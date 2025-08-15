@@ -1,444 +1,465 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>THEGRID — Black & Gold Performance Creativity</title>
-<meta name="description" content="Cinematic reels + a savable system. Library-driven, mobile-first, creator-guided. Drop in content; the site adapts."/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>THEGRID — Black & Gold</title>
+<meta name="color-scheme" content="dark light" />
+
 <style>
   :root{
-    --bg:#0a0b0e;
-    --panel:#0f1015;
-    --panel-2:#0b0c11;
-    --ring:#1f2432;
-    --gold:#f5c56b;
-    --text:#e8e8ee;
-    --muted:#a6a8b3;
-    --accent:#14e1b5;
-    --radius:10px;
-    --shadow:0 10px 28px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+    --bg:#0b0d0f; --panel:#0f1216; --ink:#e8e8e8; --muted:#a9afba;
+    --ring:hsla(0 0% 100%/.08); --gold:#e4c35a; --accent:#10b3a6;
+    --radius:14px; --gap:16px; --header-h:76px;
   }
   *{box-sizing:border-box} html,body{height:100%}
-  body{
-    margin:0; color:var(--text);
-    font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial;
-    background:
-      radial-gradient(1200px 600px at 10% -10%, #132226 0%, transparent 50%),
-      radial-gradient(1200px 600px at 110% 10%, #241a12 0%, transparent 50%),
-      var(--bg);
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  }
-  a{color:inherit;text-decoration:none}
+  body{margin:0;background:
+      radial-gradient(1200px 800px at 20% -10%, #132029, transparent 60%),
+      linear-gradient(180deg,#0a0c0f,#090b0d 50%,#0a0c0f), var(--bg);
+    color:var(--ink); font:500 16px/1.55 ui-sans-serif, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; padding-top:var(--header-h)}
+  a{color:inherit;text-decoration:none} button{font:inherit}
 
-  /* HEADER (sticky, non-blocking) */
-  .top{
-    position:sticky; top:0; z-index:50;
-    background:rgba(10,11,14,.72);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid #1b1e28;
-  }
-  .topIn{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
-  .brand{display:flex;align-items:center;gap:10px}
-  .brand img{width:28px;height:28px;border-radius:6px;border:1px solid #2a2e3b}
-  .brand b{font-weight:800;letter-spacing:.2px}
-  .topBtns{display:flex;gap:8px}
+  .wrap{width:min(1040px,92vw); margin-inline:auto}
+  .row{display:grid; gap:var(--gap)}
+  .card{background:linear-gradient(180deg,#0f1216,#0b0d10);
+    border:1px solid var(--ring); border-radius:var(--radius);
+    box-shadow:0 15px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.03);
+    padding:18px}
+  h1,h2,h3{margin:0 0 10px} h1{font-size:clamp(34px,7vw,56px);line-height:1.06}
+  h2{font-size:clamp(22px,3.6vw,28px)} .muted{color:var(--muted)}
+  .grid{display:grid; gap:var(--gap)} .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:760px){.cols-2,.cols-3{grid-template-columns:1fr}}
 
-  /* BUTTONS: solid, square (radius 10) */
-  .btn{
-    background:#151722; border:1px solid #24283a; color:#e9e9ee;
-    padding:12px 16px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);
-    display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px;
+  /* header */
+  .topbar{position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:30;
+    display:flex; align-items:center; backdrop-filter:saturate(120%) blur(10px);
+    background:linear-gradient(180deg, rgba(10,12,15,.8), rgba(10,12,15,.55));
+    border-bottom:1px solid var(--ring)}
+  .topbar .wrap{display:flex; align-items:center; gap:12px}
+  .spacer{flex:1}
+
+  /* logo block (video w/ fallback) */
+  .logo{
+    width:46px;height:46px;border-radius:10px;overflow:hidden;
+    border:1px solid var(--ring); background:#0c0f13; display:grid; place-items:center
   }
-  .btn.gold{background:#2a2312; border-color:#3b3017; color:#f8e3aa}
-  .btn.flat{box-shadow:none}
+  .logo video{width:100%;height:100%;object-fit:cover}
+  .logo img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* square buttons */
+  .btn{display:inline-grid; place-items:center; min-height:44px;
+    padding:10px 16px; border-radius:10px; border:1px solid var(--ring);
+    background:#12161b; color:#f1f1f1; box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    transition:transform .12s ease, border-color .2s ease, box-shadow .2s ease}
+  .btn:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.14);
+    box-shadow:0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06)}
+  .btn.gold{background:linear-gradient(180deg,#3b2f12,#241d0b); border-color:#5b4a1b; color:#f7eac1}
+  .btn.ghost{background:#0f1317}
   .btn.block{width:100%}
-  .chip{background:#151722;border:1px solid #24283a;border-radius:999px;padding:6px 10px;font-size:13px;color:#d2d3da}
 
-  .wrap{max-width:980px;margin:0 auto;padding:16px}
-  .spacer{height:8px}
+  /* greeting tile (time-aware) */
+  .greet{--greet:#e4c35a; --bg:#0f1216; --fg:#eaeaea;
+    display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:center;
+    border:1px solid var(--ring); border-radius:12px; padding:12px 14px;
+    background:linear-gradient(180deg, #0f1216, #0b0d10)}
+  .greet-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;
+    background:
+      radial-gradient(80% 80% at 30% 20%, var(--greet), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.2));
+    outline:1px solid var(--ring); font-size:22px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+  .greet-text{display:flex;flex-direction:column;line-height:1.05}
+  .greet-1{font-weight:700;letter-spacing:.2px}
+  .greet-2{opacity:.75;font-size:.95rem}
 
-  /* CARDS */
-  .card{
-    background:linear-gradient(180deg,var(--panel),var(--panel-2));
-    border:1px solid #1c2030; border-radius:10px; box-shadow:var(--shadow); padding:18px; margin:14px 0;
-  }
+  /* hero */
+  .hero{margin-top:20px}
+  .hero .media{overflow:hidden;border-radius:16px;border:1px solid var(--ring); background:#06080a}
+  .hero .media video{width:100%;height:100%;display:block;object-fit:cover}
 
-  .h1{font-size:44px;line-height:1.08;font-weight:900;letter-spacing:-.02em;margin:6px 0 10px}
-  .gold{color:var(--gold)} .muted{color:var(--muted)}
+  /* library tiles */
+  .lib-grid{display:grid; gap:14px}
+  .lib-grid .tile{
+    border-radius:12px;border:1px solid var(--ring); background:#0d1014; overflow:hidden}
+  .tile .head{display:flex;align-items:center;gap:8px; padding:10px 12px; border-bottom:1px solid var(--ring)}
+  .tile .body{padding:12px}
+  .thumb{height:160px;border:1px dashed #2a313b;border-radius:10px;display:grid;place-items:center;background:#0a0d10;color:#596170}
+  .thumb.filled{border:1px solid var(--ring);background:#0b0e12;color:#cbd3df}
+  .thumb video,.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px}
 
-  .row{display:flex;flex-wrap:wrap;gap:8px}
-  .grid{display:grid;gap:12px}
-  @media(min-width:800px){ .grid3{grid-template-columns:1fr 1fr 1fr} .grid2{grid-template-columns:1fr 1fr} }
+  /* monetise */
+  .price{font-size: clamp(28px,5.6vw,40px); font-weight:800}
+  .plan{display:grid;gap:14px;padding:16px;border-radius:14px;border:1px solid var(--ring);background:#0d1115}
+  .plan ul{margin:0;padding:0 0 0 18px}
 
-  /* HERO */
-  .heroWrap{padding:12px;border-radius:14px;background:linear-gradient(180deg,#0b0c12,#090a0f);border:1px solid #1b1f28}
-  .hero{width:100%;aspect-ratio:16/9;background:#0c0d12;border-radius:10px;border:1px solid #1d2130;overflow:hidden;display:grid;place-items:center}
-  video,img.heroImg{width:100%;height:100%;object-fit:cover}
+  /* confetti canvas */
+  #confetti{position:fixed; inset:0; pointer-events:none; z-index:50}
 
-  /* MODALS */
-  .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.6);z-index:60;padding:18px}
-  .modal.open{display:grid}
-  .sheet{
-    width:min(980px,100%); max-height:88vh; overflow:auto;
-    background:linear-gradient(180deg,var(--panel),var(--panel-2));
-    border:1px solid #1c2030; border-radius:12px; padding:16px; box-shadow:var(--shadow);
-  }
-  .sheetHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-  .secTitle{font-size:22px;font-weight:900;margin:0 0 8px}
-
-  /* LIBRARY */
-  .cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-  .tiles{display:grid;gap:10px}
-  @media(min-width:640px){ .tiles{grid-template-columns:1fr 1fr} }
-  .tile{background:#0f1016;border:1px solid #1c2030;border-radius:10px;padding:8px;cursor:pointer}
-  .tile video,.tile img{width:100%;border-radius:8px;border:1px solid #202534}
-  .tile label{display:block;font-size:13px;margin:6px 0 0;color:#b9bbc6}
-
-  /* PRICING & MONETISE */
-  .price{font-size:40px;font-weight:900}
-  .unit{opacity:.7;font-weight:700}
-
-  .note{font-size:13px;color:#a9abbb}
+  /* sections spacing */
+  section{margin:28px 0}
 </style>
 </head>
 <body>
-  <!-- STICKY TOP (non-blocking) -->
-  <div class="top">
-    <div class="topIn">
-      <div class="brand">
-        <img src="assets/images/gc_logo.png" alt="Logo" onerror="this.style.opacity=.4">
-        <b>THEGRID</b>
-        <span class="chip" id="greet">Hello</span>
-      </div>
-      <div class="topBtns">
-        <button class="btn" id="btnCustomize">Customize</button>
-        <a class="btn gold" id="btnJoin" href="#monetise">Join Now</a>
-      </div>
-    </div>
-  </div>
 
+<canvas id="confetti"></canvas>
+
+<header class="topbar" id="topbar">
   <div class="wrap">
-    <!-- Intro -->
-    <div class="card">
-      <h1 class="h1"><span class="gold">Black & Gold</span><br>Performance Creativity</h1>
-      <p class="muted">Launch cinematic, mobile-ready visuals fast. Update the site by replacing a single file and dropping media into the library folders. The system adapts automatically.</p>
-      <div class="row" style="margin-top:8px">
-        <button class="btn" id="btnNiches">Explore Niches</button>
-        <button class="btn" id="btnLibraryTop">Open Library</button>
-        <button class="btn" id="btnSaveView">Save My View</button>
-        <button class="btn gold" id="btnMonetiseTop">Monetise</button>
+    <div class="logo">
+      <video src="assets/videos/gc_spin.mp4" autoplay muted loop playsinline poster="assets/images/gc_logo.png"></video>
+      <img src="assets/images/gc_logo.png" alt="THEGRID logo" onerror="this.style.display='none'"/>
+    </div>
+
+    <div id="greeting" class="greet" aria-live="polite">
+      <div class="greet-icon" id="greetIcon">☀️</div>
+      <div class="greet-text">
+        <strong class="greet-1" id="greetLine1">Good afternoon</strong>
+        <span class="greet-2">— THEGRID</span>
       </div>
     </div>
 
-    <!-- Hero -->
-    <div class="heroWrap card">
-      <div class="hero" id="hero">
-        <video id="heroVideo" muted playsinline autoplay loop></video>
-        <img id="heroImg" class="heroImg" alt="Hero image" style="display:none"/>
-      </div>
-    </div>
+    <div class="spacer"></div>
 
-    <!-- Highlights -->
-    <div class="grid grid2">
-      <div class="card">
-        <div class="secTitle">One-Step Updates</div>
-        <p class="muted">Swap <code>index.html</code> or drop media into <code>assets/images</code> and <code>assets/videos</code>. The layout adapts.</p>
-      </div>
-      <div class="card">
-        <div class="secTitle">Access vs Admin</div>
-        <p class="muted">Visitors get safe personalization (colors, hero, radius). Admin enables full control (paths, theme tokens). Default is <b>Access</b>.</p>
-      </div>
-    </div>
-
-    <!-- Library CTA -->
-    <div class="card">
-      <div class="secTitle" style="display:flex;justify-content:space-between;align-items:center">
-        <span>Content Library</span>
-        <button class="btn" id="btnLibrary">Open Library</button>
-      </div>
-      <p class="muted">Choose a clip or image as your Hero. Categories keep things tidy and ready for uploads.</p>
-    </div>
-
-    <!-- Monetise (all options in one place) -->
-    <div class="card" id="monetise">
-      <div class="secTitle" style="display:flex;justify-content:space-between;align-items:center">
-        <span>Monetise</span><span class="chip">All options</span>
-      </div>
-
-      <div class="grid grid3">
-        <div class="card">
-          <div class="secTitle">Subscriptions</div>
-          <div class="price">£19<span class="unit">/mo</span></div>
-          <ul class="note" style="margin:8px 0 0">
-            <li>Starter templates</li>
-            <li>Library access</li>
-            <li>Email support</li>
-          </ul>
-          <button class="btn gold block choosePlan" data-plan="Basic">Choose Basic</button>
-        </div>
-
-        <div class="card">
-          <div class="secTitle">&nbsp;</div>
-          <div class="price">£49<span class="unit">/mo</span></div>
-          <ul class="note" style="margin:8px 0 0">
-            <li>Everything in Basic</li>
-            <li>Advanced effects</li>
-            <li>Priority support</li>
-          </ul>
-          <button class="btn gold block choosePlan" data-plan="Silver">Choose Silver</button>
-        </div>
-
-        <div class="card">
-          <div class="secTitle">&nbsp;</div>
-          <div class="price">£99<span class="unit">/mo</span></div>
-          <ul class="note" style="margin:8px 0 0">
-            <li>Full customization</li>
-            <li>Admin toolkit</li>
-            <li>1:1 onboarding</li>
-          </ul>
-          <button class="btn gold block choosePlan" data-plan="Gold">Choose Gold</button>
-        </div>
-      </div>
-
-      <div class="grid grid3" style="margin-top:12px">
-        <div class="card">
-          <div class="secTitle">One-time Packs</div>
-          <p class="muted">Buy a bundle of themed reels or images for instant use.</p>
-          <button class="btn block" id="btnPacks">Browse Packs</button>
-        </div>
-        <div class="card">
-          <div class="secTitle">Custom Work</div>
-          <p class="muted">Commission bespoke visuals and integrations.</p>
-          <button class="btn block" id="btnCustom">Request Quote</button>
-        </div>
-        <div class="card">
-          <div class="secTitle">Affiliate</div>
-          <p class="muted">Earn by referring creators and brands.</p>
-          <button class="btn block" id="btnAffiliate">Join Affiliate</button>
-        </div>
-      </div>
-      <p class="note" style="margin-top:10px">Connect these buttons to Stripe/PayPal/Link-in-bio later; they’re wired to placeholders for testing now.</p>
-    </div>
-
-    <!-- FAQ -->
-    <div class="card">
-      <div class="secTitle">FAQ</div>
-      <p><b>Where do videos go?</b><br><span class="muted"><code>assets/videos/</code> — e.g. <code>gc_spin.mp4</code>, <code>hero_1.mp4</code>.</span></p>
-      <p><b>Where do images go?</b><br><span class="muted"><code>assets/images/</code> — e.g. <code>gc_logo.png</code>, <code>hero_1.jpg</code>.</span></p>
-      <p class="note">© THEGRID · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
-    </div>
+    <a class="btn ghost" href="#customize">Customize</a>
+    <a class="btn gold" href="#monetise">Join Now</a>
   </div>
+</header>
 
-  <!-- LIBRARY MODAL -->
-  <div class="modal" id="libModal" aria-hidden="true">
-    <div class="sheet">
-      <div class="sheetHead">
-        <div class="secTitle" style="margin:0">Content Library</div>
-        <button class="btn" id="libClose">Close</button>
-      </div>
+<main class="wrap">
 
-      <div class="cats">
-        <span class="chip">Reels 9:16</span>
-        <span class="chip">Reels 16:9</span>
-        <span class="chip">Logos</span>
-        <span class="chip">Backgrounds</span>
-      </div>
-
-      <div class="secTitle" style="margin-top:6px">Reels (9:16)</div>
-      <div class="tiles" id="tilesV916"></div>
-
-      <div class="secTitle" style="margin-top:12px">Reels (16:9)</div>
-      <div class="tiles" id="tilesV169"></div>
-
-      <div class="secTitle" style="margin-top:12px">Logos</div>
-      <div class="tiles" id="tilesLogos"></div>
-
-      <div class="secTitle" style="margin-top:12px">Backgrounds</div>
-      <div class="tiles" id="tilesBgs"></div>
+  <section class="card row">
+    <h1>Black &amp; Gold<br/>Performance <span style="color:var(--gold)">Creativity</span></h1>
+    <p class="muted">Launch cinematic, mobile-ready visuals fast. Update by replacing a file — no complex tools. Your site adapts and learns from your content.</p>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="#niches">Explore Niches</a>
+      <a class="btn" href="#library">Open Library</a>
+      <a class="btn gold" href="#monetise">Monetise</a>
+      <button class="btn" id="saveView">Save My View</button>
     </div>
-  </div>
 
-  <!-- CUSTOMIZE MODAL -->
-  <div class="modal" id="custModal" aria-hidden="true">
-    <div class="sheet">
-      <div class="sheetHead">
-        <div class="secTitle" style="margin:0">Customize</div>
-        <button class="btn" id="custClose">Close</button>
+    <div class="hero">
+      <div class="media">
+        <video id="heroVideo" autoplay muted playsinline loop
+          poster="assets/images/hero_1.jpg"
+          src="assets/videos/hero_1.mp4"></video>
       </div>
-
-      <div class="row" style="gap:10px;margin-bottom:8px">
-        <div class="btn flat">Role&nbsp;
-          <select id="roleSel" style="background:#0e1016;border:1px solid #24283a;color:#e9e9ee;border-radius:8px;padding:10px">
-            <option value="access" selected>Access</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-        <div class="btn flat">Hero&nbsp;
-          <select id="heroType" style="background:#0e1016;border:1px solid #24283a;color:#e9e9ee;border-radius:8px;padding:10px">
-            <option value="video" selected>Video</option>
-            <option value="image">Image</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid grid2">
-        <div class="card">
-          <div class="secTitle">Hero Video Path</div>
-          <input id="heroVideoPath" type="text" value="assets/videos/gc_spin.mp4"
-                 style="width:100%;background:#0e1016;border:1px solid #24283a;color:#e9e9ee;border-radius:8px;padding:10px">
-        </div>
-        <div class="card">
-          <div class="secTitle">Hero Image Path</div>
-          <input id="heroImgPath" type="text" value="assets/images/gc_logo.png"
-                 style="width:100%;background:#0e1016;border:1px solid #24283a;color:#e9e9ee;border-radius:8px;padding:10px">
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:8px">
-        <button class="btn gold" id="custApply">Apply</button>
-        <button class="btn" id="custSave">Save to this device</button>
-        <button class="btn" id="custOpenLib">Open Library</button>
-      </div>
-      <p class="note" id="roleNote" style="margin-top:8px">You are in <b>Access</b> — safe personalization only.</p>
     </div>
-  </div>
+  </section>
+
+  <!-- Customize (Access mode) -->
+  <section id="customize" class="card">
+    <h2>Customize (Access)</h2>
+    <div class="grid cols-3">
+      <div>
+        <label class="muted">Hero Source</label>
+        <select id="heroSelect" class="btn block">
+          <option value="assets/videos/hero_1.mp4">Video: hero_1.mp4</option>
+          <option value="assets/videos/interaction_1.mp4">Video: interaction_1.mp4</option>
+          <option value="assets/videos/pour_1.mp4">Video: pour_1.mp4</option>
+          <option value="assets/images/hero_1.jpg">Image: hero_1.jpg</option>
+          <option value="assets/images/hero_2.jpg">Image: hero_2.jpg</option>
+          <option value="assets/images/hero_3.jpg">Image: hero_3.jpg</option>
+        </select>
+      </div>
+      <div>
+        <label class="muted">Gold Accent</label>
+        <input id="goldPick" class="btn block" type="color" value="#e4c35a" />
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label class="muted">Card Radius</label>
+        <input id="radius" type="range" min="6" max="22" value="14" />
+        <button class="btn" id="applyCustom">Apply</button>
+        <button class="btn" id="saveLocal">Save to this device</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Library -->
+  <section id="library" class="card">
+    <h2>Library</h2>
+    <p class="muted">Tap a tile to set as Hero. Place your media in <code>assets/videos/</code> and <code>assets/images/</code>.</p>
+
+    <div class="lib-grid">
+      <div class="tile">
+        <div class="head"><strong>Reels (9:16)</strong></div>
+        <div class="body grid cols-3">
+          <div class="thumb" data-src="assets/videos/launch_tiktok.mp4">launch_tiktok.mp4</div>
+          <div class="thumb" data-src="assets/videos/natural_1.mp4">natural_1.mp4</div>
+          <div class="thumb" data-src="assets/videos/transform_1.mp4">transform_1.mp4</div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="head"><strong>Reels (16:9)</strong></div>
+        <div class="body grid cols-3">
+          <div class="thumb" data-src="assets/videos/hero_1.mp4">hero_1.mp4</div>
+          <div class="thumb" data-src="assets/videos/interaction_1.mp4">interaction_1.mp4</div>
+          <div class="thumb" data-src="assets/videos/pour_1.mp4">pour_1.mp4</div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="head"><strong>Backgrounds</strong></div>
+        <div class="body grid cols-3">
+          <div class="thumb" data-src="assets/images/hero_1.jpg">hero_1.jpg</div>
+          <div class="thumb" data-src="assets/images/hero_2.jpg">hero_2.jpg</div>
+          <div class="thumb" data-src="assets/images/hero_3.jpg">hero_3.jpg</div>
+        </div>
+      </div>
+
+      <div class="tile">
+        <div class="head"><strong>Logos</strong></div>
+        <div class="body grid cols-3">
+          <div class="thumb filled">
+            <video src="assets/videos/gc_spin.mp4" autoplay muted loop playsinline></video>
+          </div>
+          <div class="thumb filled">
+            <img src="assets/images/gc_logo.png" alt="Logo"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Monetise -->
+  <section id="monetise" class="card">
+    <div style="display:flex;align-items:center;gap:12px">
+      <h2 style="margin-right:auto">Monetise</h2>
+      <a class="btn ghost" href="#all-options">All options</a>
+    </div>
+
+    <h3 style="margin-top:10px">Launch Pricing (Limited)</h3>
+    <div class="grid cols-3" style="margin-top:10px">
+      <div class="plan">
+        <div class="price">£9<span class="muted" style="font-weight:600">/mo</span></div>
+        <div class="muted">Basic</div>
+        <ul>
+          <li>Starter templates</li>
+          <li>Library access</li>
+          <li>Email support</li>
+        </ul>
+        <button class="btn gold buy" data-plan="basic-monthly" data-amount="900">Choose Basic</button>
+      </div>
+
+      <div class="plan">
+        <div class="price">£29<span class="muted" style="font-weight:600">/mo</span></div>
+        <div class="muted">Silver</div>
+        <ul>
+          <li>Everything in Basic</li>
+          <li>Advanced effects</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn gold buy" data-plan="silver-monthly" data-amount="2900">Choose Silver</button>
+      </div>
+
+      <div class="plan">
+        <div class="price">£69<span class="muted" style="font-weight:600">/mo</span></div>
+        <div class="muted">Gold</div>
+        <ul>
+          <li>Full customization</li>
+          <li>Admin toolkit</li>
+          <li>1:1 onboarding</li>
+        </ul>
+        <button class="btn gold buy" data-plan="gold-monthly" data-amount="6900">Choose Gold</button>
+      </div>
+    </div>
+
+    <h3 id="all-options" style="margin:20px 0 6px">À-la-carte Services</h3>
+    <div class="grid cols-3">
+      <div class="plan">
+        <strong>One-time Setup</strong>
+        <div class="muted">Deploy + connect Pages</div>
+        <div class="price">£49</div>
+        <button class="btn buy" data-plan="setup-once" data-amount="4900">Start Setup</button>
+      </div>
+      <div class="plan">
+        <strong>Custom Reel Pack</strong>
+        <div class="muted">3 reels tuned to your niche</div>
+        <div class="price">£79</div>
+        <button class="btn buy" data-plan="reel-pack" data-amount="7900">Order Pack</button>
+      </div>
+      <div class="plan">
+        <strong>Niche Kit</strong>
+        <div class="muted">Design + copy + assets</div>
+        <div class="price">£129</div>
+        <button class="btn buy" data-plan="niche-kit" data-amount="12900">Get Niche Kit</button>
+      </div>
+      <div class="plan">
+        <strong>Brand Kit</strong>
+        <div class="muted">Logo lockups + palette + type</div>
+        <div class="price">£199</div>
+        <button class="btn buy" data-plan="brand-kit" data-amount="19900">Get Brand Kit</button>
+      </div>
+      <div class="plan">
+        <strong>Priority Setup</strong>
+        <div class="muted">Jump the queue</div>
+        <div class="price">+£29</div>
+        <button class="btn buy" data-plan="priority" data-amount="2900">Add Priority</button>
+      </div>
+      <div class="plan">
+        <strong>1:1 Onboarding</strong>
+        <div class="muted">30-min session</div>
+        <div class="price">£59</div>
+        <button class="btn buy" data-plan="onboarding" data-amount="5900">Book Session</button>
+      </div>
+      <div class="plan">
+        <strong>Template Pack</strong>
+        <div class="muted">5 premium page blocks</div>
+        <div class="price">£29</div>
+        <button class="btn buy" data-plan="template-pack" data-amount="2900">Get Pack</button>
+      </div>
+      <div class="plan">
+        <strong>Commercial License Add-on</strong>
+        <div class="muted">Extended usage rights</div>
+        <div class="price">£59<span class="muted" style="font-weight:600">/mo</span></div>
+        <button class="btn buy" data-plan="commercial-addon" data-amount="5900">Add License</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="card">
+    <h2>FAQ</h2>
+    <p><strong>Can I update without coding?</strong><br/>Yes — paste a new <code>index.html</code> (like this one) and drop media into the <code>assets</code> folders.</p>
+    <p><strong>What happens if media are missing?</strong><br/>A clean placeholder shows. Nothing breaks.</p>
+    <p><strong>Where do videos go?</strong><br/><code>assets/videos/</code> — e.g. <code>gc_spin.mp4</code>, <code>hero_1.mp4</code>.</p>
+    <p><strong>Where do images go?</strong><br/><code>assets/images/</code> — e.g. <code>gc_logo.png</code>, <code>hero_1.jpg</code>.</p>
+  </section>
+
+  <section class="row muted" style="text-align:center;margin:24px 0 60px">© THEGRID · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></section>
+
+</main>
 
 <script>
-  /* helpers */
-  const $=(q,el=document)=>el.querySelector(q);
-  const $$=(q,el=document)=>[...el.querySelectorAll(q)];
+/* ----- header safe spacing ----- */
+(function(){
+  const tb=document.getElementById('topbar');
+  const setH=()=>document.documentElement.style.setProperty('--header-h', tb.getBoundingClientRect().height+'px');
+  setH(); addEventListener('resize', setH);
+})();
 
-  /* state */
-  const state={
-    role:'access',
-    heroType:'video',
-    heroVideo:'assets/videos/gc_spin.mp4',
-    heroImg:'assets/images/gc_logo.png',
-    radius:10
+/* ----- time-aware greeting tile ----- */
+(function(){
+  const h=(new Date()).getHours();
+  const line=document.getElementById('greetLine1');
+  const icon=document.getElementById('greetIcon');
+  const greet=document.getElementById('greeting');
+
+  let label='Hello', emoji='✨', accent='#e4c35a';
+  if(h>=5 && h<12){ label='Good morning'; emoji='🌅'; accent='#f3d07a'; }
+  else if(h>=12 && h<17){ label='Good afternoon'; emoji='☀️'; accent='#e4c35a'; }
+  else if(h>=17 && h<21){ label='Good evening'; emoji='🌇'; accent='#f2b35e'; }
+  else { label='Good night'; emoji='🌙'; accent='#8fb6ff'; }
+
+  line.textContent=label; icon.textContent=emoji;
+  greet.style.setProperty('--greet', accent);
+})();
+
+/* ----- Library: click any tile to set hero ----- */
+(function(){
+  const thumbs=[...document.querySelectorAll('.thumb')];
+  const hero=document.getElementById('heroVideo');
+  thumbs.forEach(t=>{
+    const src=t.dataset.src;
+    if(!src) return;
+    // try to detect type by extension
+    const isVideo=/\.(mp4|webm|mov)$/i.test(src);
+    if(isVideo){
+      const v=document.createElement('video');
+      v.src=src; v.muted=true; v.playsInline=true; v.loop=true;
+      v.oncanplay=()=>t.classList.add('filled');
+      v.onerror=()=>{}; // placeholder stays
+    } else {
+      const i=new Image(); i.src=src; i.onload=()=>t.classList.add('filled');
+    }
+    t.addEventListener('click', ()=>{
+      if(isVideo){
+        hero.src=src; hero.play().catch(()=>{});
+      }else{
+        hero.pause(); hero.removeAttribute('src'); hero.load();
+        hero.setAttribute('poster', src);
+      }
+      scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+})();
+
+/* ----- Customize controls (Access mode) ----- */
+(function(){
+  const hero=document.getElementById('heroVideo');
+  const heroSel=document.getElementById('heroSelect');
+  const gold=document.getElementById('goldPick');
+  const radius=document.getElementById('radius');
+
+  document.getElementById('applyCustom').onclick=()=>{
+    const src=heroSel.value;
+    if(/\.(mp4|webm|mov)$/i.test(src)){ hero.removeAttribute('poster'); hero.src=src; hero.play().catch(()=>{}); }
+    else { hero.pause(); hero.removeAttribute('src'); hero.load(); hero.setAttribute('poster', src); }
+    document.documentElement.style.setProperty('--gold', gold.value);
+    document.documentElement.style.setProperty('--radius', radius.value+'px');
   };
+  document.getElementById('saveLocal').onclick=()=>{
+    const state={src:heroSel.value, gold:gold.value, radius:radius.value};
+    localStorage.setItem('thegrid_view', JSON.stringify(state));
+    alert('Saved to this device.');
+  };
+  const saved=localStorage.getItem('thegrid_view');
+  if(saved){
+    try{ const s=JSON.parse(saved);
+      heroSel.value=s.src||heroSel.value; gold.value=s.gold||gold.value; radius.value=s.radius||radius.value;
+      document.getElementById('applyCustom').click();
+    }catch{}
+  }
+  document.getElementById('saveView').onclick=()=>document.getElementById('saveLocal').click();
+})();
 
-  /* greeting */
-  (function(){
-    const h=new Date().getHours();
-    const t=h<12?'Good morning':(h<18?'Good afternoon':'Good evening');
-    $('#greet').textContent=t;
-  })();
+/* ----- Gold Confetti (falls to bottom) ----- */
+(function(){
+  const cvs=document.getElementById('confetti'), ctx=cvs.getContext('2d');
+  let W=innerWidth, H=innerHeight, parts=[];
+  const colors=['#f6e18b','#f2c95a','#e8b83a','#ffd06e','#f9d991'];
+  const reset=()=>{ W=innerWidth; H=innerHeight; cvs.width=W; cvs.height=H; };
+  reset(); addEventListener('resize', reset);
 
-  /* hero render */
-  function renderHero(){
-    const v=$('#heroVideo'), img=$('#heroImg');
-    if(state.heroType==='video'){
-      img.style.display='none';
-      v.style.display='block';
-      if(v.src!==location.origin+'/'+state.heroVideo) v.src=state.heroVideo;
-      v.play().catch(()=>{});
-    }else{
-      v.pause?.(); v.removeAttribute('src');
-      img.src=state.heroImg; img.style.display='block';
+  function spawn(n=140){
+    for(let i=0;i<n;i++){
+      parts.push({
+        x:Math.random()*W, y:-20-Math.random()*H*0.4,
+        w:6+Math.random()*6, h:3+Math.random()*5,
+        vy:1.2+Math.random()*2.6, vx:(Math.random()-.5)*1.2,
+        rot:Math.random()*Math.PI, vr:(Math.random()-.5)*0.15,
+        c:colors[(Math.random()*colors.length)|0], life:0
+      });
     }
   }
-
-  /* apply role UI */
-  function updateRoleUI(){
-    const isAdmin=state.role==='admin';
-    $('#heroVideoPath').disabled=!isAdmin;
-    $('#heroImgPath').disabled=!isAdmin;
-    $('#roleNote').innerHTML=isAdmin?'You are in <b>Admin</b> — full control enabled.':'You are in <b>Access</b> — safe personalization only.';
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(let p of parts){
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life+=1;
+      const alpha=Math.max(0, 1 - (p.y-H)/80);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.min(1, alpha);
+      ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    }
+    // remove fallen
+    parts=parts.filter(p=>p.y<H+40);
+    requestAnimationFrame(tick);
   }
+  tick();
+  // expose
+  window.dropConfetti=()=>spawn(220);
+})();
 
-  /* local persistence */
-  function saveLocal(){ localStorage.setItem('THEGRID_VIEW', JSON.stringify(state)); }
-  function loadLocal(){ try{ Object.assign(state, JSON.parse(localStorage.getItem('THEGRID_VIEW')||'{}')); }catch(e){} }
-
-  /* confetti (light) */
-  function confetti(){
-    const c=document.createElement('canvas'); c.width=innerWidth; c.height=innerHeight;
-    Object.assign(c.style,{position:'fixed',inset:0,pointerEvents:'none',zIndex:70});
-    document.body.appendChild(c); const ctx=c.getContext('2d');
-    const P=[...Array(140)].map(()=>({x:Math.random()*c.width,y:-20-Math.random()*100,r:3+Math.random()*4,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,a:Math.random()*6.28,col:`hsl(${Math.random()*360},90%,60%)`}));
-    let t=0; (function loop(){ ctx.clearRect(0,0,c.width,c.height);
-      P.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.a+=.1; ctx.fillStyle=p.col; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillRect(-p.r,-p.r,p.r*2,p.r*2); ctx.restore(); });
-      if(++t<180) requestAnimationFrame(loop); else c.remove();
-    })();
-  }
-
-  /* library content (categorised) — add filenames as you upload */
-  const LIB={
-    reels916:[
-      'assets/videos/hero_1.mp4',
-      'assets/videos/interaction_1.mp4',
-      'assets/videos/natural_1.mp4',
-      'assets/videos/pour_1.mp4',
-      'assets/videos/spread_1.mp4',
-      'assets/videos/transform_1.mp4'
-    ],
-    reels169:[
-      'assets/videos/gc_spin.mp4'
-    ],
-    logos:[
-      'assets/images/gc_logo.png'
-    ],
-    backgrounds:[
-      'assets/images/hero_1.jpg',
-      'assets/images/hero_2.jpg',
-      'assets/images/hero_3.jpg'
-    ]
-  };
-
-  function buildTiles(arr, wrap, isVideo){
-    wrap.innerHTML='';
-    arr.forEach(path=>{
-      const el=document.createElement('div'); el.className='tile';
-      if(isVideo){ el.innerHTML=`<video src="${path}" muted playsinline loop></video><label>${path.split('/').pop()}</label>`; }
-      else       { el.innerHTML=`<img src="${path}" alt=""><label>${path.split('/').pop()}</label>`; }
-      el.onclick=()=>{
-        if(isVideo){ state.heroType='video'; state.heroVideo=path; }
-        else{ state.heroType='image'; state.heroImg=path; }
-        renderHero(); $('#libModal').classList.remove('open');
-      };
-      wrap.appendChild(el);
-    });
-  }
-  function openLibrary(){
-    buildTiles(LIB.reels916, $('#tilesV916'), true);
-    buildTiles(LIB.reels169, $('#tilesV169'), true);
-    buildTiles(LIB.logos, $('#tilesLogos'), false);
-    buildTiles(LIB.backgrounds, $('#tilesBgs'), false);
-    $('#libModal').classList.add('open');
-  }
-
-  /* wire header buttons */
-  $('#btnCustomize').onclick=()=>$('#custModal').classList.add('open');
-  $('#btnJoin').onclick=(e)=>{e.preventDefault(); confetti(); document.getElementById('monetise').scrollIntoView({behavior:'smooth'});};
-
-  /* intro buttons */
-  $('#btnLibraryTop').onclick=openLibrary;
-  $('#btnLibrary').onclick=openLibrary;
-  $('#libClose').onclick=()=>$('#libModal').classList.remove('open');
-
-  $('#btnNiches').onclick=()=>alert('Niches coming soon. (Hook to a section or page.)');
-  $('#btnSaveView').onclick=()=>{ saveLocal(); alert('Saved — this device will remember your view.'); };
-  $('#btnMonetiseTop').onclick=()=>document.getElementById('monetise').scrollIntoView({behavior:'smooth'});
-
-  /* customise modal */
-  $('#custClose').onclick=()=>$('#custModal').classList.remove('open');
-  $('#roleSel').oninput=e=>{ state.role=e.target.value; updateRoleUI(); };
-  $('#heroType').oninput=e=>{ state.heroType=e.target.value; renderHero(); };
-  $('#heroVideoPath').oninput=e=>{ if(state.role==='admin'){ state.heroVideo=e.target.value; renderHero(); } };
-  $('#heroImgPath').oninput=e=>{ if(state.role==='admin'){ state.heroImg=e.target.value; renderHero(); } };
-  $('#custApply').onclick=()=>{ renderHero(); alert('Applied.'); };
-  $('#custSave').onclick=()=>{ saveLocal(); alert('Saved to this device.'); };
-  $('#custOpenLib').onclick=()=>{ $('#custModal').classList.remove('open'); openLibrary(); };
-
-  /* monetise buttons (placeholders to wire to Stripe/PayPal later) */
-  $$('.choosePlan').forEach(b=>b.onclick=()=>{ confetti(); alert('Checkout: '+b.dataset.plan+' (connect to Stripe/PayPal later)'); });
-  $('#btnPacks').onclick=()=>alert('Packs catalogue (connect later).');
-  $('#btnCustom').onclick=()=>alert('Custom work form (connect later).');
-  $('#btnAffiliate').onclick=()=>alert('Affiliate signup (connect later).');
-
-  /* init */
-  loadLocal(); updateRoleUI(); renderHero();
-  $('#heroVideo').src = state.heroVideo; // default ensure something shows
+/* ----- “Buy” Buttons (placeholder until Stripe) ----- */
+document.querySelectorAll('.buy').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    dropConfetti();
+    const plan=btn.dataset.plan, amount=(+btn.dataset.amount/100).toFixed(2);
+    alert(`Checkout (test mode)\n\nPlan: ${plan}\nAmount: £${amount}\n\nWe’ll wire this to Stripe next.`);
+  });
+});
 </script>
+
 </body>
 </html>
