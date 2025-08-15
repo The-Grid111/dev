@@ -1,236 +1,353 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>THEGRID — DEV BUILD</title>
-<meta name="color-scheme" content="dark light"/>
-<link rel="preload" href="assets/video/gc_spin.mp4" as="video" type="video/mp4">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>THEGRID — Black & Gold</title>
+<meta name="description" content="Creator-guided, AI-assisted visuals. One-step updates. Launch-ready site with pricing, library, and customization.">
+<meta name="color-scheme" content="dark">
 <style>
-  :root{
-    --bg: #071e22;        /* page background */
-    --panel:#0c2e33;      /* card background */
-    --ink: #e7f8f9;       /* text */
-    --accent:#e9b949;     /* gold */
-    --muted:#8abfc6;
-    --radius:22px;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%;background:radial-gradient(1200px 600px at 20% -10%, #0e444b 0%, transparent 60%) , var(--bg); color:var(--ink); font:500 16px/1.45 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue";}
-  .wrap{max-width:980px;margin:28px auto;padding:16px}
-  .banner{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .chip{padding:14px 18px;border-radius:999px;background:#111a1c;box-shadow:inset 0 0 0 1px #1e3438}
-  .cta{padding:14px 22px;border-radius:999px;background:linear-gradient(180deg, #2c2210, #1d160a); color:var(--accent); border:1px solid #403117; cursor:pointer}
-  .card{background:linear-gradient(180deg, #0a2024, #0b1719); border:1px solid #1c3135; border-radius:var(--radius); padding:18px; box-shadow:0 10px 28px rgba(0,0,0,.28); margin:16px 0}
-  .row{display:flex; gap:12px; flex-wrap:wrap}
-  select,button,.btn{appearance:none;border:1px solid #1f363a;background:#0f1b1e;color:var(--ink);padding:12px 14px;border-radius:12px}
-  button,.btn{cursor:pointer}
-  .btn-primary{background:#16282c;border-color:#254349}
-  .hero{background:#0b1214;border:1px solid #20363a;border-radius:calc(var(--radius) - 6px);height:280px;display:grid;place-items:center;overflow:hidden}
-  video, img{max-width:100%;height:100%;object-fit:cover}
-  h1{font-size:44px;line-height:1.05;margin:12px 0}
-  h1 small{color:var(--accent);display:block;font-weight:800}
-  .pillbar{display:flex;gap:12px;flex-wrap:wrap}
-  .pill{padding:14px 20px;border-radius:16px;background:#0c1618;border:1px solid #21363a}
-  .ghost{background:#0b1416}
-  .footer{opacity:.7;font-size:14px;margin-top:18px}
-  /* DEV ribbon */
-  .ribbon{position:fixed;top:10px;left:10px;padding:6px 10px;border-radius:10px;background:#122; border:1px solid #244; color:#7fe7ff; font-size:12px; letter-spacing:.08em; z-index:5}
-  /* spinning logo in corner */
-  .logo-corner{position:fixed;top:14px;right:14px; width:48px;height:48px;border-radius:14px;background:rgba(0,0,0,.35);backdrop-filter: blur(6px); display:grid;place-items:center;border:1px solid #2b3f43; z-index:5}
-  .logo-corner img{width:30px;height:30px;animation:spin 7s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  /* simple modal */
-  dialog{border:none;border-radius:18px;background:var(--panel);color:var(--ink);padding:0;max-width:720px;width:92%}
-  dialog::backdrop{background:rgba(0,0,0,.55)}
-  .modal-head{padding:14px 16px;border-bottom:1px solid #244}
-  .modal-body{padding:16px}
+:root{
+  --bg:#0b0d10; --panel:#0f1318; --panel2:#0c1014; --ring:#232a33; --ink:#e9ecef; --muted:#aab2bd; --gold:#e6c26e; --accent:#e6c26e;
+  --radius:18px; --shadow:0 18px 60px rgba(0,0,0,.45);
+  --pattern: radial-gradient(900px 500px at -8% -8%, rgba(230,194,110,.08), transparent 55%),
+             radial-gradient(1000px 520px at 120% -8%, rgba(230,194,110,.06), transparent 60%);
+}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);background-image:var(--pattern);color:var(--ink);
+  font:14px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:14px 14px 120px}
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0a0d10ee,#0a0d1000);backdrop-filter:saturate(1.2) blur(6px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}
+.brand{display:flex;align-items:center;gap:10px}
+.logoSpin{width:40px;height:40px;border-radius:12px;border:1px solid var(--ring);overflow:hidden;background:#0d1217;display:grid;place-items:center}
+.spin3d{animation:spin 7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.greet{padding:8px 12px;border-radius:999px;border:1px solid var(--ring);background:#0e141a;white-space:nowrap;color:#cfd6de}
+.navlinks{display:none;gap:16px}
+.nav a{opacity:.9} .nav a:hover{opacity:1}
+.menu{display:flex;gap:8px}
+.btn, .pill, .cta{border:1px solid var(--ring);border-radius:12px;background:#0f151b;padding:10px 14px;transition:transform .08s, box-shadow .12s}
+.btn.ghost{background:#0c1217} .btn.gold{border-color:rgba(230,194,110,.55);background:linear-gradient(180deg,#2a2418,#171309);color:var(--gold)}
+.btn.pressed{transform:translateY(1px) scale(.99)}
+.hero{display:grid;gap:14px;padding:14px}
+.hero-frame{aspect-ratio:16/9;border-radius:16px;border:1px solid var(--ring);background:#0b0f14;overflow:hidden;display:grid;place-items:center}
+.hero-frame video,.hero-frame img{width:100%;height:100%;object-fit:cover;display:block}
+h1{font-size:40px;line-height:1.07;margin:10px 0 6px}
+.gold{color:var(--gold)}
+.lead{color:#b7bec7;margin:0 0 12px;max-width:70ch}
+.cards{display:grid;grid-template-columns:1fr;gap:12px}
+.card{border:1px solid var(--ring);border-radius:var(--radius);background:linear-gradient(180deg,var(--panel),var(--panel2));box-shadow:var(--shadow);padding:14px}
+.grid2{display:grid;grid-template-columns:1fr;gap:12px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{border:1px solid var(--ring);border-radius:999px;padding:4px 8px;background:#0e1419;color:#cbd4dd}
+.list{margin:8px 0 0 18px;color:#c7cdd6}
+.small{color:#9aa3ad}
+hr.line{border:none;border-top:1px solid var(--ring);margin:10px 0}
+
+.prices{display:grid;grid-template-columns:1fr;gap:12px}
+.price{padding:16px;border:1px solid var(--ring);border-radius:16px;background:linear-gradient(180deg,#0f151b,#0b1014)}
+.price h3{margin:0 0 6px}.price .amt{font-size:34px;color:var(--gold);font-weight:800}
+.price ul{margin:8px 0 0 18px;color:#c7cdd6}
+
+.faq dt{font-weight:700;margin-top:10px} .faq dd{margin:4px 0 10px 0;color:#c5ccd4}
+
+footer{margin-top:20px;color:#9aa3ad}
+footer a{color:#dfe6ee}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:9999}
+
+/* dialogs */
+dialog{border:none;padding:0;background:transparent}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.modal{width:min(960px,96vw);max-height:84vh;overflow:auto;background:var(--panel);border:1px solid var(--ring);border-radius:16px;box-shadow:var(--shadow)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--ring)}
+.modal-body{padding:12px 14px}
+.grid-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.tile{border:1px solid var(--ring);border-radius:12px;overflow:hidden;background:#0e1319}
+.tile .cap{padding:8px 10px;font-size:12px;color:#aab4bf;border-top:1px solid var(--ring)}
+.placeholder{display:grid;place-items:center;color:#9aa3ad;font-size:13px;background:repeating-conic-gradient(from 0deg,#141922 0 15deg,#10151b 15deg 30deg);min-height:140px}
+
+/* responsive */
+@media (min-width:900px){
+  .navlinks{display:flex}
+  .grid2{grid-template-columns:1.2fr .8fr}
+  .prices{grid-template-columns:repeat(3,1fr)}
+  .cards{grid-template-columns:repeat(3,1fr)}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-  <div class="ribbon">DEV BUILD</div>
-  <div class="logo-corner" aria-hidden="true">
-    <img src="assets/images/gc_logo.png" alt="THEGRID logo">
-  </div>
+<canvas id="confetti" aria-hidden="true"></canvas>
 
+<div class="top">
   <div class="wrap">
-    <div class="banner">
-      <div class="chip" id="greeting">Good afternoon — THEGRID</div>
-      <button id="joinBtn" class="cta">Join Now</button>
-    </div>
-
-    <!-- Top controls -->
-    <div class="card">
-      <div class="row" style="align-items:center;justify-content:space-between">
-        <div class="row">
-          <label>Role:&nbsp;
-            <select id="roleSel">
-              <option>Admin (My View)</option>
-              <option>User (My View)</option>
-            </select>
-          </label>
-          <label>&nbsp;Hero:&nbsp;
-            <select id="heroSel">
-              <option value="auto">Auto</option>
-              <option value="video">Video</option>
-              <option value="image">Image</option>
-            </select>
-          </label>
-        </div>
-        <button id="saveView" class="btn-primary">Save My View</button>
+    <div class="nav">
+      <div class="brand">
+        <div class="logoSpin"><video id="spinLogo" class="spin3d" muted autoplay playsinline loop></video></div>
+        <span class="greet" id="greet">Welcome — THEGRID</span>
       </div>
-
-      <div class="row" style="margin-top:12px">
-        <label>Reels set:&nbsp;
-          <select id="reelsSel">
-            <option>Auto (landscape_*.mp4)</option>
-            <option>Vertical (1080x1920)</option>
-          </select>
-        </label>
-        <button id="openLib" class="btn">Open Library</button>
-        <button id="openCustomizer" class="btn">Customize</button>
+      <div class="navlinks">
+        <a href="#how">How it works</a>
+        <a href="#library">Library</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
       </div>
-    </div>
-
-    <!-- Hero -->
-    <div class="card">
-      <div class="hero" id="hero">
-        <video id="heroVid" playsinline muted loop preload="metadata" poster="assets/images/hero_1.jpg"></video>
+      <div class="menu">
+        <button class="btn ghost" id="btnCustomize">Customize</button>
+        <button class="btn gold" id="btnJoin" data-event="join" data-tier="gold">Join Now</button>
       </div>
-    </div>
-
-    <!-- Headline -->
-    <div class="card ghost">
-      <h1><small>Black &amp; Gold</small>Performance Creativity</h1>
-      <p style="color:var(--muted)">Cinematic reels + a savable system. Swap files with the same names and the site updates itself.</p>
-      <div class="pillbar" style="margin-top:10px">
-        <button class="pill" id="btnNiches">Explore Niches</button>
-        <button class="pill" id="btnReels">Cinematic Reels</button>
-        <button class="pill" id="btnMonetise">Monetise</button>
-      </div>
-      <div class="footer">© THEGRID · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></div>
     </div>
   </div>
+</div>
 
-  <!-- Library Modal -->
-  <dialog id="libModal">
-    <div class="modal-head"><strong>Library</strong></div>
-    <div class="modal-body">
-      <p>Drop new media using these names and the page will swap automatically:</p>
-      <ul>
-        <li><code>assets/video/gc_spin.mp4</code> (logo spin)</li>
-        <li><code>assets/video/hero_1.mp4</code> (hero)</li>
-        <li><code>assets/images/hero_1.jpg</code> (poster)</li>
-      </ul>
-      <p><button id="closeLib" class="btn-primary">Close</button></p>
-    </div>
-  </dialog>
+<div class="wrap">
 
-  <!-- Customizer Modal -->
-  <dialog id="custModal">
-    <div class="modal-head"><strong>Customize</strong></div>
-    <div class="modal-body">
-      <div class="row">
-        <label>Accent&nbsp;<input type="color" id="accentPick" value="#e9b949"></label>
-        <label>Radius&nbsp;<input type="range" id="radius" min="8" max="28" value="22"></label>
-        <button id="saveTheme" class="btn-primary">Save</button>
+  <!-- HERO -->
+  <section class="card">
+    <div class="grid2">
+      <div>
+        <h1><span class="gold">Black & Gold</span><br/>Performance Creativity</h1>
+        <p class="lead">Launch cinematic, mobile-ready visuals fast. Your site learns from your process. You update by replacing a single file — no complex tools.</p>
+        <div class="menu" style="flex-wrap:wrap;margin-top:8px">
+          <button class="btn" id="btnExplore">Explore Niches</button>
+          <button class="btn" id="btnReels">Cinematic Reels</button>
+          <button class="btn" id="btnSave">Save My View</button>
+          <a class="btn gold" id="btnMonetise" data-event="purchase" data-tier="gold" href="#">Monetise</a>
+        </div>
+        <p class="small" style="margin-top:6px">© THEGRID · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
+      </div>
+      <div>
+        <div class="hero-frame" id="heroBox"></div>
       </div>
     </div>
-  </dialog>
+  </section>
+
+  <!-- VALUE CARDS -->
+  <section class="cards">
+    <div class="card">
+      <h3>One-Step Updates</h3>
+      <p class="small">Swap <code>index.html</code> or drop media into <code>assets/images</code> or <code>assets/videos</code>. The site adapts.</p>
+    </div>
+    <div class="card">
+      <h3>Creator-Guided · AI-Assisted</h3>
+      <p class="small">You steer the style. The system handles structure, polish, and learning.</p>
+    </div>
+    <div class="card">
+      <h3>Admin-Only Customise</h3>
+      <p class="small">Change theme, hero source, and layout accents live. Save locally.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="card">
+    <div class="section-head">
+      <h2>How it works</h2><span class="badge">Fast · Clear · Flexible</span>
+    </div>
+    <ol class="list">
+      <li><b>Add media</b> to <code>assets/videos</code> and <code>assets/images</code> (keep names simple).</li>
+      <li><b>Pick hero</b> (Video or Image) and tweak theme in Customize.</li>
+      <li><b>Save My View</b> to store your setup on this device.</li>
+      <li><b>Advertise</b> — pricing and onboarding are ready below.</li>
+    </ol>
+    <hr class="line">
+    <p class="small">Tip: iOS autoplay requires muted video. We enable <code>muted playsinline autoplay</code> automatically.</p>
+  </section>
+
+  <!-- LIBRARY -->
+  <section id="library" class="card">
+    <div class="section-head">
+      <h2>Library</h2><button class="btn" id="btnOpenLib">Open Library</button>
+    </div>
+    <p class="small">Click a tile to set as Hero. Missing files show placeholders (so nothing breaks).</p>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="card">
+    <div class="section-head"><h2>Pricing</h2><span class="badge">Instant access</span></div>
+    <div class="prices">
+      <div class="price">
+        <h3>Basic</h3>
+        <div class="amt">£19<span class="small">/mo</span></div>
+        <ul>
+          <li>Starter templates</li><li>Library access</li><li>Email support</li>
+        </ul>
+        <button class="btn gold" data-event="purchase" data-tier="basic">Choose Basic</button>
+      </div>
+      <div class="price">
+        <h3>Silver</h3>
+        <div class="amt">£49<span class="small">/mo</span></div>
+        <ul>
+          <li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li>
+        </ul>
+        <button class="btn gold" data-event="purchase" data-tier="silver">Choose Silver</button>
+      </div>
+      <div class="price">
+        <h3>Gold</h3>
+        <div class="amt">£99<span class="small">/mo</span></div>
+        <ul>
+          <li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li>
+        </ul>
+        <button class="btn gold" data-event="purchase" data-tier="gold">Choose Gold</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="card">
+    <div class="section-head"><h2>FAQ</h2><span class="badge">Quick answers</span></div>
+    <dl class="faq">
+      <dt>Can I update without coding?</dt><dd>Yes — paste a new <code>index.html</code> (like this one) and drop media into the <code>assets</code> folders.</dd>
+      <dt>What happens if media are missing?</dt><dd>We show a clean placeholder; nothing breaks.</dd>
+      <dt>Where do videos go?</dt><dd><code>assets/videos/</code> — e.g. <code>gc_spin.mp4</code>, <code>launch_tiktok.mp4</code>.</dd>
+      <dt>Where do images go?</dt><dd><code>assets/images/</code> — e.g. <code>gc_logo.png</code>, <code>background.jpg</code>.</dd>
+    </dl>
+  </section>
+
+  <footer class="small">
+    <div>© THEGRID · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></div>
+  </footer>
+</div>
+
+<!-- LIBRARY MODAL -->
+<dialog id="libDialog"><div class="modal">
+  <div class="modal-head"><strong>Content Library</strong><button class="btn" id="closeLib">Close</button></div>
+  <div class="modal-body">
+    <h4>Videos</h4><div id="vGrid" class="grid-tiles"></div>
+    <h4 style="margin-top:12px">Images</h4><div id="iGrid" class="grid-tiles"></div>
+    <p class="small" style="margin-top:8px">Tip: upload your clips to <code>assets/videos/</code> and images to <code>assets/images/</code>. Keep filenames simple and lower-case.</p>
+  </div>
+</div></dialog>
+
+<!-- CUSTOMIZE MODAL (admin-style) -->
+<dialog id="customDialog"><div class="modal">
+  <div class="modal-head"><strong>Customize</strong><button class="btn" id="closeCustomize">Close</button></div>
+  <div class="modal-body">
+    <div class="menu" style="flex-wrap:wrap">
+      <label>Role&nbsp;
+        <select id="roleSel"><option>Admin</option><option>User</option></select>
+      </label>
+      <label>Hero&nbsp;
+        <select id="heroSel"><option>Video</option><option>Image</option><option>Off</option></select>
+      </label>
+      <label>Hero Video&nbsp;<input id="heroVideo" value="assets/videos/gc_spin.mp4"></label>
+      <label>Hero Image&nbsp;<input id="heroImage" value="assets/images/gc_logo.png"></label>
+      <label>Text&nbsp;<input type="color" id="textPick" value="#e9ecef"></label>
+      <label>Gold&nbsp;<input type="color" id="goldPick" value="#e6c26e"></label>
+      <label>Panel&nbsp;<input type="color" id="panelPick" value="#0f1318"></label>
+      <label>Ring&nbsp;<input type="color" id="ringPick" value="#232a33"></label>
+      <label>Radius&nbsp;<input type="range" id="radius" min="6" max="28" value="18"></label>
+    </div>
+    <div class="menu" style="margin-top:10px">
+      <button class="btn gold" id="applyTheme">Apply</button>
+      <button class="btn" id="saveTheme">Save to this device</button>
+    </div>
+  </div>
+</div></dialog>
+
+<!-- GENERIC MODAL (for "Coming Soon") -->
+<dialog id="soonDialog"><div class="modal">
+  <div class="modal-head"><strong>Coming Soon</strong><button class="btn" id="closeSoon">Close</button></div>
+  <div class="modal-body">
+    <p>This button is wired and will connect to the full feature when content is added. For now, it confirms your layout and flow.</p>
+  </div>
+</div></dialog>
 
 <script>
-  // greeting
-  (function(){
-    const h=new Date().getHours();
-    const t = h<12?'Good morning':(h<18?'Good afternoon':'Good evening');
-    document.getElementById('greeting').textContent = t+' — THEGRID (DEV)';
-  })();
+(()=>{const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+/* cache-bust helper */
+const BUST=String(Date.now());const bust=s=>s+(s.includes('?')?'&':'?')+'v='+BUST;
 
-  // load hero video (cache-busted)
-  const heroVid = document.getElementById('heroVid');
-  const src = 'assets/video/gc_spin.mp4?v=' + Date.now().toString().slice(-6);
-  heroVid.src = src;
+/* greeting + corner spinner */
+(function(){const h=(new Date).getHours(),t=h<12?'Good morning':h<18?'Good afternoon':'Good evening';$('#greet').textContent=t+' — THEGRID';})();
+(function(){const v=$('#spinLogo');const srcV='assets/videos/gc_spin.mp4', srcI='assets/images/gc_logo.png';
+  v.src=bust(srcV); v.oncanplay=()=>v.play().catch(()=>{}); v.onerror=()=>{const img=document.createElement('img');img.src=bust(srcI);img.className='spin3d';v.replaceWith(img);}
+})();
 
-  // Save My View
-  document.getElementById('saveView').onclick = () => {
-    const pref = {
-      role: document.getElementById('roleSel').value,
-      hero: document.getElementById('heroSel').value,
-      reels: document.getElementById('reelsSel').value,
-      theme: {
-        accent: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
-        radius: getComputedStyle(document.documentElement).getPropertyValue('--radius').trim()
-      }
-    };
-    localStorage.setItem('thegrid_dev_pref', JSON.stringify(pref));
-    toast('View saved.');
-  };
+/* hero with fallbacks */
+const heroBox=$('#heroBox'); function placeholder(txt){const d=document.createElement('div');d.className='placeholder';d.textContent=txt;return d}
+function setHero(mode){
+  heroBox.innerHTML='';
+  const hv=$('#heroVideo').value.trim()||'assets/videos/gc_spin.mp4';
+  const hi=$('#heroImage').value.trim()||'assets/images/gc_logo.png';
+  if(mode==='Off'){heroBox.append(placeholder('Hero off'));return}
+  if(mode==='Image'){const img=new Image();img.src=bust(hi);img.onerror=()=>heroBox.append(placeholder('Image missing'));heroBox.append(img);return}
+  const v=document.createElement('video');Object.assign(v,{src:bust(hv),muted:true,autoplay:true,loop:true,playsInline:true});
+  v.oncanplay=()=>v.play().catch(()=>{}); v.onerror=()=>{const img=new Image();img.src=bust(hi);img.onerror=()=>heroBox.append(placeholder('Media missing'));heroBox.append(img)}; heroBox.append(v);
+}
+setHero('Video');
 
-  // restore
-  (function(){
-    const raw = localStorage.getItem('thegrid_dev_pref');
-    if(!raw) return;
-    try{
-      const p = JSON.parse(raw);
-      document.getElementById('roleSel').value = p.role || 'Admin (My View)';
-      document.getElementById('heroSel').value = p.hero || 'auto';
-      document.getElementById('reelsSel').value = p.reels || 'Auto (landscape_*.mp4)';
-      if(p.theme){
-        document.documentElement.style.setProperty('--accent', p.theme.accent || '#e9b949');
-        document.documentElement.style.setProperty('--radius', p.theme.radius || '22px');
-      }
-    }catch(e){}
-  })();
+/* buttons press feedback + confetti only on join/purchase */
+function pressFX(e){const b=e.target.closest('button,a');if(!b)return;b.classList.add('pressed');setTimeout(()=>b.classList.remove('pressed'),120)}
+document.addEventListener('click',pressFX,{passive:true});
+const CE=document.getElementById('confetti');let CX,PS=[],RAF=null,L=0;function fit(){const d=devicePixelRatio||1,w=innerWidth,h=innerHeight;CE.width=w*d;CE.height=h*d;CE.style.width=w+'px';CE.style.height=h+'px';CX=CE.getContext('2d');CX.setTransform(d,0,0,d,0,0)}fit();addEventListener('resize',fit,{passive:true});
+function boom(x,y,tier){const k={basic:1,silver:1.4,gold:2}[tier]||1, cols=tier==='gold'?['#e6c26e','#fff2ce','#f6e3a4']:tier==='silver'?['#cfd7e3','#e7edf7','#ffffff']:['#d0d7e3','#f0f4fa','#ffffff'];
+  for(let i=0;i<140*k;i++){const a=Math.random()*6.283,s=3+Math.random()*6*k;PS.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-6*k,g:.25,r:2+Math.random()*3,life:180+Math.random()*80,col:cols[(Math.random()*cols.length)|0]})}
+  if(!RAF)RAF=requestAnimationFrame(loop)}
+function loop(t){if(!L)L=t;const dt=Math.min(32,t-L)/16.6667;L=t;CX.clearRect(0,0,CE.width,CE.height);
+  for(const p of PS){p.vy+=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;CX.globalAlpha=Math.max(0,Math.min(1,p.life/180));CX.fillStyle=p.col;CX.beginPath();CX.arc(p.x,p.y,p.r,0,6.283);CX.fill()}
+  PS=PS.filter(p=>p.life>0&&p.y<CE.height+12); if(PS.length)RAF=requestAnimationFrame(loop); else{cancelAnimationFrame(RAF);RAF=null;L=0}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-event]');if(!b)return; const ev=b.dataset.event;
+  if(ev==='join'||ev==='purchase'){const r=b.getBoundingClientRect();boom(r.left+r.width/2,r.top+r.height/2,b.dataset.tier||'basic')}},{passive:true});
 
-  // library modal
-  const lib = document.getElementById('libModal');
-  document.getElementById('openLib').onclick = ()=> lib.showModal();
-  document.getElementById('closeLib').onclick = ()=> lib.close();
+/* Save / load my view (local only) */
+$('#btnSave').onclick=()=>{const v={role:$('#roleSel')?$('#roleSel').value:'Admin',heroSel:$('#heroSel')?$('#heroSel').value:'Video',
+  hv:$('#heroVideo')?$('#heroVideo').value:'assets/videos/gc_spin.mp4',hi:$('#heroImage')?$('#heroImage').value:'assets/images/gc_logo.png',
+  text:getComputedStyle(document.documentElement).getPropertyValue('--ink').trim(),
+  gold:getComputedStyle(document.documentElement).getPropertyValue('--gold').trim(),
+  panel:getComputedStyle(document.documentElement).getPropertyValue('--panel').trim(),
+  ring:getComputedStyle(document.documentElement).getPropertyValue('--ring').trim(),
+  radius:getComputedStyle(document.documentElement).getPropertyValue('--radius').trim()};
+  localStorage.setItem('thegrid:view',JSON.stringify(v)); toast('View saved');};
+(function(){try{const v=JSON.parse(localStorage.getItem('thegrid:view')||'{}');
+  if(v.hv)$('#heroVideo').value=v.hv; if(v.hi)$('#heroImage').value=v.hi; if(v.heroSel) setHero(v.heroSel);
+  if(v.text)document.documentElement.style.setProperty('--ink',v.text);
+  if(v.gold)document.documentElement.style.setProperty('--gold',v.gold);
+  if(v.panel)document.documentElement.style.setProperty('--panel',v.panel);
+  if(v.ring)document.documentElement.style.setProperty('--ring',v.ring);
+  if(v.radius)document.documentElement.style.setProperty('--radius',v.radius);
+}catch{} })();
 
-  // customizer
-  const cust = document.getElementById('custModal');
-  document.getElementById('openCustomizer').onclick = ()=> cust.showModal();
-  document.getElementById('saveTheme').onclick = ()=>{
-    const c = document.getElementById('accentPick').value;
-    const r = document.getElementById('radius').value + 'px';
-    document.documentElement.style.setProperty('--accent', c);
-    document.documentElement.style.setProperty('--radius', r);
-    toast('Theme updated.');
-    cust.close();
-  };
+/* Customize modal (admin only — soft gate) */
+const custom=$('#customDialog'); $('#btnCustomize').onclick=()=>custom.showModal(); $('#closeCustomize').onclick=()=>custom.close();
+$('#applyTheme').onclick=()=>{document.documentElement.style.setProperty('--ink',$('#textPick').value);
+  document.documentElement.style.setProperty('--gold',$('#goldPick').value);
+  document.documentElement.style.setProperty('--panel',$('#panelPick').value);
+  document.documentElement.style.setProperty('--ring',$('#ringPick').value);
+  document.documentElement.style.setProperty('--radius',$('#radius').value+'px');
+  setHero($('#heroSel').value); toast('Theme applied');};
+$('#saveTheme').onclick=()=>{$('#btnSave').click()};
 
-  // confetti only on Join
-  document.getElementById('joinBtn').onclick = ()=>{
-    confetti(240);
-    setTimeout(()=>toast('Welcome aboard! (DEV)'), 300);
-  };
+/* Library modal + tiles (skip missing) */
+const lib=$('#libDialog'); $('#btnOpenLib').onclick=()=>{buildLib(); lib.showModal()}; $('#closeLib').onclick=()=>lib.close();
+const vids=['assets/videos/gc_spin.mp4','assets/videos/hero_1.mp4','assets/videos/interaction_1.mp4','assets/videos/natural_1.mp4','assets/videos/launch_tiktok.mp4'];
+const imgs=['assets/images/gc_logo.png','assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/launch_poster.jpg'];
+function tileVideo(src){const el=document.createElement('div');el.className='tile';const v=document.createElement('video');
+  Object.assign(v,{src:bust(src),muted:true,loop:true,playsInline:true}); v.style.height='140px'; v.style.width='100%'; v.style.objectFit='cover';
+  v.oncanplay=()=>v.play().catch(()=>{}); v.onerror=()=>el.remove(); const cap=document.createElement('div');cap.className='cap';cap.textContent=src.split('/').pop();
+  el.append(v,cap); el.onclick=()=>{ $('#heroVideo').value=src; setHero('Video'); lib.close(); toast('Hero → video'); }; return el;}
+function tileImage(src){const el=document.createElement('div');el.className='tile'; const i=new Image(); i.src=bust(src); i.loading='lazy'; i.onerror=()=>el.remove();
+  i.style.height='140px'; i.style.width='100%'; i.style.objectFit='cover'; const cap=document.createElement('div');cap.className='cap';cap.textContent=src.split('/').pop();
+  el.append(i,cap); el.onclick=()=>{ $('#heroImage').value=src; setHero('Image'); lib.close(); toast('Hero → image'); }; return el;}
+function buildLib(){const vg=$('#vGrid'), ig=$('#iGrid'); vg.innerHTML=''; ig.innerHTML=''; vids.forEach(s=>vg.appendChild(tileVideo(s))); imgs.forEach(s=>ig.appendChild(tileImage(s)));}
 
-  // tiny confetti
-  function confetti(n=120){
-    const box=document.createElement('div');
-    Object.assign(box.style,{position:'fixed',inset:0,overflow:'hidden',pointerEvents:'none',zIndex:9});
-    document.body.append(box);
-    for(let i=0;i<n;i++){
-      const s=document.createElement('i');
-      const size=6+Math.random()*7;
-      const x=Math.random()*100;
-      const d=4000+Math.random()*2000;
-      s.style.cssText=`position:absolute;top:-10px;left:${x}vw;width:${size}px;height:${size}px;background:hsl(${Math.random()*360} 90% 60%);transform:rotate(${Math.random()*360}deg);opacity:.95`;
-      box.appendChild(s);
-      s.animate([{transform:`translateY(0) rotate(0deg)`},{transform:`translateY(110vh) rotate(${720+Math.random()*720}deg)`}],{duration:d,iterations:1,easing:'cubic-bezier(.2,.7,.2,1)'});
-    }
-    setTimeout(()=>box.remove(),6500);
-  }
+/* “Coming Soon” for any button without a real destination yet */
+const soon=$('#soonDialog'); $('#closeSoon').onclick=()=>soon.close();
+['btnExplore','btnReels'].forEach(id=>{ const el=document.getElementById(id); if(el) el.onclick=()=>soon.showModal(); });
 
-  // toast
-  function toast(msg){
-    const t=document.createElement('div');
-    t.textContent=msg;
-    Object.assign(t.style,{position:'fixed',bottom:'16px',left:'50%',transform:'translateX(-50%)',background:'#0c1517',border:'1px solid #274147',padding:'10px 14px',borderRadius:'12px',zIndex:10,opacity:0});
-    document.body.append(t);
-    t.animate([{opacity:0,transform:'translate(-50%, 8px)'},{opacity:1,transform:'translate(-50%, 0)'}],{duration:200,fill:'forwards'});
-    setTimeout(()=>t.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}).finished.then(()=>t.remove()), 1400);
-  }
+/* toast helper */
+function toast(msg){const t=document.createElement('div');t.textContent=msg;
+  Object.assign(t.style,{position:'fixed',bottom:'16px',left:'50%',transform:'translateX(-50%)',background:'#0c1517',border:'1px solid var(--ring)',padding:'10px 14px',borderRadius:'12px',zIndex:9999,opacity:0});
+  document.body.append(t); t.animate([{opacity:0,transform:'translate(-50%,8px)'},{opacity:1,transform:'translate(-50%,0)'}],{duration:200,fill:'forwards'});
+  setTimeout(()=>t.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}).finished.then(()=>t.remove()),1500);
+}
+
+/* wire Join + Monetise (confetti + placeholder checkout) */
+function attachPurchase(selector){$$(selector).forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();const r=btn.getBoundingClientRect();boom(r.left+r.width/2,r.top+r.height/2,btn.dataset.tier||'basic'); setTimeout(()=>soon.showModal(),300);},{passive:false}))}
+attachPurchase('#btnJoin,[data-event="purchase"]');
+
+/* init hero to video */
+setHero('Video');
+})();
 </script>
 </body>
 </html>
