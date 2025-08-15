@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- THEGRID:HEAD:BEGIN -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>THEGRID — Black & Gold • Presets + Vibes</title>
+<title>THEGRID — Black & Gold • Live Custom</title>
 <meta name="color-scheme" content="dark">
 <style>
 :root{
@@ -23,8 +24,6 @@ body{
   font:500 16px/1.55 ui-sans-serif,system-ui,-apple-system,Inter,Segoe UI,Roboto,Helvetica,Arial;
   padding-top:var(--header-h);
 }
-
-/* Layout */
 .wrap{width:min(1040px,92vw); margin-inline:auto}
 .stack{display:grid; gap:14px}
 .grid{display:grid; gap:14px}
@@ -113,6 +112,7 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
 /* Confetti canvas */
 #confetti{position:fixed; inset:0; pointer-events:none; z-index:80}
 </style>
+<!-- THEGRID:HEAD:END -->
 </head>
 <body>
 
@@ -136,10 +136,10 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
 
 <main class="wrap stack">
 
-  <!-- HERO -->
+  <!-- THEGRID:HERO:BEGIN -->
   <section class="card borderable hero" id="heroCard">
     <h1>Black &amp; Gold <span style="color:var(--gold)">Creativity</span></h1>
-    <p class="muted">Cinematic visuals. One-file updates. Owner controls: borders, glow, colors, layout—plus vibe presets per section.</p>
+    <p class="muted">Cinematic visuals. One-file updates. Owner controls with presets, vibes, borders & glow.</p>
     <div class="stack">
       <div class="grid cols-3">
         <a class="btn" href="#library">Open Library</a>
@@ -151,8 +151,9 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
       </div>
     </div>
   </section>
+  <!-- THEGRID:HERO:END -->
 
-  <!-- LIBRARY -->
+  <!-- THEGRID:LIBRARY:BEGIN -->
   <section id="library" class="card borderable">
     <h2>Library</h2>
     <p class="muted">Tap a tile to set as Hero. Each tile can carry a <em>vibe</em> that rethemes sections.</p>
@@ -165,8 +166,9 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
       <div class="thumb" data-src="assets/images/hero_2.jpg" data-vibe="noir-bevel">hero_2.jpg</div>
     </div>
   </section>
+  <!-- THEGRID:LIBRARY:END -->
 
-  <!-- PRICING -->
+  <!-- THEGRID:PRICING:BEGIN -->
   <section id="pricing" class="card borderable">
     <div class="grid cols-3" style="align-items:center">
       <div><h2 style="margin:0">Monetise</h2><p class="muted">Launch Pricing (Limited)</p></div>
@@ -200,7 +202,6 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
           <li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li>
         </ul>
         <button class="btn gold" data-confetti>Choose Gold</button>
-        <!-- diamonds -->
         <i class="diamond" style="left:-10px;bottom:-10px"></i>
         <i class="diamond d2" style="right:-10px;top:-10px"></i>
         <i class="diamond d3" style="right:40%;top:-8px"></i>
@@ -210,23 +211,25 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
 
     <h3 style="margin:18px 0 8px">À-la-carte Services</h3>
     <div class="grid cols-3">
-      <div class="plan borderable"><strong>One-time Setup</strong><div class="muted">Deploy & connect Pages</div><div class="price" style="font-size:34px">£39</div><button class="btn gold" data-confetti>Start Setup</button></div>
+      <div class="plan borderable"><strong>One-time Setup</strong><div class="muted">Deploy &amp; connect Pages</div><div class="price" style="font-size:34px">£39</div><button class="btn gold" data-confetti>Start Setup</button></div>
       <div class="plan borderable"><strong>Custom Reel Pack</strong><div class="muted">3 reels tuned to your niche</div><div class="price" style="font-size:34px">£59</div><button class="btn gold" data-confetti>Order Pack</button></div>
       <div class="plan borderable"><strong>Template Pack</strong><div class="muted">5 premium blocks</div><div class="price" style="font-size:34px">£29</div><button class="btn gold" data-confetti>Get Pack</button></div>
     </div>
   </section>
+  <!-- THEGRID:PRICING:END -->
 
-  <!-- FAQ -->
+  <!-- THEGRID:FAQ:BEGIN -->
   <section class="card borderable">
     <h2>FAQ</h2>
     <p><b>No-code updates?</b> Yes — replace <code>index.html</code>, drop media into <code>assets</code>.</p>
     <p><b>Missing files?</b> Clean placeholders show — nothing breaks.</p>
   </section>
+  <!-- THEGRID:FAQ:END -->
 
   <footer class="muted" style="text-align:center">© THEGRID • Privacy • Terms</footer>
 </main>
 
-<!-- OWNER PANEL (long-press logo to toggle) -->
+<!-- THEGRID:OWNER-PANEL:BEGIN -->
 <div id="ownerPanel" class="stack">
   <div class="panelCard">
     <div class="roww"><strong>Design Panel</strong><span class="small">(Owner only · long-press logo once per device)</span></div>
@@ -265,7 +268,7 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
       <label class="small">Buttons radius</label><input id="btnRadius" type="range" min="6" max="18" step="1" value="10">
     </div>
 
-    <!-- Scope + Vibe -->
+    <!-- Scope -->
     <hr class="split">
     <div class="roww"><span class="small">Apply to section</span>
       <button class="sel active" data-scope="all">All</button>
@@ -282,7 +285,9 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
     </div>
   </div>
 </div>
+<!-- THEGRID:OWNER-PANEL:END -->
 
+<!-- THEGRID:SCRIPTS:BEGIN -->
 <script>
 /* Header spacing */
 (()=>{const tb=document.querySelector('.topbar'); const setH=()=>document.documentElement.style.setProperty('--header-h', tb.getBoundingClientRect().height+'px'); setH(); addEventListener('resize', setH)})();
@@ -291,11 +296,9 @@ input[type="color"], input[type="range"], select{border-radius:10px; border:1px 
 (()=>{const h=(new Date()).getHours(), line=document.getElementById('gline'), ico=document.getElementById('gico');
 let label='Hello', emoji='✨'; if(h>=5&&h<12){label='Good morning';emoji='🌅'} else if(h>=12&&h<17){label='Good afternoon';emoji='☀️'} else if(h>=17&&h<21){label='Good evening';emoji='🌇'} else {label='Good night';emoji='🌙'} line.textContent=label; ico.textContent=emoji;})();
 
-/* Confetti (fast, dense, glowing) */
-(()=>{const S={n:150,bursts:2,hue:48,jit:12,spdMin:6.2,spdMax:12.8,grav:.32,drag:.994,spinMin:-.28,spinMax:.28,szMin:4,szMax:10,lifeMin:140,lifeMax:220,glow:14,maxLive:900,wind:.004};
-const c=document.getElementById('confetti'),x=c.getContext('2d');let W,H,D;
-const rs=()=>{D=Math.min(devicePixelRatio||1,2);W=c.width=innerWidth*D;H=c.height=innerHeight*D;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(D,0,0,D,0,0)};
-addEventListener('resize',rs,{passive:true}); rs();
+/* Confetti (fast, dense, glowing) + live tunables */
+(()=>{const S=window.runConfettiSettings={n:150,bursts:2,hue:48,jit:12,spdMin:6.2,spdMax:12.8,grav:.32,drag:.994,spinMin:-.28,spinMax:.28,szMin:4,szMax:10,lifeMin:140,lifeMax:220,glow:14,maxLive:900,wind:.004};
+const c=document.getElementById('confetti'),x=c.getContext('2d');let W,H,D;const rs=()=>{D=Math.min(devicePixelRatio||1,2);W=c.width=innerWidth*D;H=c.height=innerHeight*D;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(D,0,0,D,0,0)};addEventListener('resize',rs,{passive:true}); rs();
 const R=(a,b)=>a+Math.random()*(b-a), P=[]; let f;
 function sp(cx,cy){for(let b=0;b<S.bursts;b++){for(let i=0;i<S.n;i++){if(P.length>=S.maxLive)break;const ang=R(-Math.PI,0),spd=R(S.spdMin,S.spdMax),h=S.hue+R(-S.jit,S.jit);
 P.push({x:cx,y:cy,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,r:R(0,6.28),vr:R(S.spinMin,S.spinMax),s:R(S.szMin,S.szMax),life:R(S.lifeMin,S.lifeMax),shape:(['rect','tri','dot'][(Math.random()*3)|0]),col:`hsl(${h} 85% 55%)`});}} if(!f)loop();}
@@ -318,10 +321,8 @@ document.getElementById('btnCustomize').onclick=()=>{ if(localStorage.getItem('g
 document.getElementById('closePanel').onclick=()=>panel.classList.remove('open');
 })();
 
-/* Presets + designer */
-(()=>{
-// Preset definitions (global defaults)
-const PRESETS={
+/* Presets + scopes */
+(()=>{const PRESETS={
   'showcase-gold': {brStyle:'glow', brWidth:1.5, brRadius:16, glow:24, brColor:'#2b3442', brAccent:'#e4c35a', gold:'#e4c35a', panel:'#11141a', btnRadius:12},
   'editorial-double': {brStyle:'double', brWidth:2, brRadius:14, glow:0, brColor:'#394555', brAccent:'#d9dee7', gold:'#e4c35a', panel:'#0f141b', btnRadius:10},
   'stealth-minimal': {brStyle:'solid', brWidth:1, brRadius:10, glow:0, brColor:'#1e252f', brAccent:'#607086', gold:'#caa94d', panel:'#0c0f13', btnRadius:8},
@@ -329,43 +330,16 @@ const PRESETS={
   'neon-aqua': {brStyle:'glow', brWidth:1.5, brRadius:14, glow:26, brColor:'#153a3a', brAccent:'#10b3a6', gold:'#d8f7f2', panel:'#0b1212', btnRadius:14},
   'noir-bevel': {brStyle:'bevel', brWidth:1.5, brRadius:12, glow:0, brColor:'#2a2f38', brAccent:'#9aa3af', gold:'#d9c078', panel:'#0e1116', btnRadius:10}
 };
-
-// Section scoping map
-const SCOPE_MAP={
-  all:  ['.borderable','.btn'],
-  hero: ['#heroCard','.hero .media'],
-  library:['#library','.thumb'],
-  pricing:['#pricing','.plan'],
-  buttons:['.btn']
-};
-
+const SCOPE_MAP={all:['.borderable','.btn'],hero:['#heroCard','.hero .media'],library:['#library','.thumb'],pricing:['#pricing','.plan'],buttons:['.btn']};
 const root=document.documentElement;
+const qsAll=s=>[...document.querySelectorAll(s)];
+const brWidth=document.getElementById('brWidth'), brRadius=document.getElementById('brRadius'), glow=document.getElementById('glow'), brColor=document.getElementById('brColor'), brAccent=document.getElementById('brAccent'), gold=document.getElementById('gold'), panel=document.getElementById('panel'), btnRadius=document.getElementById('btnRadius');
+let scope='all', activeStyle='solid';
 
-// Inputs
-const brWidth=document.getElementById('brWidth');
-const brRadius=document.getElementById('brRadius');
-const glow=document.getElementById('glow');
-const brColor=document.getElementById('brColor');
-const brAccent=document.getElementById('brAccent');
-const gold=document.getElementById('gold');
-const panel=document.getElementById('panel');
-const btnRadius=document.getElementById('btnRadius');
-
-let scope='all'; // default
-let activeStyle='solid';
-
-// helpers
-const qsAll = s => [...document.querySelectorAll(s)];
-function markActive(list, attr, val){ list.forEach(b=>b.classList.toggle('active', b.getAttribute(attr)===val)); }
-function applyVars(vars){
-  root.style.setProperty('--br-width', (vars.brWidth ?? brWidth.value)+'px');
-  root.style.setProperty('--br-radius', (vars.brRadius ?? brRadius.value)+'px');
-  root.style.setProperty('--glow-strength', (vars.glow ?? glow.value)+'px');
-  root.style.setProperty('--br-color', vars.brColor ?? brColor.value);
-  root.style.setProperty('--br-accent', vars.brAccent ?? brAccent.value);
-  root.style.setProperty('--gold', vars.gold ?? gold.value);
-  root.style.setProperty('--panel', vars.panel ?? panel.value);
-  root.style.setProperty('--btn-radius', (vars.btnRadius ?? btnRadius.value)+'px');
+function applyVars(v){const set=(k,val)=>root.style.setProperty(k,val);
+  set('--br-width',(v.brWidth??brWidth.value)+'px'); set('--br-radius',(v.brRadius??brRadius.value)+'px'); set('--glow-strength',(v.glow??glow.value)+'px');
+  set('--br-color',v.brColor??brColor.value); set('--br-accent',v.brAccent??brAccent.value); set('--gold',v.gold??gold.value); set('--panel',v.panel??panel.value);
+  set('--btn-radius',(v.btnRadius??btnRadius.value)+'px');
 }
 function setStyleOnScope(style){
   activeStyle=style;
@@ -373,95 +347,33 @@ function setStyleOnScope(style){
   qsAll(Object.values(SCOPE_MAP).flat().join(',')).forEach(n=>n.removeAttribute('data-br-style'));
   (SCOPE_MAP[scope]||[]).forEach(sel=>qsAll(sel).forEach(n=>n.setAttribute('data-br-style', style)));
 }
-
-// border style buttons
 qsAll('[data-brstyle]').forEach(b=>b.addEventListener('click',()=>{qsAll('[data-brstyle]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); setStyleOnScope(b.dataset.brstyle);}));
-// scope buttons
-qsAll('[data-scope]').forEach(b=>b.addEventListener('click',()=>{scope=b.dataset.scope; markActive(qsAll('[data-scope]'),'data-scope',scope); setStyleOnScope(activeStyle);}));
-// sliders/colors
+qsAll('[data-scope]').forEach(b=>b.addEventListener('click',()=>{scope=b.dataset.scope; qsAll('[data-scope]').forEach(x=>x.classList.toggle('active',x.dataset.scope===scope)); setStyleOnScope(activeStyle);}));
 [brWidth,brRadius,glow,brColor,brAccent,gold,panel,btnRadius].forEach(i=>i.addEventListener('input',()=>applyVars({})));
-
-// presets
-qsAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
-  const p=PRESETS[b.dataset.preset]; if(!p) return;
-  // mark active
-  qsAll('[data-preset]').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-  // apply style to current scope
-  applyVars(p); setStyleOnScope(p.brStyle);
-  // sync controls to preset values
-  brWidth.value=p.brWidth; brRadius.value=p.brRadius; glow.value=p.glow;
-  brColor.value=p.brColor; brAccent.value=p.brAccent; gold.value=p.gold; panel.value=p.panel; btnRadius.value=p.btnRadius;
-}));
-
-// save/reset
-document.getElementById('saveLook').onclick=()=>{
-  const state={
-    scope, style:activeStyle,
-    brWidth:brWidth.value, brRadius:brRadius.value, glow:glow.value,
-    brColor:brColor.value, brAccent:brAccent.value, gold:gold.value, panel:panel.value, btnRadius:btnRadius.value
-  };
-  localStorage.setItem('gc_look', JSON.stringify(state));
-  alert('Saved to this device.');
-};
+qsAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{const p=PRESETS[b.dataset.preset]; if(!p)return; qsAll('[data-preset]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); applyVars(p); setStyleOnScope(p.brStyle);
+  brWidth.value=p.brWidth; brRadius.value=p.brRadius; glow.value=p.glow; brColor.value=p.brColor; brAccent.value=p.brAccent; gold.value=p.gold; panel.value=p.panel; btnRadius.value=p.btnRadius; }));
+document.getElementById('saveLook').onclick=()=>{const state={scope, style:activeStyle, brWidth:brWidth.value, brRadius:brRadius.value, glow:glow.value, brColor:brColor.value, brAccent:brAccent.value, gold:gold.value, panel:panel.value, btnRadius:btnRadius.value}; localStorage.setItem('gc_look', JSON.stringify(state)); alert('Saved to this device.');};
 document.getElementById('resetLook').onclick=()=>{localStorage.removeItem('gc_look'); location.reload();};
-
-// restore
-(function restore(){
-  const s=localStorage.getItem('gc_look'); if(!s){ // default preset
-    document.querySelector('[data-preset="showcase-gold"]').click(); return;
-  }
-  try{
-    const v=JSON.parse(s);
-    scope=v.scope||'all'; activeStyle=v.style||'solid';
-    brWidth.value=v.brWidth; brRadius.value=v.brRadius; glow.value=v.glow;
-    brColor.value=v.brColor; brAccent.value=v.brAccent; gold.value=v.gold; panel.value=v.panel; btnRadius.value=v.btnRadius;
-    applyVars(v); setStyleOnScope(activeStyle);
-    markActive(qsAll('[data-scope]'),'data-scope',scope);
-  }catch{ document.querySelector('[data-preset="showcase-gold"]').click(); }
-})();
+(function restore(){const s=localStorage.getItem('gc_look'); if(!s){document.querySelector('[data-preset="showcase-gold"]').click(); return;} try{const v=JSON.parse(s); scope=v.scope||'all'; activeStyle=v.style||'solid';
+  brWidth.value=v.brWidth; brRadius.value=v.brRadius; glow.value=v.glow; brColor.value=v.brColor; brAccent.value=v.brAccent; gold.value=v.gold; panel.value=v.panel; btnRadius.value=v.btnRadius; applyVars(v); setStyleOnScope(activeStyle);
+  qsAll('[data-scope]').forEach(x=>x.classList.toggle('active',x.dataset.scope===scope)); }catch{ document.querySelector('[data-preset="showcase-gold"]').click(); }})();
 })();
 
 /* Library: set Hero + auto-vibe mapping */
-(()=>{
-// map vibes to presets
-const VIBE_TO_PRESET={
-  'showcase-gold':'showcase-gold',
-  'editorial-double':'editorial-double',
-  'stealth-minimal':'stealth-minimal',
-  'diamond-luxe':'diamond-luxe',
-  'neon-aqua':'neon-aqua',
-  'noir-bevel':'noir-bevel'
-};
-const hero=document.getElementById('hero');
-document.querySelectorAll('.thumb').forEach(t=>{
-  const src=t.dataset.src, vibe=t.dataset.vibe; if(!src) return;
-  const isVideo=/\.(mp4|webm|mov)$/i.test(src);
-  // preload to mark active
-  if(isVideo){ const v=document.createElement('video'); v.src=src; v.muted=true; v.playsInline=true; v.loop=true; v.oncanplay=()=>t.classList.add('active'); }
-  else { const i=new Image(); i.src=src; i.onload=()=>t.classList.add('active'); }
-  t.addEventListener('click', ()=>{
-    document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('picked'));
-    t.classList.add('picked');
-    if(isVideo){ hero.removeAttribute('poster'); hero.src=src; hero.play().catch(()=>{}); }
-    else { hero.pause(); hero.removeAttribute('src'); hero.load(); hero.setAttribute('poster', src); }
-    // auto-apply vibe preset to HERO + PRICING to “match the video”
-    const presetBtn = vibe ? document.querySelector(`[data-preset="${VIBE_TO_PRESET[vibe]}"]`) : null;
-    if(presetBtn){
-      // Temporarily set scope=hero, apply preset, then scope=pricing and apply same, then restore scope to 'all' visually marked
-      const scopeBtns=[...document.querySelectorAll('[data-scope]')];
-      const clickScope=(name)=>scopeBtns.find(b=>b.dataset.scope===name)?.click();
-      clickScope('hero'); presetBtn.click();
-      clickScope('pricing'); presetBtn.click();
-      clickScope('all'); // back to all for future edits
-    }
-    scrollTo({top:0,behavior:'smooth'});
-  });
-});
-})();
-
-/* Owner panel show/hide */
-(()=>{const panel=document.getElementById('ownerPanel'); document.getElementById('closePanel').onclick=()=>panel.classList.remove('open');
-document.getElementById('btnCustomize').onclick=()=>{ if(localStorage.getItem('gc_owner')==='1') panel.classList.add('open'); else alert('Owner controls hidden. Long-press the logo to enable on this device.'); };})();
+(()=>{const VIBE_TO_PRESET={'showcase-gold':'showcase-gold','editorial-double':'editorial-double','stealth-minimal':'stealth-minimal','diamond-luxe':'diamond-luxe','neon-aqua':'neon-aqua','noir-bevel':'noir-bevel'};
+const hero=document.getElementById('hero'); document.querySelectorAll('.thumb').forEach(t=>{const src=t.dataset.src, vibe=t.dataset.vibe; if(!src) return;
+  const isVideo=/\.(mp4|webm|mov)$/i.test(src); if(isVideo){const v=document.createElement('video'); v.src=src; v.muted=true; v.playsInline=true; v.loop=true; v.oncanplay=()=>t.classList.add('active');} else {const i=new Image(); i.src=src; i.onload=()=>t.classList.add('active');}
+  t.addEventListener('click', ()=>{document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('picked')); t.classList.add('picked');
+    if(isVideo){ hero.removeAttribute('poster'); hero.src=src; hero.play().catch(()=>{});} else { hero.pause(); hero.removeAttribute('src'); hero.load(); hero.setAttribute('poster', src);}
+    const btn=vibe?document.querySelector(`[data-preset="${VIBE_TO_PRESET[vibe]}"]`):null; if(btn){const scopes=[...document.querySelectorAll('[data-scope]')];
+      const clickScope=n=>scopes.find(b=>b.dataset.scope===n)?.click(); clickScope('hero'); btn.click(); clickScope('pricing'); btn.click(); clickScope('all');}
+    scrollTo({top:0,behavior:'smooth'}); });
+});})();
 </script>
+<!-- THEGRID:SCRIPTS:END -->
+
+<!-- THEGRID:PATCH-SLOT:BEGIN (leave this in the file; paste future capsules below this line) -->
+<!-- THEGRID:PATCH-SLOT:END -->
+
 </body>
 </html>
