@@ -371,143 +371,385 @@ const hero=document.getElementById('hero'); document.querySelectorAll('.thumb').
 });})();
 </script>
 <!-- THEGRID:SCRIPTS:END -->
-<!-- THEGRID:PATCH-SLOT:BEGIN (v1.7 Luxury Confetti + Glow) -->
+<!-- THEGRID:PATCH-SLOT:BEGIN (v2.2 All-in-One + Media Manager) -->
 <script>
-(() => {
-  const VER = "v1.7";
-  const TAG = "THEGRID Patch " + VER;
+(()=>{
+  const VER="v2.2";
+  const OWNER_KEY="tg_owner";
+  const isOwner = localStorage.getItem(OWNER_KEY)==="1";
 
-  // ---- helpers ------------------------------------------------------------
-  const once = (id, el) => (document.getElementById(id) ? null : (el.id = id, document.head.appendChild(el)));
-  const ensureCSS = (href, id) => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet"; link.href = href;
-    once(id, link);
-  };
-  const ensureJS = (src, id, onload) => {
-    if (document.getElementById(id)) return;
-    const s = document.createElement("script");
-    s.src = src; s.defer = true; s.onload = () => onload && onload();
-    s.id = id; document.body.appendChild(s);
-  };
+  /* ========= CONTACT CONFIG =========
+     Works now with mailto → gridcoresystems@gmail.com
+     Add EmailJS keys later to switch to in-site send automatically.
+  */
+  const CONTACT_TO = "gridcoresystems@gmail.com";
+  const EMAILJS_PUBLIC_KEY = "";  // e.g. "nP3xYz_abC123"
+  const EMAILJS_SERVICE_ID = "";  // e.g. "service_gmail"
+  const EMAILJS_TEMPLATE_ID = ""; // e.g. "template_contact"
 
-  // ---- Tiers & styles -----------------------------------------------------
-  const TIERS = ["basic","silver","gold","diamond"];
-  const STYLES = {
-    basic:   { color:"#ADADB8", shape:"dot",     size:12, density:12, speed:1.2 },
-    silver:  { color:"#C0C0C0", shape:"square",  size:12, density:16, speed:1.1 },
-    gold:    { color:"#FFD700", shape:"triangle",size:14, density:22, speed:1.0 },
-    diamond: { color:"#B9F2FF", shape:"star",    size:14, density:26, speed:0.95 }
-  };
+  /* ========= THEME (same as before, persisted CSS vars) ========= */
+  const DEFAULTS={ "--tg-gold":"#FFD700","--tg-gold-deep":"#C59D00","--tg-silver":"#C0C0C0","--tg-diamond":"#B9F2FF",
+    "--tg-ink":"#0C0F14","--tg-panel":"#11151B","--tg-card":"#131922","--tg-card-ink":"#E9EEF6",
+    "--tg-border":"#FFD700","--tg-accent":"#FFD700","--tg-ring":"rgba(255,215,0,.25)",
+    "--tg-radius":"18px","--tg-border-w":"2px","--tg-border-glow":"0 0 20px rgba(255,215,0,.25), inset 0 0 12px rgba(255,255,255,.04)",
+    "--tg-btn-radius":"14px","--tg-btn-bg":"#191F29","--tg-btn-fg":"#F5F7FA",
+    "--tg-btn-ring":"0 0 0 1px rgba(255,255,255,.06), 0 1px 12px rgba(0,0,0,.35)","--tg-btn-bg-hover":"#1E2633" };
+  const VARS_KEY="tg_theme_vars";
+  const loadVars=()=>{try{return Object.assign({},DEFAULTS,JSON.parse(localStorage.getItem(VARS_KEY)||"{}"))}catch{return {...DEFAULTS}}};
+  const saveVars=v=>{try{localStorage.setItem(VARS_KEY,JSON.stringify(v))}catch{}};
+  const VARS=loadVars();
+  const applyVars=(v=VARS)=>{Object.entries(v).forEach(([k,val])=>document.documentElement.style.setProperty(k,val));};
+  applyVars();
 
-  // ---- Tag pricing cards with data attributes -----------------------------
-  const cards = [...document.querySelectorAll(".pricing-card")];
-  cards.forEach((card, i) => {
-    const tier = (card.dataset.tier || TIERS[i] || "basic");
-    const style = STYLES[tier] || STYLES.basic;
-    card.dataset.tier = tier;
-    card.setAttribute("data-confetti-color", style.color);
-    card.setAttribute("data-confetti-shape", style.shape);
-    card.setAttribute("data-confetti-size",  style.size);
-    card.setAttribute("data-confetti-density", style.density);
-    card.setAttribute("data-confetti-speed", style.speed);
-  });
+  function toColor(v){ if(!v) return "#ffffff"; if(/^#/.test(v)) return v;
+    const m=/rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(v); if(!m) return "#ffffff";
+    const h=n=>(+n).toString(16).padStart(2,"0"); return "#"+h(m[1])+h(m[2])+h(m[3]); }
+  function pxNum(v,f){const n=parseInt(String(v||"").replace("px",""),10);return Number.isFinite(n)?n:f;}
 
-  // ---- Inline fallback CSS (used only if effects.css not present) ---------
-  if (!document.querySelector('link[href*="assets/css/effects.css"]')) {
-    const css = document.createElement("style");
-    css.id = "tg-effects-inline";
-    css.textContent = `
-    /* elegant borders & glow */
-    .pricing-card{ position:relative; }
-    .pricing-card.is-live::before{
-      content:"Live"; position:absolute; top:10px; right:12px;
-      font:600 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background:rgba(255,255,255,.06); padding:6px 10px; border-radius:12px;
-      border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px);
+  // Long-press logo to unlock owner
+  const logo=document.getElementById("siteLogo");
+  if(logo){
+    let t; const on=()=>{t=setTimeout(()=>{localStorage.setItem(OWNER_KEY,"1");location.reload()},800)};
+    const off=()=>clearTimeout(t);
+    logo.addEventListener("touchstart",on); logo.addEventListener("touchend",off);
+    logo.addEventListener("mousedown",on);  logo.addEventListener("mouseup",off);
+  }
+
+  /* ========= CONFETTI (light, mobile-safe) ========= */
+  const TIERS={basic:{color:"#ADADB8",shape:"•",size:12,density:14,speed:1.1},
+               silver:{color:"#C0C0C0",shape:"■",size:12,density:18,speed:1.0},
+               gold:{color:"#FFD700",shape:"▲",size:14,density:24,speed:1.0},
+               diamond:{color:"#B9F2FF",shape:"✦",size:14,density:28,speed:0.95}};
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const small=Math.min(innerWidth,innerHeight)<480;
+  const scale = reduce?0.3: small?0.5: 1;
+
+  function burst(btn,tierKey='basic'){
+    if(reduce) return;
+    const style=TIERS[tierKey]||TIERS.basic;
+    const N=Math.max(12,Math.round(style.density*scale));
+    const rect=btn.getBoundingClientRect(); const ox=rect.left+rect.width/2; const oy=rect.top+rect.height/2+scrollY;
+    for(let i=0;i<N;i++){
+      const s=document.createElement('span'); s.textContent=style.shape;
+      Object.assign(s.style,{position:'absolute',left:`${ox}px`,top:`${oy}px`,transform:'translate(-50%,-50%)',color:style.color,fontSize:`${style.size}px`,pointerEvents:'none',zIndex:9999,
+        textShadow:`0 0 6px ${style.color},0 0 12px ${style.color}`,animation:`tgFall ${1.2*style.speed+Math.random()*0.6}s linear forwards`,
+        '--dx':`${(Math.random()-.5)*160}px`});
+      document.body.appendChild(s); setTimeout(()=>s.remove(),2200);
     }
-    .pricing-card::after{
-      content:"✨"; margin-left:.5ch; font-size:1.15em; vertical-align:middle;
-      color:var(--tg-confetti, #FFD700);
-      text-shadow: 0 0 6px currentColor, 0 0 14px currentColor;
-      animation: tgShimmer 1.6s ease-in-out infinite alternate;
-    }
-    .pricing-card[data-tier="diamond"]::after{
-      content:"💎"; color:#B9F2FF; text-shadow:0 0 8px #B9F2FF, 0 0 18px #B9F2FF;
-      animation: tgGlow 2s ease-in-out infinite alternate;
-    }
-    @keyframes tgShimmer{ from{opacity:.7; transform:translateY(0)} to{opacity:1; transform:translateY(-1px)} }
-    @keyframes tgGlow{ from{filter:drop-shadow(0 0 4px currentColor)} to{filter:drop-shadow(0 0 10px currentColor)} }
-    /* confetti fall animation fallback */
-    @keyframes tgFall {
-      0% { transform: translate3d(0,0,0) rotate(0deg); opacity:1; }
-      100% { transform: translate3d(var(--dx,40px), 64vh, 0) rotate(540deg); opacity:0; }
-    }`;
+  }
+  if(!document.getElementById('tgFall-anim')){
+    const st=document.createElement('style'); st.id='tgFall-anim';
+    st.textContent=`@keyframes tgFall{0%{transform:translate(-50%,-50%) translateY(0) rotate(0);opacity:1}100%{transform:translate(-50%,-50%) translateY(64vh) translateX(var(--dx)) rotate(540deg);opacity:0}}`;
+    document.head.appendChild(st);
+  }
+  function wireConfetti(){
+    document.querySelectorAll('.pricing-card .choose-btn,.pricing-card .tg-purchase').forEach(btn=>{
+      if(btn._tgBound) return; btn._tgBound=1;
+      btn.addEventListener('click',()=>{
+        const tier=(btn.dataset.tier||(btn.closest('.pricing-card')?.dataset.tier)||'basic');
+        burst(btn,tier);
+      });
+    });
+  }
+  wireConfetti();
+
+  /* ========= CONTACT (mailto now; EmailJS later when keys added) ========= */
+  const cssId='tg-contact-css';
+  if(!document.getElementById(cssId)){
+    const css=document.createElement('style'); css.id=cssId; css.textContent=`
+      .tg-contact{max-width:720px;margin:24px auto;padding:18px;background:var(--tg-card,#131922);color:var(--tg-card-ink,#E9EEF6);border-radius:var(--tg-radius,18px);border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 32px rgba(0,0,0,.35)}
+      .tg-contact h3{margin:0 0 12px;font-weight:800;letter-spacing:.2px}
+      .tg-field{display:grid;gap:6px;margin:10px 0}
+      .tg-field input,.tg-field textarea{background:#0E141C;color:#E9EEF6;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px;outline:none}
+      .tg-field input:focus,.tg-field textarea:focus{border-color:var(--tg-border,#FFD700)}
+      .tg-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.1rem;border-radius:var(--tg-btn-radius,14px);background:var(--tg-btn-bg,#191F29);color:var(--tg-btn-fg,#F5F7FA);border:1px solid rgba(255,255,255,.10);cursor:pointer;font-weight:700}
+      .tg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      @media(max-width:680px){.tg-row{grid-template-columns:1fr}}
+      .tg-note{opacity:.7;font-size:.9rem;margin-top:10px}
+      .tg-toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#0b1016;color:#cfe1ff;border:1px solid #2a3040;border-radius:10px;padding:10px 14px;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:0;transition:opacity .15s}`; 
     document.head.appendChild(css);
   }
+  function toast(msg,ok=true){const t=document.createElement('div');t.className='tg-toast';t.style.borderColor=ok?'#2a3040':'#5a2a2a';t.style.color=ok?'#cfe1ff':'#ffd7d7';t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(()=>t.style.opacity=1);setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.remove(),200)},2400)}
+  function ensureContact(){
+    if(document.getElementById('tg-contact')) return;
+    const host=document.querySelector('#contact')||document.querySelector('main')||document.body;
+    const wrap=document.createElement('section'); wrap.id='tg-contact'; wrap.className='tg-contact tg-border glow';
+    wrap.innerHTML=`
+      <h3>Contact us</h3>
+      <form id="tg-contact-form">
+        <div class="tg-row">
+          <label class="tg-field"><span>Name</span><input type="text" name="from_name" required placeholder="Your name"></label>
+          <label class="tg-field"><span>Email</span><input type="email" name="reply_to" required placeholder="you@example.com"></label>
+        </div>
+        <label class="tg-field"><span>Subject</span><input type="text" name="subject" required placeholder="How can we help?"></label>
+        <label class="tg-field"><span>Message</span><textarea name="message" required rows="5" placeholder="Write your message…"></textarea></label>
+        <input type="text" name="_tg_hp" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" tabindex="-1" autocomplete="off">
+        <button class="tg-btn" id="tg-send-btn" type="submit">Send message</button>
+        <div class="tg-note">We’ll reply from <b>${CONTACT_TO}</b>. No spam, no sharing.</div>
+      </form>`;
+    host.appendChild(wrap);
+  }
+  function wireContact(){
+    const form=document.getElementById('tg-contact-form'); const btn=document.getElementById('tg-send-btn'); if(!form||!btn) return;
+    form.addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const fd=new FormData(form);
+      if(fd.get('_tg_hp')){toast('Blocked (spam)',false);return;}
+      const email=String(fd.get('reply_to')||''); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Enter a valid email',false);return;}
+      const subj=encodeURIComponent(String(fd.get('subject')||'Contact from site'));
+      const body=encodeURIComponent(`Name: ${fd.get('from_name')}\nEmail: ${email}\n\n${fd.get('message')}`);
+      btn.disabled=true; btn.textContent='Sending…';
 
-  // ---- Inline fallback JS for confetti (used if confetti.js not present) --
-  function fallbackBurst(btn, style) {
-    const { color, shape, size, density, speed } = style;
-    const N = density;
-    const rect = btn.getBoundingClientRect();
-    const originX = rect.left + rect.width / 2;
-    const originY = rect.top  + rect.height / 2 + window.scrollY;
+      const configured = EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID;
+      function done(ok){ btn.disabled=false; btn.textContent='Send message'; toast(ok?'✅ Message sent!':'❌ Failed. Try again.', ok); if(ok) form.reset(); }
 
-    const glyphs = { dot:"•", square:"■", triangle:"▲", star:"✦" };
-    for (let i = 0; i < N; i++) {
-      const p = document.createElement("span");
-      p.textContent = glyphs[shape] || "✦";
-      Object.assign(p.style, {
-        position:"absolute", left: `${originX}px`, top: `${originY}px`,
-        color, fontSize: `${size}px`, pointerEvents:"none", zIndex: 9999,
-        transform: "translate(-50%, -50%)",
-        animation: `tgFall ${1.2 * speed + Math.random()*0.6}s linear forwards`,
-        "--dx": `${(Math.random() - .5) * 160}px`,
-        textShadow: `0 0 6px ${color},0 0 12px ${color}`
-      });
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 2200);
+      if(configured && window.emailjs){
+        window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {from_name:fd.get('from_name'),reply_to:email,subject:fd.get('subject'),message:fd.get('message')})
+          .then(()=>done(true)).catch(()=>done(false));
+      }else if(configured && !window.emailjs){
+        const s=document.createElement('script'); s.src="https://cdn.emailjs.com/sdk/3.11.0/email.min.js";
+        s.onload=()=>{ try{window.emailjs.init(EMAILJS_PUBLIC_KEY);}catch{}; window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {from_name:fd.get('from_name'),reply_to:email,subject:fd.get('subject'),message:fd.get('message')})
+          .then(()=>done(true)).catch(()=>done(false)); };
+        document.body.appendChild(s);
+      }else{ location.href=`mailto:${CONTACT_TO}?subject=${subj}&body=${body}`; done(true); }
+    });
+  }
+  ensureContact(); wireContact();
+
+  /* ========= MEDIA MANAGER (Owner-only) =========
+     Lets you set: Logo image, Spinner video, Hero (img/video), Library items.
+     Persists to localStorage; optionally merges with /assets/manifest.json if present.
+  */
+  const MM_KEY="tg_media_map";
+  const DEF_MEDIA={
+    logo: "assets/images/logo.png",
+    spinner: "assets/videos/gc_spin.mp4",
+    heroImage: "assets/images/hero.jpg",
+    heroVideo: "assets/videos/hero.mp4",
+    library: [] // [{type:'image'|'video', path:'assets/images/x.png', label:'…'}]
+  };
+  function loadMedia(){ try{return Object.assign({},DEF_MEDIA,JSON.parse(localStorage.getItem(MM_KEY)||"{}"))}catch{return {...DEF_MEDIA}}}
+  function saveMedia(m){ try{localStorage.setItem(MM_KEY,JSON.stringify(m))}catch{} }
+  const MEDIA = loadMedia();
+
+  async function tryLoadManifest(){
+    // Optional manifest: /assets/manifest.json
+    // {
+    //   "images": ["assets/images/logo.png","assets/images/hero.jpg"],
+    //   "videos": ["assets/videos/gc_spin.mp4","assets/videos/hero.mp4"]
+    // }
+    try{
+      const res = await fetch("assets/manifest.json?ts="+Date.now(), {cache:"no-store"});
+      if(!res.ok) return;
+      const man = await res.json();
+      // If user hasn't picked custom ones, prefer manifest defaults
+      if(!MEDIA.logo && man.images?.length) MEDIA.logo = man.images[0];
+      if(!MEDIA.spinner && man.videos?.length) MEDIA.spinner = man.videos.find(v=>/spin|logo/i.test(v)) || man.videos[0];
+      if(!MEDIA.heroImage && man.images?.length) MEDIA.heroImage = man.images.find(i=>/hero|bg/i.test(i)) || man.images[0];
+      if(!MEDIA.heroVideo && man.videos?.length) MEDIA.heroVideo = man.videos.find(v=>/hero/i.test(v)) || man.videos[0];
+      if(man.library?.length) MEDIA.library = man.library; // optional detailed library from file
+      saveMedia(MEDIA);
+    }catch{/* no manifest, ignore */}
+  }
+
+  // Apply media to DOM (best-effort selectors)
+  function applyMedia(){
+    // Logo
+    const logoImg = document.querySelector('#siteLogo, img[alt*="logo" i]');
+    if(logoImg && MEDIA.logo) logoImg.src = MEDIA.logo;
+
+    // Spinner video (if present)
+    const spinVideo = document.querySelector('#logoSpinner, #spinnerVideo, video[data-role="logo-spinner"]');
+    if(spinVideo && MEDIA.spinner){ spinVideo.src = MEDIA.spinner; spinVideo.loop=true; spinVideo.muted=true; spinVideo.playsInline=true; spinVideo.autoplay=true; spinVideo.load(); spinVideo.play().catch(()=>{}); }
+
+    // Hero image/video (prefer video if present)
+    const heroVideo = document.querySelector('#heroVideo, video[data-role="hero"]');
+    const heroImg   = document.querySelector('#heroImage, img[data-role="hero"]');
+    if(heroVideo && MEDIA.heroVideo){ heroVideo.src = MEDIA.heroVideo; heroVideo.muted=true; heroVideo.loop=true; heroVideo.playsInline=true; heroVideo.autoplay=true; heroVideo.load(); heroVideo.play().catch(()=>{}); }
+    else if(heroImg && MEDIA.heroImage){ heroImg.src = MEDIA.heroImage; }
+
+    // Simple Library renderer (owner-only preview)
+    const libHost = document.querySelector('#library, #tg-library');
+    if(libHost){
+      const items = MEDIA.library || [];
+      if(items.length){
+        libHost.innerHTML = `<div class="tg-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px"></div>`;
+        const grid = libHost.firstElementChild;
+        items.forEach(it=>{
+          if(it.type==='video'){
+            const v=document.createElement('video'); v.src=it.path; v.controls=true; v.style.width='100%'; v.style.borderRadius='12px';
+            grid.appendChild(v);
+          }else{
+            const img=document.createElement('img'); img.src=it.path; img.alt=it.label||''; img.style.width='100%'; img.style.borderRadius='12px';
+            grid.appendChild(img);
+          }
+        });
+      }
     }
   }
 
-  // ---- Wire button clicks -------------------------------------------------
-  const wire = () => {
-    document.querySelectorAll(".pricing-card button, .pricing-card .tg-purchase")
-      .forEach(btn => {
-        btn.removeEventListener("_tgClick", btn._tgClickHandler || (()=>{}));
-        const handler = () => {
-          const card = btn.closest(".pricing-card");
-          if (!card) return;
-          const tier = card.dataset.tier || "basic";
-          const style = STYLES[tier] || STYLES.basic;
+  // Owner UI (Theme + Media tabs)
+  if(isOwner){
+    // Badge
+    const b=document.createElement('div');
+    b.textContent=`PATCH ${VER} • owner on`;
+    Object.assign(b.style,{position:'fixed',left:'10px',bottom:'10px',zIndex:98,background:'#0d1016',border:'1px solid #2a3040',color:'#cfd6df',borderRadius:'10px',padding:'6px 10px',fontSize:'12px',opacity:'.45',pointerEvents:'none'});
+    document.body.appendChild(b);
 
-          // prefer external confetti.js if it attached a global API
-          if (window.tgConfetti && typeof window.tgConfetti.burst === "function") {
-            window.tgConfetti.burst(btn, style);
-          } else {
-            fallbackBurst(btn, style);
-          }
-        };
-        btn._tgClickHandler = handler;
-        btn.addEventListener("click", handler);
-        btn.addEventListener("_tgClick", handler); // marker
+    // FAB
+    const fab=document.createElement('button');
+    fab.textContent='⚙️';
+    Object.assign(fab.style,{position:'fixed',right:'14px',bottom:'14px',zIndex:99,width:'46px',height:'46px',borderRadius:'50%',border:'1px solid #2a3040',background:'#0b1016',color:'#f0f3f8',boxShadow:'0 10px 30px rgba(0,0,0,.45)',cursor:'pointer',fontSize:'20px'});
+    document.body.appendChild(fab);
+
+    // Panel with tabs
+    const panel=document.createElement('div');
+    panel.style.cssText="position:fixed;right:14px;bottom:74px;z-index:99;background:var(--tg-panel,#11151B);color:#cfd6df;border:1px solid #2a3040;border-radius:16px;width:min(420px,94vw);padding:0;box-shadow:0 18px 60px rgba(0,0,0,.45);font:500 13px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:none";
+    panel.innerHTML=`
+      <div style="display:flex;gap:6px;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #2a3040">
+        <div style="display:flex;gap:6px">
+          <button data-tab="theme" class="tgTab" style="all:unset;cursor:pointer;padding:6px 10px;border:1px solid #2a3040;border-radius:10px;background:#0b1016">Theme</button>
+          <button data-tab="media" class="tgTab" style="all:unset;cursor:pointer;padding:6px 10px;border:1px solid #2a3040;border-radius:10px;background:#0b1016">Media</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="tgSave"  style="all:unset;cursor:pointer;padding:6px 10px;border:1px solid #5a4b20;border-radius:10px;background:#151007;color:#f6e7b9">Save</button>
+          <button id="tgClose" style="all:unset;cursor:pointer;padding:6px 10px;border:1px solid #2a3040;border-radius:10px;background:#0b1016">Close</button>
+        </div>
+      </div>
+      <div id="tgPane-theme" style="padding:12px;display:block"></div>
+      <div id="tgPane-media" style="padding:12px;display:none"></div>
+    `;
+    document.body.appendChild(panel);
+    fab.addEventListener('click',()=>panel.style.display=panel.style.display==='none'?'block':'none');
+    panel.querySelector('#tgClose').addEventListener('click',()=>panel.style.display='none');
+
+    // THEME pane
+    const themePane=panel.querySelector('#tgPane-theme');
+    themePane.innerHTML = `
+      <div style="margin:10px 0 6px;color:#9fb0c6">Brand Colours</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+        ${[["--tg-gold","Gold"],["--tg-silver","Silver"],["--tg-diamond","Diamond"],["--tg-border","Border"],["--tg-card","Card BG"],["--tg-card-ink","Card Text"]].map(([k,l])=>`
+          <label style="display:grid;gap:6px">
+            <span>${l}</span>
+            <input data-var="${k}" type="color" value="${toColor(VARS[k])}" style="height:34px;border-radius:8px;background:#0d1018;border:1px solid #2a3040">
+          </label>`).join('')}
+      </div>
+      <div style="margin:12px 0 6px;color:#9fb0c6">Radii & Border</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        ${rangeRow("--tg-radius","Radius",pxNum(VARS["--tg-radius"],18),6,32)}
+        ${rangeRow("--tg-btn-radius","Btn Radius",pxNum(VARS["--tg-btn-radius"],14),4,26)}
+        ${rangeRow("--tg-border-w","Border W",pxNum(VARS["--tg-border-w"],2),1,5)}
+      </div>
+    `;
+    function rangeRow(varkey,label,val,min,max){
+      return `<label style="display:grid;gap:6px"><span>${label}: <b id="${varkey}-val">${val}</b>px</span><input data-var="${varkey}" type="range" min="${min}" max="${max}" step="1" value="${val}"></label>`;
+    }
+    themePane.querySelectorAll('input[type="color"]').forEach(inp=>{
+      inp.addEventListener('input',()=>{VARS[inp.dataset.var]=inp.value; applyVars();});
+    });
+    themePane.querySelectorAll('input[type="range"]').forEach(inp=>{
+      const out=themePane.querySelector(`#${inp.dataset.var}-val`);
+      inp.addEventListener('input',()=>{VARS[inp.dataset.var]=`${inp.value}px`; if(out) out.textContent=inp.value; applyVars();});
+    });
+
+    // MEDIA pane
+    const mediaPane=panel.querySelector('#tgPane-media');
+    function inputRow(id,label,placeholder,value){
+      return `<label class="tg-field"><span>${label}</span><input id="${id}" type="text" placeholder="${placeholder}" value="${value||''}"></label>`;
+    }
+    mediaPane.innerHTML = `
+      <div style="display:grid;gap:8px">
+        ${inputRow("tgMediaLogo","Logo image path","assets/images/logo.png", MEDIA.logo)}
+        ${inputRow("tgMediaSpin","Spinner video path","assets/videos/gc_spin.mp4", MEDIA.spinner)}
+        ${inputRow("tgMediaHeroImg","Hero image path","assets/images/hero.jpg", MEDIA.heroImage)}
+        ${inputRow("tgMediaHeroVid","Hero video path","assets/videos/hero.mp4", MEDIA.heroVideo)}
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="tgApplyMedia" class="tg-btn">Apply to page</button>
+          <button id="tgLoadManifest" class="tg-btn">Load manifest.json</button>
+          <button id="tgAddToLibrary" class="tg-btn">Add Library Item</button>
+        </div>
+        <div id="tgLibList" style="margin-top:8px"></div>
+        <div class="tg-note">Tip: Put files in <code>assets/images/</code> or <code>assets/videos/</code>. Optionally add <code>assets/manifest.json</code> to auto-list.</div>
+      </div>
+    `;
+    function renderLib(){
+      const host=mediaPane.querySelector('#tgLibList');
+      const arr=MEDIA.library||[];
+      if(!arr.length){ host.innerHTML='<div class="tg-note">Library empty.</div>'; return; }
+      host.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px"></div>`;
+      const grid=host.firstElementChild;
+      arr.forEach((it,idx)=>{
+        const card=document.createElement('div');
+        card.className='tg-surface tg-border'; card.style.padding='8px'; card.style.borderRadius='12px';
+        card.innerHTML = `
+          <div style="font-weight:700;margin-bottom:4px">${it.label||it.path.split('/').pop()}</div>
+          <div style="font-size:12px;opacity:.7">${it.type} · ${it.path}</div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button data-idx="${idx}" data-act="hero"  class="tg-btn">Set as Hero</button>
+            <button data-idx="${idx}" data-act="logo"  class="tg-btn">Set as Logo</button>
+          </div>
+        `;
+        grid.appendChild(card);
       });
-  };
+      grid.querySelectorAll('button').forEach(btn=>{
+        btn.onclick=()=>{
+          const it=MEDIA.library[+btn.dataset.idx];
+          if(!it) return;
+          if(btn.dataset.act==='hero'){
+            if(it.type==='video'){ MEDIA.heroVideo=it.path; MEDIA.heroImage=""; }
+            else { MEDIA.heroImage=it.path; MEDIA.heroVideo=""; }
+          }else if(btn.dataset.act==='logo'){
+            if(it.type==='image') MEDIA.logo=it.path;
+          }
+          saveMedia(MEDIA); applyMedia(); toast('Applied');
+        };
+      });
+    }
+    renderLib();
 
-  // ---- Try to use external files if you add them later --------------------
-  ensureCSS("assets/css/effects.css", "tg-effects-css");
-  ensureJS("assets/js/confetti.js", "tg-confetti-js", () => {
-    // optional: external script sets window.tgConfetti
-    wire();
-  });
+    mediaPane.querySelector('#tgApplyMedia').onclick=()=>{
+      MEDIA.logo = mediaPane.querySelector('#tgMediaLogo').value.trim();
+      MEDIA.spinner = mediaPane.querySelector('#tgMediaSpin').value.trim();
+      MEDIA.heroImage = mediaPane.querySelector('#tgMediaHeroImg').value.trim();
+      MEDIA.heroVideo = mediaPane.querySelector('#tgMediaHeroVid').value.trim();
+      saveMedia(MEDIA); applyMedia(); toast('Media applied & saved');
+    };
+    mediaPane.querySelector('#tgLoadManifest').onclick=async()=>{
+      await tryLoadManifest(); renderLib(); applyMedia();
+      toast('Manifest loaded (if present)');
+    };
+    mediaPane.querySelector('#tgAddToLibrary').onclick=()=>{
+      const path = prompt('Path (e.g. assets/images/pic.png or assets/videos/clip.mp4)');
+      if(!path) return;
+      const type = /\.mp4|\.webm|\.mov$/i.test(path) ? 'video' : 'image';
+      const label = prompt('Label (optional)', path.split('/').pop());
+      MEDIA.library = MEDIA.library || [];
+      MEDIA.library.push({type, path, label});
+      saveMedia(MEDIA); renderLib(); applyMedia();
+    };
 
-  // initial wire (works even without external files)
-  wire();
+    // Switch tabs
+    panel.querySelectorAll('.tgTab').forEach(tab=>{
+      tab.onclick=()=>{
+        panel.querySelectorAll('.tgTab').forEach(t=>t.style.background='#0b1016');
+        tab.style.background='#151a22';
+        const id = tab.dataset.tab;
+        panel.querySelector('#tgPane-theme').style.display = id==='theme'?'block':'none';
+        panel.querySelector('#tgPane-media').style.display = id==='media'?'block':'none';
+      };
+    });
 
-  // mark
-  document.documentElement.setAttribute("data-thegrid-patch", VER);
-  console.info("%c" + TAG + " loaded", "color:#FFD700; font-weight:600");
+    // Save (theme + media)
+    panel.querySelector('#tgSave').onclick=()=>{ saveVars(VARS); saveMedia(MEDIA); toast('Saved on this device'); };
+  }
+
+  // Initial media apply (after optional manifest)
+  tryLoadManifest().finally(applyMedia);
+
+  // Final wire for confetti & contact (in case DOM was not ready)
+  document.addEventListener('DOMContentLoaded',()=>{wireConfetti(); wireContact();});
+
+  console.info("THEGRID",VER,"loaded");
 })();
 </script>
 <!-- THEGRID:PATCH-SLOT:END -->
