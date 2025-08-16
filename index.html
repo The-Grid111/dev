@@ -371,9 +371,147 @@ const hero=document.getElementById('hero'); document.querySelectorAll('.thumb').
 });})();
 </script>
 <!-- THEGRID:SCRIPTS:END -->
+<!-- THEGRID:PATCH-SLOT:BEGIN (v1.7 Luxury Confetti + Glow) -->
+<script>
+(() => {
+  const VER = "v1.7";
+  const TAG = "THEGRID Patch " + VER;
 
-<!-- THEGRID:PATCH-SLOT:BEGIN (leave this in the file; paste future capsules below this line) -->
+  // ---- helpers ------------------------------------------------------------
+  const once = (id, el) => (document.getElementById(id) ? null : (el.id = id, document.head.appendChild(el)));
+  const ensureCSS = (href, id) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet"; link.href = href;
+    once(id, link);
+  };
+  const ensureJS = (src, id, onload) => {
+    if (document.getElementById(id)) return;
+    const s = document.createElement("script");
+    s.src = src; s.defer = true; s.onload = () => onload && onload();
+    s.id = id; document.body.appendChild(s);
+  };
+
+  // ---- Tiers & styles -----------------------------------------------------
+  const TIERS = ["basic","silver","gold","diamond"];
+  const STYLES = {
+    basic:   { color:"#ADADB8", shape:"dot",     size:12, density:12, speed:1.2 },
+    silver:  { color:"#C0C0C0", shape:"square",  size:12, density:16, speed:1.1 },
+    gold:    { color:"#FFD700", shape:"triangle",size:14, density:22, speed:1.0 },
+    diamond: { color:"#B9F2FF", shape:"star",    size:14, density:26, speed:0.95 }
+  };
+
+  // ---- Tag pricing cards with data attributes -----------------------------
+  const cards = [...document.querySelectorAll(".pricing-card")];
+  cards.forEach((card, i) => {
+    const tier = (card.dataset.tier || TIERS[i] || "basic");
+    const style = STYLES[tier] || STYLES.basic;
+    card.dataset.tier = tier;
+    card.setAttribute("data-confetti-color", style.color);
+    card.setAttribute("data-confetti-shape", style.shape);
+    card.setAttribute("data-confetti-size",  style.size);
+    card.setAttribute("data-confetti-density", style.density);
+    card.setAttribute("data-confetti-speed", style.speed);
+  });
+
+  // ---- Inline fallback CSS (used only if effects.css not present) ---------
+  if (!document.querySelector('link[href*="assets/css/effects.css"]')) {
+    const css = document.createElement("style");
+    css.id = "tg-effects-inline";
+    css.textContent = `
+    /* elegant borders & glow */
+    .pricing-card{ position:relative; }
+    .pricing-card.is-live::before{
+      content:"Live"; position:absolute; top:10px; right:12px;
+      font:600 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:rgba(255,255,255,.06); padding:6px 10px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px);
+    }
+    .pricing-card::after{
+      content:"✨"; margin-left:.5ch; font-size:1.15em; vertical-align:middle;
+      color:var(--tg-confetti, #FFD700);
+      text-shadow: 0 0 6px currentColor, 0 0 14px currentColor;
+      animation: tgShimmer 1.6s ease-in-out infinite alternate;
+    }
+    .pricing-card[data-tier="diamond"]::after{
+      content:"💎"; color:#B9F2FF; text-shadow:0 0 8px #B9F2FF, 0 0 18px #B9F2FF;
+      animation: tgGlow 2s ease-in-out infinite alternate;
+    }
+    @keyframes tgShimmer{ from{opacity:.7; transform:translateY(0)} to{opacity:1; transform:translateY(-1px)} }
+    @keyframes tgGlow{ from{filter:drop-shadow(0 0 4px currentColor)} to{filter:drop-shadow(0 0 10px currentColor)} }
+    /* confetti fall animation fallback */
+    @keyframes tgFall {
+      0% { transform: translate3d(0,0,0) rotate(0deg); opacity:1; }
+      100% { transform: translate3d(var(--dx,40px), 64vh, 0) rotate(540deg); opacity:0; }
+    }`;
+    document.head.appendChild(css);
+  }
+
+  // ---- Inline fallback JS for confetti (used if confetti.js not present) --
+  function fallbackBurst(btn, style) {
+    const { color, shape, size, density, speed } = style;
+    const N = density;
+    const rect = btn.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top  + rect.height / 2 + window.scrollY;
+
+    const glyphs = { dot:"•", square:"■", triangle:"▲", star:"✦" };
+    for (let i = 0; i < N; i++) {
+      const p = document.createElement("span");
+      p.textContent = glyphs[shape] || "✦";
+      Object.assign(p.style, {
+        position:"absolute", left: `${originX}px`, top: `${originY}px`,
+        color, fontSize: `${size}px`, pointerEvents:"none", zIndex: 9999,
+        transform: "translate(-50%, -50%)",
+        animation: `tgFall ${1.2 * speed + Math.random()*0.6}s linear forwards`,
+        "--dx": `${(Math.random() - .5) * 160}px`,
+        textShadow: `0 0 6px ${color},0 0 12px ${color}`
+      });
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2200);
+    }
+  }
+
+  // ---- Wire button clicks -------------------------------------------------
+  const wire = () => {
+    document.querySelectorAll(".pricing-card button, .pricing-card .tg-purchase")
+      .forEach(btn => {
+        btn.removeEventListener("_tgClick", btn._tgClickHandler || (()=>{}));
+        const handler = () => {
+          const card = btn.closest(".pricing-card");
+          if (!card) return;
+          const tier = card.dataset.tier || "basic";
+          const style = STYLES[tier] || STYLES.basic;
+
+          // prefer external confetti.js if it attached a global API
+          if (window.tgConfetti && typeof window.tgConfetti.burst === "function") {
+            window.tgConfetti.burst(btn, style);
+          } else {
+            fallbackBurst(btn, style);
+          }
+        };
+        btn._tgClickHandler = handler;
+        btn.addEventListener("click", handler);
+        btn.addEventListener("_tgClick", handler); // marker
+      });
+  };
+
+  // ---- Try to use external files if you add them later --------------------
+  ensureCSS("assets/css/effects.css", "tg-effects-css");
+  ensureJS("assets/js/confetti.js", "tg-confetti-js", () => {
+    // optional: external script sets window.tgConfetti
+    wire();
+  });
+
+  // initial wire (works even without external files)
+  wire();
+
+  // mark
+  document.documentElement.setAttribute("data-thegrid-patch", VER);
+  console.info("%c" + TAG + " loaded", "color:#FFD700; font-weight:600");
+})();
+</script>
 <!-- THEGRID:PATCH-SLOT:END -->
+
 
 </body>
 </html>
