@@ -1,0 +1,134 @@
+/* =============== THEGRID Luxe Effects (v1.0) =============== */
+/* Core tokens (owner panel can overwrite these at runtime) */
+:root{
+  --tg-gold:#FFD700;
+  --tg-gold-deep:#C59D00;
+  --tg-silver:#C0C0C0;
+  --tg-diamond:#B9F2FF;
+  --tg-ink:#0C0F14;
+  --tg-panel:#11151B;
+  --tg-card:#131922;
+  --tg-card-ink:#E9EEF6;
+
+  --tg-border: var(--tg-gold);
+  --tg-accent: var(--tg-gold);
+  --tg-ring: rgba(255,215,0,.25);
+  --tg-radius: 18px;
+  --tg-border-w: 2px;
+  --tg-border-glow: 0 0 20px var(--tg-ring), inset 0 0 12px rgba(255,255,255,.04);
+
+  --tg-btn-radius: 14px;
+  --tg-btn-bg: #191F29;
+  --tg-btn-fg: #F5F7FA;
+  --tg-btn-ring: 0 0 0 1px rgba(255,255,255,.06), 0 1px 12px rgba(0,0,0,.35);
+  --tg-btn-bg-hover: #1E2633;
+}
+
+/* Reset-ish */
+.tg-elevate{ box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+.tg-surface{
+  background: var(--tg-card);
+  color: var(--tg-card-ink);
+  border-radius: var(--tg-radius);
+}
+
+/* ===== Premium Borders ===== */
+.tg-border{ position:relative; border-radius:var(--tg-radius); }
+.tg-border.solid{ border: var(--tg-border-w) solid var(--tg-border); }
+.tg-border.double{
+  border: var(--tg-border-w) double var(--tg-border);
+  border-radius: calc(var(--tg-radius) + 2px);
+}
+.tg-border.gradient{
+  border: var(--tg-border-w) solid transparent;
+  background:
+    linear-gradient(var(--tg-card), var(--tg-card)) padding-box,
+    linear-gradient(135deg, var(--tg-gold), #FFEF9A, var(--tg-gold-deep)) border-box;
+  border-radius: var(--tg-radius);
+}
+.tg-border.glow{
+  border: var(--tg-border-w) solid var(--tg-border);
+  box-shadow: var(--tg-border-glow);
+}
+
+/* Live tag */
+.pricing-card.is-live::before{
+  content:"Live";
+  position:absolute; top:12px; right:12px;
+  padding:6px 10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.14);
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color:#fff; font-weight:600; font-size:12px;
+  letter-spacing:.25px; backdrop-filter: blur(6px);
+}
+
+/* Diamond badge */
+.pricing-card[data-tier="diamond"] .plan-title::after{
+  content:" 💎";
+  filter: drop-shadow(0 0 8px var(--tg-diamond));
+}
+
+/* Card base */
+.pricing-card{
+  background: var(--tg-card);
+  border-radius: var(--tg-radius);
+  overflow:hidden;
+  position:relative;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.pricing-card:hover{ transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,.45); }
+
+/* Soft inner halo */
+.pricing-card .halo{
+  position:absolute; inset:0;
+  pointer-events:none;
+  background: radial-gradient(120% 80% at 80% 0%, rgba(255,215,0,.12), rgba(0,0,0,0) 60%),
+              radial-gradient(120% 80% at 0% 100%, rgba(185,242,255,.10), rgba(0,0,0,0) 60%);
+  mix-blend-mode: screen; opacity:.6;
+}
+
+/* Buttons */
+.tg-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:.5rem; padding:.9rem 1.2rem;
+  border-radius: var(--tg-btn-radius);
+  background: var(--tg-btn-bg);
+  color: var(--tg-btn-fg);
+  box-shadow: var(--tg-btn-ring);
+  border:1px solid rgba(255,255,255,.10);
+  transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+  text-decoration: none; font-weight:700;
+}
+.tg-btn:hover{ background: var(--tg-btn-bg-hover); transform: translateY(-1px); }
+.tg-btn.gold{ background: linear-gradient(180deg, #3A2F14, #2A210E); border-color: rgba(255,215,0,.35); }
+.tg-btn.gold:hover{ box-shadow: 0 0 0 1px rgba(255,215,0,.45), 0 10px 24px rgba(255,215,0,.18); }
+.tg-btn.square{ border-radius: 10px; }  /* quick square look */
+
+/* Tier tints */
+.pricing-card[data-tier="basic"]  { --tg-border: #ADADB8; }
+.pricing-card[data-tier="silver"] { --tg-border: var(--tg-silver); }
+.pricing-card[data-tier="gold"]   { --tg-border: var(--tg-gold); }
+.pricing-card[data-tier="diamond"]{ --tg-border: var(--tg-diamond); }
+
+/* Hero & library tiles (neutral place-holders look premium) */
+.tg-tile{
+  background:#0E1218; border:1px dashed rgba(255,255,255,.08);
+  border-radius: var(--tg-radius); min-height: 160px;
+  display:flex; align-items:center; justify-content:center; color:#AEB6C2;
+}
+
+/* Top bar guard so it never covers content */
+.tg-topbar-spacer{ height: clamp(56px, 7vh, 78px); }
+body.has-sticky-topbar main{ padding-top: clamp(56px, 7vh, 78px); }
+
+/* Subtle section dividers */
+.section{ margin: 24px 0; }
+.section .section-title{ font-weight:800; letter-spacing:.2px; }
+
+/* Shine overlay when needed */
+.tg-shine{
+  position:absolute; inset:0; pointer-events:none; opacity:.75;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.06) 50%, rgba(255,255,255,0) 100%);
+  mask: linear-gradient(#000, transparent);
+}
