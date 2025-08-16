@@ -1,1 +1,15 @@
-
+{
+  "images": [
+    "assets/images/logo.png",
+    "assets/images/hero.jpg",
+    "assets/images/bg_pattern.png"
+  ],
+  "videos": [
+    "assets/videos/gc_spin.mp4",
+    "assets/videos/hero.mp4"
+  ],
+  "library": [
+    { "type": "image", "path": "assets/images/showcase1.png", "label": "Showcase 1" },
+    { "type": "video", "path": "assets/videos/reel1.mp4", "label": "Reel 1" }
+  ]
+}
