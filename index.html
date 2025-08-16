@@ -1,159 +1,404 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>THEGRID • Black & Gold</title>
-<link rel="icon" href="assets/images/gc_logo.png">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>THEGRID — Black & Gold</title>
 <style>
-:root{--bg:#0e0f12;--panel:#14161b;--text:#e9ecf1;--muted:#aeb4bf;--gold:#f2c14e;--aqua:#1ee0ff;--r:18px}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(1000px 700px at 10% -10%,#1b1e24 0%,#0e0f12 45%),#0e0f12;color:var(--text);font:500 16px/1.5 ui-sans-serif,system-ui,Inter,Arial;-webkit-font-smoothing:antialiased}
-.wrap{max-width:980px;margin:0 auto;padding:20px 16px 80px}
-header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(8px);background:linear-gradient(#0b0c0fcc,#0b0c0faa 70%,transparent);border-bottom:1px solid #fff2}
-.top{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:36px;height:36px;border-radius:12px;object-fit:cover;box-shadow:0 0 0 2px #000 inset,0 0 24px #f6d47b33}
-.greeting{font-weight:800}.sub{color:var(--muted);font-size:12px;margin-top:-2px}
-.btn{border:0;padding:12px 18px;border-radius:14px;font-weight:700;background:#1b1e24;color:#e9ecf1;box-shadow:0 1px 0 #fff2 inset,0 0 0 1px #000;cursor:pointer;transition:transform .08s ease,box-shadow .2s}
-.btn.gold{background:linear-gradient(#f0c55d,#d8a93f);color:#0d0e10;box-shadow:0 10px 30px #f2c14e26,0 0 0 1px #000}.btn:active{transform:translateY(1px) scale(.99)}
-section{margin:22px 0}.card{background:linear-gradient(180deg,#14161b,#101216);border-radius:var(--r);padding:18px;box-shadow:0 0 0 1px #fff2,0 0 60px #000 inset,0 12px 50px #0008;position:relative;overflow:hidden}
-.card.glow:before{content:"";position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;background:radial-gradient(140% 80% at -10% -30%,#f7d67b25 0,#f7d67b08 35%,transparent 55%),linear-gradient(#f7d67b10,transparent 40%);filter:blur(.6px)}
-h1,h2{margin:0 0 14px}h1{font-size:36px;font-weight:900}h2{font-size:22px;font-weight:800}p.lead{color:#cfd4de;margin:6px 0 20px}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-.tile{height:140px;border-radius:14px;background:#0f1216;color:#c1c7d3;display:grid;place-items:center;border:1px dashed #f2c14e66}
-.tile video,.tile img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
-.plans{display:grid;gap:16px}.plan{position:relative;background:#0f1216;border-radius:18px;padding:20px;box-shadow:0 0 0 1px #fff3,0 12px 40px #0008}
-.badge{position:absolute;right:16px;top:16px;font:900 12px/1 ui-sans-serif;letter-spacing:.6px;padding:6px 10px;border-radius:999px;color:#0c0f12;background:#ffd86b}
-.badge.silver{background:#cfd3d9}.badge.diamond{background:#b9f2ff;color:#00212a}
-.plan h3{font-size:28px;margin:0 0 4px}.plan ul{margin:10px 0 16px;padding-left:20px;color:#cfd4de}
-.confetti{position:absolute;inset:0;pointer-events:none;z-index:3;filter:drop-shadow(0 0 3px #0007)}
-.spark{position:absolute;width:8px;height:8px;border-radius:2px;opacity:0;will-change:transform,opacity}
-@keyframes float{0%{transform:translate(var(--x,0),-8px) rotate(0turn);opacity:.95}100%{transform:translate(calc(var(--x,0)+var(--dx,0px)),calc(100% + 30px)) rotate(var(--rot,1turn));opacity:0}}
-.twinkle{position:absolute;width:5px;height:5px;border-radius:50%;opacity:0;box-shadow:0 0 8px currentColor,0 0 14px currentColor}
-@keyframes tw{0%{opacity:.9;transform:translate(var(--tx,0),var(--ty,0)) scale(.8)}50%{opacity:1}100%{opacity:0;transform:translate(calc(var(--tx,0) + var(--dx,14px)),calc(var(--ty,0) + 10px)) scale(1.2)}}
-input,textarea{width:100%;padding:12px 14px;border-radius:12px;background:#0d0f12;color:#e8ecf2;border:1px solid #fff3;outline:none}textarea{min-height:110px;resize:vertical}
+  :root{
+    --bg:#0d0f12;
+    --panel:#13161b;
+    --card:#171a20;
+    --ink:#e9edf3;
+    --muted:#b4bcc8;
+    --gold:#f0c14b;
+    --gold-2:#d9a63e;
+    --accent: var(--gold);
+    --radius:14px;
+    --ring: 0 0 0 1px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.35);
+    --glow: 0 0 0 1px rgba(240,193,75,.32), 0 0 40px rgba(240,193,75,.18), inset 0 0 0 1px rgba(255,255,255,.04);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,rgba(240,193,75,.07),transparent),var(--bg);color:var(--ink);font:500 16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+  a{color:inherit}
+  .wrap{max-width:980px;margin:0 auto;padding:16px}
+  /* Header */
+  .bar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(0,0,0,.7),rgba(0,0,0,.25) 60%,transparent);backdrop-filter:saturate(1.2) blur(6px)}
+  .nav{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#1a1f27,#0b0d10);box-shadow:var(--glow);position:relative}
+  .logo::after{content:"GG";position:absolute;inset:0;display:grid;place-content:center;font-weight:800;color:#f5f5f5;letter-spacing:.5px;font-size:12px;opacity:.85}
+  .greet{font-size:18px;font-weight:800}
+  .pill{border:none;border-radius:999px;padding:10px 16px;background:#20242b;box-shadow:var(--ring);color:#dfe6f2;cursor:pointer}
+  .cta{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#121317;font-weight:800;box-shadow:0 10px 20px rgba(240,193,75,.15),inset 0 1px 0 rgba(255,255,255,.35)}
+  .cta:active{transform:translateY(1px)}
+  /* Sections */
+  h2.section{font-size:40px;margin:24px 0 8px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--ring);padding:18px;margin:16px 0;position:relative}
+  .card.gold{box-shadow:var(--glow)}
+  .sub{color:var(--muted)}
+  .btn{display:inline-block;background:#21262e;border-radius:12px;padding:12px 18px;margin-right:10px;box-shadow:var(--ring);cursor:pointer}
+  .btn.gold{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;font-weight:800}
+  /* Library */
+  .tabs{display:flex;gap:8px;margin:10px 0 14px}
+  .tab{padding:8px 12px;border-radius:999px;background:#1b2027;color:#cfd6e2;cursor:pointer;box-shadow:var(--ring)}
+  .tab.active{background:linear-gradient(180deg,#1f242c,#121519);color:#fff;box-shadow:var(--glow)}
+  .grid{display:grid;gap:12px}
+  @media(min-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .tile{background:#12161c;border-radius:16px;padding:20px;min-height:90px;border:1px dashed rgba(240,193,75,.35);display:grid;place-content:center;color:#c9d1de;cursor:pointer;transition:transform .15s}
+  .tile:hover{transform:translateY(-2px)}
+  /* Pricing */
+  .plans .plan{border-radius:18px;padding:18px;margin:16px 0;background:linear-gradient(180deg,#151922,#0e1116);box-shadow:var(--ring);position:relative;overflow:hidden}
+  .badge{position:absolute;top:14px;right:14px;background:#222a33;border-radius:999px;padding:6px 10px;font-size:12px;letter-spacing:.8px;font-weight:800;box-shadow:var(--ring)}
+  .badge.basic{background:#23282f}
+  .badge.silver{background:#2b333d}
+  .badge.gold{background:#2b2416;color:#ffdf93;box-shadow:var(--glow)}
+  .badge.diamond{background:#163246;color:#bff2ff;box-shadow:0 0 0 1px rgba(185,242,255,.3),0 0 30px rgba(185,242,255,.15)}
+  .price{font-size:34px;font-weight:900;margin:6px 0 10px}
+  .choose{display:inline-block;border-radius:12px;padding:12px 18px;background:#1f242c;box-shadow:var(--ring);cursor:pointer}
+  .choose.gold{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;font-weight:800}
+  /* Customize panel (owner only) */
+  .panel{position:fixed;right:16px;bottom:16px;width:min(420px,calc(100vw - 32px));background:var(--panel);border-radius:16px;box-shadow:var(--ring);z-index:45;display:none}
+  .panel.open{display:block}
+  .panel header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .panel .body{padding:14px;display:grid;gap:12px}
+  .panel label{display:grid;gap:6px}
+  input[type="range"], select, input[type="color"]{width:100%}
+  .help{font-size:12px;color:#9fb0c7}
+  .saveBadge{position:fixed;left:16px;bottom:16px;background:#0f141a;color:#cfe3ff;border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px 10px;box-shadow:var(--ring);z-index:46;opacity:0;transform:translateY(4px);transition:all .2s}
+  .saveBadge.show{opacity:1;transform:none}
+  /* Confetti canvas */
+  canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
+  /* Section separators */
+  .section-head{display:flex;align-items:end;justify-content:space-between;margin-top:22px}
+  .section-head .title{font-size:28px;font-weight:900}
+  .section-head .dash{height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,rgba(240,193,75,.45),transparent);flex:1;margin-left:10px}
 </style>
 </head>
 <body>
-<!-- BASELINE v2.2 • Learn/shorten: keep features, trim code. -->
-<header>
-  <div class="top wrap">
+<canvas id="fx"></canvas>
+
+<!-- Sticky header -->
+<div class="bar">
+  <div class="nav wrap">
     <div class="brand">
-      <img class="logo" id="logo" src="assets/images/gc_logo.png" alt="GC">
-      <div><div class="greeting" id="greet">Good day</div><div class="sub">THEGRID</div></div>
+      <div class="logo"></div>
+      <div>
+        <div class="greet" id="greet">Good afternoon</div>
+        <div style="opacity:.7;font-size:12px;letter-spacing:.6px">THEGRID</div>
+      </div>
     </div>
-    <div class="actions"><button id="openCustomizer" class="btn">Customize</button><button class="btn gold">Join Now</button></div>
+    <div style="display:flex;gap:10px">
+      <button class="pill" id="openCustomize">Customize</button>
+      <button class="pill cta" id="joinBtn">Join Now</button>
+    </div>
   </div>
-</header>
+</div>
 
-<main class="wrap">
-  <section class="card glow">
-    <h1>Black & Gold</h1>
-    <p class="lead">Cinematic visuals. One-file updates. Owner controls with presets, borders & glow.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px"><a href="#library" class="btn">Open Library</a><a href="#plans" class="btn gold">See Pricing</a></div>
-    <div id="hero" class="tile" style="height:260px;border:1px dashed #f2c14e66"></div>
+<div class="wrap">
+  <!-- Hero -->
+  <section class="card gold">
+    <h2 class="section">Black & Gold</h2>
+    <p class="sub">Cinematic visuals. One-file updates. Owner controls with presets, borders & glow.</p>
+    <div style="margin:14px 0 10px">
+      <button class="btn" data-scroll="#library">Open Library</button>
+      <button class="btn gold" data-scroll="#plans">See Pricing</button>
+    </div>
+    <div id="hero" style="aspect-ratio:16/9;border-radius:16px;background:#0c0f13;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);display:grid;place-content:center;color:#526176">HERO PLACEHOLDER</div>
   </section>
 
-  <section id="library" class="card glow">
-    <h2>Library</h2>
-    <p class="lead">Tap a tile to set the hero. Put media in <code>assets/videos</code> or <code>assets/images</code>.</p>
-    <div id="libGrid" class="grid"></div>
+  <!-- Library -->
+  <section id="library" class="card gold">
+    <div class="section-head">
+      <div class="title">Library</div><div class="dash"></div>
+    </div>
+    <p class="sub">Tap a tile to set the hero. Put media in <code>assets/videos</code> or <code>assets/images</code>.</p>
+    <div class="tabs" id="libTabs"></div>
+    <div class="grid" id="libGrid"></div>
   </section>
 
-  <section id="plans" class="card glow">
-    <h2>Plans</h2>
-    <p class="lead">Fair pricing. No lock-in. Refund within 7 days if it’s not for you.</p>
-    <div class="plans">
-      <div class="plan pricing-card" data-tier="basic"><span class="badge">BASIC</span><h3>£9/mo</h3><ul><li>Starter templates</li><li>Library access</li><li>Email support</li></ul><button class="btn choose" data-tier="basic">Choose</button></div>
-      <div class="plan pricing-card" data-tier="silver"><span class="badge silver">SILVER</span><h3>£29/mo</h3><ul><li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li></ul><button class="btn choose" data-tier="silver">Choose</button></div>
-      <div class="plan pricing-card" data-tier="gold"><span class="badge">GOLD</span><h3>£49/mo</h3><ul><li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul><button class="btn choose" data-tier="gold">Choose</button></div>
-      <div class="plan pricing-card" data-tier="diamond"><span class="badge diamond">DIAMOND</span><h3>£99/mo</h3><ul><li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li></ul><button class="btn choose" data-tier="diamond">Choose</button></div>
+  <!-- Plans / Pricing -->
+  <section id="plans" class="card gold plans">
+    <div class="section-head">
+      <div class="title">Plans</div><div class="dash"></div>
+    </div>
+    <p class="sub">Fair pricing. No lock-in. Refund within 7 days if it’s not for you.</p>
+
+    <div class="plan" data-tier="basic">
+      <div class="badge basic">BASIC</div>
+      <div class="price">£9/mo</div>
+      <ul class="sub">
+        <li>Starter templates</li>
+        <li>Library access</li>
+        <li>Email support</li>
+      </ul>
+      <button class="choose" data-choose>Choose</button>
+    </div>
+
+    <div class="plan" data-tier="silver">
+      <div class="badge silver">SILVER</div>
+      <div class="price">£29/mo</div>
+      <ul class="sub">
+        <li>Everything in Basic</li>
+        <li>Advanced effects</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="choose" data-choose>Choose</button>
+    </div>
+
+    <div class="plan" data-tier="gold">
+      <div class="badge gold">GOLD</div>
+      <div class="price">£49/mo</div>
+      <ul class="sub">
+        <li>Full customization</li>
+        <li>Admin toolkit</li>
+        <li>1:1 onboarding</li>
+      </ul>
+      <button class="choose gold" data-choose>Choose</button>
+    </div>
+
+    <div class="plan" data-tier="diamond">
+      <div class="badge diamond">DIAMOND</div>
+      <div class="price">£99/mo</div>
+      <ul class="sub">
+        <li>Custom pipelines</li>
+        <li>Hands-on help</li>
+        <li>Priority turnaround</li>
+      </ul>
+      <button class="choose" data-choose>Choose</button>
     </div>
   </section>
 
-  <section class="card glow">
-    <h2>Contact</h2>
-    <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr">
-      <div><label>Name</label><input placeholder="Your name"></div>
-      <div><label>Email</label><input placeholder="you@example.com"></div>
-      <div style="grid-column:1/-1"><label>Subject</label><input placeholder="How can we help?"></div>
-      <div style="grid-column:1/-1"><label>Message</label><textarea placeholder="Write your message…"></textarea></div>
-      <div><button class="btn gold">Send</button></div>
+  <!-- Contact -->
+  <section class="card gold" id="contact">
+    <div class="section-head">
+      <div class="title">Contact</div><div class="dash"></div>
     </div>
-    <p style="color:#aeb4bf">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
+    <form onsubmit="event.preventDefault();alert('Thanks! We will reply from gridcoresystems@gmail.com');">
+      <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr;max-width:760px">
+        <input placeholder="Your name" required style="border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb">
+        <input placeholder="you@example.com" type="email" required style="border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb">
+        <input placeholder="How can we help?" style="grid-column:1/-1;border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb">
+        <textarea placeholder="Write your message…" rows="5" style="grid-column:1/-1;border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb"></textarea>
+        <button class="btn gold" style="width:120px">Send</button>
+      </div>
+      <p class="sub" style="margin-top:10px">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
+    </form>
   </section>
-</main>
 
-<!-- Owner Customizer (does NOT auto-open) -->
-<dialog id="customizer" style="background:#0f1116;border:1px solid #ffffff22;border-radius:16px;padding:14px 16px;max-width:720px;width:92vw;color:#e8ecf3">
-  <form method="dialog" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Design Panel</strong><button class="btn">Close</button></form>
-  <div style="display:grid;gap:12px">
-    <div><label>Accent color</label><input id="accentPick" type="color" value="#f2c14e" style="width:100%;height:40px;border-radius:10px;border:1px solid #ffffff22;background:#0d0f12"></div>
-    <div><label>Card radius</label><input id="radiusRange" type="range" min="8" max="26" value="18" style="width:100%"></div>
-    <div><label>Hero source</label><select id="heroSelect" style="width:100%;padding:10px;border-radius:10px;background:#0d0f12;border:1px solid #ffffff22;color:#e8ecf3"></select></div>
-    <button id="saveLook" class="btn gold" style="width:max-content">Save to this device</button>
+  <p class="sub" style="text-align:center;margin:30px 0 60px">© THEGRID • Privacy • Terms</p>
+</div>
+
+<!-- Customize Panel (Owner) -->
+<div class="panel" id="panel">
+  <header>
+    <strong>Design Panel</strong>
+    <button class="pill" id="closeCustomize">Close</button>
+  </header>
+  <div class="body">
+    <label>Accent color
+      <input id="accent" type="color" value="#f0c14b">
+    </label>
+    <label>Card radius
+      <input id="radius" type="range" min="8" max="26" step="1" value="14">
+    </label>
+    <label>Border Glow (0–100)
+      <input id="glow" type="range" min="0" max="100" value="65">
+    </label>
+    <label>Hero source
+      <select id="heroSrc"></select>
+    </label>
+    <fieldset style="border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px">
+      <legend style="padding:0 6px;opacity:.8">Confetti</legend>
+      <label>Density<input id="cfDensity" type="range" min="0" max="1" step="0.05" value="0.45"></label>
+      <label>Speed<input id="cfSpeed" type="range" min="0.2" max="2" step="0.05" value="1"></label>
+      <label>Shape
+        <select id="cfShape">
+          <option value="mix">Mix</option>
+          <option value="circle">Circle</option>
+          <option value="square">Square</option>
+          <option value="diamond">Diamond</option>
+        </select>
+      </label>
+      <p class="help">Confetti is GPU-friendly (canvas) and auto-centers on the clicked plan.</p>
+    </fieldset>
+    <button class="btn" id="saveBtn">Save to this device</button>
+    <button class="btn" id="resetBtn">Reset</button>
   </div>
-</dialog>
+</div>
+<div class="saveBadge" id="saveBadge">Saved ✓</div>
 
 <script>
-/* ===== BASELINE: logic kept tight; features intact ===== */
-const LIBRARY=['assets/videos/hero_1.mp4','assets/videos/interaction_1.mp4','assets/videos/pour_1.mp4','assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg'];
-const heroEl=document.getElementById('hero'),libGrid=document.getElementById('libGrid'),heroSelect=document.getElementById('heroSelect');
-function setHero(src){heroEl.innerHTML='';const v=/\.(mp4|webm|mov)$/i.test(src),el=document.createElement(v?'video':'img');el.src=src;if(v){Object.assign(el,{autoplay:true,loop:true,muted:true,playsInline:true})}heroEl.appendChild(el)}
-LIBRARY.forEach(s=>{const t=document.createElement('div');t.className='tile';t.textContent=s;t.onclick=()=>{setHero(s);scrollTo({top:0,behavior:'smooth'})};libGrid.appendChild(t);const o=document.createElement('option');o.value=s;o.textContent=s;heroSelect.appendChild(o)});setHero(LIBRARY[0]);
+(() => {
+  /* ========= Live-Saving Settings ========= */
+  const LS = 'tg_settings_v2';
+  const DEFAULTS = {
+    accent:'#f0c14b', radius:14, glow:65,
+    cf:{ density:.45, speed:1, shape:'mix' },
+    hero:'assets/videos/hero_1.mp4'
+  };
+  let S = Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem(LS)||'{}'));
 
-/* Greeting */
-document.getElementById('greet').textContent=(h=>h<12?'Good morning':h<18?'Good afternoon':'Good evening')(new Date().getHours());
+  const el = s=>document.querySelector(s);
+  const els = s=>[...document.querySelectorAll(s)];
+  const setBadge=()=>{ const b=el('#saveBadge'); b.classList.add('show'); clearTimeout(b._t); b._t=setTimeout(()=>b.classList.remove('show'),1200) };
+  const save = ()=>{ localStorage.setItem(LS, JSON.stringify(S)); setBadge(); apply(); };
+  const apply = ()=>{
+    document.documentElement.style.setProperty('--gold', S.accent);
+    document.documentElement.style.setProperty('--gold-2', S.accent);
+    document.documentElement.style.setProperty('--radius', S.radius+'px');
+    // glow strength tweaks
+    const g = S.glow/100;
+    document.documentElement.style.setProperty('--glow', `0 0 0 1px rgba(240,193,75,${.18+g*.3}), 0 0 40px rgba(240,193,75,${.1+g*.2}), inset 0 0 0 1px rgba(255,255,255,.04)`);
 
-/* Customizer (manual open) */
-const dlg=document.getElementById('customizer');
-document.getElementById('openCustomizer').onclick=()=>dlg.showModal();
-document.getElementById('logo').onpointerdown=()=>{const id=setTimeout(()=>dlg.showModal(),700);['pointerup','pointerleave','pointercancel'].forEach(ev=>addEventListener(ev,()=>clearTimeout(id),{once:true}))};
-document.getElementById('accentPick').oninput=e=>document.documentElement.style.setProperty('--gold',e.target.value);
-document.getElementById('radiusRange').oninput=e=>{const v=e.target.value+'px';document.documentElement.style.setProperty('--r',v);document.querySelectorAll('.card,.plan,.tile,.btn').forEach(el=>el.style.borderRadius=v)};
-document.getElementById('saveLook').onclick=()=>{localStorage.setItem('tg_gold',getComputedStyle(document.documentElement).getPropertyValue('--gold'));localStorage.setItem('tg_r',getComputedStyle(document.documentElement).getPropertyValue('--r'));localStorage.setItem('tg_hero',heroSelect.value);alert('Saved to this device.')};
-heroSelect.onchange=()=>setHero(heroSelect.value);
-(()=>{const a=localStorage.getItem('tg_gold'),r=localStorage.getItem('tg_r'),h=localStorage.getItem('tg_hero');if(a)document.documentElement.style.setProperty('--gold',a);if(r){document.documentElement.style.setProperty('--r',r);document.querySelectorAll('.card,.plan,.tile,.btn').forEach(el=>el.style.borderRadius=r)};if(h){heroSelect.value=h;setHero(h)}})();
+    // hero media
+    const hero = el('#hero');
+    const isVid = /\.(mp4|webm|mov)$/i.test(S.hero);
+    hero.innerHTML='';
+    if(isVid){
+      const v=document.createElement('video');
+      v.src=S.hero; v.muted=true; v.autoplay=true; v.loop=true; v.playsInline=true; v.style.width='100%'; v.style.borderRadius='16px';
+      hero.appendChild(v);
+    } else {
+      const img=new Image(); img.src=S.hero; img.style.width='100%'; img.style.borderRadius='16px'; hero.appendChild(img);
+    }
+  };
 
-/* Section title bars */
-document.querySelectorAll('section h2').forEach(h=>{const b=document.createElement('div');Object.assign(b.style,{height:'2px',width:'64px',margin:'6px 0 12px',background:'linear-gradient(90deg,var(--gold),transparent)'});h.after(b)});
+  /* ========= Greeting (time-of-day) ========= */
+  const h=new Date().getHours();
+  el('#greet').textContent = h<12 ? 'Good morning' : h<18 ? 'Good afternoon' : 'Good evening';
 
-/* Tier confetti + sparkle trails */
-const TIER={basic:{colors:['#FFD86B','#F1C24E'],count:70,speed:1.05},
-            silver:{colors:['#E6E8ED','#C0C6D4'],count:80,speed:1.08},
-            gold:{colors:['#FFE07A','#F2C14E','#D6A63A'],count:95,speed:1.1,trail:true},
-            diamond:{colors:['#B9F2FF','#8BE7FF','#E7FDFF'],count:110,speed:1.14,trail:true}};
-function confetti(card,tier='basic'){
-  const spec=TIER[tier]||TIER.basic, host=document.createElement('div');host.className='confetti';card.appendChild(host);
-  const dur=900/spec.speed, w=card.clientWidth;
-  for(let i=0;i<spec.count;i++){const s=document.createElement('div');s.className='spark';
-    s.style.background=spec.colors[i%spec.colors.length];
-    s.style.left=(Math.random()*w)+'px';
-    s.style.setProperty('--x',(Math.random()*40-20)+'px');
-    s.style.setProperty('--dx',(Math.random()*80-40)+'px');
-    s.style.setProperty('--rot',(Math.random()*1.5+.5)+'turn');
-    s.style.animation=`float ${dur+Math.random()*500}ms linear both`;s.style.opacity=.95;
-    if(i%2){s.style.clipPath='polygon(50% 0,0 100%,100% 100%)'}
-    host.appendChild(s);
+  /* ========= Library contents ========= */
+  const LIB = {
+    'Hero':['assets/videos/hero_1.mp4','assets/videos/interaction_1.mp4','assets/videos/pour_1.mp4','assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg'],
+    'Reels 9:16':['assets/videos/launch_tiktok.mp4','assets/videos/natural_1.mp4','assets/videos/transform_1.mp4'],
+    'Reels 16:9':['assets/videos/hero_1.mp4','assets/videos/interaction_1.mp4','assets/videos/pour_1.mp4'],
+    'Backgrounds':['assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg'],
+    'Logos':['assets/images/logo_gold.png','assets/images/logo_dark.png']
+  };
+  const tabs = el('#libTabs'), grid = el('#libGrid'), heroSel = el('#heroSrc');
+  Object.keys(LIB).forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='tab'+(i? '':' active'); b.textContent=k; b.dataset.key=k;
+    b.onclick=()=>{ els('.tab').forEach(t=>t.classList.remove('active')); b.classList.add('active'); drawGrid(k); };
+    tabs.appendChild(b);
+  });
+  function drawGrid(key){
+    grid.innerHTML='';
+    LIB[key].forEach(src=>{
+      const t=document.createElement('div'); t.className='tile'; t.textContent=src;
+      t.onclick=()=>{ S.hero=src; save(); window.scrollTo({top:0,behavior:'smooth'}); };
+      grid.appendChild(t);
+    });
   }
-  if(spec.trail){trail(card, spec.colors)}
-  setTimeout(()=>host.remove(),dur+1200);
-}
-function trail(card,colors){
-  // 6 quick twinkles near the Choose button area
-  const btn=card.querySelector('.choose'), rect=btn?btn.getBoundingClientRect():card.getBoundingClientRect(), baseLeft=(btn?btn.offsetLeft:16)+20;
-  for(let k=0;k<6;k++){
-    const tw=document.createElement('div');tw.className='twinkle';
-    tw.style.color=colors[k%colors.length];
-    tw.style.left=(baseLeft + Math.random()*60)+'px';
-    tw.style.top=(btn?btn.offsetTop:10)-8+'px';
-    tw.style.setProperty('--tx','0px');tw.style.setProperty('--ty','0px');tw.style.setProperty('--dx',(10+Math.random()*12)+'px');
-    tw.style.animation=`tw ${400+Math.random()*200}ms ease-out both ${k*40}ms`;
-    card.appendChild(tw);setTimeout(()=>tw.remove(),800+k*40);
-  }
-}
-document.querySelectorAll('.choose').forEach(b=>b.onclick=e=>{e.preventDefault();confetti(e.currentTarget.closest('.pricing-card'),e.currentTarget.dataset.tier)});
+  drawGrid('Hero');
+  // Populate select
+  heroSel.innerHTML = Object.values(LIB).flat().map(v=>`<option ${S.hero===v?'selected':''}>${v}</option>`).join('');
+  heroSel.oninput = e=>{ S.hero=e.target.value; save(); };
 
-/* Smooth in-page links */
-document.querySelectorAll('a[href^="#"]').forEach(a=>a.onclick=e=>{const id=a.getAttribute('href').slice(1),s=document.getElementById(id);if(s){e.preventDefault();s.scrollIntoView({behavior:'smooth'})}});
+  /* ========= Customize panel (owner only, manual open) ========= */
+  const panel=el('#panel');
+  el('#openCustomize').onclick=()=>panel.classList.add('open');
+  el('#closeCustomize').onclick=()=>panel.classList.remove('open');
+
+  // Bind inputs + live-save
+  const bind = (id, path, transform=(v)=>v )=>{
+    const input=el(id); const set=(v)=>{ let ref=S; const keys=path.split('.'); while(keys.length>1) ref=ref[keys.shift()]; ref[keys[0]]=transform(v); save(); };
+    input.oninput=e=>set(e.target.value);
+    // set initial UI value from settings
+    const get=(()=>{ let ref=S; for(const k of path.split('.')) ref=ref[k]; return ref; })();
+    if(input.type==='range'||input.type==='color'||input.tagName==='SELECT') input.value=get;
+  };
+  bind('#accent','accent');
+  bind('#radius','radius',v=>+v);
+  bind('#glow','glow',v=>+v);
+  bind('#cfDensity','cf.density',v=>+v);
+  bind('#cfSpeed','cf.speed',v=>+v);
+  bind('#cfShape','cf.shape');
+
+  el('#saveBtn').onclick=save;
+  el('#resetBtn').onclick=()=>{ S=JSON.parse(JSON.stringify(DEFAULTS)); save(); location.reload(); };
+
+  /* ========= Join button scroll ========= */
+  const scrollToSel = sel => document.querySelector(sel).scrollIntoView({behavior:'smooth',block:'start'});
+  el('#joinBtn').onclick=()=>scrollToSel('#plans');
+  els('[data-scroll]').forEach(b=>b.onclick=()=>scrollToSel(b.dataset.scroll));
+
+  /* ========= Confetti (GPU-friendly, tier-aware) ========= */
+  const C = (()=>{
+    const canvas = el('#fx'), ctx = canvas.getContext('2d');
+    let W=canvas.width=innerWidth, H=canvas.height=innerHeight, parts=[], active=false, last=0;
+    addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;});
+    const hex = (h)=>'#'+h;
+    const TIER = {
+      basic : { colors:['#9aa8bd','#c7d2e2'], shape:'circle' },
+      silver: { colors:['#c0c0c0','#f2f2f2'], shape:'square' },
+      gold  : { colors:['#ffd36a','#f0b73a'], shape:'triangle' },
+      diamond:{ colors:['#b9f2ff','#7fd0e3'], shape:'diamond' }
+    };
+    function spawn(x,y,tier){
+      const conf = TIER[tier]||TIER.basic;
+      const n = Math.round(120 * S.cf.density);
+      for(let i=0;i<n;i++){
+        parts.push({
+          x,y, vx:(Math.random()-0.5)*3*S.cf.speed, vy:(Math.random()-1.6)*3*S.cf.speed,
+          r: 2+Math.random()*5, a:1, vr: (Math.random()-0.5)*0.2,
+          rot: Math.random()*6.28,
+          color: conf.colors[Math.random()*conf.colors.length|0],
+          shape: S.cf.shape==='mix'? conf.shape : S.cf.shape
+        });
+      }
+      active=true; requestAnimationFrame(frame);
+    }
+    function draw(p){
+      ctx.globalAlpha=p.a;
+      ctx.fillStyle=p.color; ctx.strokeStyle=p.color;
+      const s=p.r*2;
+      switch(p.shape){
+        case 'circle': ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); break;
+        case 'square': ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillRect(-p.r,-p.r,s,s); ctx.restore(); break;
+        case 'triangle': ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+          ctx.beginPath(); ctx.moveTo(0,-s*.6); ctx.lineTo(s*.6,s*.6); ctx.lineTo(-s*.6,s*.6); ctx.closePath(); ctx.fill(); ctx.restore(); break;
+        case 'diamond': ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+          ctx.beginPath(); ctx.moveTo(0,-s*.7); ctx.lineTo(s*.55,0); ctx.lineTo(0,s*.7); ctx.lineTo(-s*.55,0); ctx.closePath(); ctx.fill(); ctx.restore(); break;
+      }
+    }
+    function frame(ts){
+      if(!active) return;
+      const dt=(ts-last)||16; last=ts;
+      ctx.clearRect(0,0,W,H);
+      parts.forEach(p=>{
+        p.vy+=0.025*S.cf.speed; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.a-=0.007;
+      });
+      parts = parts.filter(p=>p.a>0 && p.y<H+20);
+      parts.forEach(draw);
+      if(parts.length) requestAnimationFrame(frame); else active=false;
+    }
+    return { burst:(x,y,tier)=>spawn(x,y,tier) };
+  })();
+
+  // Attach to plan Choose buttons
+  els('[data-choose]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const plan = e.currentTarget.closest('.plan');
+      const rect = plan.getBoundingClientRect();
+      // center over the card and ensure it scrolls into view first
+      plan.scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(()=> C.burst(rect.left + rect.width/2, rect.top + scrollY + 10, plan.dataset.tier), 260);
+    });
+  });
+
+  /* ========= Initialize + persist UI values ========= */
+  // hydrate inputs
+  el('#accent').value=S.accent;
+  el('#radius').value=S.radius;
+  el('#glow').value=S.glow;
+  el('#cfDensity').value=S.cf.density;
+  el('#cfSpeed').value=S.cf.speed;
+  el('#cfShape').value=S.cf.shape;
+
+  apply();
+
+})();
 </script>
 </body>
 </html>
