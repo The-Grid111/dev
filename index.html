@@ -1,225 +1,272 @@
-<script>
-/* ==========================================================
-   THEGRID — Patch v1.8  (Performance + Payments polish)
-   - No auto-open Customize panel
-   - GPU-friendly sparkles (replaces heavy confetti)
-   - Strong section titles & separators
-   - Payment cards: tier badges + “View details”
-   - Safe: no external deps; removes itself cleanly
-   ========================================================== */
-
-(function () {
-  const TAG = "THEGRID Patch v1.8";
-  try {
-    /* ---------- 0) Owner panel: never auto-open ---------- */
-    // Older patches may have auto-opened the panel via a flag.
-    localStorage.removeItem("tg_conf_open"); // hard stop
-    // Only toggle when Customize is clicked:
-    const customize = document.querySelector('[data-action="customize"], .tg-customize, button[aria-label="Customize"]');
-    if (customize && !customize._tgWired) {
-      customize._tgWired = true;
-      customize.addEventListener("click", () => {
-        document.documentElement.toggleAttribute("data-owner-open");
-      });
-    }
-
-    /* ---------- 1) Section titles & separation ---------- */
-    // Add a classy divider & stronger headings without touching markup
-    const style = document.createElement("style");
-    style.id = "tg-patch-18-style";
-    style.textContent = `
-      /* Headline lift */
-      .tg-title,
-      section h2,
-      .pricing h2,
-      [data-section-title] {
-        letter-spacing:.2px;
-        font-weight:800;
-        position:relative;
-        text-shadow:0 0 12px rgba(255,215,0,.15);
-      }
-      /* Section frame */
-      .tg-section,
-      section,
-      .pricing {
-        position:relative;
-        isolation:isolate;
-      }
-      .tg-section::before,
-      section::before,
-      .pricing::before{
-        content:"";
-        position:absolute; inset: -2px;
-        border-radius:18px;
-        pointer-events:none;
-        background:
-          radial-gradient(120% 50% at 50% -10%, rgba(255,215,0,.22), transparent 60%) ,
-          linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,0));
-        box-shadow: 0 0 0 1px rgba(255,215,0,.18), inset 0 0 18px rgba(255,215,0,.08);
-        z-index:-1;
-      }
-      /* Strong card headers inside Monetise */
-      .pricing .card-title{
-        font-weight:900;
-        letter-spacing:.3px;
-      }
-
-      /* ---------- Sparkles (no-lag) ---------- */
-      .tg-sparkles { position:absolute; inset:0; overflow:visible; pointer-events:none; }
-      .tg-sparkles i {
-        position:absolute; width:6px; height:6px; opacity:0; border-radius:50%;
-        transform:translate3d(0,0,0);
-        animation: tgPop .9s ease-out forwards;
-        will-change: transform, opacity;
-        filter: drop-shadow(0 0 6px currentColor);
-      }
-      .tg-sparkles i.sq { border-radius:2px; }
-      .tg-sparkles i.shard { width:8px; height:3px; border-radius:2px; }
-      .tg-sparkles i.star { width:7px; height:7px; clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-
-      @keyframes tgPop {
-        0%   {opacity:0; transform: translate3d(var(--x,0), var(--y,0),0) scale(.6);}
-        8%   {opacity:1;}
-        100% {opacity:0; transform: translate3d(calc(var(--x,0) * 1.7), calc(var(--y,0) * 2.1),0) scale(.9);}
-      }
-
-      /* Tier badges & details link */
-      .tg-badge {
-        display:inline-flex; align-items:center; gap:.45rem;
-        font:600 .85rem/1.15 var(--font-sans, ui-sans-serif);
-        padding:.35rem .6rem; border-radius:999px;
-        background: rgba(255,215,0,.10);
-        border:1px solid rgba(255,215,0,.28);
-      }
-      .tg-badge svg{ width:16px; height:16px; }
-      .tg-details { margin-top:.6rem; }
-      .tg-details button{
-        background:transparent; color:var(--text,#eaeaea);
-        border:none; text-decoration:underline; font-weight:600;
-      }
-      .tg-details ul{ margin:.5rem 0 .3rem 1.1rem; display:none; }
-      .tg-details[open] ul{ display:block; }
-    `;
-    document.head.appendChild(style);
-
-    /* ---------- 2) Tier styling helpers ---------- */
-    const TIERS = {
-      basic:  { color:"#FBD76B", shape:"dot"   },
-      silver: { color:"#C8D2E2", shape:"shard" },
-      gold:   { color:"#FFD24D", shape:"sq"    },
-      diamond:{ color:"#B9F2FF", shape:"star"  }
-    };
-
-    /* ---------- 3) Payment cards polish ---------- */
-    const cards = document.querySelectorAll('.pricing [data-tier], .pricing .card, .pricing-card');
-    cards.forEach((card) => {
-      // Determine tier from data-tier OR text content fallback
-      const txt = (card.getAttribute('data-tier') || card.textContent || "").toLowerCase();
-      const tier = /diamond/.test(txt) ? "diamond"
-                 : /gold/.test(txt)    ? "gold"
-                 : /silver/.test(txt)  ? "silver"
-                 : "basic";
-      card.dataset.tier = tier;
-      const {color} = TIERS[tier];
-
-      // Badge
-      if (!card.querySelector('.tg-badge')) {
-        const badge = document.createElement('div');
-        badge.className = 'tg-badge';
-        badge.style.color = color;
-        badge.innerHTML = `
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.86L18.18 22 12 18.77 5.82 22 7 14.13l-5-4.86 6.91-1.01L12 2z"/>
-          </svg>
-          ${tier[0].toUpperCase()+tier.slice(1)}
-        `;
-        const title = card.querySelector('.card-title, h3, h4') || card.firstElementChild;
-        (title || card).prepend(badge);
-      }
-
-      // Details toggle (use existing bullet list if present)
-      const bullets = card.querySelector('ul, .features') || null;
-      if (bullets && !card.querySelector('.tg-details')) {
-        const wrap = document.createElement('div');
-        wrap.className = 'tg-details';
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = 'View details';
-        btn.addEventListener('click', ()=> wrap.toggleAttribute('open'));
-        wrap.appendChild(btn);
-        bullets.parentNode.insertBefore(wrap, bullets);
-        wrap.appendChild(bullets);
-      }
-    });
-
-    /* ---------- 4) GPU sparkles (on view & on click) ---------- */
-    function makeSparkles(host, tier="basic", count=22) {
-      // Keep to small counts for perf on mobile
-      const {color, shape} = TIERS[tier] || TIERS.basic;
-      const box = document.createElement('div');
-      box.className = 'tg-sparkles';
-      for (let i=0;i<count;i++){
-        const p = document.createElement('i');
-        if (shape!=="dot") p.classList.add(shape);
-        const angle = Math.random()*Math.PI*2;
-        const r = 20 + Math.random()*80;
-        p.style.setProperty('--x', (Math.cos(angle)*r) + 'px');
-        p.style.setProperty('--y', (Math.sin(angle)*r) + 'px');
-        p.style.color = color;
-        p.style.left = (50 + (Math.random()*40-20)) + '%';
-        p.style.top  = (50 + (Math.random()*20-10)) + '%';
-        p.style.animationDelay = (Math.random()*0.25) + 's';
-        box.appendChild(p);
-      }
-      host.style.position = 'relative';
-      host.appendChild(box);
-      setTimeout(()=> box.remove(), 1200); // auto-clean
-    }
-
-    // Once when a pricing card first becomes visible
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          const card = e.target;
-          makeSparkles(card, card.dataset.tier || 'basic', 18);
-          io.unobserve(card);
-        }
-      });
-    }, {rootMargin:"0px 0px -10% 0px", threshold:.4});
-    cards.forEach(c=> io.observe(c));
-
-    // Also on primary CTA click
-    document.querySelectorAll('.pricing button, .pricing a[role="button"], .pricing .cta')
-      .forEach(btn=>{
-        if(btn._tgWired) return; btn._tgWired = true;
-        btn.addEventListener('click', (ev)=>{
-          const card = btn.closest('.pricing [data-tier], .pricing .card, .pricing-card');
-          if(card) makeSparkles(card, card.dataset.tier || 'basic', 24);
-        }, {passive:true});
-      });
-
-    /* ---------- 5) Disable any old heavy confetti engines ---------- */
-    document.documentElement.setAttribute('data-no-confetti','1');
-    // If an older script exposed window.tgconfetti, pause it.
-    if (window.tgconfetti && typeof window.tgconfetti.disable === 'function') {
-      window.tgconfetti.disable();
-    }
-
-    /* ---------- 6) Clear section headings text where needed ---------- */
-    // Make key section titles explicit if the template used generic labels.
-    const fixTitles = [
-      { sel: '.pricing h2, .pricing [data-section-title]', text: 'Monetise' },
-      { sel: '#library h2, [data-section="library"] h2, .library h2', text: 'Library' },
-      { sel: '#hero h2, [data-section="hero"] h2', text: 'Black & Gold — Creativity' }
-    ];
-    fixTitles.forEach(({sel,text})=>{
-      const el = document.querySelector(sel);
-      if (el && !el.dataset.lockTitle) { el.textContent = text; el.classList.add('tg-title'); }
-    });
-
-    console.info("%c" + TAG + " loaded.", "color:#FFD24D");
-  } catch (e) {
-    console.error("Patch v1.8 error:", e);
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THEGRID — Black & Gold</title>
+<meta name="theme-color" content="#0b0c0f">
+<style>
+  :root{
+    --bg:#0b0c0f; --panel:#121316; --card:#17181d; --text:#e9ecf1; --muted:#9aa3b2;
+    --gold:#FFD36B; --gold2:#E6B54A; --silver:#C0C0C0; --diamond:#B9F2FF;
+    --radius:18px;
   }
-})();
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;background:#0b0c0f;color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:24px 16px 120px}
+
+  /* Top bar */
+  .top{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,.25));border-bottom:1px solid rgba(255,211,107,.12);backdrop-filter:blur(8px)}
+  .row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+  .brand{display:flex;gap:10px;align-items:center}
+  .logo-wrap{position:relative;width:36px;height:36px;border-radius:8px;overflow:hidden}
+  .logo-wrap video,.logo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+  .greet{font-weight:900;padding:8px 12px;border-radius:12px;background:#0f1014;border:1px solid rgba(255,211,107,.25)}
+  .pill{padding:10px 16px;border-radius:12px;border:1px solid rgba(255,211,107,.25);background:#111216;font-weight:800;margin-left:8px}
+  .cta{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1200;border:none}
+
+  /* Sections */
+  section{background:var(--card);border-radius:var(--radius);margin:22px 0;overflow:hidden;position:relative;isolation:isolate}
+  section>.inner{padding:20px}
+  section::before{content:"";position:absolute;inset:-1px;border-radius:calc(var(--radius)+1px);
+    background:radial-gradient(140% 60% at 50% -10%, rgba(255,215,0,.10), transparent 65%);
+    box-shadow:0 0 0 1px rgba(255,215,0,.16), inset 0 0 18px rgba(255,215,0,.06);pointer-events:none;z-index:-1}
+  h1,h2{margin:0 0 10px} h1{font-size:clamp(26px,5vw,44px);font-weight:900;text-shadow:0 0 10px rgba(255,215,0,.15)}
+  h2{font-size:clamp(20px,3.4vw,28px);font-weight:800;letter-spacing:.2px;text-shadow:0 0 10px rgba(255,215,0,.12)}
+  .kicker{color:var(--muted);font-weight:700;margin:0 0 10px}
+
+  /* Buttons & grids */
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,211,107,.28);background:#101116;font-weight:800}
+  .btn.gold{color:#1a1200;background:linear-gradient(180deg,var(--gold),var(--gold2));border:none}
+  .grid{display:grid;gap:12px}
+  .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media(max-width:640px){.cols-2{grid-template-columns:1fr}}
+
+  /* Hero */
+  #heroWrap{aspect-ratio:16/9;background:#0e0f13;border-radius:12px;display:grid;place-items:center;overflow:hidden}
+  #heroVideo,#heroImg{width:100%;height:100%;object-fit:cover;display:none}
+  #heroVideo.on,#heroImg.on{display:block}
+
+  /* Library */
+  .tile{height:120px;border-radius:14px;background:#0f1014;border:1px dashed rgba(255,211,107,.35);display:grid;place-items:center;color:#9aa3b2;font-weight:800}
+  .tile:hover{border-style:solid;box-shadow:0 0 0 1px rgba(255,211,107,.4) inset}
+
+  /* Pricing */
+  .cards{display:grid;gap:16px}
+  @media(min-width:720px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .card{position:relative;background:#121317;border-radius:16px;padding:18px;min-height:260px}
+  .price{font-size:clamp(28px,5.4vw,40px);font-weight:900;margin:4px 0 8px}
+  .bullets{padding-left:18px;margin:0 0 14px} .bullets li{margin:6px 0}
+  .ribbon{position:absolute;top:10px;right:10px;padding:6px 10px;border-radius:10px;font:800 12px/1 system-ui}
+  .basic{background:linear-gradient(180deg,#FFE9A8,var(--gold));color:#1a1200}
+  .silver{background:linear-gradient(180deg,#E6E6E6,var(--silver));color:#111}
+  .gold{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1200}
+  .diamond{background:linear-gradient(180deg,#EFFFFF,var(--diamond));color:#003044}
+  .paychips{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 12px}
+  .chip{padding:6px 10px;border-radius:999px;font:600 12px/1.1 system-ui;background:linear-gradient(180deg,#fff,#ddd);color:#111;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 1px 2px rgba(0,0,0,.25)}
+  .chip.dark{color:#fff;background:linear-gradient(180deg,#222,#111)}
+
+  /* Confetti (CSS-only, fast) */
+  .confetti{position:absolute;inset:0 0 -40vh 0;overflow:hidden;pointer-events:none;mix-blend-mode:screen}
+  .piece{position:absolute;width:9px;height:9px;transform:translate3d(0,-20%,0);filter:drop-shadow(0 0 6px rgba(255,215,0,.35));
+    animation:fall 5.5s linear forwards}
+  .tri{clip-path:polygon(50% 0,0 100%,100% 100%)} .sq{border-radius:2px} .di{transform:translate3d(0,-20%,0) rotate(45deg);border-radius:2px}
+  @keyframes fall{0%{transform:translate3d(var(--x,0),-10%,0) rotate(0);opacity:0}10%{opacity:1}100%{transform:translate3d(var(--x,0),110%,0) rotate(540deg);opacity:0}}
+  @media (prefers-reduced-motion: reduce){ .confetti{display:none!important} }
+
+  /* Error overlay (shows only if JS throws) */
+  #err{position:fixed;inset:0;display:none;align-items:flex-start;justify-content:center;background:rgba(0,0,0,.7);z-index:9999}
+  #err pre{max-width:960px;width:90%;background:#1b1c21;color:#fff;border:1px solid #f66;border-radius:12px;padding:14px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+  <!-- Top bar -->
+  <div class="top">
+    <div class="row wrap" style="padding-inline:16px">
+      <div class="brand">
+        <div class="logo-wrap">
+          <video id="logoVid" autoplay muted loop playsinline></video>
+          <img id="logoImg" src="assets/images/gc_logo.png" alt="Logo">
+        </div>
+        <div id="greet" class="greet">Good day</div>
+      </div>
+      <div>
+        <a href="#library" class="pill">Library</a>
+        <a href="#pricing" class="pill cta" id="joinNow">Join&nbsp;Now</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- Hero -->
+    <section id="hero"><div class="inner">
+      <h1>Black &amp; Gold <span style="color:var(--gold)">Creativity</span></h1>
+      <p class="kicker">Replace a file — no code. Your site adapts to your content.</p>
+      <div class="grid cols-2" style="margin:0 0 12px">
+        <a class="btn" href="#library">Open Library</a>
+        <a class="btn gold" href="#pricing">See Pricing</a>
+      </div>
+      <div id="heroWrap">
+        <video id="heroVideo" autoplay muted loop playsinline></video>
+        <img id="heroImg" alt="Hero">
+      </div>
+    </div></section>
+
+    <!-- Library -->
+    <section id="library"><div class="inner">
+      <h2>Library</h2>
+      <p class="kicker">Tap a tile to set the hero. Place media in <code>assets/videos</code> or <code>assets/images</code>.</p>
+      <div class="grid cols-2">
+        <button class="tile" data-src="assets/videos/hero_1.mp4">hero_1.mp4</button>
+        <button class="tile" data-src="assets/videos/interaction_1.mp4">interaction_1.mp4</button>
+        <button class="tile" data-src="assets/videos/pour_1.mp4">pour_1.mp4</button>
+        <button class="tile" data-src="assets/images/hero_1.jpg">hero_1.jpg</button>
+        <button class="tile" data-src="assets/images/hero_2.jpg">hero_2.jpg</button>
+        <button class="tile" data-src="assets/images/hero_3.jpg">hero_3.jpg</button>
+      </div>
+    </div></section>
+
+    <!-- Pricing -->
+    <section id="pricing"><div class="inner">
+      <h2>Monetise</h2>
+      <div class="paychips">
+        <span class="chip">🔒 Secure</span>
+        <span class="chip">💳 Stripe</span>
+        <span class="chip dark">🧾 VAT-ready</span>
+        <span class="chip">↩︎ 7-day refund</span>
+      </div>
+
+      <div class="cards">
+        <div class="card" data-tier="basic">
+          <div class="ribbon basic">BASIC</div>
+          <div class="price">£9<span style="font-weight:700">/mo</span></div>
+          <div class="kicker">For starting out</div>
+          <ul class="bullets">
+            <li>Starter templates</li><li>Library access</li><li>Email support</li>
+          </ul>
+          <a class="btn gold buy" data-tier="basic" href="#contact">Choose Basic</a>
+        </div>
+
+        <div class="card" data-tier="silver">
+          <div class="ribbon silver">SILVER</div>
+          <div class="price">£29<span style="font-weight:700">/mo</span></div>
+          <div class="kicker">Growing creators</div>
+          <ul class="bullets">
+            <li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li>
+          </ul>
+          <a class="btn gold buy" data-tier="silver" href="#contact">Choose Silver</a>
+        </div>
+
+        <div class="card" data-tier="gold">
+          <div class="ribbon gold">GOLD</div>
+          <div class="price">£49<span style="font-weight:700">/mo</span></div>
+          <div class="kicker">Serious builders</div>
+          <ul class="bullets">
+            <li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li>
+          </ul>
+          <a class="btn gold buy" data-tier="gold" href="#contact">Choose Gold</a>
+        </div>
+
+        <div class="card" data-tier="diamond">
+          <div class="ribbon diamond">DIAMOND</div>
+          <div class="price">£99<span style="font-weight:700">/mo</span></div>
+          <div class="kicker">Premium &amp; bespoke</div>
+          <ul class="bullets">
+            <li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li>
+          </ul>
+          <a class="btn gold buy" data-tier="diamond" href="#contact">Choose Diamond</a>
+        </div>
+      </div>
+    </div></section>
+
+    <!-- Contact -->
+    <section id="contact"><div class="inner">
+      <h2>Contact us</h2>
+      <form id="contactForm">
+        <input id="cName" placeholder="Your name" required>
+        <input id="cEmail" type="email" placeholder="you@example.com" required>
+        <input id="cSubject" placeholder="How can we help?" required>
+        <textarea id="cMsg" placeholder="Write your message…" required></textarea>
+        <button class="btn gold" type="submit">Send message</button>
+      </form>
+      <p class="kicker" style="margin-top:10px">We’ll reply from <strong>gridcoresystems@gmail.com</strong>.</p>
+    </div></section>
+
+    <footer class="wrap" style="text-align:center;color:var(--muted)">© THEGRID • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a></footer>
+  </main>
+
+  <!-- Error overlay (only shows if JS throws) -->
+  <div id="err"><pre id="errtxt"></pre></div>
+
+<script>
+/* Safe Core — compact, guarded, high-performance */
+(function(){try{
+  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+
+  /* Greeting */
+  const h=new Date().getHours(); const g=$('#greet'); if(g) g.textContent=h<12?'Good morning':(h<18?'Good afternoon':'Good evening');
+
+  /* Spinning logo video (fallback to image) */
+  (function(){
+    const v=$('#logoVid'), i=$('#logoImg');
+    const trySrcs=['assets/videos/logo_spin.mp4','assets/logo_spin.mp4'];
+    let used=false;
+    function play(){
+      v.play().catch(()=>{ /* ignore autoplay block */ });
+    }
+    function fail(){ v.removeAttribute('src'); v.style.display='none'; i.style.display='block'; }
+    v.addEventListener('error',()=>{ if(!used){ used=true; v.src=trySrcs[1]; } else fail(); });
+    v.addEventListener('loadeddata',()=>{ i.style.display='none'; v.style.display='block'; play(); });
+    v.src=trySrcs[0];
+  })();
+
+  /* Hero & Library */
+  const hv=$('#heroVideo'), hi=$('#heroImg');
+  function setHero(src){
+    if(!src) return;
+    localStorage.setItem('tg_hero',src);
+    if(/\.(mp4|webm|mov)$/i.test(src)){ if(hi){hi.classList.remove('on');hi.removeAttribute('src');} if(hv){hv.src=src;hv.classList.add('on');} }
+    else{ if(hv){hv.classList.remove('on');hv.removeAttribute('src');} if(hi){hi.src=src;hi.classList.add('on');} }
+  }
+  setHero(localStorage.getItem('tg_hero')||'assets/videos/hero_1.mp4');
+  $$('.tile').forEach(t=>t.addEventListener('click',()=>{ setHero(t.dataset.src); scrollTo({top:0,behavior:'smooth'}); }));
+
+  /* Contact (mailto only) */
+  $('#contactForm')?.addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=encodeURIComponent($('#cName').value.trim());
+    const email=encodeURIComponent($('#cEmail').value.trim());
+    const subj=encodeURIComponent($('#cSubject').value.trim());
+    const msg =encodeURIComponent($('#cMsg').value.trim()+`%0A%0AFrom: ${name} <${email}>`);
+    location.href=`mailto:gridcoresystems@gmail.com?subject=${subj}&body=${msg}`;
+  });
+
+  /* Lightweight confetti — only on Join/Buy */
+  function confetti(host,tier){
+    const colors={basic:'var(--gold)',silver:'var(--silver)',gold:'var(--gold)',diamond:'var(--diamond)'}; const col=colors[tier]||'var(--gold)';
+    const box=document.createElement('div'); box.className='confetti';
+    const N=26;
+    for(let i=0;i<N;i++){
+      const p=document.createElement('div');
+      p.className='piece ' + (tier==='diamond'?'di':(i%2?'tri':'sq'));
+      const left=(Math.random()*100).toFixed(2)+'%';
+      const x=(Math.random()*100-20).toFixed(0)+'%';
+      const size=(8+Math.random()*8)|0;
+      const delay=(Math.random()*1.2).toFixed(2)+'s';
+      p.style.cssText=`left:${left};--x:${x};background:${col};width:${size}px;height:${size}px;animation-delay:${delay}`;
+      box.appendChild(p);
+    }
+    host.style.position='relative'; host.appendChild(box);
+    setTimeout(()=>box.remove(), 1400);
+  }
+  // Buttons: join + each plan
+  $('#joinNow')?.addEventListener('click',()=>{ const sec=$('#pricing'); if(sec) confetti(sec,'gold'); });
+  $$('.buy').forEach(b=>b.addEventListener('click',()=>{ const card=b.closest('.card'); if(card) confetti(card, card.dataset.tier||b.dataset.tier||'basic'); }));
+
+}catch(e){
+  const o=document.getElementById('err'), p=document.getElementById('errtxt'); p.textContent='JavaScript error:\\n\\n'+(e&&e.stack||e); o.style.display='flex';
+}})();
 </script>
+</body>
+</html>
