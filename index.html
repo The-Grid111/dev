@@ -1,540 +1,432 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>THEGRID — Black & Gold</title>
-<meta name="theme-color" content="#0b0b0f"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE GRID</title>
+  <style>
+    :root {
+      --accent: #d4af37;
+      --accent2: #6ca0ff;
+      --ink: #ffffff;
+      --soft: #a0a0a0;
+      --card: #111111;
+      --panel: #1a1a1a;
+      --bgA: #000000;
+      --bgB: #0a0a0a;
+      --ring: 40;
+      --radius: 16px;
+      --fontScale: 1;
+      --space: 1;
+      --vignette: 1;
+    }
 
-<!-- Preloads -->
-<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
-<link rel="preload" href="assets/videos/logo.mp4" as="video">
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(180deg,var(--bgA),var(--bgB));
+      color: var(--ink);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
 
-<style>
-  :root{
-    /* Theme tokens (many are user-tunable in Customize) */
-    --accent:#E7B84B;
-    --accent-2:#9ec5ff;          /* secondary accent for fx */
-    --bg-1:#0B0C10;               /* page gradient start */
-    --bg-2:#0A0B0E;               /* page gradient end */
-    --ink:#E9ECF3;                /* primary text */
-    --soft:#B9C0CF;               /* secondary text */
-    --card:#11131A;               /* card surface */
-    --panel:#0F1219;              /* panel surface */
-    --ring:22;                    /* 0–100, glow thickness */
-    --radius:18px;
-    --fontScale:1;                /* 0.9–1.2 */
-    --space:1;                    /* 0.9–1.2 */
-    --vignette:1;                 /* 0/1 */
-    --borderStyle:glow;           /* glow | solid | none */
-  }
+    header {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+    }
 
-  /* Base */
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    color:var(--ink);
-    background:
-      radial-gradient(1100px 600px at 20% -80px, color-mix(in srgb,var(--accent),transparent 88%), transparent 70%),
-      radial-gradient(1200px 700px at 80% -120px, color-mix(in srgb,var(--accent-2),transparent 90%), transparent 70%),
-      linear-gradient(180deg,var(--bg-1),var(--bg-2));
-    letter-spacing:.2px;
-    --pad: calc(14px*var(--space));
-  }
-  .vignette:before{
-    content:""; position:fixed; inset:0; pointer-events:none;
-    background: radial-gradient(1200px 800px at 50% 120%, rgba(0,0,0,.55), transparent 60%);
-    opacity: calc(.6*var(--vignette));
-  }
-  .wrap{max-width:980px;margin-inline:auto;padding:22px}
+    header h1 {
+      font-size: calc(2rem * var(--fontScale));
+      margin: 0;
+      color: var(--accent);
+    }
 
-  /* Header / hero bar */
-  header{
-    position:sticky; top:0; z-index:50;
-    backdrop-filter:saturate(1.2) blur(10px);
-    background:color-mix(in srgb, #0b0c10 78%, #000 22%);
-    border-bottom:1px solid #161B26;
-  }
-  .bar{display:flex;align-items:center;gap:14px;padding:14px 20px}
-  .brand{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;min-width:0}
-  .logo{width:46px;height:46px;border-radius:12px;overflow:hidden;background:#0E1117;
-        box-shadow:0 0 0 1px #1b2130 inset, 0 0 30px rgba(231,184,75,.18);}
-  .logo video,.logo img{width:100%;height:100%;object-fit:cover;display:block}
-  .hello{margin:0;font:800 clamp(18px,5vw,28px)/1.1 inherit;letter-spacing:.2px}
-  .sub{margin:2px 0 0;color:var(--soft);font-size:.9em}
-  .spacer{flex:1}
-  .btn{
-    appearance:none;border:0;border-radius:14px;padding:12px 16px;
-    background:#151A23;color:var(--ink);font:600 16px/1 inherit;
-    box-shadow:0 0 0 1px #23293A inset;cursor:pointer;transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
-  }
-  .btn:hover{transform:translateY(-1px)}
-  .btn.primary{
-    background:linear-gradient(180deg, color-mix(in srgb,var(--accent),#fff 14%), var(--accent));
-    color:#1a1300; box-shadow:0 10px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb,var(--accent),#000 45%) inset;
-  }
+    header p {
+      color: var(--soft);
+      max-width: 600px;
+      margin: 1rem auto 0;
+    }
 
-  /* Sections / cards */
-  section{margin:28px 0}
-  .card{
-    background:linear-gradient(180deg, color-mix(in srgb,var(--card),#000 0%), color-mix(in srgb,var(--panel),#000 0%));
-    border-radius:var(--radius);
-    padding:calc(var(--pad)*1.2);
-    position:relative;
-    box-shadow:
-      0 0 0 1px #1b2130 inset,
-      0 8px 40px rgba(0,0,0,.45),
-      0 0 0 calc(var(--ring)*.12px) color-mix(in srgb, var(--accent), transparent 90%);
-  }
-  h2{font:800 clamp(26px,5.3vw,42px)/1.12 ui-sans-serif;margin:0 0 8px}
-  .lede{color:var(--soft); margin:0 0 16px}
+    .plans {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      padding: 2rem;
+      max-width: 1200px;
+      width: 100%;
+    }
 
-  /* Hero block */
-  .heroFrame{
-    aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px);
-    background:#0E1117; display:grid; place-items:center;
-    box-shadow:0 0 0 2px #202636 inset; border:1px dashed #2a3142;
-    position:relative; overflow:hidden;
-  }
-  .heroFrame video,.heroFrame img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
-  .slotTag{position:absolute;top:8px;left:8px;background:#0f141d;border:1px solid #263046;padding:6px 8px;border-radius:999px;font:700 12px/1 ui-sans-serif;color:#cbd4ea}
+    .plan {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2rem;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      border: 1px solid rgba(212,175,55,0.25);
+    }
 
-  .ctaRow{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
-  .ctaRow .btn{padding:12px 18px}
+    .plan h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
 
-  /* Library */
-  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-  .pill{
-    padding:10px 14px;border-radius:999px;background:#0f141d;color:var(--ink);
-    box-shadow:0 0 0 1px #252c3c inset;cursor:pointer;user-select:none
-  }
-  .pill.active{box-shadow:0 0 0 2px var(--accent) inset;background:#151a24}
-  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-  .tile{padding:14px;border-radius:14px;background:#0f1218;border:1px dashed #2a3142;color:#c4cbda;cursor:pointer}
-  .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
-  .meta{font-size:.9em;color:#93a0b8}
+    .price {
+      font-size: 1.8rem;
+      margin: 1rem 0;
+      font-weight: bold;
+    }
 
-  /* Pricing */
-  .plan{display:grid;gap:10px;padding:18px;border-radius:16px;background:#11141b;box-shadow:0 0 0 1px #1c2130 inset}
-  .plan .head{display:flex;justify-content:space-between;align-items:center}
-  .badge{border-radius:999px;padding:6px 10px;font:700 12px/1 ui-sans-serif;letter-spacing:.7px;color:#0c1017;background:color-mix(in srgb,var(--accent),#fff 20%);box-shadow:0 0 0 1px #2b2110 inset}
-  .price{font:800 34px/1.1 ui-sans-serif}
-  .plan ul{margin:0 0 4px 18px}
-  .plan .row{display:flex;gap:10px}
-  .plan .btn{flex:1}
-  .plan .ghost{background:#0f141d;color:#d7dbea}
+    .badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent);
+      color: #000;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: 12px;
+    }
 
-  /* Contact */
-  form{display:grid;gap:10px}
-  input,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #22283a;background:#0e1218;color:var(--ink)}
-  textarea{min-height:130px;resize:vertical}
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+      text-align: left;
+    }
 
-  /* Modal */
-  dialog{border:0;border-radius:16px;background:#0f1219;color:var(--ink);padding:0;width:min(680px,90vw)}
-  dialog::backdrop{background:rgba(0,0,0,.6)}
-  .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
-  .modalBody{padding:18px}
-  .x{background:#141926}
+    ul li {
+      margin: 0.4rem 0;
+    }
 
-  /* Border preview helpers */
-  .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent),#000 40%) inset}
-  .none  .card, .none  .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
+    .btn {
+      display: inline-block;
+      margin: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
 
-  .muted{color:var(--soft)}
-</style>
+    .btn.primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn.secondary {
+      background: #333;
+      color: var(--ink);
+    }
+    .btn:hover { opacity: 0.85; }
+
+    dialog {
+      background: var(--panel);
+      border: none;
+      border-radius: 12px;
+      max-width: 420px;
+      padding: 2rem;
+      color: var(--ink);
+    }
+
+    dialog::backdrop { background: rgba(0,0,0,0.8); }
+    #fx { position: fixed; inset:0; pointer-events:none; z-index:10; }
+  </style>
 </head>
-<body class="vignette" id="app">
-<header>
-  <div class="bar wrap">
-    <div class="brand">
-      <div class="logo" aria-label="Brand"><video id="logoVid" muted autoplay loop playsinline></video></div>
-      <div>
-        <h1 class="hello" id="hello">Good day — THEGRID</h1>
-        <div class="sub">Black & Gold</div>
-      </div>
+<body>
+  <header>
+    <h1>THE GRID</h1>
+    <p>Create, customize, and grow — with a system built for TikTok creators and beyond.</p>
+  </header>
+
+  <main class="plans">
+    <div class="plan" data-tier="basic">
+      <span class="badge">BASIC</span>
+      <h2>Basic</h2>
+      <div class="price">£9/mo</div>
+      <ul>
+        <li>Starter templates</li>
+        <li>Library access</li>
+        <li>Email support (48h)</li>
+      </ul>
+      <button class="btn primary choose">Choose</button>
+      <button class="btn secondary details">Details</button>
     </div>
-    <div class="spacer"></div>
-    <button id="btnCustomize" class="btn">Customize</button>
-    <button class="btn primary" id="btnJoin">Join Now</button>
+
+    <div class="plan" data-tier="silver">
+      <span class="badge">SILVER</span>
+      <h2>Silver</h2>
+      <div class="price">£29/mo</div>
+      <ul>
+        <li>Everything in Basic</li>
+        <li>Advanced effects</li>
+        <li>Priority support (24h)</li>
+      </ul>
+      <button class="btn primary choose">Choose</button>
+      <button class="btn secondary details">Details</button>
+    </div>
+
+    <div class="plan" data-tier="gold">
+      <span class="badge">GOLD</span>
+      <h2>Gold</h2>
+      <div class="price">£49/mo</div>
+      <ul>
+        <li>Everything in Silver</li>
+        <li>Customization session</li>
+        <li>Admin toolkit</li>
+      </ul>
+      <button class="btn primary choose">Choose</button>
+      <button class="btn secondary details">Details</button>
+    </div>
+
+    <div class="plan" data-tier="diamond">
+      <span class="badge">DIAMOND</span>
+      <h2>Diamond</h2>
+      <div class="price">£99/mo</div>
+      <ul>
+        <li>Everything in Gold</li>
+        <li>Custom pipelines & integrations</li>
+        <li>Priority roadmap</li>
+      </ul>
+      <button class="btn primary choose">Choose</button>
+      <button class="btn secondary details">Details</button>
+    </div>
+  </main>
+
+  <div style="margin:2rem;">
+    <button class="btn secondary" id="btnCompare">Compare Plans</button>
   </div>
-</header>
 
-<main class="wrap">
-  <!-- HERO (clickable slot) -->
-  <section class="card">
-    <h2 id="heroTitle">Black & Gold</h2>
-    <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    <div id="hero" class="heroFrame" data-slot="Hero" aria-label="Hero media">
-      <span class="slotTag">Hero slot • tap to change</span>
+  <dialog id="planModal">
+    <h2 id="mTitle"></h2>
+    <div id="mBody"></div>
+    <div style="text-align:right;margin-top:1rem">
+      <button class="btn secondary" onclick="planModal.close()">Close</button>
     </div>
-    <div class="ctaRow">
-      <a href="#library" class="btn">Open Library</a>
-      <a href="#plans" class="btn primary">See Pricing</a>
-    </div>
-  </section>
+  </dialog>
 
-  <!-- LIBRARY -->
-  <section id="library" class="card">
-    <h2>Library</h2>
-    <p class="lede">Tap a tile to set media. Drop files into <b>assets/videos</b> or <b>assets/images</b>. Optional: add <b>assets/manifest.json</b> to list more.</p>
-    <div class="tabs" id="libTabs"></div>
-    <div class="grid" id="libGrid" aria-live="polite"></div>
-    <p class="meta">Tip: name files clearly (e.g. <i>hero_1.mp4</i>, <i>reel_9x16_a.mp4</i>). The list auto-loads from your <b>assets/manifest.json</b> when present.</p>
-  </section>
+  <canvas id="fx"></canvas>
+  <script>
+    const $=s=>document.querySelector(s);
+    const $$=s=>document.querySelectorAll(s);
 
-  <!-- PLANS -->
-  <section id="plans" class="card">
-    <h2>Plans</h2>
-    <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
-    <div class="grid">
-      <article class="plan" data-tier="basic">
-        <div class="head"><div class="price">£9<span class="muted">/mo</span></div><span class="badge">BASIC</span></div>
-        <ul><li>Starter templates</li><li>Library access</li><li>Email support</li></ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-      <article class="plan" data-tier="silver">
-        <div class="head"><div class="price">£29<span class="muted">/mo</span></div><span class="badge">SILVER</span></div>
-        <ul><li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li></ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-      <article class="plan" data-tier="gold">
-        <div class="head"><div class="price">£49<span class="muted">/mo</span></div><span class="badge">GOLD</span></div>
-        <ul><li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-      <article class="plan" data-tier="diamond">
-        <div class="head"><div class="price">£99<span class="muted">/mo</span></div><span class="badge">DIAMOND</span></div>
-        <ul><li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li></ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-    </div>
-    <p class="meta" style="margin-top:10px">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
-  </section>
+    /* Settings + state */
+    let state=JSON.parse(localStorage.getItem('thegrid.settings')||'{}');
+    state=Object.assign({
+      accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
+      accent2:getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim(),
+      ink:getComputedStyle(document.documentElement).getPropertyValue('--ink').trim(),
+      soft:getComputedStyle(document.documentElement).getPropertyValue('--soft').trim(),
+      card:getComputedStyle(document.documentElement).getPropertyValue('--card').trim(),
+      panel:getComputedStyle(document.documentElement).getPropertyValue('--panel').trim(),
+      bgA:getComputedStyle(document.documentElement).getPropertyValue('--bgA').trim(),
+      bgB:getComputedStyle(document.documentElement).getPropertyValue('--bgB').trim(),
+      ring:40, radius:16, font:1, space:1, border:"glow", vignette:1,
+      heroSrc:"assets/images/bg_01.jpg", logoSrc:"assets/videos/hero_2.mp4",
+      confetti:{density:40,speed:3}
+    }, state);
 
-  <!-- À-la-carte -->
-  <section class="card">
-    <h2>À-la-carte Services</h2>
-    <div class="grid">
-      <article class="plan">
-        <div class="head"><div class="price" style="font-size:28px">£39</div><span class="badge">SETUP</span></div>
-        <ul><li>Deploy & connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
-        <button class="btn primary">Start Setup</button>
-      </article>
-      <article class="plan">
-        <div class="head"><div class="price" style="font-size:28px">£59</div><span class="badge">REELS</span></div>
-        <ul><li>3 niche reels</li><li>Captions & cuts</li><li>IG/TikTok ready</li></ul>
-        <button class="btn primary">Order Pack</button>
-      </article>
-      <article class="plan">
-        <div class="head"><div class="price" style="font-size:28px">£29</div><span class="badge">TEMPLATES</span></div>
-        <ul><li>5 premium blocks</li><li>Copy-paste ready</li><li>Lifetime updates</li></ul>
-        <button class="btn primary">Get Pack</button>
-      </article>
-    </div>
-  </section>
+    function save(){ localStorage.setItem('thegrid.settings',JSON.stringify(state)); }
+    function setCSS(k,v){ document.documentElement.style.setProperty(k,v); }
 
-  <!-- CONTACT -->
-  
-  <section class="card">
-    <h2>Contact</h2>
-    <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
-      <div class="grid" style="grid-template-columns:1fr 1fr">
-        <input placeholder="Your name" required>
-        <input type="email" placeholder="you@example.com" required>
-      </div>
-      <input placeholder="How can we help?">
-      <textarea placeholder="Write your message…"></textarea>
-      <button class="btn primary" style="width:180px">Send</button>
-      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
-    </form>
-  </section>
-</main>
-<!-- PART 1 END -->
-  <!-- DETAILS MODAL -->
-<dialog id="planModal">
-  <div class="modalHead">
-    <strong id="mTitle">Plan details</strong>
-    <button class="btn x" onclick="planModal.close()">Close</button>
-  </div>
-  <div class="modalBody" id="mBody"></div>
-</dialog>
+    function renderHero(){
+      let hero=document.querySelector('.hero');
+      if(!hero){
+        hero=document.createElement('div');
+        hero.className='hero';
+        document.body.prepend(hero);
+      }
+      hero.style.backgroundImage=`url(${state.heroSrc})`;
+    }
+        /* ---------- apply theme from state ---------- */
+    function applyTheme(){
+      setCSS('--accent', state.accent);
+      setCSS('--accent2', state.accent2);
+      setCSS('--ink', state.ink);
+      setCSS('--soft', state.soft);
+      setCSS('--card', state.card);
+      setCSS('--panel', state.panel);
+      setCSS('--bgA', state.bgA);
+      setCSS('--bgB', state.bgB);
+      setCSS('--radius', state.radius+'px');
+      setCSS('--fontScale', state.font);
+      setCSS('--space', state.space);
+    }
 
-<!-- CUSTOMIZE PANEL -->
-<dialog id="panel">
-  <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
-  <div class="modalBody">
-    <div class="grid" style="grid-template-columns:1fr 1fr">
-      <!-- Colors -->
-      <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Secondary accent<br><input id="uiAccent2" type="color" value="#9ec5ff" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Text color<br><input id="uiInk" type="color" value="#E9ECF3" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Soft text<br><input id="uiSoft" type="color" value="#B9C0CF" style="width:100%;height:42px;border:0;background:transparent"></label>
+    /* ---------- greeting (header tagline) ---------- */
+    (function greet(){
+      const h = new Date().getHours();
+      const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+      document.querySelector('header h1').innerText = `${word} — THE GRID`;
+    })();
 
-      <label>Card surface<br><input id="uiCard" type="color" value="#11131A" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Panel surface<br><input id="uiPanel" type="color" value="#0F1219" style="width:100%;height:42px;border:0;background:transparent"></label>
+    applyTheme();
+    renderHero();
 
-      <label>Background A<br><input id="uiBg1" type="color" value="#0B0C10" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Background B<br><input id="uiBg2" type="color" value="#0A0B0E" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <!-- Spacing / chrome -->
-      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="18" style="width:100%"></label>
-      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="22" style="width:100%"></label>
-      <label>Border style<br>
-        <select id="uiBorder" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-          <option value="glow">Glow</option><option value="solid">Solid</option><option value="none">None</option>
-        </select>
-      </label>
-      <label>Vignette<br>
-        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-          <option value="1">On</option><option value="0">Off</option>
-        </select>
-      </label>
-
-      <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-      <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-
-      <!-- Sources -->
-      <label>Logo source<br><select id="uiLogo" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select></label>
-      <label>Hero source<br><select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select></label>
-    </div>
-
-    <h3 style="margin:16px 0 8px">Confetti</h3>
-    <div class="grid" style="grid-template-columns:1fr 1fr">
-      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="120" value="40" style="width:100%"></label>
-      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.5" max="2" step=".05" value="1" style="width:100%"></label>
-    </div>
-
-    <div class="ctaRow" style="margin-top:16px">
-      <button id="save" class="btn">Save to this device</button>
-      <button id="reset" class="btn x">Reset</button>
-    </div>
-  </div>
-</dialog>
-
-<!-- Confetti canvas -->
-<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
-
-<script>
-/* ========== Helpers & State ========== */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const css = (k,v) => document.documentElement.style.setProperty(k,v);
-const readCSS = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
-
-const state = {
-  accent: readCSS('--accent'),
-  accent2: readCSS('--accent-2'),
-  bg1: readCSS('--bg-1'),
-  bg2: readCSS('--bg-2'),
-  ink: readCSS('--ink'),
-  soft: readCSS('--soft'),
-  card: readCSS('--card'),
-  panel: readCSS('--panel'),
-  ring: +readCSS('--ring'),
-  radius: parseInt(readCSS('--radius')),
-  border: 'glow',
-  font: +readCSS('--fontScale'),
-  space: +readCSS('--space'),
-  vignette: +readCSS('--vignette'),
-  heroSrc: 'assets/videos/hero_1.mp4',
-  logoSrc: 'assets/videos/logo.mp4',
-  confetti: {density:40, speed:1},
-  library: { Hero:[], 'Reels 9:16':[], 'Reels 16:9':[], Backgrounds:[], Logos:[], Images:[] }
-};
-
-function save(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)); }
-function load(){
-  const s = JSON.parse(localStorage.getItem('thegrid.settings')||'null');
-  if(!s) return;
-  Object.assign(state, s);
-  applyState();
-}
-
-/* ========== Greeting + Logo ========== */
-(function greeting(){
-  const h = new Date().getHours();
-  const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-  $('#hello').textContent = `${word} — THEGRID`;
-})();
-(function logo(){
-  const v = $('#logoVid');
-  v.src = state.logoSrc;
-  v.onerror = ()=> v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/logo.png',alt:'Logo'}));
-})();
-
-/* ========== HERO Slot ========== */
-function renderHero(){
-  const box = $('#hero'); box.onclick = ()=>activateTabFor('Hero');
-  box.innerHTML = '';
-  const src = state.heroSrc;
-  if(/\.(mp4|webm|mov)$/i.test(src)){
-    box.appendChild(Object.assign(document.createElement('video'), {src,controls:true,playsInline:true}));
-  }else{
-    box.appendChild(Object.assign(document.createElement('img'), {src,alt:'hero'}));
-  }
-}
-
-/* ========== Library (manifest-driven) ========== */
-const fallbackManifest = {
-  "Hero":["assets/videos/hero_1.mp4","assets/videos/interaction_1.mp4","assets/videos/pour_1.mp4","assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"],
-  "Reels 9:16":[],
-  "Reels 16:9":[],
-  "Backgrounds":["assets/images/bg_01.jpg","assets/images/bg_02.jpg"],
-  "Logos":["assets/videos/logo.mp4","assets/images/logo.png"],
-  "Images":["assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"]
-};
-async function fetchManifest(){
-  try{
-    const r = await fetch('assets/manifest.json',{cache:'no-store'});
-    if(r.ok) Object.assign(state.library, await r.json());
-    else Object.assign(state.library, fallbackManifest);
-  }catch{ Object.assign(state.library, fallbackManifest); }
-  buildLibrary(); fillSourceSelects();
-}
-function buildLibrary(){
-  const tabs = $('#libTabs'); const grid = $('#libGrid');
-  tabs.innerHTML = ''; grid.innerHTML = '';
-  const cats = Object.keys(state.library);
-  const active = localStorage.getItem('thegrid.activeTab') || cats[0];
-  cats.forEach(cat=>{
-    const pill = Object.assign(document.createElement('div'),{className:'pill'+(active===cat?' active':''),textContent:cat});
-    pill.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
-    tabs.appendChild(pill);
-  });
-  state.library[active].forEach(src=>{
-    const t = Object.assign(document.createElement('div'),{className:'tile',innerHTML:`<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`});
-    t.onclick = ()=>{
-      // If picking for a known slot, set hero when category fits
-      if(active==='Hero' || /\.(mp4|webm|mov|jpg|jpeg|png|gif)$/i.test(src)) { state.heroSrc=src; save(); renderHero(); }
-      // Also update selects for convenience
-      $('#uiHero').value = state.heroSrc;
+    /* ===================== Plan details ===================== */
+    const DETAILS = {
+      basic: `
+        <p><strong>Who it’s for:</strong> creators getting started, or teams who want a clean base fast.</p>
+        <p><strong>What you get</strong></p>
+        <ul>
+          <li>Starter site templates and blocks</li>
+          <li>Access to the media library (videos, images, logos)</li>
+          <li>Email support within 48h</li>
+          <li>7-day refund guarantee</li>
+        </ul>
+        <p class="muted">Upgrade any time. Keep your settings — no rebuilds.</p>
+      `,
+      silver: `
+        <p><strong>Who it’s for:</strong> growing creators who need polish and time-saving effects.</p>
+        <p><strong>What you get</strong></p>
+        <ul>
+          <li>Everything in Basic</li>
+          <li>Advanced effects & presets (hero/video polish, borders, glow, timing)</li>
+          <li>Priority support within 24h</li>
+          <li>Monthly improvement suggestions</li>
+        </ul>
+      `,
+      gold: `
+        <p><strong>Who it’s for:</strong> brands that want a tailored look with admin tools.</p>
+        <p><strong>What you get</strong></p>
+        <ul>
+          <li>Everything in Silver</li>
+          <li>Hands-on customization session (we set it up with you)</li>
+          <li>Admin toolkit (theme controls, asset manifest helpers)</li>
+          <li>Onboarding call (45 min)</li>
+        </ul>
+      `,
+      diamond: `
+        <p><strong>Who it’s for:</strong> teams that want integrations and fast turnarounds.</p>
+        <p><strong>What you get</strong></p>
+        <ul>
+          <li>Everything in Gold</li>
+          <li>Custom pipelines & integrations (analytics, forms, automations)</li>
+          <li>Hands-on help building your stack</li>
+          <li>Priority turnaround & roadmap planning</li>
+        </ul>
+      `
     };
-    grid.appendChild(t);
-  });
-}
-function activateTabFor(cat){ localStorage.setItem('thegrid.activeTab',cat); location.hash='#library'; buildLibrary(); }
-function fillSourceSelects(){
-  const all = [...new Set(Object.values(state.library).flat())];
-  const fill = (sel,val)=>{ sel.innerHTML=''; all.forEach(src=> sel.add(new Option(src,src,src===val,src===val))); };
-  fill($('#uiHero'), state.heroSrc);
-  fill($('#uiLogo'), state.logoSrc);
-}
 
-/* ========== Customize Panel bindings ========== */
-$('#btnCustomize').onclick = ()=> panel.showModal();
-$('#save').onclick = ()=>{ save(); alert('Saved to this device.'); };
-$('#reset').onclick = ()=>{ localStorage.removeItem('thegrid.settings'); location.reload(); };
+    $$('.details').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const card = e.currentTarget.closest('.plan');
+        const tier = card.dataset.tier;
+        $('#mTitle').textContent = `${tier.toUpperCase()} plan`;
+        $('#mBody').innerHTML = DETAILS[tier] +
+          `<div style="margin-top:1rem;text-align:right">
+             <button class="btn primary" onclick="planModal.close()">Sounds good</button>
+           </div>`;
+        $('#planModal').showModal();
+      });
+    });
 
-const bind = (id, key, fn=val=>val)=>{ const el=$(id); el.oninput=e=>{ state[key]=fn(e.target.value); applyState(true); save(); }; };
-bind('#uiAccent',  'accent');        bind('#uiAccent2','accent2');
-bind('#uiInk',     'ink');           bind('#uiSoft',   'soft');
-bind('#uiCard',    'card');          bind('#uiPanel',  'panel');
-bind('#uiBg1',     'bg1');           bind('#uiBg2',    'bg2');
-bind('#uiRing',    'ring',   v=>+v); bind('#uiRadius','radius',v=>+v);
-bind('#uiFont',    'font',   v=>+v); bind('#uiSpace', 'space', v=>+v);
-bind('#uiVignette','vignette',v=>+v);
-$('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save(); };
+    /* ===================== Compare modal ===================== */
+    $('#btnCompare').addEventListener('click', ()=>{
+      $('#mTitle').textContent = 'Compare plans';
+      $('#mBody').innerHTML = `
+        <div style="overflow:auto">
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Feature</th>
+                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Basic</th>
+                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Silver</th>
+                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Gold</th>
+                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Diamond</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${[
+                ['Starter templates','✓','✓','✓','✓'],
+                ['Media library access','✓','✓','✓','✓'],
+                ['Priority support','–','24h','24h','Same-day'],
+                ['Advanced effects','–','✓','✓','✓'],
+                ['Customization session','–','–','✓','✓'],
+                ['Admin toolkit','–','–','✓','✓'],
+                ['Integrations & pipelines','–','–','–','✓']
+              ].map(row=>`
+                <tr>
+                  ${row.map((cell,i)=>`
+                    <td style="padding:.6rem;border-bottom:1px solid #222;${i? 'color:#ddd':'color:#bbb'}">${cell}</td>
+                  `).join('')}
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+      $('#planModal').showModal();
+    });
 
-$('#uiHero').oninput = e=>{ state.heroSrc=e.target.value; renderHero(); save(); };
-$('#uiLogo').oninput = e=>{ state.logoSrc=e.target.value; const v=$('#logoVid'); if(v.tagName==='VIDEO'){ v.src=state.logoSrc; } save(); };
+    /* ===================== Confetti (left + right) ===================== */
+    const cvs = $('#fx'), ctx = cvs.getContext('2d');
+    let W=0,H=0, parts=[];
+    function size(){
+      const dpr = Math.max(1, window.devicePixelRatio||1);
+      W = cvs.width = innerWidth * dpr;
+      H = cvs.height = innerHeight * dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    size(); addEventListener('resize', size);
 
-function applyState(skipSelects=false){
-  css('--accent', state.accent); css('--accent-2', state.accent2);
-  css('--ink', state.ink); css('--soft', state.soft);
-  css('--card', state.card); css('--panel', state.panel);
-  css('--bg-1', state.bg1); css('--bg-2', state.bg2);
-  css('--ring', state.ring); css('--radius', state.radius+'px');
-  css('--fontScale', state.font); css('--space', state.space);
-  css('--vignette', state.vignette);
-  document.body.classList.add(state.border);
-  renderHero();
-  if(!skipSelects){
-    $('#uiAccent').value=state.accent; $('#uiAccent2').value=state.accent2;
-    $('#uiInk').value=state.ink; $('#uiSoft').value=state.soft;
-    $('#uiCard').value=state.card; $('#uiPanel').value=state.panel;
-    $('#uiBg1').value=state.bg1; $('#uiBg2').value=state.bg2;
-    $('#uiRing').value=state.ring; $('#uiRadius').value=state.radius;
-    $('#uiFont').value=state.font; $('#uiSpace').value=state.space;
-    $('#uiVignette').value=state.vignette; $('#uiBorder').value=state.border;
-  }
-}
+    function addConfetti(el){
+      const rect = el.getBoundingClientRect();
+      const originY = rect.top + rect.height*0.4;
+      const leftX   = rect.left - 8;
+      const rightX  = rect.right + 8;
+      const n = Math.max(12, state.confetti.density|0);
+      const s = Math.max(1, state.confetti.speed|0);
 
-/* ========== Plan Details + Confetti ========== */
-const DETAILS = {
-  basic:`<ul><li>Starter templates to get online today</li><li>Access to the media library & updates</li><li>Support via email within 48h</li></ul>`,
-  silver:`<ul><li>Everything in Basic</li><li>Advanced visual effects & presets</li><li>Priority support within 24h</li></ul>`,
-  gold:`<ul><li>Hands-on customization session</li><li>Admin toolkit & automation setup</li><li>Onboarding call (45 min)</li></ul>`,
-  diamond:`<ul><li>Custom pipelines & integrations</li><li>Hands-on help building your stack</li><li>Priority turnaround & roadmap</li></ul>`
-};
-$$('.details').forEach(b=>{
-  b.onclick = e=>{
-    const card = e.currentTarget.closest('.plan');
-    const tier = card.dataset.tier;
-    $('#mTitle').textContent = tier.toUpperCase() + ' plan';
-    $('#mBody').innerHTML = DETAILS[tier] + `<div class="ctaRow"><button class="btn primary" onclick="planModal.close()">Sounds good</button></div>`;
-    planModal.showModal();
-  };
-});
-$$('.choose').forEach(b=>{
-  b.onclick = e=>{
-    const card = e.currentTarget.closest('.plan');
-    card.scrollIntoView({behavior:'smooth', block:'center'});
-    confettiBurst(card);
-  };
-});
+      const palette = [getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
+                       '#ffffff','#9fb3ff','#cdd4e6'];
 
-/* ========== Confetti (tasteful, both sides) ========== */
-const canvas = $('#fx'), ctx = canvas.getContext('2d'); let W,H, parts=[];
-function size(){ W=canvas.width=innerWidth*devicePixelRatio; H=canvas.height=innerHeight*devicePixelRatio; }
-addEventListener('resize', size); size();
-function confettiBurst(el){
-  const r = el.getBoundingClientRect(); const y = (r.top + r.height*0.3) * devicePixelRatio;
-  const l = (r.left - 6) * devicePixelRatio; const rt = (r.right + 6) * devicePixelRatio;
-  const n = state.confetti.density|0; const s = +state.confetti.speed;
-  const colors = [state.accent, state.accent2, '#ffffff', '#cbd4ea'];
-  for(let i=0;i<n;i++){ parts.push(drop(l,y, 1,s,colors)); parts.push(drop(rt,y,-1,s,colors)); }
-}
-function drop(x,y,dir,s,colors){
-  const w = 4 + Math.random()*7, h = w*(.6 + Math.random()*.5);
-  return {x,y, vx:(1.6+Math.random()*1.7)*dir*s, vy:(-3 - Math.random()*2)*s,
-          g:.09*s, r:Math.random()*Math.PI, w,h, life:140+Math.random()*60, c:colors[(Math.random()*colors.length)|0]};
-}
-(function loop(){
-  ctx.clearRect(0,0,W,H);
-  parts = parts.filter(p=>p.life>0);
-  for(const p of parts){
-    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .12; p.life--;
-    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-    ctx.globalAlpha = Math.max(0, p.life/200);
-    ctx.fillStyle = p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-    ctx.restore();
-  }
-  requestAnimationFrame(loop);
-})();
+      for(let i=0;i<n;i++){
+        parts.push(makePiece(leftX, originY,  1, s, palette));
+        parts.push(makePiece(rightX,originY, -1, s, palette));
+      }
+    }
 
-/* ========== Init ========== */
-load(); fetchManifest(); renderHero();
+    function makePiece(x,y,dir,s,colors){
+      const shape = Math.random()<.5 ? 'rect':'tri';
+      const size = 6 + Math.random()*8;
+      return {
+        x, y, vx:(1.2+Math.random()*1.6)*dir*s, vy:(-2.5-Math.random()*2.5)*s,
+        g:.12*s, a:1, r:Math.random()*Math.PI, w:size, h:size*.7,
+        c: colors[(Math.random()*colors.length)|0], life: 140+Math.random()*40, shape
+      };
+    }
 
-/* Click hero to jump to the right tab */
-$('#hero').addEventListener('click', ()=>activateTabFor('Hero'));
+    function tick(){
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      parts = parts.filter(p=>p.life>0);
+      parts.forEach(p=>{
+        p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .12; p.life--; p.a = Math.max(0, p.life/180);
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a; ctx.fillStyle = p.c;
+        if(p.shape==='tri'){
+          ctx.beginPath();
+          ctx.moveTo(0,-p.h/2); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(-p.w/2,p.h/2); ctx.closePath(); ctx.fill();
+        } else {
+          ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        }
+        ctx.restore();
+      });
+      requestAnimationFrame(tick);
+    }
+    tick();
 
-/* Join button placeholder */
-$('#btnJoin').addEventListener('click', ()=>{ location.hash='#plans'; });
+    $$('.choose').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const card = e.currentTarget.closest('.plan');
+        addConfetti(card);
+        // here you can wire your checkout / link
+        // location.href = 'https://your-checkout.example/' + card.dataset.tier;
+      });
+    });
 
-</script>
+  </script>
 </body>
 </html>
