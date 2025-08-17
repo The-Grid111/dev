@@ -1,479 +1,524 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>THEGRID — Black & Gold</title>
-<meta name="theme-color" content="#0b0d0f"/>
-<link rel="icon" href="assets/images/logo.png"/>
+<meta name="theme-color" content="#0b0b0f"/>
+<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
 <style>
-:root{
-  --bg:#0b0d0f;--panel:#101317;--ink:#e9edf1;--muted:#aab3bd;
-  --accent:#e9b94f;--accent-2:#b8891f;--ring:rgba(233,185,79,.35);
-  --card: #0f1216; --edge: #1b1f26;
-  --radius:18px; --glow:0.5; --pad:18px; --lead:1.45; --fs:16px;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:radial-gradient(1200px 400px at 85% -10%,rgba(233,185,79,.07),transparent 60%),var(--bg);color:var(--ink);font:var(--fs)/var(--lead) ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
-h1,h2,h3{margin:0 0 .5rem}
-h1{font-size:clamp(32px,5vw,56px);letter-spacing:.3px}
-h2{font-size:clamp(22px,3.2vw,28px)}
-h3{font-size:18px;color:var(--muted)}
-p{margin:.4rem 0 0;color:var(--muted)}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-.card{background:linear-gradient( to bottom, rgba(255,255,255,.02), rgba(255,255,255,.01) ) , var(--card);
-  border:1px solid color-mix(in oklab, var(--edge) 70%, #000);
-  border-radius:var(--radius); padding:var(--pad);
-  box-shadow:0 0 calc(50px*var(--glow)) var(--ring), inset 0 1px 0 rgba(255,255,255,.03);
-}
-.row{display:grid;gap:18px}
-.header{position:sticky;top:0;z-index:40;background:
-  linear-gradient(180deg,rgba(11,13,15,.9),rgba(11,13,15,.6) 80%,transparent);}
-.header-inner{display:flex;align-items:center;gap:14px;padding:12px 16px}
-.logo{width:40px;height:40px;border-radius:12px;background:
-  radial-gradient(circle at 30% 30%,rgba(233,185,79,.55),transparent 55%),
-  #0a0c0f;border:1px solid #2a2e37;display:grid;place-items:center;overflow:hidden}
-.logo img{width:100%;height:100%;object-fit:cover;mix-blend:screen;opacity:.9}
-.brand{display:flex;flex-direction:column}
-.brand b{letter-spacing:.4px}
-.badge{font:12px/1 system-ui;color:#0b0d0f;background:linear-gradient(#f7d57a,#e6b34a);
-  padding:.55rem .9rem;border-radius:999px;border:1px solid #b8891f;box-shadow:0 6px 18px rgba(233,185,79,.25)}
-.btn{appearance:none;border:0;border-radius:12px;padding:.8rem 1.1rem;font-weight:600;
-  color:#0b0d0f;background:linear-gradient(#f1cd67,#e0aa3c);box-shadow:0 10px 28px rgba(233,185,79,.25)}
-.btn.secondary{color:var(--ink);background:#1a1f27;border:1px solid #2a2f38}
-.btn.block{display:block;width:100%}
-.kicker{display:flex;gap:10px;margin-top:10px}
-.hero{height:340px;border-radius:var(--radius);background:#0d1014;display:grid;place-items:center;overflow:hidden;border:1px dashed #3a3f47}
-.hero video,.hero img{width:100%;height:100%;object-fit:cover}
-.section-title{position:relative;margin-bottom:.4rem}
-.section-title::after{content:"";position:absolute;left:0;bottom:-8px;width:84px;height:3px;border-radius:999px;background:linear-gradient(90deg,var(--accent),transparent)}
-.grid-3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.plan{position:relative}
-.plan .tag{position:absolute;right:14px;top:14px;background:#111923;color:#e7eef6;border:1px solid #263241;padding:.28rem .55rem;border-radius:999px;font-size:12px}
-.plan.gold .tag{background:#20170a;color:#ffefc0;border-color:#6d4a0f}
-.plan.diamond .tag{background:#0e1620;color:#d6f2ff;border-color:#2a475e}
-ul{margin:.6rem 0 0;padding-left:1.1rem}
-small.note{display:block;color:var(--muted);margin-top:10px}
-.library .tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-.tab{padding:.5rem .9rem;border-radius:999px;border:1px solid #2a2f38;background:#10151c;color:#cbd4df;font-size:14px}
-.tab[aria-selected="true"]{outline:2px solid var(--ring);background:#141a22}
-.library .tiles{display:grid;gap:12px}
-.tile{height:92px;border-radius:14px;border:1px dashed #3a3f47;display:grid;place-items:center;color:#9fb0c4;background:#0e1217}
-.tile:hover{border-color:#526179}
-.pricing-cta{display:flex;gap:10px;margin-top:12px}
-footer{color:#99a6b5;margin:28px 0 18px;text-align:center}
-.panel{position:fixed;right:16px;bottom:16px;width:min(420px,92vw);max-height:86vh;overflow:auto;
-  border-radius:16px;background:#0f1318;border:1px solid #2a2f38;box-shadow:0 25px 80px rgba(0,0,0,.45), 0 0 50px var(--ring);padding:14px;display:none;z-index:50}
-.panel.open{display:block}
-.panel label{display:grid;gap:6px;margin:8px 0}
-.range{accent-color:var(--accent)}
-.sel{padding:.6rem;border-radius:10px;background:#0b0f14;border:1px solid #2a2f38;color:#cbd4df}
-.field{display:grid;gap:8px;margin:10px 0}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.bad{background:#12161c;border:1px solid #2a2f38;color:#cbd4df;border-radius:10px;padding:.6rem .9rem}
-hr.sep{border:0;border-top:1px solid #202733;margin:12px 0}
-canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:60}
-.hidden{display:none}
+  :root{
+    --accent:#E7B84B;
+    --panel:#101218;
+    --card:#12141b;
+    --ink:#e9ecf3;
+    --soft:#b9c0cf;
+    --ring: 20;          /* border glow 0–100 */
+    --radius:20px;
+    --fontScale:1;       /* 0.9–1.2 */
+    --space:1;           /* 0.9–1.2 */
+    --borderStyle: glow; /* none | solid | glow */
+    --vignette: 1;       /* 0 off / 1 on */
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font: 400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--ink); background:#0b0c10;
+    letter-spacing:.2px;
+    --pad: calc(14px * var(--space));
+  }
+  .vignette:before{
+    content:""; position:fixed; inset:0; pointer-events:none;
+    background:
+      radial-gradient(1200px 600px at 50% -200px, #0000 30%, rgba(231,184,75,.18) 55%, #0000 70%),
+      radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
+      radial-gradient(1200px 600px at -200px 50%, #0000 30%, rgba(231,184,75,.12) 55%, #0000 70%),
+      radial-gradient(1200px 600px at calc(100% + 200px) 50%, #0000 30%, rgba(231,184,75,.12) 55%, #0000 70%);
+    opacity: calc(.55 * var(--vignette));
+  }
+  .wrap{max-width:980px;margin-inline:auto;padding:24px}
+  header{
+    position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(10px);
+    background:color-mix(in srgb, #0b0c10 78%, #000 22%);
+    border-bottom:1px solid #151822;
+  }
+  .bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
+  .brand{display:flex;gap:12px;align-items:center; min-width:0}
+  .logo{
+    width:44px; height:44px; border-radius:12px; overflow:hidden;
+    background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 20px rgba(231,184,75,.15);
+    position:relative;
+  }
+  .logo video,.logo img{width:100%;height:100%;object-fit:cover; display:block}
+  .brand h1{font:700 20px/1.2 inherit; margin:0}
+  .brand small{display:block; color:var(--soft); font-size:.8em}
+  .spacer{flex:1}
+  .btn{
+    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit;
+    background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset;
+    transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
+    cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%);
+    color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
+  }
+
+  /* Sections / cards */
+  section{margin:28px 0}
+  .card{
+    background:linear-gradient(180deg, #151925, #0F1219);
+    border-radius:var(--radius);
+    padding:calc(var(--pad)*1.2);
+    position:relative;
+    box-shadow:
+      0 0 0 1px #1b2130 inset,
+      0 8px 40px rgba(0,0,0,.45),
+      0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
+  }
+  h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 8px}
+  .lede{color:var(--soft); margin:0 0 18px}
+
+  /* Hero */
+  .heroFrame{aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px); background:#0d1016;
+    display:grid; place-items:center; box-shadow:0 0 0 2px #202636 inset;
+    border: 1px dashed #2a3142;
+  }
+  .heroFrame video,.heroFrame img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+  .ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
+  .ctaRow .btn{padding:12px 18px}
+
+  /* Library */
+  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+  .pill{
+    padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
+    box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none;
+  }
+  .pill.active{box-shadow:0 0 0 2px var(--accent) inset; background: #151a24}
+  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .tile{padding:14px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer}
+  .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
+  .meta{font-size:.9em; color:#93a0b8}
+
+  /* Pricing */
+  .plan{display:grid; gap:10px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
+  .plan .head{display:flex; justify-content:space-between; align-items:center}
+  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;
+    color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
+  .price{font:800 34px/1.1 ui-sans-serif}
+  .plan ul{margin:0 0 4px 18px}
+  .plan .row{display:flex; gap:10px}
+  .plan .btn{flex:1}
+  .plan .ghost{background:#0f141d;color:#d7dbea}
+
+  /* Footer/contact */
+  form{display:grid;gap:10px}
+  input,textarea{
+    width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)
+  }
+  textarea{min-height:130px; resize:vertical}
+
+  /* Modal */
+  dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,90vw)}
+  dialog::backdrop{background:rgba(0,0,0,.6)}
+  .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
+  .modalBody{padding:18px}
+  .x{background:#141926}
+
+  /* Border style preview */
+  .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
+  .none .card, .none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
+
+  /* Utility */
+  .muted{color:var(--soft)}
 </style>
 </head>
-<body>
-
-<canvas id="fx" class="hidden"></canvas>
-
-<header class="header">
-  <div class="header-inner container">
-    <div class="logo"><img src="assets/images/logo.png" alt=""></div>
+<body class="vignette" id="app">
+<header>
+  <div class="bar wrap">
     <div class="brand">
-      <b id="greet">Welcome to THEGRID</b>
-      <small style="color:var(--muted)">Black &amp; Gold</small>
+      <div class="logo" aria-label="Brand">
+        <!-- Put your mp4 logo at assets/videos/logo.mp4 (fallback to img) -->
+        <video id="logoVid" muted autoplay loop playsinline></video>
+      </div>
+      <div>
+        <h1 id="hello">Good day — THEGRID</h1>
+        <small>Black & Gold</small>
+      </div>
     </div>
-    <div style="margin-left:auto;display:flex;gap:10px">
-      <button id="btnCustomize" class="btn secondary">Customize</button>
-      <a href="#plans" class="btn">Join Now</a>
-    </div>
+    <div class="spacer"></div>
+    <button id="btnCustomize" class="btn">Customize</button>
+    <button class="btn primary" id="btnJoin">Join Now</button>
   </div>
 </header>
 
-<main class="container" style="padding-bottom:60px">
-
-  <!-- Hero -->
-  <section class="row card" style="margin-top:18px">
-    <h1>Black &amp; Gold</h1>
-    <p>Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    <div id="hero" class="hero" data-src="assets/videos/hero_1.mp4">
-      <button class="bad" id="playHero">Play</button>
+<main class="wrap">
+  <!-- HERO -->
+  <section class="card">
+    <h2 id="heroTitle">Black & Gold</h2>
+    <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+    <div id="hero" class="heroFrame" aria-label="Hero media">
+      <!-- filled by JS -->
     </div>
-    <div class="kicker">
-      <a href="#library" class="btn secondary">Open Library</a>
-      <a href="#plans" class="btn">See Pricing</a>
+    <div class="ctaRow">
+      <a href="#library" class="btn">Open Library</a>
+      <a href="#plans" class="btn primary">See Pricing</a>
     </div>
   </section>
 
-  <!-- Library -->
-  <section id="library" class="row card library">
-    <div class="section-title"><h2>Library</h2></div>
-    <p>Tap a tile to set media. Drop files into <code>assets/videos</code> or <code>assets/images</code>.
-    Optional: add <code>assets/manifest.json</code> to list more.</p>
-
-    <div class="tabs" id="libTabs">
-      <button class="tab" aria-selected="true" data-scope="hero">Hero</button>
-      <button class="tab" data-scope="reels916">Reels 9:16</button>
-      <button class="tab" data-scope="reels169">Reels 16:9</button>
-      <button class="tab" data-scope="backgrounds">Backgrounds</button>
-      <button class="tab" data-scope="logos">Logos</button>
-      <button class="tab" data-scope="images">Images</button>
-    </div>
-
-    <div class="tiles" id="tiles"></div>
-    <small class="note">Tip: name files clearly (e.g. <code>hero_1.mp4</code>, <code>reel_9x16_a.mp4</code>). The list auto-loads from your
-      <code>assets/manifest.json</code> when present.</small>
+  <!-- LIBRARY -->
+  <section id="library" class="card">
+    <h2>Library</h2>
+    <p class="lede">Tap a tile to set media. Drop files into <b>assets/videos</b> or <b>assets/images</b>. Optional: add <b>assets/manifest.json</b> to list more.</p>
+    <div class="tabs" id="libTabs"></div>
+    <div class="grid" id="libGrid" aria-live="polite"></div>
+    <p class="meta">Tip: name files clearly (e.g. <i>hero_1.mp4</i>, <i>reel_9x16_a.mp4</i>). The list auto-loads from your <b>assets/manifest.json</b> when present.</p>
   </section>
 
-  <!-- Plans -->
-  <section id="plans" class="row card">
-    <div class="section-title"><h2>Plans</h2></div>
-    <p>Fair pricing. No lock-in. 7-day refund.</p>
-
-    <div class="grid-3" style="margin-top:8px">
-      <article class="card plan basic" data-tier="basic">
-        <span class="tag">BASIC</span>
-        <h2>£9<span style="font-size:.6em">/mo</span></h2>
-        <ul>
-          <li>Starter templates</li><li>Library access</li><li>Email support</li>
-        </ul>
-        <div class="pricing-cta">
-          <button class="btn block pay" data-tier="basic">Choose</button>
+  <!-- PLANS -->
+  <section id="plans" class="card">
+    <h2>Plans</h2>
+    <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
+    <div class="grid">
+      <article class="plan" data-tier="basic">
+        <div class="head"><div class="price">£9<span class="muted">/mo</span></div><span class="badge">BASIC</span></div>
+        <ul><li>Starter templates</li><li>Library access</li><li>Email support</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
         </div>
       </article>
 
-      <article class="card plan" data-tier="silver">
-        <span class="tag">SILVER</span>
-        <h2>£29<span style="font-size:.6em">/mo</span></h2>
-        <ul>
-          <li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li>
-        </ul>
-        <div class="pricing-cta">
-          <button class="btn block pay" data-tier="silver">Choose</button>
+      <article class="plan" data-tier="silver">
+        <div class="head"><div class="price">£29<span class="muted">/mo</span></div><span class="badge">SILVER</span></div>
+        <ul><li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
         </div>
       </article>
 
-      <article class="card plan gold" data-tier="gold">
-        <span class="tag">GOLD</span>
-        <h2>£49<span style="font-size:.6em">/mo</span></h2>
-        <ul>
-          <li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li>
-        </ul>
-        <div class="pricing-cta">
-          <button class="btn block pay" data-tier="gold">Choose</button>
+      <article class="plan" data-tier="gold">
+        <div class="head"><div class="price">£49<span class="muted">/mo</span></div><span class="badge">GOLD</span></div>
+        <ul><li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
         </div>
       </article>
 
-      <article class="card plan diamond" data-tier="diamond" style="grid-column:1/-1">
-        <span class="tag">DIAMOND</span>
-        <h2>£99<span style="font-size:.6em">/mo</span></h2>
-        <ul>
-          <li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li>
-        </ul>
-        <div class="pricing-cta">
-          <button class="btn block pay" data-tier="diamond">Choose</button>
+      <article class="plan" data-tier="diamond">
+        <div class="head"><div class="price">£99<span class="muted">/mo</span></div><span class="badge">DIAMOND</span></div>
+        <ul><li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
         </div>
       </article>
     </div>
 
-    <small class="note">All plans billed monthly. Cancel anytime. Prices are fair-value, not inflated — adjust in the Customize panel.</small>
+    <p class="meta" style="margin-top:10px">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
   </section>
 
   <!-- À-la-carte -->
-  <section class="row card">
-    <div class="section-title"><h2>À-la-carte Services</h2></div>
-    <div class="grid-3">
-      <article class="card">
-        <span class="tag">SETUP</span>
-        <h2>£39</h2>
-        <ul><li>Deploy &amp; connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
-        <button class="btn block pay" data-tier="setup">Start Setup</button>
+  <section class="card">
+    <h2>À-la-carte Services</h2>
+    <div class="grid">
+      <article class="plan">
+        <div class="head"><div class="price" style="font-size:28px">£39</div><span class="badge">SETUP</span></div>
+        <ul><li>Deploy & connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
+        <button class="btn primary">Start Setup</button>
       </article>
-      <article class="card">
-        <span class="tag">REELS</span>
-        <h2>£59</h2>
-        <ul><li>3 niche reels</li><li>Captions &amp; cuts</li><li>IG/TikTok ready</li></ul>
-        <button class="btn block pay" data-tier="reels">Order Pack</button>
+      <article class="plan">
+        <div class="head"><div class="price" style="font-size:28px">£59</div><span class="badge">REELS</span></div>
+        <ul><li>3 niche reels</li><li>Captions & cuts</li><li>IG/TikTok ready</li></ul>
+        <button class="btn primary">Order Pack</button>
       </article>
-      <article class="card">
-        <span class="tag">TEMPLATES</span>
-        <h2>£29</h2>
+      <article class="plan">
+        <div class="head"><div class="price" style="font-size:28px">£29</div><span class="badge">TEMPLATES</span></div>
         <ul><li>5 premium blocks</li><li>Copy-paste ready</li><li>Lifetime updates</li></ul>
-        <button class="btn block pay" data-tier="templates">Get Pack</button>
+        <button class="btn primary">Get Pack</button>
       </article>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section class="row card">
-    <div class="section-title"><h2>Contact</h2></div>
-    <form class="row" onsubmit="event.preventDefault();alert('Thanks! We will reply from gridcoresystems@gmail.com');">
-      <div class="grid-3">
-        <input class="bad" placeholder="Your name" required/>
-        <input class="bad" type="email" placeholder="you@example.com" required/>
-        <input class="bad" placeholder="How can we help?" />
+  <!-- CONTACT -->
+  <section class="card">
+    <h2>Contact</h2>
+    <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <input placeholder="Your name" required>
+        <input type="email" placeholder="you@example.com" required>
       </div>
-      <textarea class="bad" rows="5" placeholder="Write your message…"></textarea>
-      <button class="btn" style="margin-top:6px;width:160px">Send</button>
+      <input placeholder="How can we help?">
+      <textarea placeholder="Write your message…"></textarea>
+      <button class="btn primary" style="width:180px">Send</button>
+      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
     </form>
-    <small class="note">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</small>
   </section>
-
 </main>
 
-<!-- Customize Panel -->
-<section id="panel" class="panel" aria-hidden="true">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-    <h3>Design Panel</h3>
-    <button id="btnClose" class="bad">Close</button>
+<!-- DETAILS MODAL -->
+<dialog id="planModal">
+  <div class="modalHead">
+    <strong id="mTitle">Plan details</strong>
+    <button class="btn x" onclick="planModal.close()">Close</button>
   </div>
-  <label>Accent color <input id="accent" type="color" class="sel" value="#e9b94f"></label>
-  <label>Card radius <input id="radius" type="range" min="8" max="28" value="18" class="range"></label>
-  <label>Border Glow (0–100) <input id="glow" type="range" min="0" max="100" value="50" class="range"></label>
+  <div class="modalBody" id="mBody"></div>
+</dialog>
 
-  <div class="field">
-    <b>Typography & Spacing</b>
-    <div class="controls">
-      <label class="bad">Font size <input id="fs" type="range" min="14" max="18" value="16" class="range"></label>
-      <label class="bad">Spacing <input id="pad" type="range" min="12" max="24" value="18" class="range"></label>
+<!-- CUSTOMIZE PANEL -->
+<dialog id="panel">
+  <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
+  <div class="modalBody">
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="20" style="width:100%"></label>
+
+      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
+      <label>Border style<br>
+        <select id="uiBorder" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="glow">Glow</option><option value="solid">Solid</option><option value="none">None</option>
+        </select>
+      </label>
+
+      <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+      <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+
+      <label>Vignette<br>
+        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="1">On</option><option value="0">Off</option>
+        </select>
+      </label>
+      <label>Hero source<br>
+        <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
+      </label>
+    </div>
+
+    <h3 style="margin-top:16px">Confetti</h3>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <label>Density<br><input id="uiConfettiDensity" type="range" min="5" max="80" value="22" style="width:100%"></label>
+      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.3" max="2" step=".05" value="1" style="width:100%"></label>
+    </div>
+
+    <div class="ctaRow" style="margin-top:16px">
+      <button id="save" class="btn">Save to this device</button>
+      <button id="reset" class="btn x">Reset</button>
     </div>
   </div>
+</dialog>
 
-  <div class="field">
-    <b>Borders</b>
-    <select id="borderStyle" class="sel">
-      <option value="solid">Solid</option>
-      <option value="double">Double</option>
-      <option value="bevel">Bevel</option>
-      <option value="glow">Glow</option>
-    </select>
-  </div>
-
-  <div class="field">
-    <b>Confetti</b>
-    <div class="controls">
-      <label class="bad">Density <input id="cDensity" type="range" min="10" max="200" value="80" class="range"></label>
-      <label class="bad">Speed <input id="cSpeed" type="range" min="0.3" max="2.5" value="1" step=".1" class="range"></label>
-      <select id="cShape" class="sel">
-        <option value="mix">Mix</option>
-        <option value="gold">Gold shards</option>
-        <option value="silver">Silver bits</option>
-        <option value="diamond">Diamond spark</option>
-      </select>
-    </div>
-    <small class="note">Confetti is GPU-friendly (canvas) and only triggers when a plan button is pressed.</small>
-  </div>
-
-  <div class="controls">
-    <button id="save" class="btn secondary">Save to this device</button>
-    <button id="reset" class="btn secondary">Reset</button>
-  </div>
-  <hr class="sep">
-  <small class="note">Changes affect the whole site unless a section adds overrides later. Settings persist with <code>localStorage</code>.</small>
-</section>
+<!-- Confetti canvas -->
+<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
 
 <script>
-(() => {
-  const $ = (s, el=document)=>el.querySelector(s);
-  const $$ = (s, el=document)=>[...el.querySelectorAll(s)];
+/* ---------- Helpers & State ---------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => [...document.querySelectorAll(sel)];
+const state = {
+  accent: getCSS('--accent'),
+  ring: +getCSS('--ring'),
+  radius: parseInt(getCSS('--radius')),
+  border: 'glow',
+  font: +getCSS('--fontScale'),
+  space: +getCSS('--space'),
+  vignette: +getCSS('--vignette'),
+  heroSrc: 'assets/videos/hero_1.mp4',
+  confetti: {density:22, speed:1},
+  library: { Hero:[], 'Reels 9:16':[], 'Reels 16:9':[], Backgrounds:[], Logos:[], Images:[] }
+};
+function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() }
+function setCSS(v,val){ document.documentElement.style.setProperty(v,val) }
+function save(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)) }
+function load(){
+  const s = JSON.parse(localStorage.getItem('thegrid.settings')||'null');
+  if(!s) return;
+  Object.assign(state, s);
+  applyState();
+}
 
-  /* Greeting */
-  const hour = new Date().getHours();
-  const msg = hour<12?'Good morning':hour<18?'Good afternoon':'Good evening';
-  $('#greet').textContent = `${msg} — THEGRID`;
-
-  /* Hero */
-  const hero = $('#hero');
-  const play = $('#playHero');
-  const setHero = src => {
-    hero.innerHTML = '';
-    if(!src) return;
-    if(/\.(mp4|webm|mov)$/i.test(src)){
-      const v=document.createElement('video');
-      v.src=src; v.autoplay=false; v.controls=true; v.playsInline=true; v.muted=false;
-      hero.appendChild(v);
-    }else{
-      const img=new Image(); img.src=src; img.alt='Hero';
-      hero.appendChild(img);
-    }
-  };
-  setHero(hero.dataset.src);
-  play?.addEventListener('click',()=>hero.querySelector('video')?.play());
-
-  /* Library data */
-  const fallbackManifest = {
-    hero: ["assets/videos/hero_1.mp4","assets/images/hero_1.jpg"],
-    reels916: ["assets/videos/interaction_1.mp4"],
-    reels169: ["assets/videos/pour_1.mp4"],
-    backgrounds: [],
-    logos: ["assets/images/logo.png"],
-    images: ["assets/images/hero_2.jpg","assets/images/hero_3.jpg"]
-  };
-
-  async function getManifest(){
-    try{
-      const r=await fetch('assets/manifest.json',{cache:'no-store'});
-      if(!r.ok) throw 0; return await r.json();
-    }catch{ return fallbackManifest }
-  }
-
-  /* Build library */
-  (async ()=>{
-    const data = await getManifest();
-    const tiles = $('#tiles');
-    function render(scope='hero'){
-      tiles.innerHTML='';
-      (data[scope]||[]).forEach(src=>{
-        const t=document.createElement('button');
-        t.className='tile'; t.textContent=src;
-        t.addEventListener('click',()=>{
-          if(scope==='hero' || /\.(mp4|webm|mov|jpg|jpeg|png|gif)$/i.test(src)){
-            setHero(src);
-            localStorage.setItem('tg_hero',src);
-            window.scrollTo({top:0,behavior:'smooth'});
-          }
-        });
-        tiles.appendChild(t);
-      });
-    }
-    $('#libTabs').addEventListener('click',e=>{
-      const b=e.target.closest('.tab'); if(!b) return;
-      $$('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
-      b.setAttribute('aria-selected','true');
-      render(b.dataset.scope);
-    });
-    const savedHero = localStorage.getItem('tg_hero');
-    if(savedHero) setHero(savedHero);
-    render('hero');
-  })();
-
-  /* Customize Panel */
-  const panel = $('#panel');
-  $('#btnCustomize').onclick=()=>panel.classList.add('open');
-  $('#btnClose').onclick =()=>panel.classList.remove('open');
-
-  const apply = s=>{
-    if(s.accent) document.documentElement.style.setProperty('--accent',s.accent);
-    if(s.radius) document.documentElement.style.setProperty('--radius',s.radius+'px');
-    if(s.glow!==undefined) document.documentElement.style.setProperty('--glow',s.glow);
-    if(s.fs) document.documentElement.style.setProperty('--fs',s.fs+'px');
-    if(s.pad) document.documentElement.style.setProperty('--pad',s.pad+'px');
-    if(s.borderStyle){
-      const root=document.documentElement.style;
-      if(s.borderStyle==='double'){
-        root.setProperty('--edge','#3a3f47');
-        document.querySelectorAll('.card').forEach(c=>{
-          c.style.border='3px double #454c57';
-        });
-      }else if(s.borderStyle==='bevel'){
-        document.querySelectorAll('.card').forEach(c=>{
-          c.style.border='1px solid #2b313a';
-          c.style.boxShadow='inset 0 1px 0 rgba(255,255,255,.06), 0 0 calc(50px*var(--glow)) var(--ring)';
-        });
-      }else if(s.borderStyle==='glow'){
-        document.querySelectorAll('.card').forEach(c=>{
-          c.style.border='1px solid #2b313a';
-          c.style.boxShadow='0 0 60px var(--ring), inset 0 1px 0 rgba(255,255,255,.04)';
-        });
-      }else{
-        document.querySelectorAll('.card').forEach(c=>{
-          c.style.border='1px solid #2b313a';
-          c.style.boxShadow='0 0 calc(50px*var(--glow)) var(--ring), inset 0 1px 0 rgba(255,255,255,.03)';
-        });
-      }
-    }
-  };
-
-  const controls = {
-    accent: $('#accent'), radius: $('#radius'), glow: $('#glow'),
-    fs: $('#fs'), pad: $('#pad'), borderStyle: $('#borderStyle'),
-    cDensity: $('#cDensity'), cSpeed: $('#cSpeed'), cShape: $('#cShape'),
-  };
-
-  const SETTINGS_KEY='tg_settings_v2';
-  const load=()=>JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');
-  const save=s=>localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
-  let S = Object.assign({accent:'#e9b94f',radius:18,glow:.5,fs:16,pad:18,borderStyle:'solid',cDensity:80,cSpeed:1,cShape:'mix'}, load());
-  // init controls
-  controls.accent.value=S.accent; controls.radius.value=S.radius; controls.glow.value=String(S.glow*100);
-  controls.fs.value=S.fs; controls.pad.value=S.pad; controls.borderStyle.value=S.borderStyle;
-  controls.cDensity.value=S.cDensity; controls.cSpeed.value=S.cSpeed; controls.cShape.value=S.cShape;
-  apply(S);
-
-  // live update
-  Object.entries(controls).forEach(([k,el])=>{
-    el.addEventListener('input',()=>{
-      if(k==='glow') S[k]=(+el.value/100); else if(k==='fs'||k==='pad'||k==='radius'||k==='cDensity') S[k]=+el.value;
-      else if(k==='cSpeed') S[k]=+el.value; else S[k]=el.value;
-      apply(S);
-    });
-  });
-  $('#save').onclick=()=>{ save(S); alert('Saved to this device.'); };
-  $('#reset').onclick=()=>{ localStorage.removeItem(SETTINGS_KEY); location.reload(); };
-
-  /* Confetti — GPU friendly canvas */
-  const fx = $('#fx'); const ctx = fx.getContext('2d');
-  let parts=[], running=false;
-  const tiers = {
-    basic:  {color:'#f0f2f7', shape:'mix'},
-    silver: {color:'#c0c6cf', shape:'square'},
-    gold:   {color:'#ffd24f', shape:'triangle'},
-    diamond:{color:'#b8f1ff', shape:'spark'},
-    setup:  {color:'#ffd24f', shape:'mix'},
-    reels:  {color:'#ffd24f', shape:'triangle'},
-    templates:{color:'#ffd24f', shape:'square'}
-  };
-  const spawn = (x,y,tier='gold')=>{
-    const style=tiers[tier]||tiers.gold;
-    const density=S.cDensity, speed=S.cSpeed, shape=S.cShape==='mix'?style.shape:S.cShape;
-    parts = [...Array(density)].map(()=>({
-      x, y, vx:(Math.random()-0.5)*3*speed, vy:(Math.random()*-3-1.5)*speed,
-      r:Math.random()*Math.PI, s:Math.random()*6+2, a:1, color:style.color, shape
-    }));
-    if(!running){ running=true; fx.classList.remove('hidden'); resize(); requestAnimationFrame(tick); }
-  };
-  const resize=()=>{ fx.width=innerWidth*devicePixelRatio; fx.height=innerHeight*devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); };
-  addEventListener('resize',resize);
-
-  const draw = p=>{
-    ctx.globalAlpha = Math.max(p.a,0);
-    ctx.fillStyle = p.color;
-    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-    const s=p.s;
-    if(p.shape==='triangle'){ ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(s,s); ctx.lineTo(-s,s); ctx.closePath(); ctx.fill(); }
-    else if(p.shape==='square'){ ctx.fillRect(-s,-s,s*2,s*2); }
-    else if(p.shape==='spark'){ ctx.beginPath(); ctx.arc(0,0,s*.8,0,Math.PI*2); ctx.fill(); ctx.fillRect(-s*1.2,-1,s*2.4,2); }
-    else { // mix
-      Math.random()<.5? ctx.fillRect(-s,-s,s*2,s*2) : (ctx.beginPath(),ctx.moveTo(0,-s),ctx.lineTo(s,s),ctx.lineTo(-s,s),ctx.closePath(),ctx.fill());
-    }
-    ctx.restore();
-  };
-  const tick = ()=>{
-    ctx.clearRect(0,0,fx.width,fx.height);
-    parts.forEach(p=>{ p.vy+=0.04; p.x+=p.vx; p.y+=p.vy; p.r+=0.05; p.a-=0.007; draw(p); });
-    parts = parts.filter(p=>p.a>0 && p.y<innerHeight+40);
-    if(parts.length) requestAnimationFrame(tick); else { running=false; fx.classList.add('hidden'); }
-  };
-
-  // Trigger confetti on CTA click and center on the clicked card
-  $$('.pay').forEach(btn=>{
-    btn.addEventListener('click',e=>{
-      const card = e.currentTarget.closest('.plan') || e.currentTarget.closest('.card');
-      const rect = card.getBoundingClientRect();
-      const x = rect.left + rect.width/2;
-      const y = rect.top  + 20;
-      spawn(x,y, e.currentTarget.dataset.tier);
-      // Scroll card into view (polished)
-      card.scrollIntoView({behavior:'smooth',block:'center'});
-      // Here you can open Stripe/checkout modal
-    });
-  });
+/* ---------- Greeting & logo ---------- */
+(function greeting(){
+  const h = new Date().getHours();
+  const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+  $('#hello').textContent = `${word} — THEGRID`;
 })();
+(function logo(){
+  const v = $('#logoVid');
+  v.src = 'assets/videos/logo.mp4';
+  v.onerror = () => { v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/logo.png',alt:'Logo'})); };
+})();
+
+/* ---------- Hero ---------- */
+function setHero(src){
+  state.heroSrc = src; save(); renderHero();
+}
+function renderHero(){
+  const box = $('#hero'); box.innerHTML = '';
+  if(/\.(mp4|webm|mov)$/i.test(state.heroSrc)){
+    const v = Object.assign(document.createElement('video'), {src:state.heroSrc, controls:true, playsInline:true});
+    box.appendChild(v);
+  }else{
+    const i = Object.assign(document.createElement('img'), {src:state.heroSrc, alt:'hero'});
+    box.appendChild(i);
+  }
+}
+
+/* ---------- Library (reads manifest if present) ---------- */
+const defaultManifest = {
+  "Hero":["assets/videos/hero_1.mp4","assets/videos/interaction_1.mp4","assets/videos/pour_1.mp4","assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"],
+  "Reels 9:16":[],
+  "Reels 16:9":[],
+  "Backgrounds":[],
+  "Logos":["assets/videos/logo.mp4","assets/images/logo.png"],
+  "Images":["assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"]
+};
+async function loadManifest(){
+  try{
+    const res = await fetch('assets/manifest.json',{cache:'no-store'});
+    if(res.ok){ Object.assign(state.library, await res.json()); }
+    else { Object.assign(state.library, defaultManifest); }
+  }catch{ Object.assign(state.library, defaultManifest); }
+  buildLibrary();
+  populateHeroSelect();
+}
+function buildLibrary(){
+  const tabs = $('#libTabs'); tabs.innerHTML='';
+  const grid = $('#libGrid'); grid.innerHTML='';
+  const cats = Object.keys(state.library);
+  let active = localStorage.getItem('thegrid.activeTab') || cats[0];
+  cats.forEach(cat=>{
+    const b = Object.assign(document.createElement('div'),{className:'pill'+(cat===active?' active':''),textContent:cat});
+    b.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
+    tabs.appendChild(b);
+  });
+  state.library[active].forEach(src=>{
+    const t = Object.assign(document.createElement('div'),{className:'tile',innerHTML:`<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`});
+    t.onclick=()=>setHero(src);
+    grid.appendChild(t);
+  });
+}
+function populateHeroSelect(){
+  const sel = $('#uiHero'); sel.innerHTML='';
+  const all = [...new Set(Object.values(state.library).flat())];
+  all.forEach(src=>{
+    const o = new Option(src, src, src===state.heroSrc, src===state.heroSrc);
+    sel.add(o);
+  });
+}
+
+/* ---------- Customize Panel ---------- */
+$('#btnCustomize').onclick = ()=>panel.showModal();
+$('#save').onclick = ()=>{ save(); alert('Saved to this device.'); };
+$('#reset').onclick = ()=>{
+  localStorage.removeItem('thegrid.settings'); location.reload();
+};
+$('#uiAccent').oninput = e=>{ state.accent=e.target.value; setCSS('--accent',state.accent); save() };
+$('#uiRing').oninput = e=>{ state.ring=+e.target.value; setCSS('--ring',state.ring); save() };
+$('#uiRadius').oninput = e=>{ state.radius=+e.target.value; setCSS('--radius', state.radius+'px'); save() };
+$('#uiFont').oninput = e=>{ state.font=+e.target.value; setCSS('--fontScale', state.font); save() };
+$('#uiSpace').oninput = e=>{ state.space=+e.target.value; setCSS('--space', state.space); save() };
+$('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save() };
+$('#uiVignette').oninput = e=>{ state.vignette=+e.target.value; setCSS('--vignette', state.vignette); save() };
+$('#uiHero').oninput = e=> setHero(e.target.value);
+
+function applyState(){
+  setCSS('--accent', state.accent);
+  setCSS('--ring', state.ring);
+  setCSS('--radius', state.radius+'px');
+  setCSS('--fontScale', state.font);
+  setCSS('--space', state.space);
+  setCSS('--vignette', state.vignette);
+  document.body.classList.add(state.border);
+  renderHero();
+
+  // fill UI controls to match
+  $('#uiAccent').value = state.accent;
+  $('#uiRing').value = state.ring;
+  $('#uiRadius').value = state.radius;
+  $('#uiFont').value = state.font;
+  $('#uiSpace').value = state.space;
+  $('#uiBorder').value = state.border;
+  $('#uiVignette').value = state.vignette;
+}
+
+/* ---------- Pricing: Details + Confetti ---------- */
+const DETAILS = {
+  basic:`<ul><li>Starter templates to get online today</li><li>Access to the media library & updates</li><li>Support via email within 48h</li></ul>`,
+  silver:`<ul><li>Everything in Basic</li><li>Advanced visual effects & presets</li><li>Priority support within 24h</li></ul>`,
+  gold:`<ul><li>Hands-on customization session</li><li>Admin toolkit & automation setup</li><li>Onboarding call (45 min)</li></ul>`,
+  diamond:`<ul><li>Custom pipelines & integrations</li><li>Hands-on help building your stack</li><li>Priority turnaround & roadmap</li></ul>`
+};
+$$('.details').forEach(b=>{
+  b.onclick = e=>{
+    const card = e.currentTarget.closest('.plan');
+    const tier = card.dataset.tier;
+    $('#mTitle').textContent = tier.toUpperCase() + ' plan';
+    $('#mBody').innerHTML = DETAILS[tier] + `<div class="ctaRow"><button class="btn primary" onclick="planModal.close()">Sounds good</button></div>`;
+    planModal.showModal();
+  };
+});
+$$('.choose').forEach(b=>{
+  b.onclick = e=>{
+    const card = e.currentTarget.closest('.plan');
+    confettiBurst(card);
+    // Scroll into view of the clicked card to preview confetti nicely
+    card.scrollIntoView({behavior:'smooth', block:'center'});
+  };
+});
+
+/* ---------- Confetti (left + right, small tasteful) ---------- */
+const canvas = $('#fx'), ctx = canvas.getContext('2d'); let W,H, parts=[];
+function size(){ W=canvas.width=innerWidth*devicePixelRatio; H=canvas.height=innerHeight*devicePixelRatio; }
+addEventListener('resize', size); size();
+function confettiBurst(el){
+  const r = el.getBoundingClientRect();
+  const originY = (r.top + r.height*0.25) * devicePixelRatio;
+  const leftX  = (r.left - 10) * devicePixelRatio;
+  const rightX = (r.right + 10) * devicePixelRatio;
+  const n = state.confetti.density|0;
+  const s = +state.confetti.speed;
+  const colors = [state.accent,'#fff','#c9d2e8','#9ec5ff'];
+  for(let i=0;i<n;i++){
+    parts.push(drop(leftX, originY,  1, s, colors));
+    parts.push(drop(rightX,originY, -1, s, colors));
+  }
+}
+function drop(x,y,dir,s,colors){
+  const sz = 3 + Math.random()*6;
+  return {
+    x, y, vx: (1.5+Math.random()*1.5)*dir*s, vy:(-2 - Math.random()*2)*s,
+    g: .08*s, r: Math.random()*Math.PI, w:sz, h:sz*.6, life: 120+Math.random()*40, c: colors[(Math.random()*colors.length)|0]
+  }
+}
+function tick(){
+  ctx.clearRect(0,0,W,H);
+  parts = parts.filter(p=>p.life>0);
+  parts.forEach(p=>{
+    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .12;
+    p.life--;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+    ctx.fillStyle = p.c; ctx.globalAlpha = Math.max(0, p.life/160);
+    ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ctx.restore();
+  });
+    requestAnimationFrame(tick);
+}
+tick();
+
+/* ---------- Join Now (scroll to plans) ---------- */
+$('#btnJoin').onclick = ()=>$('#plans').scrollIntoView({behavior:'smooth'});
+
+/* ---------- Boot ---------- */
+applyState();         // apply saved CSS vars & border style
+loadManifest();       // build Library (manifest.json if present)
+load();               // restore saved UI choices (localStorage)
+
+/* ---------- Confetti tuning from panel ---------- */
+$('#uiConfettiDensity').oninput = e=>{ state.confetti.density = +e.target.value; save(); };
+$('#uiConfettiSpeed').oninput   = e=>{ state.confetti.speed   = +e.target.value; save(); };
 </script>
 </body>
 </html>
