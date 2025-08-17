@@ -1,403 +1,483 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>THEGRID — Black & Gold</title>
+<meta name="theme-color" content="#0b0b0f">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0d0f12;
-    --panel:#13161b;
-    --card:#171a20;
-    --ink:#e9edf3;
-    --muted:#b4bcc8;
-    --gold:#f0c14b;
-    --gold-2:#d9a63e;
-    --accent: var(--gold);
-    --radius:14px;
-    --ring: 0 0 0 1px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.35);
-    --glow: 0 0 0 1px rgba(240,193,75,.32), 0 0 40px rgba(240,193,75,.18), inset 0 0 0 1px rgba(255,255,255,.04);
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,rgba(240,193,75,.07),transparent),var(--bg);color:var(--ink);font:500 16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
-  a{color:inherit}
-  .wrap{max-width:980px;margin:0 auto;padding:16px}
-  /* Header */
-  .bar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(0,0,0,.7),rgba(0,0,0,.25) 60%,transparent);backdrop-filter:saturate(1.2) blur(6px)}
-  .nav{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px}
-  .brand{display:flex;align-items:center;gap:10px}
-  .logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#1a1f27,#0b0d10);box-shadow:var(--glow);position:relative}
-  .logo::after{content:"GG";position:absolute;inset:0;display:grid;place-content:center;font-weight:800;color:#f5f5f5;letter-spacing:.5px;font-size:12px;opacity:.85}
-  .greet{font-size:18px;font-weight:800}
-  .pill{border:none;border-radius:999px;padding:10px 16px;background:#20242b;box-shadow:var(--ring);color:#dfe6f2;cursor:pointer}
-  .cta{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#121317;font-weight:800;box-shadow:0 10px 20px rgba(240,193,75,.15),inset 0 1px 0 rgba(255,255,255,.35)}
-  .cta:active{transform:translateY(1px)}
-  /* Sections */
-  h2.section{font-size:40px;margin:24px 0 8px}
-  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--ring);padding:18px;margin:16px 0;position:relative}
-  .card.gold{box-shadow:var(--glow)}
-  .sub{color:var(--muted)}
-  .btn{display:inline-block;background:#21262e;border-radius:12px;padding:12px 18px;margin-right:10px;box-shadow:var(--ring);cursor:pointer}
-  .btn.gold{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;font-weight:800}
-  /* Library */
-  .tabs{display:flex;gap:8px;margin:10px 0 14px}
-  .tab{padding:8px 12px;border-radius:999px;background:#1b2027;color:#cfd6e2;cursor:pointer;box-shadow:var(--ring)}
-  .tab.active{background:linear-gradient(180deg,#1f242c,#121519);color:#fff;box-shadow:var(--glow)}
-  .grid{display:grid;gap:12px}
-  @media(min-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  .tile{background:#12161c;border-radius:16px;padding:20px;min-height:90px;border:1px dashed rgba(240,193,75,.35);display:grid;place-content:center;color:#c9d1de;cursor:pointer;transition:transform .15s}
-  .tile:hover{transform:translateY(-2px)}
-  /* Pricing */
-  .plans .plan{border-radius:18px;padding:18px;margin:16px 0;background:linear-gradient(180deg,#151922,#0e1116);box-shadow:var(--ring);position:relative;overflow:hidden}
-  .badge{position:absolute;top:14px;right:14px;background:#222a33;border-radius:999px;padding:6px 10px;font-size:12px;letter-spacing:.8px;font-weight:800;box-shadow:var(--ring)}
-  .badge.basic{background:#23282f}
-  .badge.silver{background:#2b333d}
-  .badge.gold{background:#2b2416;color:#ffdf93;box-shadow:var(--glow)}
-  .badge.diamond{background:#163246;color:#bff2ff;box-shadow:0 0 0 1px rgba(185,242,255,.3),0 0 30px rgba(185,242,255,.15)}
-  .price{font-size:34px;font-weight:900;margin:6px 0 10px}
-  .choose{display:inline-block;border-radius:12px;padding:12px 18px;background:#1f242c;box-shadow:var(--ring);cursor:pointer}
-  .choose.gold{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;font-weight:800}
-  /* Customize panel (owner only) */
-  .panel{position:fixed;right:16px;bottom:16px;width:min(420px,calc(100vw - 32px));background:var(--panel);border-radius:16px;box-shadow:var(--ring);z-index:45;display:none}
-  .panel.open{display:block}
-  .panel header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
-  .panel .body{padding:14px;display:grid;gap:12px}
-  .panel label{display:grid;gap:6px}
-  input[type="range"], select, input[type="color"]{width:100%}
-  .help{font-size:12px;color:#9fb0c7}
-  .saveBadge{position:fixed;left:16px;bottom:16px;background:#0f141a;color:#cfe3ff;border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px 10px;box-shadow:var(--ring);z-index:46;opacity:0;transform:translateY(4px);transition:all .2s}
-  .saveBadge.show{opacity:1;transform:none}
-  /* Confetti canvas */
-  canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
-  /* Section separators */
-  .section-head{display:flex;align-items:end;justify-content:space-between;margin-top:22px}
-  .section-head .title{font-size:28px;font-weight:900}
-  .section-head .dash{height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,rgba(240,193,75,.45),transparent);flex:1;margin-left:10px}
+:root{
+  --bg:#0b0b0f;--panel:#10131a;--ink:#e9eef6;--muted:#aab3c2;
+  --accent:#f2c94c;--radius:18px;--depth:24;--glow:18;--ring:rgba(255,215,96,.35);
+  --h1:44;--h2:28;--label:600;
+}
+*{box-sizing:border-box} html,body{margin:0;background:
+  radial-gradient(1200px 800px at 10% -10%, rgba(255,215,96,.08), transparent 60%),
+  radial-gradient(900px 600px at 85% -20%, rgba(64,241,255,.06), transparent 60%),
+  var(--bg);
+  color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:20px}
+a{color:inherit;text-decoration:none}
+.hdr{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(0,0,0,.75),rgba(0,0,0,.38) 60%,transparent);backdrop-filter:blur(8px)}
+.hbar{display:flex;align-items:center;gap:14px;padding:12px 20px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:36px;height:36px;border-radius:10px;background:
+  radial-gradient(circle at 30% 30%,#ffd36b,transparent 40%),
+  linear-gradient(135deg,#1c1e27,#0f1117);
+  box-shadow:0 0 0 2px rgba(255,215,96,.25),0 12px 28px rgba(0,0,0,.45)}
+.title{font-weight:800;font-size:20px;letter-spacing:.2px}
+.hctas{display:flex;gap:10px;margin-left:auto}
+.btn{border:0;padding:10px 16px;border-radius:12px;background:#191c24;color:var(--ink);cursor:pointer}
+.btn.gold{background:linear-gradient(180deg,#ffd36b,#d0a93a);color:#1b1200;box-shadow:0 6px 18px rgba(255,215,96,.25)}
+.btn.pill{border-radius:999px}.btn:hover{filter:brightness(1.05)}
+
+.section{margin:24px 0 28px}
+.h1{font-size:calc(var(--h1)*1px);font-weight:800;margin:6px 0 8px}
+.lede{color:var(--muted);max-width:740px}
+
+.card{position:relative;background:linear-gradient(180deg,#11141a,#0f1218);
+  border-radius:var(--radius);padding:18px;
+  box-shadow:0 0 calc(var(--glow)*1px) rgba(255,215,96,.05),
+             0 18px calc(var(--depth)*1px) rgba(0,0,0,.45),
+             inset 0 0 0 1px rgba(255,255,255,.04)}
+.card+.card{margin-top:14px}
+.halo{position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;
+  box-shadow:0 0 0 1px rgba(255,255,255,.06),0 0 calc(var(--glow)*1px) var(--ring)}
+.headline{font-size:calc(var(--h2)*1px);font-weight:800;margin:0 0 8px;letter-spacing:.2px}
+.divider{height:2px;width:56px;background:linear-gradient(90deg,transparent,var(--accent),transparent);border-radius:2px;margin:8px 0 18px}
+
+.hero-frame{aspect-ratio:16/9;border-radius:calc(var(--radius) - 6px);background:#0c0f15;display:grid;place-items:center;overflow:hidden}
+.media{width:100%;height:100%;object-fit:cover;border-radius:inherit;cursor:pointer}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.chip{padding:8px 14px;border-radius:999px;background:#151821;border:1px solid rgba(255,255,255,.08);cursor:pointer;font-weight:var(--label)}
+.chip.is-on{outline:2px solid var(--ring);box-shadow:0 0 0 3px rgba(255,215,96,.12) inset}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{padding:16px;border-radius:14px;background:#0e1016;border:1px dashed rgba(255,255,255,.12);color:#cbd3df;cursor:pointer}
+.tile:hover{background:#121522}.missing{opacity:.55;text-decoration:line-through}
+
+.plans{display:grid;gap:16px}
+.plan{position:relative;padding:18px;border-radius:18px;background:linear-gradient(180deg,#11141a,#0f1218);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.plan.solid{border:1px solid rgba(255,255,255,.08)}
+.plan.double{box-shadow:inset 0 0 0 2px rgba(255,255,255,.06),inset 0 0 0 4px rgba(255,255,255,.03)}
+.plan.gradient{background:linear-gradient(180deg,rgba(255,215,96,.05),transparent 30%),linear-gradient(180deg,#11141a,#0f1218)}
+.plan .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.price{font-weight:800;font-size:34px}.tag{font-size:12px;font-weight:800;letter-spacing:.6px;padding:6px 10px;border-radius:999px;background:#191c24;color:#d6dde8;display:inline-flex}
+.tag.gold{background:#241a03;color:#ffd36b;box-shadow:0 0 0 1px rgba(255,215,96,.25) inset}.tag.diamond{background:#0f1b26;color:#9ad8ff}
+.plan .cta{margin-top:12px} details{margin-top:10px;color:#c9d1de} summary{cursor:pointer;list-style:none} summary::-webkit-details-marker{display:none}
+.fx{position:absolute;inset:0;pointer-events:none}
+
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.input,.textarea{width:100%;background:#0e1016;border:1px solid rgba(255,255,255,.08);border-radius:12px;color:#e9eef6;padding:12px}
+.textarea{min-height:120px;resize:vertical}
+
+dialog{border:0;padding:0;background:transparent}.panel{width:min(820px,96vw)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#11151d;border:1px solid rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.tabbar{display:flex;gap:8px;margin:10px 0 6px}
+.tab{padding:8px 12px;border-radius:999px;background:#151821;border:1px solid rgba(255,255,255,.08);cursor:pointer}
+.tab.on{background:#1a1f2a;outline:2px solid var(--ring)}
+.group{display:grid;gap:10px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.offline{position:sticky;top:0;z-index:50;background:#2a0b0b;color:#ffd9d9;padding:8px 14px;text-align:center}
+body[data-safe="1"] .halo{box-shadow:none} body[data-safe="1"] .card{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
 </style>
 </head>
 <body>
-<canvas id="fx"></canvas>
-
-<!-- Sticky header -->
-<div class="bar">
-  <div class="nav wrap">
-    <div class="brand">
-      <div class="logo"></div>
-      <div>
-        <div class="greet" id="greet">Good afternoon</div>
-        <div style="opacity:.7;font-size:12px;letter-spacing:.6px">THEGRID</div>
-      </div>
+<header class="hdr">
+  <div class="wrap hbar">
+    <div class="brand"><div class="logo"></div>
+      <div><div class="title">THEGRID</div><div style="font-size:12px;color:#9aa3b2;letter-spacing:.3px">Black &amp; Gold</div></div>
     </div>
-    <div style="display:flex;gap:10px">
-      <button class="pill" id="openCustomize">Customize</button>
-      <button class="pill cta" id="joinBtn">Join Now</button>
+    <div class="hctas">
+      <button class="btn" id="openPanel">Customize</button>
+      <a class="btn gold" href="#plans" id="joinBtn">Join Now</a>
     </div>
   </div>
-</div>
+</header>
 
-<div class="wrap">
-  <!-- Hero -->
-  <section class="card gold">
-    <h2 class="section">Black & Gold</h2>
-    <p class="sub">Cinematic visuals. One-file updates. Owner controls with presets, borders & glow.</p>
-    <div style="margin:14px 0 10px">
-      <button class="btn" data-scroll="#library">Open Library</button>
-      <button class="btn gold" data-scroll="#plans">See Pricing</button>
-    </div>
-    <div id="hero" style="aspect-ratio:16/9;border-radius:16px;background:#0c0f13;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);display:grid;place-content:center;color:#526176">HERO PLACEHOLDER</div>
-  </section>
-
-  <!-- Library -->
-  <section id="library" class="card gold">
-    <div class="section-head">
-      <div class="title">Library</div><div class="dash"></div>
-    </div>
-    <p class="sub">Tap a tile to set the hero. Put media in <code>assets/videos</code> or <code>assets/images</code>.</p>
-    <div class="tabs" id="libTabs"></div>
-    <div class="grid" id="libGrid"></div>
-  </section>
-
-  <!-- Plans / Pricing -->
-  <section id="plans" class="card gold plans">
-    <div class="section-head">
-      <div class="title">Plans</div><div class="dash"></div>
-    </div>
-    <p class="sub">Fair pricing. No lock-in. Refund within 7 days if it’s not for you.</p>
-
-    <div class="plan" data-tier="basic">
-      <div class="badge basic">BASIC</div>
-      <div class="price">£9/mo</div>
-      <ul class="sub">
-        <li>Starter templates</li>
-        <li>Library access</li>
-        <li>Email support</li>
-      </ul>
-      <button class="choose" data-choose>Choose</button>
-    </div>
-
-    <div class="plan" data-tier="silver">
-      <div class="badge silver">SILVER</div>
-      <div class="price">£29/mo</div>
-      <ul class="sub">
-        <li>Everything in Basic</li>
-        <li>Advanced effects</li>
-        <li>Priority support</li>
-      </ul>
-      <button class="choose" data-choose>Choose</button>
-    </div>
-
-    <div class="plan" data-tier="gold">
-      <div class="badge gold">GOLD</div>
-      <div class="price">£49/mo</div>
-      <ul class="sub">
-        <li>Full customization</li>
-        <li>Admin toolkit</li>
-        <li>1:1 onboarding</li>
-      </ul>
-      <button class="choose gold" data-choose>Choose</button>
-    </div>
-
-    <div class="plan" data-tier="diamond">
-      <div class="badge diamond">DIAMOND</div>
-      <div class="price">£99/mo</div>
-      <ul class="sub">
-        <li>Custom pipelines</li>
-        <li>Hands-on help</li>
-        <li>Priority turnaround</li>
-      </ul>
-      <button class="choose" data-choose>Choose</button>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="card gold" id="contact">
-    <div class="section-head">
-      <div class="title">Contact</div><div class="dash"></div>
-    </div>
-    <form onsubmit="event.preventDefault();alert('Thanks! We will reply from gridcoresystems@gmail.com');">
-      <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr;max-width:760px">
-        <input placeholder="Your name" required style="border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb">
-        <input placeholder="you@example.com" type="email" required style="border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb">
-        <input placeholder="How can we help?" style="grid-column:1/-1;border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb">
-        <textarea placeholder="Write your message…" rows="5" style="grid-column:1/-1;border-radius:12px;padding:12px;background:#10141a;border:1px solid rgba(255,255,255,.08);color:#e6eefb"></textarea>
-        <button class="btn gold" style="width:120px">Send</button>
+<main class="wrap">
+  <section class="section">
+    <div class="h1">Black &amp; Gold</div>
+    <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+    <div class="card" data-sec="hero"><div class="halo"></div>
+      <div class="hero-frame">
+        <video class="media" id="hero" data-slot="hero" playsinline muted loop>
+          <source src="assets/videos/hero_1.mp4" type="video/mp4">
+        </video>
       </div>
-      <p class="sub" style="margin-top:10px">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
-    </form>
+    </div>
   </section>
 
-  <p class="sub" style="text-align:center;margin:30px 0 60px">© THEGRID • Privacy • Terms</p>
-</div>
+  <section class="section" id="library">
+    <div class="card" data-sec="library"><div class="halo"></div>
+      <div class="headline">Library</div><div class="divider"></div>
+      <p class="lede">Tap a tile to set media. Drop files into <code>assets/videos</code> or <code>assets/images</code>. Optional: add <code>assets/manifest.json</code> to list more.</p>
+      <div class="chips" id="chips"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
 
-<!-- Customize Panel (Owner) -->
-<div class="panel" id="panel">
-  <header>
-    <strong>Design Panel</strong>
-    <button class="pill" id="closeCustomize">Close</button>
-  </header>
-  <div class="body">
-    <label>Accent color
-      <input id="accent" type="color" value="#f0c14b">
-    </label>
-    <label>Card radius
-      <input id="radius" type="range" min="8" max="26" step="1" value="14">
-    </label>
-    <label>Border Glow (0–100)
-      <input id="glow" type="range" min="0" max="100" value="65">
-    </label>
-    <label>Hero source
-      <select id="heroSrc"></select>
-    </label>
-    <fieldset style="border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px">
-      <legend style="padding:0 6px;opacity:.8">Confetti</legend>
-      <label>Density<input id="cfDensity" type="range" min="0" max="1" step="0.05" value="0.45"></label>
-      <label>Speed<input id="cfSpeed" type="range" min="0.2" max="2" step="0.05" value="1"></label>
-      <label>Shape
-        <select id="cfShape">
-          <option value="mix">Mix</option>
-          <option value="circle">Circle</option>
-          <option value="square">Square</option>
-          <option value="diamond">Diamond</option>
-        </select>
-      </label>
-      <p class="help">Confetti is GPU-friendly (canvas) and auto-centers on the clicked plan.</p>
-    </fieldset>
-    <button class="btn" id="saveBtn">Save to this device</button>
-    <button class="btn" id="resetBtn">Reset</button>
+  <section class="section" id="plans">
+    <div class="card" data-sec="plans"><div class="halo"></div>
+      <div class="headline">Plans</div><div class="divider"></div>
+      <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
+      <div class="plans" id="plansGrid"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card" data-sec="aLaCarte"><div class="halo"></div>
+      <div class="headline">À-la-carte Services</div><div class="divider"></div>
+      <div class="plans">
+        <div class="plan"><div class="top"><div class="price">£39</div><span class="tag">SETUP</span></div>
+          <ul><li>Deploy & connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
+          <div class="cta"><a class="btn pill gold" href="#contact">Start Setup</a></div>
+        </div>
+        <div class="plan"><div class="top"><div class="price">£59</div><span class="tag">REELS</span></div>
+          <ul><li>3 niche reels</li><li>Captions & cuts</li><li>IG/TikTok ready</li></ul>
+          <div class="cta"><a class="btn pill gold" href="#contact">Order Pack</a></div>
+        </div>
+        <div class="plan"><div class="top"><div class="price">£29</div><span class="tag">TEMPLATES</span></div>
+          <ul><li>5 premium blocks</li><li>Copy-paste ready</li><li>Lifetime updates</li></ul>
+          <div class="cta"><a class="btn pill gold" href="#contact">Get Pack</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="card" data-sec="contact"><div class="halo"></div>
+      <div class="headline">Contact</div><div class="divider"></div>
+      <form class="fields" onsubmit="event.preventDefault();alert('Thanks! We’ll reply from gridcoresystems@gmail.com.');">
+        <input class="input" placeholder="Your name" required>
+        <input class="input" placeholder="you@example.com" type="email" required>
+        <input class="input" placeholder="How can we help?" style="grid-column:1/-1">
+        <textarea class="textarea" placeholder="Write your message…" style="grid-column:1/-1"></textarea>
+        <button class="btn gold" type="submit" style="grid-column:1/-1;justify-self:start">Send</button>
+      </form>
+      <p class="lede" style="margin-top:8px">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
+    </div>
+  </section>
+
+  <p id="offline" class="offline" hidden>You're offline. Changes are saved locally; media will sync when back online.</p>
+  <p style="text-align:center;color:#8e97a6;margin:40px 0 60px">© THEGRID • <a href="#">Privacy</a> • <a href="#">Terms</a></p>
+</main>
+
+<!-- ADVANCED CUSTOMIZER -->
+<dialog id="panel">
+  <div class="card panel"><div class="halo"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="headline" style="margin:0">Design Panel</div>
+      <button class="btn" id="closePanel">Close</button>
+    </div>
+
+    <div class="tabbar" id="tabs">
+      <button class="tab on" data-tab="theme">Theme</button>
+      <button class="tab" data-tab="layout">Layout</button>
+      <button class="tab" data-tab="effects">Effects</button>
+      <button class="tab" data-tab="library">Library</button>
+      <button class="tab" data-tab="presets">Presets</button>
+    </div>
+
+    <!-- THEME -->
+    <div class="group" data-pane="theme">
+      <div class="g2">
+        <label>Accent <input id="accent" type="color" value="#f2c94c" style="width:100%;height:38px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:transparent"></label>
+        <label>Panel color <input id="panelColor" type="color" value="#10131a" style="width:100%;height:38px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:transparent"></label>
+      </div>
+      <div class="g2">
+        <label>Card radius <input id="rad" type="range" min="8" max="28" value="18"></label>
+        <label>Card depth (shadow) <input id="depth" type="range" min="0" max="40" value="24"></label>
+      </div>
+      <div class="g2">
+        <label>Halo glow <input id="glow" type="range" min="0" max="100" value="18"></label>
+        <label>Label weight <input id="labelW" type="range" min="400" max="800" step="50" value="600"></label>
+      </div>
+      <div class="g2">
+        <label>H1 size <input id="h1" type="range" min="32" max="60" value="44"></label>
+        <label>H2 size <input id="h2" type="range" min="22" max="36" value="28"></label>
+      </div>
+    </div>
+
+    <!-- LAYOUT -->
+    <div class="group" data-pane="layout" hidden>
+      <div class="g2">
+        <label>Section <select id="secPick" class="input">
+          <option value="hero">Hero</option><option value="library">Library</option>
+          <option value="plans">Plans</option><option value="aLaCarte">À-la-carte</option><option value="contact">Contact</option>
+        </select></label>
+        <label>Border style
+          <select id="borderStyle" class="input"><option>default</option><option>solid</option><option>double</option><option>gradient</option></select>
+        </label>
+      </div>
+      <div class="g2">
+        <label>Section radius <input id="secRadius" type="range" min="10" max="28" value="18"></label>
+        <label>Section glow <input id="secGlow" type="range" min="0" max="100" value="18"></label>
+      </div>
+      <div class="g2">
+        <label>Heading size <input id="secH2" type="range" min="22" max="36" value="28"></label>
+        <label>Apply to all <input id="applyAll" type="checkbox"></label>
+      </div>
+    </div>
+
+    <!-- EFFECTS -->
+    <div class="group" data-pane="effects" hidden>
+      <fieldset class="g2" style="border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px">
+        <legend>Confetti per tier</legend>
+        <label>Tier
+          <select id="tier" class="input"><option>basic</option><option>silver</option><option>gold</option><option>diamond</option></select>
+        </label>
+        <label>Color <input id="cColor" type="color" value="#ffd36b"></label>
+        <label>Shape
+          <select id="cShape" class="input"><option>mix</option><option>circle</option><option>square</option><option>triangle</option></select>
+        </label>
+        <label>Density <input id="cDen" type="range" min="10" max="140" value="60"></label>
+        <label>Speed <input id="cSpd" type="range" min="5" max="70" value="24"></label>
+        <label>Enabled <input id="fxEnable" type="checkbox" checked></label>
+      </fieldset>
+      <div class="g2">
+        <label>Safe Mode (disable heavy FX) <input id="safeMode" type="checkbox"></label>
+        <label>Show FPS watchdog <input id="watch" type="checkbox" checked></label>
+      </div>
+    </div>
+
+    <!-- LIBRARY -->
+    <div class="group" data-pane="library" hidden>
+      <p class="lede">Drag files into <code>assets/videos</code> or <code>assets/images</code>. Use <code>assets/manifest.json</code> to add more categories.</p>
+      <div class="g2">
+        <label>Hero source <input id="heroSrc" class="input" placeholder="assets/videos/hero_1.mp4"></label>
+        <button class="btn" id="applyHero">Apply to Hero</button>
+      </div>
+      <div class="g2">
+        <button class="btn" id="rescan">Rescan library</button>
+        <button class="btn" id="openPicker">Pick from library</button>
+      </div>
+    </div>
+
+    <!-- PRESETS -->
+    <div class="group" data-pane="presets" hidden>
+      <div class="g2">
+        <button class="btn" data-preset="showcase">Showcase Gold Glow</button>
+        <button class="btn" data-preset="stealth">Stealth Minimal</button>
+      </div>
+      <div class="g2">
+        <button class="btn" data-preset="editorial">Editorial Double</button>
+        <button class="btn" data-preset="aqua">Neon Aqua</button>
+      </div>
+      <div class="g2">
+        <button class="btn" id="savePreset">Save current as preset</button>
+        <button class="btn" id="clearSave">Clear saved settings</button>
+      </div>
+      <div class="g2">
+        <button class="btn" id="exportJson">Export JSON</button>
+        <input id="importFile" type="file" accept="application/json" class="input">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn gold" id="store">Save to this device</button>
+      <button class="btn" id="resetAll">Reset</button>
+    </div>
+    <p class="lede">Long-press <strong>Customize</strong> for Diagnostics (FPS, Safe Mode).</p>
   </div>
-</div>
-<div class="saveBadge" id="saveBadge">Saved ✓</div>
+</dialog>
+
+<!-- Diagnostics -->
+<dialog id="diag">
+  <div class="card panel"><div class="halo"></div>
+    <div class="headline" style="margin:0 0 6px">Diagnostics</div>
+    <p class="lede" id="fpsRead">FPS: —</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn" id="toggleSafe">Toggle Safe Mode</button>
+      <button class="btn" id="toggleFx">Disable/Enable Confetti</button>
+      <button class="btn" id="wipe">Clear Saved Settings</button>
+      <button class="btn" id="closeDiag" style="margin-left:auto">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Media picker (click on any media to open) -->
+<dialog id="picker">
+  <div class="card panel"><div class="halo"></div>
+    <div class="headline" style="margin:0">Choose media</div>
+    <p class="lede" id="slotName" style="margin:6px 0 12px">Select a source for this slot.</p>
+    <div class="chips" id="pChips"></div>
+    <div class="grid" id="pGrid"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn" id="closePicker">Close</button></div>
+  </div>
+</dialog>
 
 <script>
-(() => {
-  /* ========= Live-Saving Settings ========= */
-  const LS = 'tg_settings_v2';
-  const DEFAULTS = {
-    accent:'#f0c14b', radius:14, glow:65,
-    cf:{ density:.45, speed:1, shape:'mix' },
-    hero:'assets/videos/hero_1.mp4'
-  };
-  let S = Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem(LS)||'{}'));
+(()=>{const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const els={panel:$('#panel'),tabs:$('#tabs'),diag:$('#diag'),picker:$('#picker'),pChips:$('#pChips'),pGrid:$('#pGrid'),
+openPanel:$('#openPanel'),closePanel:$('#closePanel'),joinBtn:$('#joinBtn'),
+accent:$('#accent'),panelColor:$('#panelColor'),rad:$('#rad'),depth:$('#depth'),glow:$('#glow'),labelW:$('#labelW'),h1:$('#h1'),h2:$('#h2'),
+secPick:$('#secPick'),borderStyle:$('#borderStyle'),secRadius:$('#secRadius'),secGlow:$('#secGlow'),secH2:$('#secH2'),applyAll:$('#applyAll'),
+tier:$('#tier'),cColor:$('#cColor'),cShape:$('#cShape'),cDen:$('#cDen'),cSpd:$('#cSpd'),fxEnable:$('#fxEnable'),safeMode:$('#safeMode'),watch:$('#watch'),
+heroSrc:$('#heroSrc'),applyHero:$('#applyHero'),rescan:$('#rescan'),openPickerBtn:$('#openPicker'),
+store:$('#store'),resetAll:$('#resetAll'),savePreset:$('#savePreset'),clearSave:$('#clearSave'),exportJson:$('#exportJson'),importFile:$('#importFile'),
+fpsRead:$('#fpsRead'),toggleSafe:$('#toggleSafe'),toggleFx:$('#toggleFx'),wipe:$('#wipe'),closeDiag:$('#closeDiag'),
+chips:$('#chips'),grid:$('#grid'),plansGrid:$('#plansGrid'),slotName:$('#slotName'),closePicker:$('#closePicker')}
+const DEF={theme:{accent:'#f2c94c',panel:'#10131a',radius:18,depth:24,glow:18,label:600,h1:44,h2:28},
+sections:{hero:{radius:18,glow:18,style:'default'},library:{radius:18,glow:18,style:'default'},
+plans:{radius:18,glow:18,style:'default'},aLaCarte:{radius:18,glow:18,style:'default'},contact:{radius:18,glow:18,style:'default'}},
+confetti:{enabled:true,watch:true,tiers:{basic:{color:'#ffd36b',shape:'mix',den:50,spd:24},silver:{color:'#c0c6d4',shape:'square',den:60,spd:26},gold:{color:'#ffd36b',shape:'triangle',den:70,spd:28},diamond:{color:'#9ad8ff',shape:'circle',den:80,spd:30}}},
+media:{hero:'assets/videos/hero_1.mp4'},
+presets:{}};
+const S=Object.assign({},DEF,JSON.parse(localStorage.getItem('tg_state_adv')||'{}'));
+function persist(){localStorage.setItem('tg_state_adv',JSON.stringify(S))}
+function setTheme(){document.documentElement.style.setProperty('--accent',S.theme.accent);
+ document.documentElement.style.setProperty('--panel',S.theme.panel);
+ document.documentElement.style.setProperty('--radius',S.theme.radius+'px');
+ document.documentElement.style.setProperty('--depth',S.theme.depth);
+ document.documentElement.style.setProperty('--glow',S.theme.glow);
+ document.documentElement.style.setProperty('--h1',S.theme.h1);
+ document.documentElement.style.setProperty('--h2',S.theme.h2);
+ document.documentElement.style.setProperty('--label',S.theme.label);}
+function styleSection(key){const card=document.querySelector(`.card[data-sec="${key}"]`);
+ if(!card) return; card.style.borderRadius=(S.sections[key].radius||S.theme.radius)+'px';
+ card.querySelector('.halo').style.boxShadow=`0 0 0 1px rgba(255,255,255,.06),0 0 ${S.sections[key].glow||S.theme.glow}px var(--ring)`;
+ card.classList.remove('solid','double','gradient');
+ const st=S.sections[key].style; if(st!=='default') card.classList.add(st);}
+function applyAllSections(){Object.keys(S.sections).forEach(styleSection)}
+function bindThemeInputs(){
+ els.accent.value=S.theme.accent; els.panelColor.value=S.theme.panel;
+ els.rad.value=S.theme.radius; els.depth.value=S.theme.depth; els.glow.value=S.theme.glow;
+ els.labelW.value=S.theme.label; els.h1.value=S.theme.h1; els.h2.value=S.theme.h2;
+}
+function initThemeEvents(){
+ ['input','change'].forEach(ev=>{
+  els.accent.addEventListener(ev,e=>{S.theme.accent=e.target.value;setTheme();persist()});
+  els.panelColor.addEventListener(ev,e=>{S.theme.panel=e.target.value;setTheme();persist()});
+  els.rad.addEventListener(ev,e=>{S.theme.radius=+e.target.value;setTheme();applyAllSections();persist()});
+  els.depth.addEventListener(ev,e=>{S.theme.depth=+e.target.value;setTheme();persist()});
+  els.glow.addEventListener(ev,e=>{S.theme.glow=+e.target.value;setTheme();applyAllSections();persist()});
+  els.labelW.addEventListener(ev,e=>{S.theme.label=+e.target.value;document.documentElement.style.setProperty('--label',S.theme.label);persist()});
+  els.h1.addEventListener(ev,e=>{S.theme.h1=+e.target.value;setTheme();persist()});
+  els.h2.addEventListener(ev,e=>{S.theme.h2=+e.target.value;setTheme();persist()});
+ });}
+function bindLayoutInputs(){
+ const k=els.secPick.value, ss=S.sections[k];
+ els.borderStyle.value=ss.style; els.secRadius.value=ss.radius; els.secGlow.value=ss.glow; els.secH2.value=S.theme.h2;
+}
+['change','input'].forEach(ev=>{
+ els.secPick.addEventListener(ev,bindLayoutInputs);
+ els.borderStyle.addEventListener(ev,()=>{const k=els.secPick.value;S.sections[k].style=els.borderStyle.value;styleSection(k); if(els.applyAll.checked){Object.keys(S.sections).forEach(x=>{S.sections[x].style=S.sections[k].style;styleSection(x)});} persist()});
+ els.secRadius.addEventListener(ev,()=>{const k=els.secPick.value;S.sections[k].radius=+els.secRadius.value;styleSection(k); if(els.applyAll.checked){Object.keys(S.sections).forEach(x=>{S.sections[x].radius=S.sections[k].radius;styleSection(x)});} persist()});
+ els.secGlow.addEventListener(ev,()=>{const k=els.secPick.value;S.sections[k].glow=+els.secGlow.value;styleSection(k); if(els.applyAll.checked){Object.keys(S.sections).forEach(x=>{S.sections[x].glow=S.sections[k].glow;styleSection(x)});} persist()});
+ els.secH2.addEventListener(ev,()=>{S.theme.h2=+els.secH2.value;setTheme();persist()});
+});
+/* tabs */
+els.tabs.addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return; $$('.tab').forEach(x=>x.classList.remove('on')); b.classList.add('on'); const id=b.dataset.tab; $$('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==id);});
 
-  const el = s=>document.querySelector(s);
-  const els = s=>[...document.querySelectorAll(s)];
-  const setBadge=()=>{ const b=el('#saveBadge'); b.classList.add('show'); clearTimeout(b._t); b._t=setTimeout(()=>b.classList.remove('show'),1200) };
-  const save = ()=>{ localStorage.setItem(LS, JSON.stringify(S)); setBadge(); apply(); };
-  const apply = ()=>{
-    document.documentElement.style.setProperty('--gold', S.accent);
-    document.documentElement.style.setProperty('--gold-2', S.accent);
-    document.documentElement.style.setProperty('--radius', S.radius+'px');
-    // glow strength tweaks
-    const g = S.glow/100;
-    document.documentElement.style.setProperty('--glow', `0 0 0 1px rgba(240,193,75,${.18+g*.3}), 0 0 40px rgba(240,193,75,${.1+g*.2}), inset 0 0 0 1px rgba(255,255,255,.04)`);
+/* Plans & confetti */
+const TIERS=[{key:'basic',name:'Basic',price:'£9/mo',badge:'BASIC',bullets:['Starter templates','Library access','Email support'],detail:['Get rolling quickly.','Customize brand color + hero media.'],style:'solid'},
+{key:'silver',name:'Silver',price:'£29/mo',badge:'SILVER',bullets:['Everything in Basic','Advanced effects','Priority support'],detail:['More border styles & glows.','Help curating/formatting media.'],style:'double'},
+{key:'gold',name:'Gold',price:'£49/mo',badge:'GOLD',bullets:['Full customization','Admin toolkit','1:1 onboarding'],detail:['Tailored visuals/sections to your niche.','Onboarding call with setup guidance.'],style:'gradient'},
+{key:'diamond',name:'Diamond',price:'£99/mo',badge:'DIAMOND',bullets:['Custom pipelines','Hands-on help','Priority turnaround'],detail:['End-to-end content pipeline setup.','Top-priority changes.'],style:'gradient'}];
+function buildPlans(){els.plansGrid.innerHTML='';TIERS.forEach(t=>{const d=document.createElement('div');d.className='plan '+t.style;d.dataset.tier=t.key;d.innerHTML=
+`<canvas class="fx"></canvas>
+<div class="top"><div class="price">${t.price}</div><span class="tag ${t.key==='gold'?'gold':''} ${t.key==='diamond'?'diamond':''}">${t.badge}</span></div>
+<ul>${t.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+<div class="cta"><button class="btn pill gold choose">Choose</button></div>
+<details><summary><strong>What’s included</strong></summary><ul style="margin-top:8px">${t.detail.map(d=>`<li>${d}</li>`).join('')}</ul></details>`;
+d.querySelector('.choose').addEventListener('click',()=>S.confetti.enabled&&confetti(d,S.confetti.tiers[t.key]));els.plansGrid.appendChild(d)});}
+function confetti(card,style){const c=card.querySelector('canvas.fx');const rect=card.getBoundingClientRect();
+const dpr=Math.min(2,devicePixelRatio||1);c.width=rect.width*dpr;c.height=rect.height*dpr;c.style.width=rect.width+'px';c.style.height=rect.height+'px';
+const ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+const N=Math.round((style.den||60)*Guard.scale),spd=(style.spd||24)/10,shape=style.shape||'mix',col=style.color||'#ffd36b';
+const parts=[...Array(N)].map(()=>({x:Math.random()*rect.width,y:rect.height+Math.random()*30,vx:(Math.random()-.5)*1.6,vy=-(1.6+Math.random()*2.2)*spd,w:4+Math.random()*6,rot:Math.random()*Math.PI,col,shp:shape==='mix'?['circle','square','triangle'][Math.floor(Math.random()*3)]:shape}));
+let t0=null;function step(ts){if(!t0)t0=ts;ctx.clearRect(0,0,rect.width,rect.height);let alive=0;
+for(const p of parts){p.vy+=0.12;p.x+=p.vx;p.y+=p.vy*0.06;p.rot+=0.05;if(p.y<rect.height+20){draw(p);alive++}}
+if(alive>0)requestAnimationFrame(step);else ctx.clearRect(0,0,rect.width,rect.height)}
+function draw(p){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.col;
+if(p.shp==='circle'){ctx.beginPath();ctx.arc(0,0,p.w*.6,0,Math.PI*2);ctx.fill()} else if(p.shp==='triangle'){ctx.beginPath();ctx.moveTo(0,-p.w);ctx.lineTo(p.w,p.w);ctx.lineTo(-p.w,p.w);ctx.closePath();ctx.fill()} else ctx.fillRect(-p.w/2,-p.w/2,p.w,p.w);ctx.restore()}
+requestAnimationFrame(step);card.scrollIntoView({block:'center',behavior:'smooth'})}
 
-    // hero media
-    const hero = el('#hero');
-    const isVid = /\.(mp4|webm|mov)$/i.test(S.hero);
-    hero.innerHTML='';
-    if(isVid){
-      const v=document.createElement('video');
-      v.src=S.hero; v.muted=true; v.autoplay=true; v.loop=true; v.playsInline=true; v.style.width='100%'; v.style.borderRadius='16px';
-      hero.appendChild(v);
-    } else {
-      const img=new Image(); img.src=S.hero; img.style.width='100%'; img.style.borderRadius='16px'; hero.appendChild(img);
-    }
-  };
+/* FPS watchdog / diagnostics */
+const Guard={scale:1,last:performance.now(),frames:0,fps:60,timer:null,start(){if(!S.confetti.watch) return;
+ const loop=()=>{this.frames++;const now=performance.now();if(now-this.last>=1000){this.fps=this.frames;this.frames=0;this.last=now;els.fpsRead.textContent='FPS: '+this.fps;if(this.fps<45&&this.scale>0.5){this.scale*=0.8;toast('Performance low — scaling effects')}else if(this.fps>55&&this.scale<1){this.scale=Math.min(1,this.scale*1.05)}}this.timer=requestAnimationFrame(loop)};loop()}};
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
+window.addEventListener('unhandledrejection',e=>{toast('Async error: '+(e.reason?.message||e.reason||''))})
 
-  /* ========= Greeting (time-of-day) ========= */
-  const h=new Date().getHours();
-  el('#greet').textContent = h<12 ? 'Good morning' : h<18 ? 'Good afternoon' : 'Good evening';
+/* Library */
+const LIB={Hero:['assets/videos/hero_1.mp4'], 'Reels 9:16':['assets/videos/interaction_1.mp4'], 'Reels 16:9':['assets/videos/pour_1.mp4'], Backgrounds:['assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg'], Logos:[]};
+async function tryManifest(){try{const r=await fetch('assets/manifest.json',{cache:'no-store'});if(!r.ok)return;const m=await r.json();for(const k in m){(LIB[k]??=[]).push(...m[k])}}catch{}}
+async function fileExists(url){try{const r=await fetch(url,{method:'HEAD'});return r.ok}catch{return false}}
+function buildLibrary(){const cats=Object.keys(LIB);els.chips.innerHTML='';els.grid.innerHTML='';cats.forEach((name,i)=>{const b=document.createElement('button');b.className='chip'+(i===0?' is-on':'');b.textContent=name;b.onclick=()=>{[...els.chips.children].forEach(x=>x.classList.remove('is-on'));b.classList.add('is-on');fill(name)};els.chips.appendChild(b)});fill(cats[0]);async function fill(cat){els.grid.innerHTML='';for(const src of LIB[cat]){const t=document.createElement('button');t.className='tile';t.textContent=src;const ok=await fileExists(src);if(!ok)t.classList.add('missing');t.onclick=()=>setSlot('hero',src,true);els.grid.appendChild(t)}}}
+/* click any media to open picker */
+let currentSlot=null;document.body.addEventListener('click',e=>{const m=e.target.closest('[data-slot]');if(!m)return;currentSlot=m.getAttribute('data-slot');els.slotName.textContent=`Select a source for “${currentSlot}”`;buildPicker().then(()=>els.picker.showModal())});
+async function buildPicker(){const cats=Object.keys(LIB);els.pChips.innerHTML='';els.pGrid.innerHTML='';cats.forEach((name,i)=>{const b=document.createElement('button');b.className='chip'+(i===0?' is-on':'');b.textContent=name;b.onclick=()=>{[...els.pChips.children].forEach(x=>x.classList.remove('is-on'));b.classList.add('is-on');fill(name)};els.pChips.appendChild(b)});await fill(cats[0]);async function fill(cat){els.pGrid.innerHTML='';for(const src of LIB[cat]){const t=document.createElement('button');t.className='tile';t.textContent=src;if(!(await fileExists(src)))t.classList.add('missing');t.onclick=()=>{setSlot(currentSlot,src,false);els.picker.close()};els.pGrid.appendChild(t)}}}
+els.closePicker.onclick=()=>els.picker.close();
 
-  /* ========= Library contents ========= */
-  const LIB = {
-    'Hero':['assets/videos/hero_1.mp4','assets/videos/interaction_1.mp4','assets/videos/pour_1.mp4','assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg'],
-    'Reels 9:16':['assets/videos/launch_tiktok.mp4','assets/videos/natural_1.mp4','assets/videos/transform_1.mp4'],
-    'Reels 16:9':['assets/videos/hero_1.mp4','assets/videos/interaction_1.mp4','assets/videos/pour_1.mp4'],
-    'Backgrounds':['assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg'],
-    'Logos':['assets/images/logo_gold.png','assets/images/logo_dark.png']
-  };
-  const tabs = el('#libTabs'), grid = el('#libGrid'), heroSel = el('#heroSrc');
-  Object.keys(LIB).forEach((k,i)=>{
-    const b=document.createElement('button'); b.className='tab'+(i? '':' active'); b.textContent=k; b.dataset.key=k;
-    b.onclick=()=>{ els('.tab').forEach(t=>t.classList.remove('active')); b.classList.add('active'); drawGrid(k); };
-    tabs.appendChild(b);
-  });
-  function drawGrid(key){
-    grid.innerHTML='';
-    LIB[key].forEach(src=>{
-      const t=document.createElement('div'); t.className='tile'; t.textContent=src;
-      t.onclick=()=>{ S.hero=src; save(); window.scrollTo({top:0,behavior:'smooth'}); };
-      grid.appendChild(t);
-    });
-  }
-  drawGrid('Hero');
-  // Populate select
-  heroSel.innerHTML = Object.values(LIB).flat().map(v=>`<option ${S.hero===v?'selected':''}>${v}</option>`).join('');
-  heroSel.oninput = e=>{ S.hero=e.target.value; save(); };
+/* set/boot media */
+function setSlot(slot,src,scroll){S.media[slot]=src;persist();const node=document.querySelector(`[data-slot="${slot}"]`);if(!node)return;const isVid=/\.(mp4|webm|mov)$/i.test(src);if(isVid){const v=node.tagName==='VIDEO'?node:document.createElement('video');v.className='media';v.setAttribute('playsinline','');v.setAttribute('muted','');v.setAttribute('loop','');v.innerHTML=`<source src="${src}" type="video/mp4">`;if(v!==node)node.replaceWith(v);v.load();v.play().catch(()=>{})}else{const img=node.tagName==='IMG'?node:document.createElement('img');img.className='media';img.src=src;if(img!==node)node.replaceWith(img)}if(scroll)window.scrollTo({top:0,behavior:'smooth'})}
 
-  /* ========= Customize panel (owner only, manual open) ========= */
-  const panel=el('#panel');
-  el('#openCustomize').onclick=()=>panel.classList.add('open');
-  el('#closeCustomize').onclick=()=>panel.classList.remove('open');
+/* Panel wiring */
+els.openPanel.onclick=()=>els.panel.showModal(); els.closePanel.onclick=()=>els.panel.close();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){els.panel.close();els.picker.close();els.diag.close()}})
+/* theme inputs -> view */
+bindThemeInputs(); initThemeEvents();
+/* layout initial */
+bindLayoutInputs();
 
-  // Bind inputs + live-save
-  const bind = (id, path, transform=(v)=>v )=>{
-    const input=el(id); const set=(v)=>{ let ref=S; const keys=path.split('.'); while(keys.length>1) ref=ref[keys.shift()]; ref[keys[0]]=transform(v); save(); };
-    input.oninput=e=>set(e.target.value);
-    // set initial UI value from settings
-    const get=(()=>{ let ref=S; for(const k of path.split('.')) ref=ref[k]; return ref; })();
-    if(input.type==='range'||input.type==='color'||input.tagName==='SELECT') input.value=get;
-  };
-  bind('#accent','accent');
-  bind('#radius','radius',v=>+v);
-  bind('#glow','glow',v=>+v);
-  bind('#cfDensity','cf.density',v=>+v);
-  bind('#cfSpeed','cf.speed',v=>+v);
-  bind('#cfShape','cf.shape');
+/* Effects tab wiring */
+function hydrateTierUI(){const t=els.tier.value, cfg=S.confetti.tiers[t];els.cColor.value=cfg.color;els.cShape.value=cfg.shape;els.cDen.value=cfg.den;els.cSpd.value=cfg.spd;els.fxEnable.checked=S.confetti.enabled;els.watch.checked=S.confetti.watch;els.safeMode.checked=document.body.getAttribute('data-safe')==='1'}
+hydrateTierUI();
+['change','input'].forEach(ev=>{
+ els.tier.addEventListener(ev,hydrateTierUI);
+ els.cColor.addEventListener(ev,()=>{S.confetti.tiers[els.tier.value].color=els.cColor.value;persist()});
+ els.cShape.addEventListener(ev,()=>{S.confetti.tiers[els.tier.value].shape=els.cShape.value;persist()});
+ els.cDen.addEventListener(ev,()=>{S.confetti.tiers[els.tier.value].den=+els.cDen.value;persist()});
+ els.cSpd.addEventListener(ev,()=>{S.confetti.tiers[els.tier.value].spd=+els.cSpd.value;persist()});
+ els.fxEnable.addEventListener(ev,()=>{S.confetti.enabled=els.fxEnable.checked;persist()});
+ els.watch.addEventListener(ev,()=>{S.confetti.watch=els.watch.checked;persist()});
+ els.safeMode.addEventListener(ev,()=>{document.body.setAttribute('data-safe',els.safeMode.checked?'1':'0')});
+});
 
-  el('#saveBtn').onclick=save;
-  el('#resetBtn').onclick=()=>{ S=JSON.parse(JSON.stringify(DEFAULTS)); save(); location.reload(); };
+/* Library tab helpers */
+els.applyHero.onclick=()=>{const v=els.heroSrc.value.trim();if(v){setSlot('hero',v,true)}};
+els.rescan.onclick=async()=>{await tryManifest();buildLibrary();toast('Library refreshed')};
+els.openPickerBtn.onclick=()=>{els.slotName.textContent='Select a source for “hero”';buildPicker().then(()=>els.picker.showModal())};
 
-  /* ========= Join button scroll ========= */
-  const scrollToSel = sel => document.querySelector(sel).scrollIntoView({behavior:'smooth',block:'start'});
-  el('#joinBtn').onclick=()=>scrollToSel('#plans');
-  els('[data-scroll]').forEach(b=>b.onclick=()=>scrollToSel(b.dataset.scroll));
+/* Presets */
+const PRESET_MAP={
+ showcase:{theme:{accent:'#f2c94c',panel:'#10131a',radius:18,depth:28,glow:26,label:700,h1:48,h2:30}},
+ stealth:{theme:{accent:'#9aa3b2',panel:'#0e1116',radius:14,depth:12,glow:8,label:500,h1:42,h2:26}},
+ editorial:{theme:{accent:'#ffdd99',panel:'#0e0e12',radius:18,depth:18,glow:12,label:700,h1:46,h2:28}},
+ aqua:{theme:{accent:'#65e0ff',panel:'#0e1016',radius:18,depth:22,glow:22,label:600,h1:46,h2:28}}
+};
+$$('[data-preset]').forEach(b=>b.onclick=()=>{const p=PRESET_MAP[b.dataset.preset];Object.assign(S.theme,p.theme);bindThemeInputs();setTheme();applyAllSections();persist();toast('Preset applied')});
+els.savePreset.onclick=()=>{const name=prompt('Preset name?');if(!name)return;S.presets[name]=JSON.parse(JSON.stringify(S.theme));persist();toast('Preset saved')};
+els.clearSave.onclick=()=>{localStorage.removeItem('tg_state_adv');toast('Cleared. Reloading…');setTimeout(()=>location.reload(),300)};
+els.exportJson.onclick=()=>{const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='thegrid-settings.json';a.click()};
+els.importFile.onchange=e=>{const f=e.target.files?.[0];if(!f)return;f.text().then(txt=>{try{const obj=JSON.parse(txt);Object.assign(S,obj);persist();location.reload()}catch{toast('Invalid JSON')}})};
 
-  /* ========= Confetti (GPU-friendly, tier-aware) ========= */
-  const C = (()=>{
-    const canvas = el('#fx'), ctx = canvas.getContext('2d');
-    let W=canvas.width=innerWidth, H=canvas.height=innerHeight, parts=[], active=false, last=0;
-    addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;});
-    const hex = (h)=>'#'+h;
-    const TIER = {
-      basic : { colors:['#9aa8bd','#c7d2e2'], shape:'circle' },
-      silver: { colors:['#c0c0c0','#f2f2f2'], shape:'square' },
-      gold  : { colors:['#ffd36a','#f0b73a'], shape:'triangle' },
-      diamond:{ colors:['#b9f2ff','#7fd0e3'], shape:'diamond' }
-    };
-    function spawn(x,y,tier){
-      const conf = TIER[tier]||TIER.basic;
-      const n = Math.round(120 * S.cf.density);
-      for(let i=0;i<n;i++){
-        parts.push({
-          x,y, vx:(Math.random()-0.5)*3*S.cf.speed, vy:(Math.random()-1.6)*3*S.cf.speed,
-          r: 2+Math.random()*5, a:1, vr: (Math.random()-0.5)*0.2,
-          rot: Math.random()*6.28,
-          color: conf.colors[Math.random()*conf.colors.length|0],
-          shape: S.cf.shape==='mix'? conf.shape : S.cf.shape
-        });
-      }
-      active=true; requestAnimationFrame(frame);
-    }
-    function draw(p){
-      ctx.globalAlpha=p.a;
-      ctx.fillStyle=p.color; ctx.strokeStyle=p.color;
-      const s=p.r*2;
-      switch(p.shape){
-        case 'circle': ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); break;
-        case 'square': ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillRect(-p.r,-p.r,s,s); ctx.restore(); break;
-        case 'triangle': ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
-          ctx.beginPath(); ctx.moveTo(0,-s*.6); ctx.lineTo(s*.6,s*.6); ctx.lineTo(-s*.6,s*.6); ctx.closePath(); ctx.fill(); ctx.restore(); break;
-        case 'diamond': ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
-          ctx.beginPath(); ctx.moveTo(0,-s*.7); ctx.lineTo(s*.55,0); ctx.lineTo(0,s*.7); ctx.lineTo(-s*.55,0); ctx.closePath(); ctx.fill(); ctx.restore(); break;
-      }
-    }
-    function frame(ts){
-      if(!active) return;
-      const dt=(ts-last)||16; last=ts;
-      ctx.clearRect(0,0,W,H);
-      parts.forEach(p=>{
-        p.vy+=0.025*S.cf.speed; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.a-=0.007;
-      });
-      parts = parts.filter(p=>p.a>0 && p.y<H+20);
-      parts.forEach(draw);
-      if(parts.length) requestAnimationFrame(frame); else active=false;
-    }
-    return { burst:(x,y,tier)=>spawn(x,y,tier) };
-  })();
+/* Save / Reset */
+els.store.onclick=()=>{persist();toast('Saved to this device')};
+els.resetAll.onclick=()=>{Object.assign(S,JSON.parse(JSON.stringify(DEF)));persist();location.reload()};
 
-  // Attach to plan Choose buttons
-  els('[data-choose]').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      const plan = e.currentTarget.closest('.plan');
-      const rect = plan.getBoundingClientRect();
-      // center over the card and ensure it scrolls into view first
-      plan.scrollIntoView({behavior:'smooth', block:'center'});
-      setTimeout(()=> C.burst(rect.left + rect.width/2, rect.top + scrollY + 10, plan.dataset.tier), 260);
-    });
-  });
+/* Diagnostics (long-press Customize) */
+let hold;els.openPanel.addEventListener('mousedown',()=>hold=setTimeout(()=>els.diag.showModal(),1200));
+els.openPanel.addEventListener('mouseup',()=>clearTimeout(hold));
+els.openPanel.addEventListener('touchstart',()=>hold=setTimeout(()=>els.diag.showModal(),1200));
+els.openPanel.addEventListener('touchend',()=>clearTimeout(hold));
+$('#closeDiag').onclick=()=>els.diag.close();
+els.toggleSafe.onclick=()=>{const on=document.body.getAttribute('data-safe')==='1';document.body.setAttribute('data-safe',on?'0':'1');toast(on?'Safe Mode off':'Safe Mode on')};
+els.toggleFx.onclick=()=>{S.confetti.enabled=!S.confetti.enabled;persist();toast(S.confetti.enabled?'Effects enabled':'Effects disabled')};
+els.wipe.onclick=()=>{localStorage.removeItem('tg_state_adv');toast('Cleared. Reloading…');setTimeout(()=>location.reload(),300)};
 
-  /* ========= Initialize + persist UI values ========= */
-  // hydrate inputs
-  el('#accent').value=S.accent;
-  el('#radius').value=S.radius;
-  el('#glow').value=S.glow;
-  el('#cfDensity').value=S.cf.density;
-  el('#cfSpeed').value=S.cf.speed;
-  el('#cfShape').value=S.cf.shape;
+/* Join scroll */
+els.joinBtn.addEventListener('click',e=>{const t=$('#plans');if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}});
 
-  apply();
+/* Offline banner */
+function setOffline(b){$('#offline').hidden=!b} window.addEventListener('online',()=>setOffline(false)); window.addEventListener('offline',()=>setOffline(true)); setOffline(!navigator.onLine);
 
+/* Build */
+(async function init(){setTheme();Object.keys(S.sections).forEach(styleSection);
+ await tryManifest();buildLibrary();buildPlans();/* hero */ if(S.media.hero){setSlot('hero',S.media.hero,false);els.heroSrc.value=S.media.hero}
+ Guard.start(); hydrateTierUI(); bindLayoutInputs();})();
 })();
 </script>
 </body>
