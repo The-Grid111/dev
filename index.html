@@ -1,137 +1,147 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>THEGRID — Black & Gold</title>
 <meta name="theme-color" content="#0b0b0f"/>
+
+<!-- Preloads -->
 <link rel="preload" href="assets/videos/hero_1.mp4" as="video">
+<link rel="preload" href="assets/videos/logo.mp4" as="video">
+
 <style>
   :root{
+    /* Theme tokens (many are user-tunable in Customize) */
     --accent:#E7B84B;
-    --panel:#101218;
-    --card:#12141b;
-    --ink:#e9ecf3;
-    --soft:#b9c0cf;
-    --ring: 20;          /* border glow 0–100 */
-    --radius:20px;
-    --fontScale:1;       /* 0.9–1.2 */
-    --space:1;           /* 0.9–1.2 */
-    --borderStyle: glow; /* none | solid | glow */
-    --vignette: 1;       /* 0 off / 1 on */
+    --accent-2:#9ec5ff;          /* secondary accent for fx */
+    --bg-1:#0B0C10;               /* page gradient start */
+    --bg-2:#0A0B0E;               /* page gradient end */
+    --ink:#E9ECF3;                /* primary text */
+    --soft:#B9C0CF;               /* secondary text */
+    --card:#11131A;               /* card surface */
+    --panel:#0F1219;              /* panel surface */
+    --ring:22;                    /* 0–100, glow thickness */
+    --radius:18px;
+    --fontScale:1;                /* 0.9–1.2 */
+    --space:1;                    /* 0.9–1.2 */
+    --vignette:1;                 /* 0/1 */
+    --borderStyle:glow;           /* glow | solid | none */
   }
+
+  /* Base */
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0; font: 400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    color:var(--ink); background:#0b0c10;
+    margin:0;
+    font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 600px at 20% -80px, color-mix(in srgb,var(--accent),transparent 88%), transparent 70%),
+      radial-gradient(1200px 700px at 80% -120px, color-mix(in srgb,var(--accent-2),transparent 90%), transparent 70%),
+      linear-gradient(180deg,var(--bg-1),var(--bg-2));
     letter-spacing:.2px;
-    --pad: calc(14px * var(--space));
+    --pad: calc(14px*var(--space));
   }
   .vignette:before{
     content:""; position:fixed; inset:0; pointer-events:none;
-    background:
-      radial-gradient(1200px 600px at 50% -200px, #0000 30%, rgba(231,184,75,.18) 55%, #0000 70%),
-      radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
-      radial-gradient(1200px 600px at -200px 50%, #0000 30%, rgba(231,184,75,.12) 55%, #0000 70%),
-      radial-gradient(1200px 600px at calc(100% + 200px) 50%, #0000 30%, rgba(231,184,75,.12) 55%, #0000 70%);
-    opacity: calc(.55 * var(--vignette));
+    background: radial-gradient(1200px 800px at 50% 120%, rgba(0,0,0,.55), transparent 60%);
+    opacity: calc(.6*var(--vignette));
   }
-  .wrap{max-width:980px;margin-inline:auto;padding:24px}
+  .wrap{max-width:980px;margin-inline:auto;padding:22px}
+
+  /* Header / hero bar */
   header{
-    position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(10px);
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:saturate(1.2) blur(10px);
     background:color-mix(in srgb, #0b0c10 78%, #000 22%);
-    border-bottom:1px solid #151822;
+    border-bottom:1px solid #161B26;
   }
-  .bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
-  .brand{display:flex;gap:12px;align-items:center; min-width:0}
-  .logo{
-    width:44px; height:44px; border-radius:12px; overflow:hidden;
-    background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 20px rgba(231,184,75,.15);
-    position:relative;
-  }
-  .logo video,.logo img{width:100%;height:100%;object-fit:cover; display:block}
-  .brand h1{font:700 20px/1.2 inherit; margin:0}
-  .brand small{display:block; color:var(--soft); font-size:.8em}
+  .bar{display:flex;align-items:center;gap:14px;padding:14px 20px}
+  .brand{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;min-width:0}
+  .logo{width:46px;height:46px;border-radius:12px;overflow:hidden;background:#0E1117;
+        box-shadow:0 0 0 1px #1b2130 inset, 0 0 30px rgba(231,184,75,.18);}
+  .logo video,.logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .hello{margin:0;font:800 clamp(18px,5vw,28px)/1.1 inherit;letter-spacing:.2px}
+  .sub{margin:2px 0 0;color:var(--soft);font-size:.9em}
   .spacer{flex:1}
   .btn{
-    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit;
-    background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset;
-    transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
-    cursor:pointer;
+    appearance:none;border:0;border-radius:14px;padding:12px 16px;
+    background:#151A23;color:var(--ink);font:600 16px/1 inherit;
+    box-shadow:0 0 0 1px #23293A inset;cursor:pointer;transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
   }
   .btn:hover{transform:translateY(-1px)}
   .btn.primary{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%);
-    color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
+    background:linear-gradient(180deg, color-mix(in srgb,var(--accent),#fff 14%), var(--accent));
+    color:#1a1300; box-shadow:0 10px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb,var(--accent),#000 45%) inset;
   }
 
   /* Sections / cards */
   section{margin:28px 0}
   .card{
-    background:linear-gradient(180deg, #151925, #0F1219);
+    background:linear-gradient(180deg, color-mix(in srgb,var(--card),#000 0%), color-mix(in srgb,var(--panel),#000 0%));
     border-radius:var(--radius);
     padding:calc(var(--pad)*1.2);
     position:relative;
     box-shadow:
       0 0 0 1px #1b2130 inset,
       0 8px 40px rgba(0,0,0,.45),
-      0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
+      0 0 0 calc(var(--ring)*.12px) color-mix(in srgb, var(--accent), transparent 90%);
   }
-  h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 8px}
-  .lede{color:var(--soft); margin:0 0 18px}
+  h2{font:800 clamp(26px,5.3vw,42px)/1.12 ui-sans-serif;margin:0 0 8px}
+  .lede{color:var(--soft); margin:0 0 16px}
 
-  /* Hero */
-  .heroFrame{aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px); background:#0d1016;
-    display:grid; place-items:center; box-shadow:0 0 0 2px #202636 inset;
-    border: 1px dashed #2a3142;
+  /* Hero block */
+  .heroFrame{
+    aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px);
+    background:#0E1117; display:grid; place-items:center;
+    box-shadow:0 0 0 2px #202636 inset; border:1px dashed #2a3142;
+    position:relative; overflow:hidden;
   }
   .heroFrame video,.heroFrame img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
-  .ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
+  .slotTag{position:absolute;top:8px;left:8px;background:#0f141d;border:1px solid #263046;padding:6px 8px;border-radius:999px;font:700 12px/1 ui-sans-serif;color:#cbd4ea}
+
+  .ctaRow{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
   .ctaRow .btn{padding:12px 18px}
 
   /* Library */
-  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
   .pill{
-    padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
-    box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none;
+    padding:10px 14px;border-radius:999px;background:#0f141d;color:var(--ink);
+    box-shadow:0 0 0 1px #252c3c inset;cursor:pointer;user-select:none
   }
-  .pill.active{box-shadow:0 0 0 2px var(--accent) inset; background: #151a24}
-  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-  .tile{padding:14px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer}
+  .pill.active{box-shadow:0 0 0 2px var(--accent) inset;background:#151a24}
+  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .tile{padding:14px;border-radius:14px;background:#0f1218;border:1px dashed #2a3142;color:#c4cbda;cursor:pointer}
   .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
-  .meta{font-size:.9em; color:#93a0b8}
+  .meta{font-size:.9em;color:#93a0b8}
 
   /* Pricing */
-  .plan{display:grid; gap:10px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
-  .plan .head{display:flex; justify-content:space-between; align-items:center}
-  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;
-    color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
+  .plan{display:grid;gap:10px;padding:18px;border-radius:16px;background:#11141b;box-shadow:0 0 0 1px #1c2130 inset}
+  .plan .head{display:flex;justify-content:space-between;align-items:center}
+  .badge{border-radius:999px;padding:6px 10px;font:700 12px/1 ui-sans-serif;letter-spacing:.7px;color:#0c1017;background:color-mix(in srgb,var(--accent),#fff 20%);box-shadow:0 0 0 1px #2b2110 inset}
   .price{font:800 34px/1.1 ui-sans-serif}
   .plan ul{margin:0 0 4px 18px}
-  .plan .row{display:flex; gap:10px}
+  .plan .row{display:flex;gap:10px}
   .plan .btn{flex:1}
   .plan .ghost{background:#0f141d;color:#d7dbea}
 
-  /* Footer/contact */
+  /* Contact */
   form{display:grid;gap:10px}
-  input,textarea{
-    width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)
-  }
-  textarea{min-height:130px; resize:vertical}
+  input,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #22283a;background:#0e1218;color:var(--ink)}
+  textarea{min-height:130px;resize:vertical}
 
   /* Modal */
-  dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,90vw)}
+  dialog{border:0;border-radius:16px;background:#0f1219;color:var(--ink);padding:0;width:min(680px,90vw)}
   dialog::backdrop{background:rgba(0,0,0,.6)}
   .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
   .modalBody{padding:18px}
   .x{background:#141926}
 
-  /* Border style preview */
-  .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
-  .none .card, .none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
+  /* Border preview helpers */
+  .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent),#000 40%) inset}
+  .none  .card, .none  .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
 
-  /* Utility */
   .muted{color:var(--soft)}
 </style>
 </head>
@@ -139,13 +149,10 @@
 <header>
   <div class="bar wrap">
     <div class="brand">
-      <div class="logo" aria-label="Brand">
-        <!-- Put your mp4 logo at assets/videos/logo.mp4 (fallback to img) -->
-        <video id="logoVid" muted autoplay loop playsinline></video>
-      </div>
+      <div class="logo" aria-label="Brand"><video id="logoVid" muted autoplay loop playsinline></video></div>
       <div>
-        <h1 id="hello">Good day — THEGRID</h1>
-        <small>Black & Gold</small>
+        <h1 class="hello" id="hello">Good day — THEGRID</h1>
+        <div class="sub">Black & Gold</div>
       </div>
     </div>
     <div class="spacer"></div>
@@ -155,12 +162,12 @@
 </header>
 
 <main class="wrap">
-  <!-- HERO -->
+  <!-- HERO (clickable slot) -->
   <section class="card">
     <h2 id="heroTitle">Black & Gold</h2>
     <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    <div id="hero" class="heroFrame" aria-label="Hero media">
-      <!-- filled by JS -->
+    <div id="hero" class="heroFrame" data-slot="Hero" aria-label="Hero media">
+      <span class="slotTag">Hero slot • tap to change</span>
     </div>
     <div class="ctaRow">
       <a href="#library" class="btn">Open Library</a>
@@ -190,7 +197,6 @@
           <button class="btn ghost details">Details</button>
         </div>
       </article>
-
       <article class="plan" data-tier="silver">
         <div class="head"><div class="price">£29<span class="muted">/mo</span></div><span class="badge">SILVER</span></div>
         <ul><li>Everything in Basic</li><li>Advanced effects</li><li>Priority support</li></ul>
@@ -199,7 +205,6 @@
           <button class="btn ghost details">Details</button>
         </div>
       </article>
-
       <article class="plan" data-tier="gold">
         <div class="head"><div class="price">£49<span class="muted">/mo</span></div><span class="badge">GOLD</span></div>
         <ul><li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul>
@@ -208,7 +213,6 @@
           <button class="btn ghost details">Details</button>
         </div>
       </article>
-
       <article class="plan" data-tier="diamond">
         <div class="head"><div class="price">£99<span class="muted">/mo</span></div><span class="badge">DIAMOND</span></div>
         <ul><li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li></ul>
@@ -218,7 +222,6 @@
         </div>
       </article>
     </div>
-
     <p class="meta" style="margin-top:10px">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
   </section>
 
@@ -245,6 +248,7 @@
   </section>
 
   <!-- CONTACT -->
+  
   <section class="card">
     <h2>Contact</h2>
     <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
@@ -259,8 +263,8 @@
     </form>
   </section>
 </main>
-
-<!-- DETAILS MODAL -->
+<!-- PART 1 END -->
+  <!-- DETAILS MODAL -->
 <dialog id="planModal">
   <div class="modalHead">
     <strong id="mTitle">Plan details</strong>
@@ -274,33 +278,44 @@
   <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
   <div class="modalBody">
     <div class="grid" style="grid-template-columns:1fr 1fr">
+      <!-- Colors -->
       <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="20" style="width:100%"></label>
+      <label>Secondary accent<br><input id="uiAccent2" type="color" value="#9ec5ff" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Text color<br><input id="uiInk" type="color" value="#E9ECF3" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Soft text<br><input id="uiSoft" type="color" value="#B9C0CF" style="width:100%;height:42px;border:0;background:transparent"></label>
 
-      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
+      <label>Card surface<br><input id="uiCard" type="color" value="#11131A" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Panel surface<br><input id="uiPanel" type="color" value="#0F1219" style="width:100%;height:42px;border:0;background:transparent"></label>
+
+      <label>Background A<br><input id="uiBg1" type="color" value="#0B0C10" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Background B<br><input id="uiBg2" type="color" value="#0A0B0E" style="width:100%;height:42px;border:0;background:transparent"></label>
+
+      <!-- Spacing / chrome -->
+      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="18" style="width:100%"></label>
+      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="22" style="width:100%"></label>
       <label>Border style<br>
         <select id="uiBorder" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
           <option value="glow">Glow</option><option value="solid">Solid</option><option value="none">None</option>
+        </select>
+      </label>
+      <label>Vignette<br>
+        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="1">On</option><option value="0">Off</option>
         </select>
       </label>
 
       <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
       <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
 
-      <label>Vignette<br>
-        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-          <option value="1">On</option><option value="0">Off</option>
-        </select>
-      </label>
-      <label>Hero source<br>
-        <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
-      </label>
+      <!-- Sources -->
+      <label>Logo source<br><select id="uiLogo" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select></label>
+      <label>Hero source<br><select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select></label>
     </div>
 
-    <h3 style="margin-top:16px">Confetti</h3>
+    <h3 style="margin:16px 0 8px">Confetti</h3>
     <div class="grid" style="grid-template-columns:1fr 1fr">
-      <label>Density<br><input id="uiConfettiDensity" type="range" min="5" max="80" value="22" style="width:100%"></label>
-      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.3" max="2" step=".05" value="1" style="width:100%"></label>
+      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="120" value="40" style="width:100%"></label>
+      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.5" max="2" step=".05" value="1" style="width:100%"></label>
     </div>
 
     <div class="ctaRow" style="margin-top:16px">
@@ -314,24 +329,34 @@
 <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
 
 <script>
-/* ---------- Helpers & State ---------- */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => [...document.querySelectorAll(sel)];
+/* ========== Helpers & State ========== */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const css = (k,v) => document.documentElement.style.setProperty(k,v);
+const readCSS = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+
 const state = {
-  accent: getCSS('--accent'),
-  ring: +getCSS('--ring'),
-  radius: parseInt(getCSS('--radius')),
+  accent: readCSS('--accent'),
+  accent2: readCSS('--accent-2'),
+  bg1: readCSS('--bg-1'),
+  bg2: readCSS('--bg-2'),
+  ink: readCSS('--ink'),
+  soft: readCSS('--soft'),
+  card: readCSS('--card'),
+  panel: readCSS('--panel'),
+  ring: +readCSS('--ring'),
+  radius: parseInt(readCSS('--radius')),
   border: 'glow',
-  font: +getCSS('--fontScale'),
-  space: +getCSS('--space'),
-  vignette: +getCSS('--vignette'),
+  font: +readCSS('--fontScale'),
+  space: +readCSS('--space'),
+  vignette: +readCSS('--vignette'),
   heroSrc: 'assets/videos/hero_1.mp4',
-  confetti: {density:22, speed:1},
+  logoSrc: 'assets/videos/logo.mp4',
+  confetti: {density:40, speed:1},
   library: { Hero:[], 'Reels 9:16':[], 'Reels 16:9':[], Backgrounds:[], Logos:[], Images:[] }
 };
-function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() }
-function setCSS(v,val){ document.documentElement.style.setProperty(v,val) }
-function save(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)) }
+
+function save(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)); }
 function load(){
   const s = JSON.parse(localStorage.getItem('thegrid.settings')||'null');
   if(!s) return;
@@ -339,7 +364,7 @@ function load(){
   applyState();
 }
 
-/* ---------- Greeting & logo ---------- */
+/* ========== Greeting + Logo ========== */
 (function greeting(){
   const h = new Date().getHours();
   const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
@@ -347,104 +372,108 @@ function load(){
 })();
 (function logo(){
   const v = $('#logoVid');
-  v.src = 'assets/videos/logo.mp4';
-  v.onerror = () => { v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/logo.png',alt:'Logo'})); };
+  v.src = state.logoSrc;
+  v.onerror = ()=> v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/logo.png',alt:'Logo'}));
 })();
 
-/* ---------- Hero ---------- */
-function setHero(src){
-  state.heroSrc = src; save(); renderHero();
-}
+/* ========== HERO Slot ========== */
 function renderHero(){
-  const box = $('#hero'); box.innerHTML = '';
-  if(/\.(mp4|webm|mov)$/i.test(state.heroSrc)){
-    const v = Object.assign(document.createElement('video'), {src:state.heroSrc, controls:true, playsInline:true});
-    box.appendChild(v);
+  const box = $('#hero'); box.onclick = ()=>activateTabFor('Hero');
+  box.innerHTML = '';
+  const src = state.heroSrc;
+  if(/\.(mp4|webm|mov)$/i.test(src)){
+    box.appendChild(Object.assign(document.createElement('video'), {src,controls:true,playsInline:true}));
   }else{
-    const i = Object.assign(document.createElement('img'), {src:state.heroSrc, alt:'hero'});
-    box.appendChild(i);
+    box.appendChild(Object.assign(document.createElement('img'), {src,alt:'hero'}));
   }
 }
 
-/* ---------- Library (reads manifest if present) ---------- */
-const defaultManifest = {
+/* ========== Library (manifest-driven) ========== */
+const fallbackManifest = {
   "Hero":["assets/videos/hero_1.mp4","assets/videos/interaction_1.mp4","assets/videos/pour_1.mp4","assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"],
   "Reels 9:16":[],
   "Reels 16:9":[],
-  "Backgrounds":[],
+  "Backgrounds":["assets/images/bg_01.jpg","assets/images/bg_02.jpg"],
   "Logos":["assets/videos/logo.mp4","assets/images/logo.png"],
   "Images":["assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"]
 };
-async function loadManifest(){
+async function fetchManifest(){
   try{
-    const res = await fetch('assets/manifest.json',{cache:'no-store'});
-    if(res.ok){ Object.assign(state.library, await res.json()); }
-    else { Object.assign(state.library, defaultManifest); }
-  }catch{ Object.assign(state.library, defaultManifest); }
-  buildLibrary();
-  populateHeroSelect();
+    const r = await fetch('assets/manifest.json',{cache:'no-store'});
+    if(r.ok) Object.assign(state.library, await r.json());
+    else Object.assign(state.library, fallbackManifest);
+  }catch{ Object.assign(state.library, fallbackManifest); }
+  buildLibrary(); fillSourceSelects();
 }
 function buildLibrary(){
-  const tabs = $('#libTabs'); tabs.innerHTML='';
-  const grid = $('#libGrid'); grid.innerHTML='';
+  const tabs = $('#libTabs'); const grid = $('#libGrid');
+  tabs.innerHTML = ''; grid.innerHTML = '';
   const cats = Object.keys(state.library);
-  let active = localStorage.getItem('thegrid.activeTab') || cats[0];
+  const active = localStorage.getItem('thegrid.activeTab') || cats[0];
   cats.forEach(cat=>{
-    const b = Object.assign(document.createElement('div'),{className:'pill'+(cat===active?' active':''),textContent:cat});
-    b.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
-    tabs.appendChild(b);
+    const pill = Object.assign(document.createElement('div'),{className:'pill'+(active===cat?' active':''),textContent:cat});
+    pill.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
+    tabs.appendChild(pill);
   });
   state.library[active].forEach(src=>{
     const t = Object.assign(document.createElement('div'),{className:'tile',innerHTML:`<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`});
-    t.onclick=()=>setHero(src);
+    t.onclick = ()=>{
+      // If picking for a known slot, set hero when category fits
+      if(active==='Hero' || /\.(mp4|webm|mov|jpg|jpeg|png|gif)$/i.test(src)) { state.heroSrc=src; save(); renderHero(); }
+      // Also update selects for convenience
+      $('#uiHero').value = state.heroSrc;
+    };
     grid.appendChild(t);
   });
 }
-function populateHeroSelect(){
-  const sel = $('#uiHero'); sel.innerHTML='';
+function activateTabFor(cat){ localStorage.setItem('thegrid.activeTab',cat); location.hash='#library'; buildLibrary(); }
+function fillSourceSelects(){
   const all = [...new Set(Object.values(state.library).flat())];
-  all.forEach(src=>{
-    const o = new Option(src, src, src===state.heroSrc, src===state.heroSrc);
-    sel.add(o);
-  });
+  const fill = (sel,val)=>{ sel.innerHTML=''; all.forEach(src=> sel.add(new Option(src,src,src===val,src===val))); };
+  fill($('#uiHero'), state.heroSrc);
+  fill($('#uiLogo'), state.logoSrc);
 }
 
-/* ---------- Customize Panel ---------- */
-$('#btnCustomize').onclick = ()=>panel.showModal();
+/* ========== Customize Panel bindings ========== */
+$('#btnCustomize').onclick = ()=> panel.showModal();
 $('#save').onclick = ()=>{ save(); alert('Saved to this device.'); };
-$('#reset').onclick = ()=>{
-  localStorage.removeItem('thegrid.settings'); location.reload();
-};
-$('#uiAccent').oninput = e=>{ state.accent=e.target.value; setCSS('--accent',state.accent); save() };
-$('#uiRing').oninput = e=>{ state.ring=+e.target.value; setCSS('--ring',state.ring); save() };
-$('#uiRadius').oninput = e=>{ state.radius=+e.target.value; setCSS('--radius', state.radius+'px'); save() };
-$('#uiFont').oninput = e=>{ state.font=+e.target.value; setCSS('--fontScale', state.font); save() };
-$('#uiSpace').oninput = e=>{ state.space=+e.target.value; setCSS('--space', state.space); save() };
-$('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save() };
-$('#uiVignette').oninput = e=>{ state.vignette=+e.target.value; setCSS('--vignette', state.vignette); save() };
-$('#uiHero').oninput = e=> setHero(e.target.value);
+$('#reset').onclick = ()=>{ localStorage.removeItem('thegrid.settings'); location.reload(); };
 
-function applyState(){
-  setCSS('--accent', state.accent);
-  setCSS('--ring', state.ring);
-  setCSS('--radius', state.radius+'px');
-  setCSS('--fontScale', state.font);
-  setCSS('--space', state.space);
-  setCSS('--vignette', state.vignette);
+const bind = (id, key, fn=val=>val)=>{ const el=$(id); el.oninput=e=>{ state[key]=fn(e.target.value); applyState(true); save(); }; };
+bind('#uiAccent',  'accent');        bind('#uiAccent2','accent2');
+bind('#uiInk',     'ink');           bind('#uiSoft',   'soft');
+bind('#uiCard',    'card');          bind('#uiPanel',  'panel');
+bind('#uiBg1',     'bg1');           bind('#uiBg2',    'bg2');
+bind('#uiRing',    'ring',   v=>+v); bind('#uiRadius','radius',v=>+v);
+bind('#uiFont',    'font',   v=>+v); bind('#uiSpace', 'space', v=>+v);
+bind('#uiVignette','vignette',v=>+v);
+$('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save(); };
+
+$('#uiHero').oninput = e=>{ state.heroSrc=e.target.value; renderHero(); save(); };
+$('#uiLogo').oninput = e=>{ state.logoSrc=e.target.value; const v=$('#logoVid'); if(v.tagName==='VIDEO'){ v.src=state.logoSrc; } save(); };
+
+function applyState(skipSelects=false){
+  css('--accent', state.accent); css('--accent-2', state.accent2);
+  css('--ink', state.ink); css('--soft', state.soft);
+  css('--card', state.card); css('--panel', state.panel);
+  css('--bg-1', state.bg1); css('--bg-2', state.bg2);
+  css('--ring', state.ring); css('--radius', state.radius+'px');
+  css('--fontScale', state.font); css('--space', state.space);
+  css('--vignette', state.vignette);
   document.body.classList.add(state.border);
   renderHero();
-
-  // fill UI controls to match
-  $('#uiAccent').value = state.accent;
-  $('#uiRing').value = state.ring;
-  $('#uiRadius').value = state.radius;
-  $('#uiFont').value = state.font;
-  $('#uiSpace').value = state.space;
-  $('#uiBorder').value = state.border;
-  $('#uiVignette').value = state.vignette;
+  if(!skipSelects){
+    $('#uiAccent').value=state.accent; $('#uiAccent2').value=state.accent2;
+    $('#uiInk').value=state.ink; $('#uiSoft').value=state.soft;
+    $('#uiCard').value=state.card; $('#uiPanel').value=state.panel;
+    $('#uiBg1').value=state.bg1; $('#uiBg2').value=state.bg2;
+    $('#uiRing').value=state.ring; $('#uiRadius').value=state.radius;
+    $('#uiFont').value=state.font; $('#uiSpace').value=state.space;
+    $('#uiVignette').value=state.vignette; $('#uiBorder').value=state.border;
+  }
 }
 
-/* ---------- Pricing: Details + Confetti ---------- */
+/* ========== Plan Details + Confetti ========== */
 const DETAILS = {
   basic:`<ul><li>Starter templates to get online today</li><li>Access to the media library & updates</li><li>Support via email within 48h</li></ul>`,
   silver:`<ul><li>Everything in Basic</li><li>Advanced visual effects & presets</li><li>Priority support within 24h</li></ul>`,
@@ -463,62 +492,49 @@ $$('.details').forEach(b=>{
 $$('.choose').forEach(b=>{
   b.onclick = e=>{
     const card = e.currentTarget.closest('.plan');
-    confettiBurst(card);
-    // Scroll into view of the clicked card to preview confetti nicely
     card.scrollIntoView({behavior:'smooth', block:'center'});
+    confettiBurst(card);
   };
 });
 
-/* ---------- Confetti (left + right, small tasteful) ---------- */
+/* ========== Confetti (tasteful, both sides) ========== */
 const canvas = $('#fx'), ctx = canvas.getContext('2d'); let W,H, parts=[];
 function size(){ W=canvas.width=innerWidth*devicePixelRatio; H=canvas.height=innerHeight*devicePixelRatio; }
 addEventListener('resize', size); size();
 function confettiBurst(el){
-  const r = el.getBoundingClientRect();
-  const originY = (r.top + r.height*0.25) * devicePixelRatio;
-  const leftX  = (r.left - 10) * devicePixelRatio;
-  const rightX = (r.right + 10) * devicePixelRatio;
-  const n = state.confetti.density|0;
-  const s = +state.confetti.speed;
-  const colors = [state.accent,'#fff','#c9d2e8','#9ec5ff'];
-  for(let i=0;i<n;i++){
-    parts.push(drop(leftX, originY,  1, s, colors));
-    parts.push(drop(rightX,originY, -1, s, colors));
-  }
+  const r = el.getBoundingClientRect(); const y = (r.top + r.height*0.3) * devicePixelRatio;
+  const l = (r.left - 6) * devicePixelRatio; const rt = (r.right + 6) * devicePixelRatio;
+  const n = state.confetti.density|0; const s = +state.confetti.speed;
+  const colors = [state.accent, state.accent2, '#ffffff', '#cbd4ea'];
+  for(let i=0;i<n;i++){ parts.push(drop(l,y, 1,s,colors)); parts.push(drop(rt,y,-1,s,colors)); }
 }
 function drop(x,y,dir,s,colors){
-  const sz = 3 + Math.random()*6;
-  return {
-    x, y, vx: (1.5+Math.random()*1.5)*dir*s, vy:(-2 - Math.random()*2)*s,
-    g: .08*s, r: Math.random()*Math.PI, w:sz, h:sz*.6, life: 120+Math.random()*40, c: colors[(Math.random()*colors.length)|0]
-  }
+  const w = 4 + Math.random()*7, h = w*(.6 + Math.random()*.5);
+  return {x,y, vx:(1.6+Math.random()*1.7)*dir*s, vy:(-3 - Math.random()*2)*s,
+          g:.09*s, r:Math.random()*Math.PI, w,h, life:140+Math.random()*60, c:colors[(Math.random()*colors.length)|0]};
 }
-function tick(){
+(function loop(){
   ctx.clearRect(0,0,W,H);
   parts = parts.filter(p=>p.life>0);
-  parts.forEach(p=>{
-    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .12;
-    p.life--;
+  for(const p of parts){
+    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .12; p.life--;
     ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-    ctx.fillStyle = p.c; ctx.globalAlpha = Math.max(0, p.life/160);
-    ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ctx.globalAlpha = Math.max(0, p.life/200);
+    ctx.fillStyle = p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
     ctx.restore();
-  });
-    requestAnimationFrame(tick);
-}
-tick();
+  }
+  requestAnimationFrame(loop);
+})();
 
-/* ---------- Join Now (scroll to plans) ---------- */
-$('#btnJoin').onclick = ()=>$('#plans').scrollIntoView({behavior:'smooth'});
+/* ========== Init ========== */
+load(); fetchManifest(); renderHero();
 
-/* ---------- Boot ---------- */
-applyState();         // apply saved CSS vars & border style
-loadManifest();       // build Library (manifest.json if present)
-load();               // restore saved UI choices (localStorage)
+/* Click hero to jump to the right tab */
+$('#hero').addEventListener('click', ()=>activateTabFor('Hero'));
 
-/* ---------- Confetti tuning from panel ---------- */
-$('#uiConfettiDensity').oninput = e=>{ state.confetti.density = +e.target.value; save(); };
-$('#uiConfettiSpeed').oninput   = e=>{ state.confetti.speed   = +e.target.value; save(); };
+/* Join button placeholder */
+$('#btnJoin').addEventListener('click', ()=>{ location.hash='#plans'; });
+
 </script>
 </body>
 </html>
