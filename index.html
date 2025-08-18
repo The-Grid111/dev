@@ -1,432 +1,281 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE GRID</title>
-  <style>
-    :root {
-      --accent: #d4af37;
-      --accent2: #6ca0ff;
-      --ink: #ffffff;
-      --soft: #a0a0a0;
-      --card: #111111;
-      --panel: #1a1a1a;
-      --bgA: #000000;
-      --bgB: #0a0a0a;
-      --ring: 40;
-      --radius: 16px;
-      --fontScale: 1;
-      --space: 1;
-      --vignette: 1;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>THEGRID — Black & Gold</title>
+<meta name="theme-color" content="#0b0b0f"/>
+<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
 
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: linear-gradient(180deg,var(--bgA),var(--bgB));
-      color: var(--ink);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-    }
+<style>
+  :root{
+    /* Theme tokens – adjustable from the Customize panel */
+    --accent:#E7B84B;
+    --accent2:#9AB6FF;     /* secondary accent for subtle UI bits */
+    --ink:#E9ECF3;         /* text */
+    --soft:#B9C0CF;        /* muted text */
+    --bg:#0B0C10;          /* page background */
+    --panel:#101218;       /* header/panel */
+    --card:#11131A;        /* card background */
+    --ring: 24;            /* border glow 0–100 */
+    --radius:20px;         /* card radius */
+    --fontScale:1;         /* 0.9–1.2 */
+    --space:1;             /* 0.9–1.2 */
+    --borderStyle: glow;   /* none | solid | glow */
+    --vignette: 1;         /* 0 off / 1 on */
+  }
 
-    header {
-      text-align: center;
-      padding: 4rem 1rem 2rem;
-    }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font: 400 calc(18px*var(--fontScale))/1.6 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--ink);
+    background:var(--bg);
+    letter-spacing:.2px;
+    --pad: calc(14px * var(--space));
+  }
 
-    header h1 {
-      font-size: calc(2rem * var(--fontScale));
-      margin: 0;
-      color: var(--accent);
-    }
+  /* Subtle page vignette */
+  .vignette:before{
+    content:""; position:fixed; inset:0; pointer-events:none;
+    background:
+      radial-gradient(1200px 600px at 50% -180px, #0000 30%, rgba(231,184,75,.18) 55%, #0000 70%),
+      radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
+      radial-gradient(1200px 600px at -220px 50%, #0000 30%, rgba(154,182,255,.10) 55%, #0000 70%),
+      radial-gradient(1200px 600px at calc(100% + 220px) 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%);
+    opacity: calc(.55 * var(--vignette));
+  }
 
-    header p {
-      color: var(--soft);
-      max-width: 600px;
-      margin: 1rem auto 0;
-    }
+  .wrap{max-width:980px;margin-inline:auto;padding:22px}
 
-    .plans {
-      display: grid;
-      gap: 2rem;
-      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
-      padding: 2rem;
-      max-width: 1200px;
-      width: 100%;
-    }
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:saturate(1.2) blur(10px);
+    background:color-mix(in srgb, var(--bg) 78%, #000 22%);
+    border-bottom:1px solid #151822;
+  }
+  .bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
+  .brand{display:flex;gap:12px;align-items:center; min-width:0}
+  .logo{
+    width:44px; height:44px; border-radius:12px; overflow:hidden;
+    background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 20px rgba(231,184,75,.15);
+  }
+  .logo video,.logo img{width:100%;height:100%;object-fit:cover; display:block}
+  .brand h1{font:800 20px/1.2 inherit; margin:0; letter-spacing:.5px}
+  .brand small{display:block; color:var(--soft); font-size:.8em}
+  .spacer{flex:1}
 
-    .plan {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 2rem;
-      position: relative;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      border: 1px solid rgba(212,175,55,0.25);
-    }
+  .btn{
+    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit;
+    background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset;
+    transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
+    cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 10%) 0%, var(--accent) 100%);
+    color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
+  }
+  .btn.ghost{background:#0f141d;color:#d7dbea}
 
-    .plan h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: var(--accent);
-    }
+  /* Sections / cards */
+  section{margin:28px 0}
+  .card{
+    background:linear-gradient(180deg, color-mix(in srgb, var(--card), #000 0%), color-mix(in srgb, var(--card), #000 6%));
+    border-radius:var(--radius);
+    padding:calc(var(--pad)*1.2);
+    position:relative;
+    box-shadow:
+      0 0 0 1px #1b2130 inset,
+      0 8px 40px rgba(0,0,0,.45),
+      0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
+  }
+  h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 8px}
+  .lede{color:var(--soft); margin:0 0 18px}
 
-    .price {
-      font-size: 1.8rem;
-      margin: 1rem 0;
-      font-weight: bold;
-    }
+  /* Hero (single, not duplicated) */
+  .hero{
+    display:grid; gap:12px;
+  }
+  .heroFrame{aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px); background:#0d1016;
+    display:grid; place-items:center; box-shadow:0 0 0 2px #202636 inset; border: 1px dashed #2a3142;
+  }
+  .heroFrame video,.heroFrame img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+  .ctaRow{display:flex; gap:12px; margin-top:6px; flex-wrap:wrap}
 
-    .badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--accent);
-      color: #000;
-      padding: 0.2rem 0.6rem;
-      font-size: 0.8rem;
-      border-radius: 12px;
-    }
+  /* Library */
+  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+  .pill{
+    padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
+    box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none;
+  }
+  .pill.active{box-shadow:0 0 0 2px var(--accent) inset; background: #151a24}
+  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .tile{padding:14px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer}
+  .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
+  .meta{font-size:.9em; color:#93a0b8}
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 1rem 0;
-      text-align: left;
-    }
+  /* Plans */
+  .plan{display:grid; gap:10px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
+  .plan .head{display:flex; justify-content:space-between; align-items:center}
+  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;
+    color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
+  .price{font:800 34px/1.1 ui-sans-serif}
+  .plan ul{margin:0 0 4px 18px}
+  .plan .row{display:flex; gap:10px}
+  .compareBtn{display:block; margin:16px auto 0; padding:12px 18px}
 
-    ul li {
-      margin: 0.4rem 0;
-    }
+  /* Contact */
+  form{display:grid;gap:10px}
+  input,textarea{
+    width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)
+  }
+  textarea{min-height:130px; resize:vertical}
 
-    .btn {
-      display: inline-block;
-      margin: 0.4rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+  /* Modal base */
+  dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,90vw)}
+  dialog::backdrop{background:rgba(0,0,0,.6); backdrop-filter: blur(2px);} /* Stronger backdrop so content doesn’t distract */
+  .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
+  .modalBody{padding:18px}
+  .x{background:#141926}
 
-    .btn.primary {
-      background: var(--accent);
-      color: #000;
-    }
-    .btn.secondary {
-      background: #333;
-      color: var(--ink);
-    }
-    .btn:hover { opacity: 0.85; }
+  /* Border style preview */
+  .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
+  .none .card, .none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
 
-    dialog {
-      background: var(--panel);
-      border: none;
-      border-radius: 12px;
-      max-width: 420px;
-      padding: 2rem;
-      color: var(--ink);
-    }
-
-    dialog::backdrop { background: rgba(0,0,0,0.8); }
-    #fx { position: fixed; inset:0; pointer-events:none; z-index:10; }
-  </style>
+  .muted{color:var(--soft)}
+</style>
 </head>
-<body>
-  <header>
-    <h1>THE GRID</h1>
-    <p>Create, customize, and grow — with a system built for TikTok creators and beyond.</p>
-  </header>
 
-  <main class="plans">
-    <div class="plan" data-tier="basic">
-      <span class="badge">BASIC</span>
-      <h2>Basic</h2>
-      <div class="price">£9/mo</div>
-      <ul>
-        <li>Starter templates</li>
-        <li>Library access</li>
-        <li>Email support (48h)</li>
-      </ul>
-      <button class="btn primary choose">Choose</button>
-      <button class="btn secondary details">Details</button>
+<body class="vignette" id="app">
+<header>
+  <div class="bar wrap">
+    <div class="brand">
+      <div class="logo" aria-label="Brand">
+        <!-- Provide mp4 at assets/videos/logo.mp4 (fallback to img) -->
+        <video id="logoVid" muted autoplay loop playsinline></video>
+      </div>
+      <div>
+        <h1 id="hello">Good day — THEGRID</h1>
+        <small>Black & Gold</small>
+      </div>
     </div>
-
-    <div class="plan" data-tier="silver">
-      <span class="badge">SILVER</span>
-      <h2>Silver</h2>
-      <div class="price">£29/mo</div>
-      <ul>
-        <li>Everything in Basic</li>
-        <li>Advanced effects</li>
-        <li>Priority support (24h)</li>
-      </ul>
-      <button class="btn primary choose">Choose</button>
-      <button class="btn secondary details">Details</button>
-    </div>
-
-    <div class="plan" data-tier="gold">
-      <span class="badge">GOLD</span>
-      <h2>Gold</h2>
-      <div class="price">£49/mo</div>
-      <ul>
-        <li>Everything in Silver</li>
-        <li>Customization session</li>
-        <li>Admin toolkit</li>
-      </ul>
-      <button class="btn primary choose">Choose</button>
-      <button class="btn secondary details">Details</button>
-    </div>
-
-    <div class="plan" data-tier="diamond">
-      <span class="badge">DIAMOND</span>
-      <h2>Diamond</h2>
-      <div class="price">£99/mo</div>
-      <ul>
-        <li>Everything in Gold</li>
-        <li>Custom pipelines & integrations</li>
-        <li>Priority roadmap</li>
-      </ul>
-      <button class="btn primary choose">Choose</button>
-      <button class="btn secondary details">Details</button>
-    </div>
-  </main>
-
-  <div style="margin:2rem;">
-    <button class="btn secondary" id="btnCompare">Compare Plans</button>
+    <div class="spacer"></div>
+    <button id="btnCustomize" class="btn">Customize</button>
+    <button class="btn primary" id="btnJoin">Join Now</button>
   </div>
+</header>
 
-  <dialog id="planModal">
-    <h2 id="mTitle"></h2>
-    <div id="mBody"></div>
-    <div style="text-align:right;margin-top:1rem">
-      <button class="btn secondary" onclick="planModal.close()">Close</button>
+<main class="wrap">
+  <!-- HERO (single) -->
+  <section class="card hero">
+    <div>
+      <h2 id="heroTitle">Black & Gold</h2>
+      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
     </div>
-  </dialog>
+    <div id="hero" class="heroFrame" aria-label="Hero media"><!-- filled by JS --></div>
+    <div class="ctaRow">
+      <a href="#library" class="btn">Open Library</a>
+      <a href="#plans" class="btn primary">See Pricing</a>
+    </div>
+  </section>
 
-  <canvas id="fx"></canvas>
-  <script>
-    const $=s=>document.querySelector(s);
-    const $$=s=>document.querySelectorAll(s);
+  <!-- LIBRARY -->
+  <section id="library" class="card">
+    <h2>Library</h2>
+    <p class="lede">Tap a tile to set media. Drop files into <b>assets/videos</b> or <b>assets/images</b>. Optional: add <b>assets/manifest.json</b> to list more.</p>
+    <div class="tabs" id="libTabs"></div>
+    <div class="grid" id="libGrid" aria-live="polite"></div>
+    <p class="meta">Tip: name files clearly (e.g. <i>hero_1.mp4</i>, <i>reel_9x16_a.mp4</i>). The list auto-loads from your <b>assets/manifest.json</b> when present.</p>
+  </section>
 
-    /* Settings + state */
-    let state=JSON.parse(localStorage.getItem('thegrid.settings')||'{}');
-    state=Object.assign({
-      accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
-      accent2:getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim(),
-      ink:getComputedStyle(document.documentElement).getPropertyValue('--ink').trim(),
-      soft:getComputedStyle(document.documentElement).getPropertyValue('--soft').trim(),
-      card:getComputedStyle(document.documentElement).getPropertyValue('--card').trim(),
-      panel:getComputedStyle(document.documentElement).getPropertyValue('--panel').trim(),
-      bgA:getComputedStyle(document.documentElement).getPropertyValue('--bgA').trim(),
-      bgB:getComputedStyle(document.documentElement).getPropertyValue('--bgB').trim(),
-      ring:40, radius:16, font:1, space:1, border:"glow", vignette:1,
-      heroSrc:"assets/images/bg_01.jpg", logoSrc:"assets/videos/hero_2.mp4",
-      confetti:{density:40,speed:3}
-    }, state);
-
-    function save(){ localStorage.setItem('thegrid.settings',JSON.stringify(state)); }
-    function setCSS(k,v){ document.documentElement.style.setProperty(k,v); }
-
-    function renderHero(){
-      let hero=document.querySelector('.hero');
-      if(!hero){
-        hero=document.createElement('div');
-        hero.className='hero';
-        document.body.prepend(hero);
-      }
-      hero.style.backgroundImage=`url(${state.heroSrc})`;
-    }
-        /* ---------- apply theme from state ---------- */
-    function applyTheme(){
-      setCSS('--accent', state.accent);
-      setCSS('--accent2', state.accent2);
-      setCSS('--ink', state.ink);
-      setCSS('--soft', state.soft);
-      setCSS('--card', state.card);
-      setCSS('--panel', state.panel);
-      setCSS('--bgA', state.bgA);
-      setCSS('--bgB', state.bgB);
-      setCSS('--radius', state.radius+'px');
-      setCSS('--fontScale', state.font);
-      setCSS('--space', state.space);
-    }
-
-    /* ---------- greeting (header tagline) ---------- */
-    (function greet(){
-      const h = new Date().getHours();
-      const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-      document.querySelector('header h1').innerText = `${word} — THE GRID`;
-    })();
-
-    applyTheme();
-    renderHero();
-
-    /* ===================== Plan details ===================== */
-    const DETAILS = {
-      basic: `
-        <p><strong>Who it’s for:</strong> creators getting started, or teams who want a clean base fast.</p>
-        <p><strong>What you get</strong></p>
-        <ul>
-          <li>Starter site templates and blocks</li>
-          <li>Access to the media library (videos, images, logos)</li>
-          <li>Email support within 48h</li>
-          <li>7-day refund guarantee</li>
-        </ul>
-        <p class="muted">Upgrade any time. Keep your settings — no rebuilds.</p>
-      `,
-      silver: `
-        <p><strong>Who it’s for:</strong> growing creators who need polish and time-saving effects.</p>
-        <p><strong>What you get</strong></p>
-        <ul>
-          <li>Everything in Basic</li>
-          <li>Advanced effects & presets (hero/video polish, borders, glow, timing)</li>
-          <li>Priority support within 24h</li>
-          <li>Monthly improvement suggestions</li>
-        </ul>
-      `,
-      gold: `
-        <p><strong>Who it’s for:</strong> brands that want a tailored look with admin tools.</p>
-        <p><strong>What you get</strong></p>
-        <ul>
-          <li>Everything in Silver</li>
-          <li>Hands-on customization session (we set it up with you)</li>
-          <li>Admin toolkit (theme controls, asset manifest helpers)</li>
-          <li>Onboarding call (45 min)</li>
-        </ul>
-      `,
-      diamond: `
-        <p><strong>Who it’s for:</strong> teams that want integrations and fast turnarounds.</p>
-        <p><strong>What you get</strong></p>
-        <ul>
-          <li>Everything in Gold</li>
-          <li>Custom pipelines & integrations (analytics, forms, automations)</li>
-          <li>Hands-on help building your stack</li>
-          <li>Priority turnaround & roadmap planning</li>
-        </ul>
-      `
-    };
-
-    $$('.details').forEach(btn=>{
-      btn.addEventListener('click', e=>{
-        const card = e.currentTarget.closest('.plan');
-        const tier = card.dataset.tier;
-        $('#mTitle').textContent = `${tier.toUpperCase()} plan`;
-        $('#mBody').innerHTML = DETAILS[tier] +
-          `<div style="margin-top:1rem;text-align:right">
-             <button class="btn primary" onclick="planModal.close()">Sounds good</button>
-           </div>`;
-        $('#planModal').showModal();
-      });
-    });
-
-    /* ===================== Compare modal ===================== */
-    $('#btnCompare').addEventListener('click', ()=>{
-      $('#mTitle').textContent = 'Compare plans';
-      $('#mBody').innerHTML = `
-        <div style="overflow:auto">
-          <table style="width:100%;border-collapse:collapse">
-            <thead>
-              <tr>
-                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Feature</th>
-                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Basic</th>
-                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Silver</th>
-                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Gold</th>
-                <th style="text-align:left;padding:.6rem;border-bottom:1px solid #333">Diamond</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${[
-                ['Starter templates','✓','✓','✓','✓'],
-                ['Media library access','✓','✓','✓','✓'],
-                ['Priority support','–','24h','24h','Same-day'],
-                ['Advanced effects','–','✓','✓','✓'],
-                ['Customization session','–','–','✓','✓'],
-                ['Admin toolkit','–','–','✓','✓'],
-                ['Integrations & pipelines','–','–','–','✓']
-              ].map(row=>`
-                <tr>
-                  ${row.map((cell,i)=>`
-                    <td style="padding:.6rem;border-bottom:1px solid #222;${i? 'color:#ddd':'color:#bbb'}">${cell}</td>
-                  `).join('')}
-                </tr>`).join('')}
-            </tbody>
-          </table>
+  <!-- PLANS -->
+  <section id="plans" class="card">
+    <h2>Plans</h2>
+    <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
+    <div class="grid">
+      <article class="plan" data-tier="basic">
+        <div class="head"><div><h3 style="margin:0">Basic</h3></div><span class="badge">BASIC</span></div>
+        <div class="price">£9<span class="muted">/mo</span></div>
+        <ul><li>Starter templates</li><li>Library access</li><li>Email support (48h)</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
         </div>
-      `;
-      $('#planModal').showModal();
-    });
+      </article>
 
-    /* ===================== Confetti (left + right) ===================== */
-    const cvs = $('#fx'), ctx = cvs.getContext('2d');
-    let W=0,H=0, parts=[];
-    function size(){
-      const dpr = Math.max(1, window.devicePixelRatio||1);
-      W = cvs.width = innerWidth * dpr;
-      H = cvs.height = innerHeight * dpr;
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-    size(); addEventListener('resize', size);
+      <article class="plan" data-tier="silver">
+        <div class="head"><div><h3 style="margin:0">Silver</h3></div><span class="badge">SILVER</span></div>
+        <div class="price">£29<span class="muted">/mo</span></div>
+        <ul><li>Everything in Basic</li><li>Advanced effects</li><li>Priority support (24h)</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
+        </div>
+      </article>
 
-    function addConfetti(el){
-      const rect = el.getBoundingClientRect();
-      const originY = rect.top + rect.height*0.4;
-      const leftX   = rect.left - 8;
-      const rightX  = rect.right + 8;
-      const n = Math.max(12, state.confetti.density|0);
-      const s = Math.max(1, state.confetti.speed|0);
+      <article class="plan" data-tier="gold">
+        <div class="head"><div><h3 style="margin:0">Gold</h3></div><span class="badge">GOLD</span></div>
+        <div class="price">£49<span class="muted">/mo</span></div>
+        <ul><li>Everything in Silver</li><li>Customization session</li><li>Admin toolkit</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
+        </div>
+      </article>
 
-      const palette = [getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
-                       '#ffffff','#9fb3ff','#cdd4e6'];
+      <article class="plan" data-tier="diamond">
+        <div class="head"><div><h3 style="margin:0">Diamond</h3></div><span class="badge">DIAMOND</span></div>
+        <div class="price">£99<span class="muted">/mo</span></div>
+        <ul><li>Custom pipelines & integrations</li><li>Hands-on help</li><li>Priority roadmap</li></ul>
+        <div class="row">
+          <button class="btn primary choose">Choose</button>
+          <button class="btn ghost details">Details</button>
+        </div>
+      </article>
+    </div>
 
-      for(let i=0;i<n;i++){
-        parts.push(makePiece(leftX, originY,  1, s, palette));
-        parts.push(makePiece(rightX,originY, -1, s, palette));
-      }
-    }
+    <button class="btn ghost compareBtn" id="btnCompare">Compare Plans</button>
+  </section>
 
-    function makePiece(x,y,dir,s,colors){
-      const shape = Math.random()<.5 ? 'rect':'tri';
-      const size = 6 + Math.random()*8;
-      return {
-        x, y, vx:(1.2+Math.random()*1.6)*dir*s, vy:(-2.5-Math.random()*2.5)*s,
-        g:.12*s, a:1, r:Math.random()*Math.PI, w:size, h:size*.7,
-        c: colors[(Math.random()*colors.length)|0], life: 140+Math.random()*40, shape
-      };
-    }
+  <!-- À-la-carte -->
+  <section class="card">
+    <h2>À-la-carte Services</h2>
+    <div class="grid">
+      <article class="plan">
+        <div class="head"><h3 style="margin:0">Setup</h3><span class="badge">SETUP</span></div>
+        <div class="price" style="font-size:28px">£39</div>
+        <ul><li>Deploy & connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
+        <button class="btn primary">Start Setup</button>
+      </article>
+      <article class="plan">
+        <div class="head"><h3 style="margin:0">Reels</h3><span class="badge">REELS</span></div>
+        <div class="price" style="font-size:28px">£59</div>
+        <ul><li>3 niche reels</li><li>Captions & cuts</li><li>IG/TikTok ready</li></ul>
+        <button class="btn primary">Order Pack</button>
+      </article>
+      <article class="plan">
+        <div class="head"><h3 style="margin:0">Templates</h3><span class="badge">TEMPLATES</span></div>
+        <div class="price" style="font-size:28px">£29</div>
+        <ul><li>5 premium blocks</li><li>Copy-paste ready</li><li>Lifetime updates</li></ul>
+        <button class="btn primary">Get Pack</button>
+      </article>
+    </div>
+  </section>
 
-    function tick(){
-      ctx.clearRect(0,0,innerWidth,innerHeight);
-      parts = parts.filter(p=>p.life>0);
-      parts.forEach(p=>{
-        p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .12; p.life--; p.a = Math.max(0, p.life/180);
-        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a; ctx.fillStyle = p.c;
-        if(p.shape==='tri'){
-          ctx.beginPath();
-          ctx.moveTo(0,-p.h/2); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(-p.w/2,p.h/2); ctx.closePath(); ctx.fill();
-        } else {
-          ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-        }
-        ctx.restore();
-      });
-      requestAnimationFrame(tick);
-    }
-    tick();
-
-    $$('.choose').forEach(btn=>{
-      btn.addEventListener('click', e=>{
-        const card = e.currentTarget.closest('.plan');
-        addConfetti(card);
-        // here you can wire your checkout / link
-        // location.href = 'https://your-checkout.example/' + card.dataset.tier;
-      });
-    });
-
-  </script>
-</body>
-</html>
+  <!-- CONTACT -->
+  <section class="card">
+    <h2>Contact</h2>
+    <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <input placeholder="Your name" required>
+        <input type="email" placeholder="you@example.com" required>
+      </div>
+      <input placeholder="How can we help?">
+      <textarea placeholder="Write your message…"></textarea>
+      <button class="btn primary" style="width:180px">Send</button>
+      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
+    </form>
+  </section>
