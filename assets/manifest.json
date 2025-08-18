@@ -1,6 +1,26 @@
-{
-  "Hero": ["assets/videos/hero_2.mp4"],
-  "Reels 9:16": ["assets/videos/reel9x16_a.mp4","assets/videos/reel9x16_b.mp4"],
-  "Backgrounds": ["assets/images/bg_01.jpg","assets/images/bg_02.jpg"],
-  "Logos": ["assets/images/logo_alt.svg"]
-}
+[
+  {
+    "file": "hero_1.mp4",
+    "label": "Hero Intro"
+  },
+  {
+    "file": "hero_2.mp4",
+    "label": "Logo Reveal"
+  },
+  {
+    "file": "reel_sample.mp4",
+    "label": "Cinematic Reel"
+  },
+  {
+    "file": "demo_1.jpg",
+    "label": "Grid Concept Art"
+  },
+  {
+    "file": "demo_2.jpg",
+    "label": "UI Mockup"
+  },
+  {
+    "file": "bg_01.jpg",
+    "label": "Background Texture"
+  }
+]
