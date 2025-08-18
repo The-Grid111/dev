@@ -1,207 +1,358 @@
-// Helpers
-const $ = (q, el=document)=>el.querySelector(q);
-const $$ = (q, el=document)=>[...el.querySelectorAll(q)];
+/* =========================================================
+   THE GRID — single controller that loads JSON content
+   Files: assets/data/site.json, plans.json, services.json,
+          assets/manifest.json (media library)
+   ========================================================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const get = async (url) => (await fetch(url, {cache:"no-store"})).json();
+const setCSS = (v,val)=>document.documentElement.style.setProperty(v,val);
+const getCSS = (v)=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
 const state = {
-  heroMode: localStorage.getItem('heroMode') || 'auto',
-  reelSet: localStorage.getItem('reelSet') || 'auto',
-  theme: JSON.parse(localStorage.getItem('theme')||'{}')
+  site:null, plans:[], services:[],
+  library:{}, heroSrc:null,
+  confetti:{density:44, speed:1.1}
 };
 
-function greet(){
+/* -------------------- boot -------------------- */
+window.addEventListener('DOMContentLoaded', init);
+
+async function init(){
+  await loadData();
+  applyTheme();
+  buildHeader();
+  renderHero();
+  await buildLibrary();
+  buildPlans();
+  buildServices();
+  wireCustomizePanel();
+  bgFX();
+  confettiFX(); // idle but only fires on Choose clicks
+}
+
+/* -------------------- data -------------------- */
+async function loadData(){
+  state.site = await get('assets/data/site.json');
+  // manifest can live at assets/manifest.json (preferred); if missing, fallback
+  try { state.library = await get('assets/manifest.json'); }
+  catch { state.library = defaultManifest(); }
+  try { state.plans = await get('assets/data/plans.json'); } catch { state.plans = []; }
+  try { state.services = await get('assets/data/services.json'); } catch { state.services = []; }
+  state.heroSrc = state.site?.defaultHero || 'assets/videos/hero_1.mp4';
+}
+
+function defaultManifest(){
+  return {
+    "Hero":[
+      "assets/videos/hero_1.mp4",
+      "assets/videos/interaction_1.mp4",
+      "assets/videos/pour_1.mp4",
+      "assets/images/hero_1.jpg",
+      "assets/images/hero_2.jpg",
+      "assets/images/hero_3.jpg"
+    ],
+    "Reels 9:16":[],
+    "Reels 16:9":[
+      "assets/videos/hero_1.mp4",
+      "assets/videos/natural_1.mp4",
+      "assets/videos/spread_1.mp4",
+      "assets/videos/transform_1.mp4"
+    ],
+    "Backgrounds":[
+      "assets/images/grid_natural_1.jpg",
+      "assets/images/grid_spread_1.jpg",
+      "assets/images/grid_transform_1.jpg"
+    ],
+    "Logos":[
+      "assets/videos/gc_spin.mp4",
+      "assets/images/gc_logo.png"
+    ],
+    "Images":[
+      "assets/images/hero_1.jpg",
+      "assets/images/hero_2.jpg",
+      "assets/images/hero_3.jpg",
+      "assets/images/grid_interaction_1.jpg",
+      "assets/images/grid_pour_1.jpg"
+    ]
+  };
+}
+
+/* -------------------- theme + header -------------------- */
+function applyTheme(){
+  const t = state.site?.theme || {};
+  setCSS('--accent', t.accent || getCSS('--accent'));
+  setCSS('--accent-2', t.accent2 || getCSS('--accent-2'));
+  setCSS('--ink', t.ink || getCSS('--ink'));
+  setCSS('--soft', t.soft || getCSS('--soft'));
+  setCSS('--bg-a', t.bgA || getCSS('--bg-a'));
+  setCSS('--bg-b', t.bgB || getCSS('--bg-b'));
+  setCSS('--panel', t.panel || getCSS('--panel'));
+  setCSS('--card', t.card || getCSS('--card'));
+  setCSS('--ring', t.ring ?? getCSS('--ring') || 24);
+  setCSS('--radius', (t.radius ?? 20) + 'px');
+  setCSS('--fontScale', t.fontScale ?? 1);
+  setCSS('--space', t.space ?? 1);
+  setCSS('--vignette', t.vignette ?? 1);
+}
+
+function buildHeader(){
+  // greeting
   const h = new Date().getHours();
-  const t = h<12 ? 'Good morning' : h<18 ? 'Good afternoon' : 'Good evening';
-  $('#greet').textContent = `${t} — THEGRID`;
-  $('#year').textContent = new Date().getFullYear();
+  const word = h<12 ? 'Good morning' : h<18 ? 'Good afternoon' : 'Good evening';
+  $('#hello').textContent = `${word} — ${state.site?.brand || 'THE GRID'}`;
+  // logo video with fallback image
+  const v = $('#logoVid');
+  if(!v) return;
+  v.src = state.site?.logoVideo || 'assets/videos/gc_spin.mp4';
+  v.onerror = () => {
+    const img = document.createElement('img');
+    img.src = state.site?.logoFallback || 'assets/images/gc_logo.png';
+    img.alt = 'Logo';
+    v.replaceWith(img);
+  };
+  // join now anchor
+  const j = $('#btnJoin');
+  if (j && state.site?.joinHref) j.href = state.site.joinHref;
 }
-greet();
 
-// Confetti (no freeze)
-const confettiCanvas = $('#confetti');
-const ctx = confettiCanvas.getContext('2d');
-let confettiBits = [], confettiTimer = null;
-function sizeCanvas(){
-  confettiCanvas.width = innerWidth * devicePixelRatio;
-  confettiCanvas.height = innerHeight * devicePixelRatio;
+/* -------------------- hero -------------------- */
+function setHero(src){ state.heroSrc = src; renderHero(); }
+function renderHero(){
+  const box = $('#hero'); if(!box) return;
+  box.innerHTML = '<div class="heroOverlay"></div>';
+  const isVideo = /\.(mp4|webm|mov)$/i.test(state.heroSrc || '');
+  const node = document.createElement(isVideo ? 'video' : 'img');
+  if(isVideo){
+    Object.assign(node, {src:state.heroSrc, controls:true, playsInline:true, className:'hero-media'});
+  }else{
+    Object.assign(node, {src:state.heroSrc, alt:'hero', className:'hero-media'});
+  }
+  box.prepend(node);
+  $('#heroTitle').textContent = state.site?.heroTitle || 'Black & Gold';
+  const lede = $('.lede'); if(lede) lede.textContent = state.site?.heroLede || lede.textContent;
 }
-addEventListener('resize', sizeCanvas); sizeCanvas();
 
-function shootConfetti({count=160, spread=60, power=9}={}){
-  const w = confettiCanvas.width, h = confettiCanvas.height;
-  for(let i=0;i<count;i++){
-    confettiBits.push({
-      x: w/2, y: h*0.18,
-      vx: (Math.random()-0.5)*spread,
-      vy: -Math.random()*power - 6,
-      r: Math.random()*6+2,
-      life: Math.random()*90+60,
-      color: i%3 ? '#e6c26e' : '#f6e3a4'
+/* -------------------- library -------------------- */
+function buildLibrary(){
+  const tabs = $('#libTabs'); const grid = $('#libGrid'); const tagsBar = $('#libTags');
+  if(!tabs || !grid) return;
+  tabs.innerHTML = ''; grid.innerHTML = ''; tagsBar.innerHTML = '';
+
+  const cats = Object.keys(state.library);
+  const active = localStorage.getItem('thegrid.activeTab') || cats[0];
+
+  cats.forEach(cat=>{
+    const b = pill(cat, cat===active);
+    b.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
+    tabs.appendChild(b);
+  });
+
+  const list = state.library[active] || [];
+  // tag cloud
+  const tags = [...new Set(list.flatMap(x=>{
+    const n = x.split('/').pop().toLowerCase();
+    return n.split(/[_\-\.]/g).filter(w=>w.length>2 && !/mp4|jpg|png|jpeg|webm|mov/.test(w));
+  }))].slice(0,6);
+
+  tags.forEach(t=>{
+    const b = pill(t,false); b.style.opacity=.9;
+    b.onclick = ()=> renderGrid(list.filter(x=>x.toLowerCase().includes(t)));
+    tagsBar.appendChild(b);
+  });
+
+  renderGrid(list);
+
+  function pill(txt, active){ const d=document.createElement('div'); d.className='pill'+(active?' active':''); d.textContent=txt; return d; }
+  function renderGrid(items){
+    grid.innerHTML='';
+    items.forEach(src=>{
+      const row = document.createElement('div'); row.className='tile';
+      const th = document.createElement('div'); th.className='thumb';
+      const label = document.createElement('div');
+      label.innerHTML = `<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`;
+      if(/\.(mp4|webm|mov)$/i.test(src)){
+        const v = document.createElement('video'); Object.assign(v,{src,muted:true,loop:true,autoplay:true,playsInline:true});
+        th.appendChild(v);
+      }else{
+        const i = document.createElement('img'); i.src=src; th.appendChild(i);
+      }
+      row.appendChild(th); row.appendChild(label);
+      row.onclick=()=>setHero(src);
+      grid.appendChild(row);
     });
   }
-  if(!confettiTimer){
-    confettiTimer = setInterval(()=> {
-      ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-      confettiBits.forEach(p=>{
-        p.vy += 0.25; p.x += p.vx; p.y += p.vy; p.life--;
-        ctx.fillStyle = p.color;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
-      });
-      confettiBits = confettiBits.filter(p=>p.life>0 && p.y<confettiCanvas.height+12);
-      if(confettiBits.length===0){ clearInterval(confettiTimer); confettiTimer=null; }
-    }, 16);
-  }
 }
 
-// Buttons press + confetti hooks
-function press(btn, makeConfetti=false){
-  btn.addEventListener('click', ()=>{
-    btn.style.filter = 'brightness(1.1)';
-    setTimeout(()=>btn.style.filter='',120);
-    if(makeConfetti) shootConfetti({});
+/* -------------------- plans + modal -------------------- */
+function buildPlans(){
+  const plansWrap = $('#plans .grid'); if(!plansWrap) return;
+  plansWrap.innerHTML = '';
+  state.plans.forEach(p=>{
+    const el = document.createElement('article');
+    el.className = `plan${p.tier==='gold'?' gold':''}${p.tier==='diamond'?' diamond':''}`;
+    el.dataset.tier = p.tier;
+    el.innerHTML = `
+      <div class="head">
+        <div class="price">${p.price.replace('/mo','<span class="muted">/mo</span>')}</div>
+        <span class="badge">${p.badge}</span>
+      </div>
+      <ul>${p.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+      <div class="row">
+        <button class="btn primary choose">Choose</button>
+        <button class="btn ghost details">Details</button>
+      </div>
+    `;
+    plansWrap.appendChild(el);
   });
-}
-press($('#joinBtn'), true);
-press($('#btnNiches'), false);
-press($('#btnReels'), false);
-press($('#btnMonetise'), true);
-press($('#saveView'), true);
 
-// Customize panel open/close
-const customPanel = $('#customPanel');
-$('#openCustomizer').onclick = ()=> customPanel.hidden=false;
-$('#closeCustomizer').onclick = ()=> customPanel.hidden=true;
-
-// Library panel
-const libPanel = $('#libPanel');
-$('#openLib').onclick = ()=> { renderLibrary(); libPanel.hidden=false; };
-$('#closeLib').onclick = ()=> libPanel.hidden=true;
-
-// Hero media handling
-const heroFrame = $('#heroFrame');
-const heroVideoDefault = 'assets/video/gc_spin.mp4';
-const heroImageDefault = 'assets/images/gc_logo.png';
-
-function setHero(mode){
-  state.heroMode = mode || $('#heroSel').value || 'auto';
-  localStorage.setItem('heroMode', state.heroMode);
-  heroFrame.innerHTML = '';
-  const vPath = ($('#heroVideoPath')?.value || heroVideoDefault);
-  const iPath = ($('#heroImagePath')?.value || heroImageDefault);
-
-  if(state.heroMode==='off'){ return; }
-
-  if(state.heroMode==='image'){
-    const img = new Image();
-    img.src = iPath;
-    heroFrame.append(img);
-    return;
-  }
-  // video or auto -> try video, then fallback image
-  const v = document.createElement('video');
-  v.src = vPath; v.autoplay=true; v.muted=true; v.loop=true; v.playsInline=true;
-  v.onerror = ()=>{ const img=new Image(); img.src=iPath; heroFrame.innerHTML=''; heroFrame.append(img); };
-  v.oncanplay = ()=> v.play().catch(()=>{ /* iOS might block; already muted */ });
-  heroFrame.append(v);
-}
-setHero(state.heroMode);
-
-// Controls save
-$('#heroSel').value = state.heroMode;
-$('#reelsSel').value = state.reelSet;
-$('#heroSel').onchange = e=> setHero(e.target.value);
-$('#reelsSel').onchange = e=> { state.reelSet = e.target.value; localStorage.setItem('reelSet', state.reelSet); };
-$('#saveView').onclick = ()=> shootConfetti({count:200,power:10});
-
-// Theme customization
-function applyThemeToDocument(t){
-  if(t.bg) document.documentElement.style.setProperty('--bg', t.bg);
-  if(t.gold) document.documentElement.style.setProperty('--gold', t.gold);
-  document.body.style.background = (t.pattern==='off')
-    ? '#0b0d0f'
-    : 'radial-gradient(1000px 500px at 20% -10%, rgba(246,203,92,.08), transparent 50%) ,#0b0d0f';
-  $$('.card').forEach(c=>{
-    c.style.borderRadius = (t.radius ?? 20)+'px';
-    c.style.borderColor = (t.borderStyle==='hard') ? '#313743' : '#232833';
+  // wire buttons
+  $$('.choose').forEach(btn=>{
+    btn.onclick = (e)=>{ blastConfetti(e.clientX, e.clientY); };
   });
-}
-function loadTheme(){
-  if(Object.keys(state.theme).length){
-    applyThemeToDocument(state.theme);
-    // also hydrate inputs if present
-    $('#bgColor')?.setAttribute('value', state.theme.bg || '#0b0d0f');
-    $('#goldColor')?.setAttribute('value', state.theme.gold || '#e6c26e');
-    $('#patternSel')?.value = state.theme.pattern || 'on';
-    $('#radius')?.setAttribute('value', state.theme.radius ?? 20);
-    $('#borderStyle')?.value = state.theme.borderStyle || 'soft';
-    $('#heroVideoPath')?.setAttribute('value', state.theme.heroVideo || heroVideoDefault);
-    $('#heroImagePath')?.setAttribute('value', state.theme.heroImage || heroImageDefault);
-  }
-}
-loadTheme();
-
-$('#applyTheme').onclick = ()=>{
-  const t = {
-    bg: $('#bgColor').value,
-    gold: $('#goldColor').value,
-    pattern: $('#patternSel').value,
-    radius: +$('#radius').value,
-    borderStyle: $('#borderStyle').value,
-    heroVideo: $('#heroVideoPath').value.trim(),
-    heroImage: $('#heroImagePath').value.trim()
-  };
-  state.theme = t; applyThemeToDocument(t); setHero(state.heroMode);
-  shootConfetti({count:120});
-};
-$('#saveTheme').onclick = ()=>{
-  localStorage.setItem('theme', JSON.stringify(state.theme));
-  shootConfetti({count:160, power:8});
-};
-
-// Library (attempt to load known names; missing ones are filtered)
-const imageCandidates = [
-  'assets/images/gc_logo.png',
-  'assets/images/hero_1.jpg','assets/images/hero_2.jpg','assets/images/hero_3.jpg',
-  'assets/images/grid_interaction_1.jpg','assets/images/grid_natural_1.jpg',
-  'assets/images/grid_pour_1.jpg','assets/images/grid_spread_1.jpg','assets/images/grid_transform_1.jpg'
-];
-const videoCandidates = [
-  'assets/video/gc_spin.mp4','assets/video/hero_1.mp4',
-  'assets/video/interaction_1.mp4','assets/video/natural_1.mp4',
-  'assets/video/pour_1.mp4','assets/video/spread_1.mp4','assets/video/transform_1.mp4'
-];
-
-async function urlExists(url){
-  try{
-    const res = await fetch(url, {method:'HEAD', cache:'no-store'});
-    return res.ok;
-  }catch{ return false; }
-}
-
-async function renderLibrary(){
-  const grid = $('#libGrid'); grid.innerHTML='';
-  const addThumb = (el, path, kind)=>{
-    const wrap = document.createElement('button');
-    wrap.className='thumb'; wrap.title=path; wrap.style.aspectRatio='1/1';
-    wrap.appendChild(el);
-    wrap.onclick = ()=>{
-      if(kind==='video'){ $('#heroVideoPath').value = path; $('#heroSel').value='video'; }
-      else { $('#heroImagePath').value = path; $('#heroSel').value='image'; }
-      setHero($('#heroSel').value);
-      shootConfetti({count:90,power:7});
+  $$('.details').forEach(btn=>{
+    btn.onclick = (e)=>{
+      const tier = e.target.closest('.plan').dataset.tier;
+      openPlanModal(tier);
     };
-    grid.appendChild(wrap);
+  });
+}
+
+function openPlanModal(tier){
+  const data = state.plans.find(p=>p.tier===tier); if(!data) return;
+  $('#mTitle').textContent = `${data.badge} plan`;
+  $('#mBody').innerHTML = `
+    <h3>Who it’s for</h3>
+    <p class="muted">${data.modal.who}</p>
+    <h3>What you get</h3>
+    <ul>${data.modal.gets.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <div class="ctaRow"><button class="btn primary">Sounds good</button></div>
+  `;
+  planModal.showModal();
+}
+
+/* -------------------- services -------------------- */
+function buildServices(){
+  // find the À-la-carte section grid (3rd card section). If not found, skip.
+  const sections = $$('main > section.card');
+  const svcSection = sections[3] || sections.find(s=>s.querySelector('h2')?.textContent?.includes('À-la-carte'));
+  if(!svcSection) return;
+  const grid = svcSection.querySelector('.grid'); if(!grid) return;
+  grid.innerHTML='';
+  state.services.forEach(s=>{
+    const el = document.createElement('article');
+    el.className='plan';
+    el.innerHTML = `
+      <div class="head"><div class="price" style="font-size:28px">${s.price}</div><span class="badge">${s.badge}</span></div>
+      <ul>${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+      <button class="btn primary">${s.cta}</button>
+    `;
+    grid.appendChild(el);
+  });
+}
+
+/* -------------------- customize panel bindings -------------------- */
+function wireCustomizePanel(){
+  const p = $('#panel'); if(!p) return;
+
+  const bind = (id, cssVar, transform = (v)=>v)=>{
+    const el = $('#'+id); if(!el) return;
+    const apply = v=> setCSS(cssVar, transform(v));
+    el.oninput = e=> apply(e.target.value);
+    // set initial UI if present in site.theme
+    const t = state.site?.theme || {};
+    if(id==='uiRadius' && t.radius!=null) el.value = t.radius;
+    if(id==='uiRing' && t.ring!=null) el.value = t.ring;
   };
-  // videos
-  for(const v of videoCandidates){
-    if(await urlExists(v)){
-      const vid = document.createElement('video');
-      vid.src=v; vid.muted=true; vid.loop=true; vid.playsInline=true; vid.autoplay=true;
-      addThumb(vid, v, 'video');
-    }
+
+  $('#btnCustomize')?.addEventListener('click', ()=> p.showModal());
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('thegrid.settings'); location.reload(); });
+
+  bind('uiAccent','--accent');
+  bind('uiAccent2','--accent-2');
+  bind('uiInk','--ink');
+  bind('uiSoft','--soft');
+  bind('uiCard','--card');
+  bind('uiPanel','--panel');
+  bind('uiBgA','--bg-a');
+  bind('uiBgB','--bg-b');
+  bind('uiRing','--ring', v=>v);
+  bind('uiRadius','--radius', v=>v+'px');
+  bind('uiFont','--fontScale');
+  bind('uiSpace','--space');
+  const vg = $('#uiVignette'); if(vg){ vg.oninput = e=> setCSS('--vignette', e.target.value); }
+  const heroSel = $('#uiHero');
+  if(heroSel){
+    const all = [...new Set(Object.values(state.library).flat())];
+    all.forEach(src=> heroSel.add(new Option(src, src, src===state.heroSrc, src===state.heroSrc)));
+    heroSel.oninput = e=> setHero(e.target.value);
   }
-  // images
-  for(const i of imageCandidates){
-    if(await urlExists(i)){
-      const img = new Image(); img.src=i; addThumb(img, i, 'image');
-    }
+}
+
+/* -------------------- FX: background + confetti -------------------- */
+function bgFX(){
+  const grad = $('#bgGrad'), g = grad.getContext('2d');
+  const part = $('#bgParticles'), q = part.getContext('2d');
+  let W,H,t=0, dots=[];
+  function size(){
+    W=grad.width=innerWidth*devicePixelRatio; H=grad.height=innerHeight*devicePixelRatio;
+    part.width=W; part.height=H;
+    dots = Array.from({length:Math.min(70, Math.round(innerWidth/14))}, ()=>({
+      x:Math.random()*W, y:Math.random()*H, r:1+Math.random()*2.5, vx:(Math.random()-.5)*.2, vy:(Math.random()-.5)*.2, a:.08+Math.random()*.12
+    }));
   }
+  function tick(){
+    t+=.0025;
+    const x = Math.sin(t)*W*0.2 + W*0.5;
+    const y = Math.cos(t*1.2)*H*0.2 + H*0.5;
+    const grd = g.createRadialGradient(x,y,0, W/2,H/2, Math.hypot(W,H)/1.2);
+    grd.addColorStop(0, getCSS('--bg-a')); grd.addColorStop(1, getCSS('--bg-b'));
+    g.fillStyle = grd; g.fillRect(0,0,W,H);
+
+    q.clearRect(0,0,W,H);
+    dots.forEach(d=>{
+      d.x+=d.vx; d.y+=d.vy;
+      if(d.x<0||d.x>W) d.vx*=-1; if(d.y<0||d.y>H) d.vy*=-1;
+      q.beginPath(); q.fillStyle = `rgba(231,184,75,${d.a})`; q.arc(d.x,d.y,d.r,0,6.283); q.fill();
+    });
+    requestAnimationFrame(tick);
+  }
+  addEventListener('resize', size); size(); tick();
+}
+
+function confettiFX(){
+  const fx = $('#fx'); const ctx = fx.getContext('2d');
+  function size(){ fx.width=innerWidth*devicePixelRatio; fx.height=innerHeight*devicePixelRatio; }
+  addEventListener('resize', size); size();
+
+  let pieces = [];
+  function step(){
+    ctx.clearRect(0,0,fx.width,fx.height);
+    pieces.forEach(p=>{
+      p.y += p.vy; p.x += p.vx; p.r += 0.08;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s);
+      ctx.restore();
+    });
+    pieces = pieces.filter(p=>p.y < fx.height + 40);
+    requestAnimationFrame(step);
+  }
+  step();
+
+  // public trigger
+  window.blastConfetti = (x,y)=>{
+    const dpr = devicePixelRatio||1;
+    const n = 70; // tighter than before
+    for(let i=0;i<n;i++){
+      pieces.push({
+        x: x*dpr + (Math.random()*40-20),
+        y: y*dpr + (Math.random()*20-10),
+        vx: (Math.random()*2-1)*2,
+        vy: (Math.random()*1.5+1),
+        s: Math.random()*8+4,
+        r: Math.random()*6.28,
+        c: ['#E7B84B','#d7dbea','#95B2FF','#ffffff'][Math.floor(Math.random()*4)]
+      });
+    }
+  };
 }
