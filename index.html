@@ -6,155 +6,127 @@
 <title>THEGRID — Black & Gold</title>
 <meta name="theme-color" content="#0b0b0f"/>
 <link rel="preload" href="assets/videos/hero_1.mp4" as="video">
-
 <style>
   :root{
-    /* Theme tokens – adjustable from the Customize panel */
     --accent:#E7B84B;
-    --accent2:#9AB6FF;     /* secondary accent for subtle UI bits */
-    --ink:#E9ECF3;         /* text */
-    --soft:#B9C0CF;        /* muted text */
-    --bg:#0B0C10;          /* page background */
-    --panel:#101218;       /* header/panel */
-    --card:#11131A;        /* card background */
-    --ring: 24;            /* border glow 0–100 */
-    --radius:20px;         /* card radius */
-    --fontScale:1;         /* 0.9–1.2 */
-    --space:1;             /* 0.9–1.2 */
-    --borderStyle: glow;   /* none | solid | glow */
-    --vignette: 1;         /* 0 off / 1 on */
+    --accent2:#9bb7ff;
+    --panel:#101218;
+    --card:#12141b;
+    --ink:#e9ecf3;
+    --soft:#b9c0cf;
+    --ring: 22;          /* border glow 0–100 */
+    --radius:20px;
+    --fontScale:1;       /* 0.9–1.2 */
+    --space:1;           /* 0.9–1.2 */
+    --borderStyle: glow; /* none | solid | glow */
+    --vignette: 1;       /* 0 off / 1 on */
   }
-
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;
-    font: 400 calc(18px*var(--fontScale))/1.6 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    color:var(--ink);
-    background:var(--bg);
-    letter-spacing:.2px;
-    --pad: calc(14px * var(--space));
+    margin:0; font: 400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--ink); background:#0b0c10;
+    letter-spacing:.2px; --pad: calc(14px * var(--space));
   }
 
-  /* Subtle page vignette */
+  /* ------- Background layer ------- */
+  #bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#07080b}
+  #bgVid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.26;filter:blur(6px) saturate(1.1) brightness(.6);display:none}
+  body.has-gradient #bg{background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(231,184,75,.12), transparent 60%),
+    radial-gradient(1200px 800px at 85% 110%, rgba(231,184,75,.10), transparent 60%),
+    linear-gradient(180deg, #0b0c11 0%, #0a0b0f 100%)}
+  body.has-pattern #bg:after{
+    content:""; position:absolute; inset:0; opacity:.12; pointer-events:none;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.08) 1px, transparent 1px);
+    background-size:22px 22px; filter:contrast(120%)
+  }
+  #bgDust{position:absolute;inset:0;opacity:.14}
+
   .vignette:before{
     content:""; position:fixed; inset:0; pointer-events:none;
     background:
-      radial-gradient(1200px 600px at 50% -180px, #0000 30%, rgba(231,184,75,.18) 55%, #0000 70%),
+      radial-gradient(1200px 600px at 50% -200px, #0000 30%, rgba(231,184,75,.18) 55%, #0000 70%),
       radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
-      radial-gradient(1200px 600px at -220px 50%, #0000 30%, rgba(154,182,255,.10) 55%, #0000 70%),
-      radial-gradient(1200px 600px at calc(100% + 220px) 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%);
+      radial-gradient(1200px 600px at -200px 50%, #0000 30%, rgba(231,184,75,.12) 55%, #0000 70%),
+      radial-gradient(1200px 600px at calc(100% + 200px) 50%, #0000 30%, rgba(231,184,75,.12) 55%, #0000 70%);
     opacity: calc(.55 * var(--vignette));
   }
 
-  .wrap{max-width:980px;margin-inline:auto;padding:22px}
-
-  /* Header */
+  .wrap{max-width:980px;margin-inline:auto;padding:24px}
   header{
-    position:sticky; top:0; z-index:50;
-    backdrop-filter:saturate(1.2) blur(10px);
-    background:color-mix(in srgb, var(--bg) 78%, #000 22%);
-    border-bottom:1px solid #151822;
+    position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(10px);
+    background:color-mix(in srgb, #0b0c10 78%, #000 22%); border-bottom:1px solid #151822;
   }
-  .bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
+  .bar{display:flex;align-items:center;gap:14px; padding:16px 22px}
   .brand{display:flex;gap:12px;align-items:center; min-width:0}
-  .logo{
-    width:44px; height:44px; border-radius:12px; overflow:hidden;
-    background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 20px rgba(231,184,75,.15);
-  }
+  .logo{width:44px; height:44px; border-radius:12px; overflow:hidden; background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 20px rgba(231,184,75,.15); position:relative}
   .logo video,.logo img{width:100%;height:100%;object-fit:cover; display:block}
-  .brand h1{font:800 20px/1.2 inherit; margin:0; letter-spacing:.5px}
-  .brand small{display:block; color:var(--soft); font-size:.8em}
+  .brand h1{font:800 22px/1.2 inherit; margin:0; letter-spacing:.2px}
+  .brand small{display:block; color:var(--soft); font-size:.82em}
   .spacer{flex:1}
-
-  .btn{
-    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit;
-    background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset;
-    transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
-    cursor:pointer;
-  }
+  .btn{appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit; background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset; transition:transform .12s ease, box-shadow .2s ease, background .2s ease; cursor:pointer}
   .btn:hover{transform:translateY(-1px)}
-  .btn.primary{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 10%) 0%, var(--accent) 100%);
-    color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
-  }
-  .btn.ghost{background:#0f141d;color:#d7dbea}
+  .btn.primary{background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%); color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset}
 
-  /* Sections / cards */
   section{margin:28px 0}
-  .card{
-    background:linear-gradient(180deg, color-mix(in srgb, var(--card), #000 0%), color-mix(in srgb, var(--card), #000 6%));
-    border-radius:var(--radius);
-    padding:calc(var(--pad)*1.2);
-    position:relative;
-    box-shadow:
-      0 0 0 1px #1b2130 inset,
-      0 8px 40px rgba(0,0,0,.45),
-      0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
-  }
+  .card{background:linear-gradient(180deg, #151925, #0F1219); border-radius:var(--radius); padding:calc(var(--pad)*1.2); position:relative; box-shadow: 0 0 0 1px #1b2130 inset, 0 8px 40px rgba(0,0,0,.45), 0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%)}
   h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 8px}
   .lede{color:var(--soft); margin:0 0 18px}
 
-  /* Hero (single, not duplicated) */
-  .hero{
-    display:grid; gap:12px;
-  }
-  .heroFrame{aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px); background:#0d1016;
-    display:grid; place-items:center; box-shadow:0 0 0 2px #202636 inset; border: 1px dashed #2a3142;
-  }
+  /* Hero */
+  .heroFrame{aspect-ratio:16/9; border-radius:calc(var(--radius) - 6px); background:#0d1016; display:grid; place-items:center; box-shadow:0 0 0 2px #202636 inset; border: 1px dashed #2a3142}
   .heroFrame video,.heroFrame img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
-  .ctaRow{display:flex; gap:12px; margin-top:6px; flex-wrap:wrap}
+  .ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
+  .ctaRow .btn{padding:12px 18px}
 
   /* Library */
   .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px}
-  .pill{
-    padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
-    box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none;
-  }
+  .pill{padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink); box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none}
   .pill.active{box-shadow:0 0 0 2px var(--accent) inset; background: #151a24}
   .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
   .tile{padding:14px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer}
   .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
+  .tile.is-active{box-shadow:0 0 0 2px var(--accent) inset, 0 8px 24px rgba(0,0,0,.4)}
   .meta{font-size:.9em; color:#93a0b8}
 
-  /* Plans */
+  /* Pricing */
   .plan{display:grid; gap:10px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
   .plan .head{display:flex; justify-content:space-between; align-items:center}
-  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;
-    color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
+  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
   .price{font:800 34px/1.1 ui-sans-serif}
   .plan ul{margin:0 0 4px 18px}
   .plan .row{display:flex; gap:10px}
-  .compareBtn{display:block; margin:16px auto 0; padding:12px 18px}
+  .plan .btn{flex:1}
+  .plan .ghost{background:#0f141d;color:#d7dbea}
 
-  /* Contact */
   form{display:grid;gap:10px}
-  input,textarea{
-    width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)
-  }
+  input,textarea{width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)}
   textarea{min-height:130px; resize:vertical}
 
-  /* Modal base */
   dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,90vw)}
-  dialog::backdrop{background:rgba(0,0,0,.6); backdrop-filter: blur(2px);} /* Stronger backdrop so content doesn’t distract */
+  dialog::backdrop{background:rgba(0,0,0,.6)}
   .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
   .modalBody{padding:18px}
   .x{background:#141926}
 
-  /* Border style preview */
   .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
   .none .card, .none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
-
   .muted{color:var(--soft)}
 </style>
 </head>
+<body class="vignette has-gradient" id="app">
 
-<body class="vignette" id="app">
+<!-- Background -->
+<div id="bg" aria-hidden="true">
+  <video id="bgVid" muted loop playsinline></video>
+  <canvas id="bgDust"></canvas>
+</div>
+
 <header>
   <div class="bar wrap">
     <div class="brand">
       <div class="logo" aria-label="Brand">
-        <!-- Provide mp4 at assets/videos/logo.mp4 (fallback to img) -->
         <video id="logoVid" muted autoplay loop playsinline></video>
       </div>
       <div>
@@ -169,13 +141,11 @@
 </header>
 
 <main class="wrap">
-  <!-- HERO (single) -->
-  <section class="card hero">
-    <div>
-      <h2 id="heroTitle">Black & Gold</h2>
-      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    </div>
-    <div id="hero" class="heroFrame" aria-label="Hero media"><!-- filled by JS --></div>
+  <!-- HERO -->
+  <section class="card">
+    <h2 id="heroTitle">Black & Gold</h2>
+    <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+    <div id="hero" class="heroFrame" aria-label="Hero media"></div>
     <div class="ctaRow">
       <a href="#library" class="btn">Open Library</a>
       <a href="#plans" class="btn primary">See Pricing</a>
@@ -188,7 +158,7 @@
     <p class="lede">Tap a tile to set media. Drop files into <b>assets/videos</b> or <b>assets/images</b>. Optional: add <b>assets/manifest.json</b> to list more.</p>
     <div class="tabs" id="libTabs"></div>
     <div class="grid" id="libGrid" aria-live="polite"></div>
-    <p class="meta">Tip: name files clearly (e.g. <i>hero_1.mp4</i>, <i>reel_9x16_a.mp4</i>). The list auto-loads from your <b>assets/manifest.json</b> when present.</p>
+    <p class="meta">Tip: name files clearly (e.g. <i>hero_1.mp4</i>, <i>reel_9x16_a.mp4</i>). The list auto-loads from <b>assets/manifest.json</b> when present.</p>
   </section>
 
   <!-- PLANS -->
@@ -197,8 +167,7 @@
     <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
     <div class="grid">
       <article class="plan" data-tier="basic">
-        <div class="head"><div><h3 style="margin:0">Basic</h3></div><span class="badge">BASIC</span></div>
-        <div class="price">£9<span class="muted">/mo</span></div>
+        <div class="head"><div class="price">£9<span class="muted">/mo</span></div><span class="badge">BASIC</span></div>
         <ul><li>Starter templates</li><li>Library access</li><li>Email support (48h)</li></ul>
         <div class="row">
           <button class="btn primary choose">Choose</button>
@@ -207,8 +176,7 @@
       </article>
 
       <article class="plan" data-tier="silver">
-        <div class="head"><div><h3 style="margin:0">Silver</h3></div><span class="badge">SILVER</span></div>
-        <div class="price">£29<span class="muted">/mo</span></div>
+        <div class="head"><div class="price">£29<span class="muted">/mo</span></div><span class="badge">SILVER</span></div>
         <ul><li>Everything in Basic</li><li>Advanced effects</li><li>Priority support (24h)</li></ul>
         <div class="row">
           <button class="btn primary choose">Choose</button>
@@ -217,9 +185,8 @@
       </article>
 
       <article class="plan" data-tier="gold">
-        <div class="head"><div><h3 style="margin:0">Gold</h3></div><span class="badge">GOLD</span></div>
-        <div class="price">£49<span class="muted">/mo</span></div>
-        <ul><li>Everything in Silver</li><li>Customization session</li><li>Admin toolkit</li></ul>
+        <div class="head"><div class="price">£49<span class="muted">/mo</span></div><span class="badge">GOLD</span></div>
+        <ul><li>Full customization</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul>
         <div class="row">
           <button class="btn primary choose">Choose</button>
           <button class="btn ghost details">Details</button>
@@ -227,9 +194,8 @@
       </article>
 
       <article class="plan" data-tier="diamond">
-        <div class="head"><div><h3 style="margin:0">Diamond</h3></div><span class="badge">DIAMOND</span></div>
-        <div class="price">£99<span class="muted">/mo</span></div>
-        <ul><li>Custom pipelines & integrations</li><li>Hands-on help</li><li>Priority roadmap</li></ul>
+        <div class="head"><div class="price">£99<span class="muted">/mo</span></div><span class="badge">DIAMOND</span></div>
+        <ul><li>Custom pipelines</li><li>Hands-on help</li><li>Priority roadmap</li></ul>
         <div class="row">
           <button class="btn primary choose">Choose</button>
           <button class="btn ghost details">Details</button>
@@ -237,28 +203,24 @@
       </article>
     </div>
 
-    <button class="btn ghost compareBtn" id="btnCompare">Compare Plans</button>
+    <p class="meta" style="margin-top:10px">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
   </section>
-
-  <!-- À-la-carte -->
+    <!-- À-la-carte -->
   <section class="card">
     <h2>À-la-carte Services</h2>
     <div class="grid">
       <article class="plan">
-        <div class="head"><h3 style="margin:0">Setup</h3><span class="badge">SETUP</span></div>
-        <div class="price" style="font-size:28px">£39</div>
+        <div class="head"><div class="price" style="font-size:28px">£39</div><span class="badge">SETUP</span></div>
         <ul><li>Deploy & connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
         <button class="btn primary">Start Setup</button>
       </article>
       <article class="plan">
-        <div class="head"><h3 style="margin:0">Reels</h3><span class="badge">REELS</span></div>
-        <div class="price" style="font-size:28px">£59</div>
+        <div class="head"><div class="price" style="font-size:28px">£59</div><span class="badge">REELS</span></div>
         <ul><li>3 niche reels</li><li>Captions & cuts</li><li>IG/TikTok ready</li></ul>
         <button class="btn primary">Order Pack</button>
       </article>
       <article class="plan">
-        <div class="head"><h3 style="margin:0">Templates</h3><span class="badge">TEMPLATES</span></div>
-        <div class="price" style="font-size:28px">£29</div>
+        <div class="head"><div class="price" style="font-size:28px">£29</div><span class="badge">TEMPLATES</span></div>
         <ul><li>5 premium blocks</li><li>Copy-paste ready</li><li>Lifetime updates</li></ul>
         <button class="btn primary">Get Pack</button>
       </article>
@@ -279,272 +241,96 @@
       <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
     </form>
   </section>
-    <!-- MODALS -->
-  <dialog id="planDialog">
-    <div class="modalHead">
-      <strong>Plan Details</strong>
-      <button class="btn x" onclick="this.closest('dialog').close()">✕</button>
-    </div>
-    <div class="modalBody" id="planDetails">Loading…</div>
-  </dialog>
-
-  <dialog id="compareDialog">
-    <div class="modalHead">
-      <strong>Compare Plans</strong>
-      <button class="btn x" onclick="this.closest('dialog').close()">✕</button>
-    </div>
-    <div class="modalBody">
-      <table style="width:100%;border-collapse:collapse;font-size:.95em">
-        <thead><tr><th align="left">Feature</th><th>Basic</th><th>Silver</th><th>Gold</th><th>Diamond</th></tr></thead>
-        <tbody>
-          <tr><td>Email support</td><td>48h</td><td>24h</td><td>Priority</td><td>Priority+</td></tr>
-          <tr><td>Templates</td><td>Starter</td><td>Advanced</td><td>+Custom</td><td>Full custom</td></tr>
-          <tr><td>Admin toolkit</td><td>–</td><td>–</td><td>✔</td><td>✔+</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </dialog>
-
-  <dialog id="customizeDialog">
-    <div class="modalHead">
-      <strong>Customize</strong>
-      <button class="btn x" onclick="this.closest('dialog').close()">✕</button>
-    </div>
-    <div class="modalBody">
-      <label>Accent <input type="color" id="cAccent" value="#E7B84B"></label><br>
-      <label>Accent 2 <input type="color" id="cAccent2" value="#9AB6FF"></label><br>
-      <label>Text <input type="color" id="cInk" value="#E9ECF3"></label><br>
-      <label>Soft <input type="color" id="cSoft" value="#B9C0CF"></label><br>
-      <label>Background <input type="color" id="cBg" value="#0B0C10"></label><br>
-      <label>Card <input type="color" id="cCard" value="#11131A"></label><br>
-      <label>Panel <input type="color" id="cPanel" value="#101218"></label><br>
-      <label>Border Glow <input type="range" id="cRing" min="0" max="100" value="24"></label><br>
-      <label>Font Scale <input type="range" id="cFont" min="0.9" max="1.2" step="0.05" value="1"></label><br>
-      <label>Spacing <input type="range" id="cSpace" min="0.9" max="1.2" step="0.05" value="1"></label><br>
-      <label>Border Style
-        <select id="cBorder">
-          <option value="glow">Glow</option>
-          <option value="solid">Solid</option>
-          <option value="none">None</option>
-        </select>
-      </label><br>
-      <label><input type="checkbox" id="cVignette" checked> Vignette</label>
-    </div>
-  </dialog>
 </main>
 
-<script>
-/* Greeting */
-(function(){
-  const h=document.getElementById('hello');
-  const hr=new Date().getHours();
-  h.textContent=(hr<12?"Good morning":hr<18?"Good afternoon":"Good evening")+" — THEGRID";
-})();
+<!-- DETAILS MODAL -->
+<dialog id="planModal">
+  <div class="modalHead">
+    <strong id="mTitle">Plan details</strong>
+    <button class="btn x" onclick="planModal.close()">Close</button>
+  </div>
+  <div class="modalBody" id="mBody"></div>
+</dialog>
 
-/* Logo */
-const logo=document.getElementById('logoVid');
-if(logo){logo.src="assets/videos/logo.mp4"; logo.onerror=()=>logo.replaceWith(Object.assign(document.createElement("img"),{src:"assets/images/logo.png"}))}
+<!-- CUSTOMIZE PANEL -->
+<dialog id="panel">
+  <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
+  <div class="modalBody">
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Secondary accent<br><input id="uiAccent2" type="color" value="#9bb7ff" style="width:100%;height:42px;border:0;background:transparent"></label>
 
-/* Hero filler */
-function setHero(src,isVideo){
-  const h=document.getElementById('hero');
-  h.innerHTML="";
-  if(isVideo){
-    const v=document.createElement("video");
-    v.src=src; v.controls=true; v.autoplay=true; v.loop=true; v.playsInline=true;
-    h.appendChild(v);
-  }else{
-    const i=document.createElement("img"); i.src=src; h.appendChild(i);
-  }
-}
-setHero("assets/videos/hero_1.mp4",true);
+      <label>Text color<br><input id="uiInk" type="color" value="#e9ecf3" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf" style="width:100%;height:42px;border:0;background:transparent"></label>
 
-/* Library builder */
-async function buildLibrary(){
-  const tabs=document.getElementById("libTabs");
-  const grid=document.getElementById("libGrid");
-  let files=[];
-  try{
-    const res=await fetch("assets/manifest.json"); if(res.ok) files=await res.json();
-  }catch(e){}
-  if(!files.length) files=[
-    {file:"hero_1.mp4",label:"Hero sample"},
-    {file:"reel_sample.mp4",label:"Reel"},
-    {file:"sample.jpg",label:"Image"}
-  ];
-  const groups={All:files,Video:files.filter(f=>f.file.endsWith(".mp4")),Image:files.filter(f=>!f.file.endsWith(".mp4"))};
-  let current="All";
-  function renderTabs(){
-    tabs.innerHTML="";
-    Object.keys(groups).forEach(k=>{
-      const b=document.createElement("div");
-      b.className="pill"+(k===current?" active":"");
-      b.textContent=k; b.onclick=()=>{current=k; renderTabs(); renderGrid();};
-      tabs.appendChild(b);
-    });
-  }
-  function renderGrid(){
-    grid.innerHTML="";
-    groups[current].forEach(f=>{
-      const t=document.createElement("div");
-      t.className="tile"; t.textContent=f.label;
-      t.onclick=()=>setHero("assets/"+(f.file.endsWith(".mp4")?"videos/":"images/")+f.file,f.file.endsWith(".mp4"));
-      grid.appendChild(t);
-    });
-  }
-  renderTabs(); renderGrid();
-}
-buildLibrary();
+      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
+      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="22" style="width:100%"></label>
 
-/* Plan details */
-document.querySelectorAll(".plan .details").forEach(btn=>{
-  btn.onclick=()=>{
-    const plan=btn.closest(".plan").dataset.tier;
-    document.getElementById("planDetails").innerHTML="<p>Loading details for <b>"+plan+"</b>…</p>";
-    document.getElementById("planDialog").showModal();
-  };
-});
+      <label>Border style<br>
+        <select id="uiBorder" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="glow">Glow</option><option value="solid">Solid</option><option value="none">None</option>
+        </select>
+      </label>
+      <label>Vignette<br>
+        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="1">On</option><option value="0">Off</option>
+        </select>
+      </label>
 
-/* Compare */
-document.getElementById("btnCompare").onclick=()=>document.getElementById("compareDialog").showModal();
+      <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+      <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
 
-/* Customize panel */
-const cDlg=document.getElementById("customizeDialog");
-document.getElementById("btnCustomize").onclick=()=>cDlg.showModal();
-function applyCustom(){
-  const r=document.documentElement;
-  r.style.setProperty("--accent",document.getElementById("cAccent").value);
-  r.style.setProperty("--accent2",document.getElementById("cAccent2").value);
-  r.style.setProperty("--ink",document.getElementById("cInk").value);
-  r.style.setProperty("--soft",document.getElementById("cSoft").value);
-  r.style.setProperty("--bg",document.getElementById("cBg").value);
-  r.style.setProperty("--card",document.getElementById("cCard").value);
-  r.style.setProperty("--panel",document.getElementById("cPanel").value);
-  r.style.setProperty("--ring",document.getElementById("cRing").value);
-  r.style.setProperty("--fontScale",document.getElementById("cFont").value);
-  r.style.setProperty("--space",document.getElementById("cSpace").value);
-  document.body.classList.remove("glow","solid","none");
-  document.body.classList.add(document.getElementById("cBorder").value);
-  r.style.setProperty("--vignette",document.getElementById("cVignette").checked?1:0);
-  localStorage.setItem("gridTheme",r.getAttribute("style")+"; borderStyle:"+document.getElementById("cBorder").value);
-}
-["cAccent","cAccent2","cInk","cSoft","cBg","cCard","cPanel","cRing","cFont","cSpace","cBorder","cVignette"].forEach(id=>{
-  document.getElementById(id).oninput=applyCustom;
-});
-window.addEventListener("DOMContentLoaded",()=>{
-  const saved=localStorage.getItem("gridTheme");
-  if(saved){ document.documentElement.setAttribute("style",saved.split("; borderStyle:")[0]); document.body.classList.add(saved.split("; borderStyle:")[1]||"glow"); }
-});
-
-/* Confetti */
-function confettiAt(el){
-  const rect=el.getBoundingClientRect();
-  const x=rect.left+rect.width/2, y=rect.top+rect.height/2;
-  for(let i=0;i<20;i++){
-    const d=document.createElement("div");
-    d.style.cssText=`position:fixed;left:${x}px;top:${y}px;width:6px;height:6px;background:${Math.random()<.5?"var(--accent)":"var(--accent2)"};border-radius:50%;pointer-events:none;z-index:2000;`;
-    document.body.appendChild(d);
-    const dx=(Math.random()-.5)*220, dy=(Math.random()-.5)*220;
-    d.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${dx}px,${dy}px)`,opacity:0}],{duration:800+Math.random()*600,easing:"ease-out"}).onfinish=()=>d.remove();
-  }
-}
-document.querySelectorAll(".choose").forEach(btn=>btn.onclick=()=>confettiAt(btn));
-</script>
-    <!-- MODALS -->
-  <dialog id="planModal">
-    <div class="modalHead">
-      <strong id="mTitle">Plan details</strong>
-      <button class="btn x" onclick="planModal.close()">Close</button>
+      <label>Hero source<br>
+        <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
+      </label>
+      <label>Background mode<br>
+        <select id="uiBgMode" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="gradient">Gradient</option>
+          <option value="pattern">Gradient + Pattern</option>
+          <option value="video">Video</option>
+        </select>
+      </label>
+      <label>Background video<br>
+        <select id="uiBgSrc" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
+      </label>
     </div>
-    <div class="modalBody" id="mBody">Loading…</div>
-  </dialog>
 
-  <dialog id="compareDialog">
-    <div class="modalHead">
-      <strong>Compare Plans</strong>
-      <button class="btn x" onclick="compareDialog.close()">Close</button>
+    <h3 style="margin-top:16px">Confetti</h3>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="100" value="36" style="width:100%"></label>
+      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.3" max="2" step=".05" value="1.1" style="width:100%"></label>
     </div>
-    <div class="modalBody">
-      <table style="width:100%;border-collapse:collapse;font-size:.95em">
-        <thead>
-          <tr>
-            <th align="left" style="padding:8px;border-bottom:1px solid #293044">Feature</th>
-            <th style="padding:8px;border-bottom:1px solid #293044">Basic</th>
-            <th style="padding:8px;border-bottom:1px solid #293044">Silver</th>
-            <th style="padding:8px;border-bottom:1px solid #293044">Gold</th>
-            <th style="padding:8px;border-bottom:1px solid #293044">Diamond</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td style="padding:8px">Email support</td><td align="center">48h</td><td align="center">24h</td><td align="center">Priority</td><td align="center">Priority+</td></tr>
-          <tr><td style="padding:8px">Templates</td><td align="center">Starter</td><td align="center">Advanced</td><td align="center">+Custom</td><td align="center">Full custom</td></tr>
-          <tr><td style="padding:8px">Admin toolkit</td><td align="center">–</td><td align="center">–</td><td align="center">✔</td><td align="center">✔+</td></tr>
-        </tbody>
-      </table>
+
+    <div class="ctaRow" style="margin-top:16px">
+      <button id="save" class="btn">Save to this device</button>
+      <button id="reset" class="btn x">Reset</button>
     </div>
-  </dialog>
+  </div>
+</dialog>
 
-  <!-- OPTIONAL: Customize dialog (binds only if you already have buttons/inputs) -->
-  <dialog id="panel">
-    <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
-    <div class="modalBody">
-      <div class="grid" style="grid-template-columns:1fr 1fr">
-        <label>Accent<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
-        <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="24" style="width:100%"></label>
-        <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
-        <label>Border style<br>
-          <select id="uiBorder" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-            <option value="glow">Glow</option><option value="solid">Solid</option><option value="none">None</option>
-          </select>
-        </label>
-        <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-        <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-        <label>Vignette<br>
-          <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-            <option value="1">On</option><option value="0">Off</option>
-          </select>
-        </label>
-        <label>Hero source<br>
-          <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
-        </label>
-      </div>
-
-      <h3 style="margin-top:16px">Confetti</h3>
-      <div class="grid" style="grid-template-columns:1fr 1fr">
-        <label>Density<br><input id="uiConfettiDensity" type="range" min="5" max="80" value="28" style="width:100%"></label>
-        <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.3" max="2" step=".05" value="1.1" style="width:100%"></label>
-      </div>
-
-      <div class="ctaRow" style="margin-top:16px">
-        <button id="save" class="btn">Save to this device</button>
-        <button id="reset" class="btn x">Reset</button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- Confetti canvas -->
-  <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;z-index:1000"></canvas>
+<!-- Confetti canvas -->
+<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
 
 <script>
-/* ---------- tiny helpers ---------- */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
+/* ---------- Helpers & State ---------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => [...document.querySelectorAll(sel)];
+const state = {
+  accent: getCSS('--accent'),
+  accent2: getCSS('--accent2'),
+  ring: +getCSS('--ring'),
+  radius: parseInt(getCSS('--radius')),
+  border: 'glow',
+  font: +getCSS('--fontScale'),
+  space: +getCSS('--space'),
+  vignette: +getCSS('--vignette'),
+  heroSrc: 'assets/videos/hero_1.mp4',
+  confetti: {density:36, speed:1.1},
+  bg: { mode:'gradient', src:'assets/videos/gc_spin.mp4', dust:true },
+  library: { Hero:[], 'Reels 9:16':[], 'Reels 16:9':[], Backgrounds:[], Logos:[], Images:[] }
+};
 function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() }
 function setCSS(v,val){ document.documentElement.style.setProperty(v,val) }
-
-/* ---------- state ---------- */
-const state = {
-  accent: getCSS('--accent') || '#E7B84B',
-  ring: +getCSS('--ring') || 24,
-  radius: parseInt(getCSS('--radius') || '20'),
-  border: (document.body.className.match(/(solid|none|glow)/)||['glow'])[0],
-  font: +getCSS('--fontScale') || 1,
-  space: +getCSS('--space') || 1,
-  vignette: +getCSS('--vignette') || 1,
-  heroSrc: 'assets/videos/hero_1.mp4',
-  confetti: {density:28, speed:1.1, sizeMin:2, sizeMax:5},
-  library: {}
-};
 function save(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)) }
 function load(){
   const s = JSON.parse(localStorage.getItem('thegrid.settings')||'null');
@@ -553,37 +339,26 @@ function load(){
   applyState();
 }
 
-/* ---------- greeting ---------- */
-(function(){
+/* ---------- Greeting & logo ---------- */
+(function greeting(){
   const h = new Date().getHours();
   const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-  const el = $('#hello'); if(el) el.textContent = `${word} — THEGRID`;
+  $('#hello').textContent = `${word} — THE GRID`;
 })();
-
-/* ---------- logo (your current files) ---------- */
-(function(){
+(function logo(){
   const v = $('#logoVid');
-  if(!v) return;
   v.src = 'assets/videos/gc_spin.mp4';
-  v.muted = true; v.autoplay = true; v.loop = true; v.playsInline = true;
-  v.onerror = () => {
-    const img = document.createElement('img');
-    img.src = 'assets/images/gc_logo.png';
-    img.alt = 'Logo';
-    v.replaceWith(img);
-  };
+  v.onerror = () => { v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/gc_logo.png',alt:'Logo'})); };
 })();
 
-/* ---------- hero ---------- */
+/* ---------- Hero ---------- */
 function setHero(src){
   state.heroSrc = src; save(); renderHero();
 }
 function renderHero(){
-  const box = $('#hero'); if(!box) return; box.innerHTML='';
+  const box = $('#hero'); box.innerHTML = '';
   if(/\.(mp4|webm|mov)$/i.test(state.heroSrc)){
-    const v = Object.assign(document.createElement('video'), {
-      src: state.heroSrc, controls:true, playsInline:true
-    });
+    const v = Object.assign(document.createElement('video'), {src:state.heroSrc, controls:true, playsInline:true});
     box.appendChild(v);
   }else{
     const i = Object.assign(document.createElement('img'), {src:state.heroSrc, alt:'hero'});
@@ -591,133 +366,145 @@ function renderHero(){
   }
 }
 
-/* ---------- manifest loader (supports your layouts) ---------- */
-async function fetchJson(url){
-  try{ const r = await fetch(url,{cache:'no-store'}); if(r.ok) return await r.json(); }catch(e){}
-  return null;
-}
-function normalizeManifest(m){
-  // 1) New structured: {logo, hero:{images,videos}, grid:{images,videos}, extras:{logoSpin}}
-  if(m && m.hero && (m.hero.images || m.hero.videos)){
-    const lib = {
-      "Hero":  [ ...(m.hero.videos||[]), ...(m.hero.images||[]) ],
-      "Reels 9:16": [],
-      "Reels 16:9": m.grid?.videos || [],
-      "Backgrounds": m.grid?.images || [],
-      "Logos": [ m.extras?.logoSpin, m.logo ].filter(Boolean),
-      "Images": [ ...(m.hero.images||[]) ]
-    };
-    // set default hero if available
-    if((m.hero.videos||[])[0]) state.heroSrc = m.hero.videos[0];
-    else if((m.hero.images||[])[0]) state.heroSrc = m.hero.images[0];
-    return lib;
-  }
-  // 2) Category object with arrays (Hero, Logos, Images, etc.)
-  if(m && !Array.isArray(m)){
-    return m;
-  }
-  // 3) Array of {file,label} or strings
-  if(Array.isArray(m)){
-    const vids = m.map(x=>typeof x==='string'?x:x.file).filter(x=>/\.(mp4|webm|mov)$/i.test(x));
-    const imgs = m.map(x=>typeof x==='string'?x:x.file).filter(x=>!/\.(mp4|webm|mov)$/i.test(x));
-    return { "Hero":[...vids,...imgs], "Images":imgs, "Logos":[], "Reels 9:16":[], "Reels 16:9":[], "Backgrounds":[] };
-  }
-  // fallback minimal
-  return {
-    "Hero":[ "assets/videos/hero_1.mp4", "assets/images/hero_1.jpg" ],
-    "Images":[ "assets/images/hero_1.jpg" ],
-    "Logos":[ "assets/videos/gc_spin.mp4", "assets/images/gc_logo.png" ],
-    "Reels 9:16":[], "Reels 16:9":[], "Backgrounds":[]
-  };
-}
-
+/* ---------- Library (reads assets/manifest.json when present) ---------- */
+const defaultManifest = {
+  "Hero":[
+    "assets/videos/hero_1.mp4","assets/videos/interaction_1.mp4",
+    "assets/videos/pour_1.mp4","assets/images/hero_1.jpg",
+    "assets/images/hero_2.jpg","assets/images/hero_3.jpg"
+  ],
+  "Reels 9:16":[],
+  "Reels 16:9":[],
+  "Backgrounds":["assets/videos/gc_spin.mp4"],
+  "Logos":["assets/images/gc_logo.png"],
+  "Images":["assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"]
+};
 async function loadManifest(){
-  // prefer assets/manifest.json (you moved it here), then fallback to assets/videos/manifest.json
-  let raw = await fetchJson('assets/manifest.json');
-  if(!raw) raw = await fetchJson('assets/videos/manifest.json');
-  state.library = normalizeManifest(raw);
+  try{
+    const res = await fetch('assets/manifest.json',{cache:'no-store'});
+    if(res.ok){ Object.assign(state.library, await res.json()); }
+    else { Object.assign(state.library, defaultManifest); }
+  }catch{ Object.assign(state.library, defaultManifest); }
   buildLibrary();
   populateHeroSelect();
+  populateBgSelect();
 }
 
-/* ---------- library UI ---------- */
 function buildLibrary(){
-  const tabs = $('#libTabs'); const grid = $('#libGrid');
-  if(!tabs || !grid) return;
-  tabs.innerHTML=''; grid.innerHTML='';
-
+  const tabs = $('#libTabs'); tabs.innerHTML='';
+  const grid = $('#libGrid'); grid.innerHTML='';
   const cats = Object.keys(state.library);
   let active = localStorage.getItem('thegrid.activeTab') || cats[0];
 
   cats.forEach(cat=>{
-    const b = Object.assign(document.createElement('div'),{
-      className:'pill'+(cat===active?' active':''), textContent:cat
-    });
-    b.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
-    tabs.appendChild(b);
+    const pill = Object.assign(document.createElement('div'),{className:'pill'+(cat===active?' active':''),textContent:cat});
+    pill.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
+    tabs.appendChild(pill);
   });
 
-  (state.library[active]||[]).forEach(src=>{
+  state.library[active].forEach(src=>{
+    const act = (active==='Hero' && state.heroSrc===src) || (active==='Backgrounds' && state.bg.src===src);
     const t = Object.assign(document.createElement('div'),{
-      className:'tile',
+      className:'tile'+(act?' is-active':''), 
       innerHTML:`<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`
     });
-    t.onclick = ()=> setHero(src);
+    t.onclick=()=>{
+      if(active==='Hero') setHero(src);
+      if(active==='Backgrounds'){ state.bg.mode='video'; state.bg.src=src; save(); renderBackground(); }
+      buildLibrary();
+    };
     grid.appendChild(t);
   });
 }
-
 function populateHeroSelect(){
-  const sel = $('#uiHero'); if(!sel) return;
-  sel.innerHTML='';
-  const all = [...new Set(Object.values(state.library).flat())];
-  all.forEach(src=>{
-    const o = new Option(src, src, src===state.heroSrc, src===state.heroSrc);
-    sel.add(o);
-  });
+  const sel = $('#uiHero'); sel.innerHTML='';
+  const all = [...new Set(Object.values(state.library).flat())].filter(Boolean);
+  all.forEach(src=> sel.add(new Option(src, src, src===state.heroSrc, src===state.heroSrc)));
+}
+function populateBgSelect(){
+  const sel = $('#uiBgSrc'); if(!sel) return;
+  const vids = [...new Set(Object.values(state.library).flat())].filter(x=>/\.(mp4|webm|mov)$/i.test(x));
+  sel.innerHTML=''; vids.forEach(src=> sel.add(new Option(src, src, src===state.bg.src, src===state.bg.src)));
 }
 
-/* ---------- customize panel bindings (only if panel exists) ---------- */
-$('#btnCustomize') && ($('#btnCustomize').onclick = ()=>panel.showModal());
-$('#save') && ($('#save').onclick = ()=>{ save(); alert('Saved to this device.'); });
-$('#reset') && ($('#reset').onclick = ()=>{ localStorage.removeItem('thegrid.settings'); location.reload(); });
+/* ---------- Customize Panel ---------- */
+$('#btnCustomize').onclick = ()=>panel.showModal();
+$('#save').onclick = ()=>{ save(); alert('Saved to this device.'); };
+$('#reset').onclick = ()=>{ localStorage.removeItem('thegrid.settings'); location.reload(); };
 
-$('#uiAccent') && ($('#uiAccent').oninput = e=>{ state.accent=e.target.value; setCSS('--accent',state.accent); save(); });
-$('#uiRing') && ($('#uiRing').oninput = e=>{ state.ring=+e.target.value; setCSS('--ring',state.ring); save(); });
-$('#uiRadius') && ($('#uiRadius').oninput = e=>{ state.radius=+e.target.value; setCSS('--radius', state.radius+'px'); save(); });
-$('#uiFont') && ($('#uiFont').oninput = e=>{ state.font=+e.target.value; setCSS('--fontScale', state.font); save(); });
-$('#uiSpace') && ($('#uiSpace').oninput = e=>{ state.space=+e.target.value; setCSS('--space', state.space); save(); });
-$('#uiBorder') && ($('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save(); });
-$('#uiVignette') && ($('#uiVignette').oninput = e=>{ state.vignette=+e.target.value; setCSS('--vignette', state.vignette); save(); });
-$('#uiHero') && ($('#uiHero').oninput = e=> setHero(e.target.value));
-$('#uiConfettiDensity') && ($('#uiConfettiDensity').oninput = e=>{ state.confetti.density=+e.target.value; save(); });
-$('#uiConfettiSpeed') && ($('#uiConfettiSpeed').oninput = e=>{ state.confetti.speed=+e.target.value; save(); });
+$('#uiAccent').oninput = e=>{ state.accent=e.target.value; setCSS('--accent',state.accent); save() };
+$('#uiAccent2').oninput = e=>{ state.accent2=e.target.value; setCSS('--accent2',state.accent2); save() };
+$('#uiInk').oninput = e=>{ state.ink=e.target.value; setCSS('--ink',state.ink); save() };
+$('#uiSoft').oninput = e=>{ state.soft=e.target.value; setCSS('--soft',state.soft); save() };
+$('#uiRing').oninput = e=>{ state.ring=+e.target.value; setCSS('--ring',state.ring); save() };
+$('#uiRadius').oninput = e=>{ state.radius=+e.target.value; setCSS('--radius', state.radius+'px'); save() };
+$('#uiFont').oninput = e=>{ state.font=+e.target.value; setCSS('--fontScale', state.font); save() };
+$('#uiSpace').oninput = e=>{ state.space=+e.target.value; setCSS('--space', state.space); save() };
+$('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save() };
+$('#uiVignette').oninput = e=>{ state.vignette=+e.target.value; setCSS('--vignette', state.vignette); save() };
+$('#uiHero').oninput = e=> setHero(e.target.value);
+$('#uiBgMode').oninput = e=>{ state.bg.mode=e.target.value; save(); applyState(); };
+$('#uiBgSrc').oninput  = e=>{ state.bg.src=e.target.value; state.bg.mode='video'; save(); applyState(); };
 
-function applyState(){
-  setCSS('--accent', state.accent);
-  setCSS('--ring', state.ring);
-  setCSS('--radius', state.radius+'px');
-  setCSS('--fontScale', state.font);
-  setCSS('--space', state.space);
-  setCSS('--vignette', state.vignette);
-  document.body.classList.add(state.border);
-  renderHero();
-  // sync selects if present
-  $('#uiAccent') && ($('#uiAccent').value = state.accent);
-  $('#uiRing') && ($('#uiRing').value = state.ring);
-  $('#uiRadius') && ($('#uiRadius').value = state.radius);
-  $('#uiFont') && ($('#uiFont').value = state.font);
-  $('#uiSpace') && ($('#uiSpace').value = state.space);
-  $('#uiBorder') && ($('#uiBorder').value = state.border);
-  $('#uiVignette') && ($('#uiVignette').value = state.vignette);
+/* ---------- Background (video/gradient/pattern + dust) ---------- */
+function renderBackground(){
+  const v = $('#bgVid');
+  if(state.bg.mode==='video'){
+    v.src = state.bg.src; v.style.display='block';
+  }else{
+    v.removeAttribute('src'); v.style.display='none';
+  }
+  const dust = $('#bgDust'), dctx = dust.getContext('2d');
+  function sizeDust(){ dust.width=innerWidth*devicePixelRatio; dust.height=innerHeight*devicePixelRatio }
+  sizeDust(); addEventListener('resize', sizeDust);
+  let flakes = new Array(60).fill(0).map(()=>({
+    x: Math.random()*dust.width, y: Math.random()*dust.height,
+    r: .6 + Math.random()*1.8, a: Math.random()*Math.PI*2, s: .2 + Math.random()*0.6
+  }));
+  (function loop(){
+    dctx.clearRect(0,0,dust.width,dust.height);
+    dctx.fillStyle = state.accent; dctx.globalAlpha = .35;
+    flakes.forEach(f=>{
+      f.x += Math.cos(f.a)*f.s; f.y += Math.sin(f.a*.5)*f.s; f.a += .002;
+      if(f.x<0) f.x=dust.width; if(f.x>dust.width) f.x=0;
+      if(f.y<0) f.y=dust.height; if(f.y>dust.height) f.y=0;
+      dctx.beginPath(); dctx.arc(f.x,f.y,f.r,0,Math.PI*2); dctx.fill();
+    });
+    requestAnimationFrame(loop);
+  })();
 }
 
-/* ---------- pricing details ---------- */
+/* ---------- Pricing: Details + Confetti ---------- */
 const DETAILS = {
-  basic:`<section><h3>Who it’s for</h3><p>Creators getting started.</p><h3>What you get</h3><ul><li>Starter templates</li><li>Library access</li><li>Email support (48h)</li><li>7-day refund</li></ul><h3>How it works</h3><p>Copy blocks, swap media, publish.</p></section>`,
-  silver:`<section><h3>Who it’s for</h3><p>Creators who want faster, better visuals.</p><h3>What you get</h3><ul><li>Everything in Basic</li><li>Advanced effects & presets</li><li>Priority support (24h)</li><li>Quarterly drops</li></ul><h3>How it works</h3><p>Import premium blocks, apply presets.</p></section>`,
-  gold:`<section><h3>Who it’s for</h3><p>Brands needing hands-on help.</p><h3>What you get</h3><ul><li>Customization session</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul><h3>How it works</h3><p>We tune the setup with you.</p></section>`,
-  diamond:`<section><h3>Who it’s for</h3><p>Teams needing pipelines & integrations.</p><h3>What you get</h3><ul><li>Everything in Gold</li><li>Custom pipelines</li><li>Priority roadmap</li></ul><h3>How it works</h3><p>We spec, implement, document.</p></section>`
+  basic:`<h3>Who it’s for</h3><p>Creators getting started or teams who want a clean base fast.</p>
+         <h3>What you get</h3><ul>
+           <li>Starter site templates and blocks</li>
+           <li>Access to the media library (videos, images, logos)</li>
+           <li>Email support within 48h</li>
+           <li>7-day refund guarantee</li>
+           <li>Upgrade anytime — keep your settings, no rebuilds</li>
+         </ul>`,
+  silver:`<h3>Who it’s for</h3><p>Growing creators who want better visuals and faster support.</p>
+          <h3>What you get</h3><ul>
+            <li>Everything in Basic</li>
+            <li>Advanced visual effects & presets</li>
+            <li>Priority email support within 24h</li>
+            <li>Quarterly tune-ups</li>
+          </ul>`,
+  gold:`<h3>Who it’s for</h3><p>Teams that need hands-on help and admin tools.</p>
+        <h3>What you get</h3><ul>
+          <li>Hands-on customization session</li>
+          <li>Admin toolkit & automation setup</li>
+          <li>Onboarding call (45 min)</li>
+          <li>Template & block requests</li>
+        </ul>`,
+  diamond:`<h3>Who it’s for</h3><p>Creators/businesses needing custom pipelines and priority turnaround.</p>
+          <h3>What you get</h3><ul>
+            <li>Custom pipelines & integrations</li>
+            <li>Hands-on help building your stack</li>
+            <li>Priority roadmap & turnaround</li>
+            <li>Private components when needed</li>
+          </ul>`
 };
 $$('.details').forEach(b=>{
   b.onclick = e=>{
@@ -728,59 +515,84 @@ $$('.details').forEach(b=>{
     planModal.showModal();
   };
 });
-$('#btnCompare') && ($('#btnCompare').onclick = () => compareDialog.showModal());
+$$('.choose').forEach(b=>{
+  b.onclick = e=>{
+    const card = e.currentTarget.closest('.plan');
+    confettiBurst(card);
+    card.scrollIntoView({behavior:'smooth', block:'center'});
+  };
+});
 
-/* ---------- confetti (clean left+right streamers from clicked button) ---------- */
+/* ---------- Confetti (from both sides, crisper) ---------- */
 const canvas = $('#fx'), ctx = canvas.getContext('2d'); let W,H, parts=[];
 function size(){ W=canvas.width=innerWidth*devicePixelRatio; H=canvas.height=innerHeight*devicePixelRatio; }
 addEventListener('resize', size); size();
-
-function confettiBurstFromButton(btn){
-  const r = btn.getBoundingClientRect();
-  const y = (r.top + r.height/2) * devicePixelRatio;
-  const leftX  = (r.left - 6) * devicePixelRatio;
-  const rightX = (r.right + 6) * devicePixelRatio;
-  const n = state.confetti.density|0;
-  const s = +state.confetti.speed;
-  const colors = [state.accent,'#f5f7fb','#cdd6ee','#9fb6ff'];
-  for(let i=0;i<n;i++){
-    parts.push(piece(leftX, y,  1, s, colors));
-    parts.push(piece(rightX,y, -1, s, colors));
-  }
+function confettiBurst(el){
+  const r = el.getBoundingClientRect();
+  const y = (r.top + r.height*.3)*devicePixelRatio;
+  const left = (r.left-8)*devicePixelRatio, right=(r.right+8)*devicePixelRatio;
+  const n = Math.max(24, state.confetti.density|0), s = +state.confetti.speed;
+  const colors=[state.accent,'#ffffff', getCSS('--accent2')||state.accent2, '#cbd4ea'];
+  for(let i=0;i<n;i++){ parts.push(makePiece(left,y,1,s,colors)); parts.push(makePiece(right,y,-1,s,colors)); }
 }
-function piece(x,y,dir,s,colors){
-  const w = state.confetti.sizeMin + Math.random()*(state.confetti.sizeMax-state.confetti.sizeMin);
-  const h = w * (0.5 + Math.random()*0.6);
-  const tri = Math.random() < 0.35;
-  return {x,y,vx:(1.2+Math.random()*1.6)*dir*s, vy:(-2.2-Math.random()*2.2)*s, g:.09*s, r:Math.random()*Math.PI, life:110+Math.random()*50, w,h,tri,c:colors[(Math.random()*colors.length)|0], a:1};
+function makePiece(x,y,dir,s,colors){
+  const shapes=['rect','tri']; const shape=shapes[(Math.random()*shapes.length)|0];
+  const size = 4 + Math.random()*8;
+  return {x,y, vx:(1+Math.random()*2)*dir*s, vy:(-3-Math.random()*2)*s, g:.08*s, r:Math.random()*Math.PI, shape, w:size, h:size*.7, life:180+Math.random()*60, c:colors[(Math.random()*colors.length)|0]};
 }
 function tick(){
   ctx.clearRect(0,0,W,H);
-  const next=[];
-  for(const p of parts){
-    p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=.14; p.life--; p.a=Math.max(0,p.life/140);
-    if(p.life>0 && p.y<H+40){
-      next.push(p);
-      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-      ctx.globalAlpha=p.a; ctx.fillStyle=p.c;
-      if(p.tri){ ctx.beginPath(); ctx.moveTo(-p.w/2, p.h/2); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(0,-p.h/2); ctx.closePath(); ctx.fill(); }
-      else{ ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
-      ctx.restore();
-    }
-  }
-  parts=next; requestAnimationFrame(tick);
+  parts = parts.filter(p=>p.life>0);
+  parts.forEach(p=>{
+    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .14; p.life--;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.globalAlpha=Math.max(.06, p.life/220);
+    if(p.shape==='tri'){ ctx.beginPath(); ctx.moveTo(-p.w/2,p.h/2); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(0,-p.h/2); ctx.closePath(); ctx.fill(); }
+    else { ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+    ctx.restore();
+  });
+  requestAnimationFrame(tick);
 }
 tick();
-$$('.choose').forEach(b=> b.onclick = ()=>{ confettiBurstFromButton(b); b.closest('.plan').scrollIntoView({behavior:'smooth', block:'center'}); });
 
-/* ---------- init ---------- */
-function applyAndInit(){
-  applyState();
-  renderHero();
-  loadManifest();
+/* ---------- Apply state + init ---------- */
+function applyState(){
+  setCSS('--accent', state.accent);
+  setCSS('--accent2', state.accent2);
+  setCSS('--ink', state.ink || getCSS('--ink'));
+  setCSS('--soft', state.soft || getCSS('--soft'));
+  setCSS('--ring', state.ring);
+  setCSS('--radius', state.radius+'px');
+  setCSS('--fontScale', state.font);
+  setCSS('--space', state.space);
+  setCSS('--vignette', state.vignette);
+  document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border);
+  document.body.classList.toggle('has-gradient', state.bg.mode!=='video');
+  document.body.classList.toggle('has-pattern', state.bg.mode==='pattern');
+  renderBackground(); renderHero();
+
+  // sync UI controls
+  $('#uiAccent').value = state.accent;
+  $('#uiAccent2').value = state.accent2;
+  $('#uiInk').value = getCSS('--ink').trim() || '#e9ecf3';
+  $('#uiSoft').value = getCSS('--soft').trim() || '#b9c0cf';
+  $('#uiRing').value = state.ring;
+  $('#uiRadius').value = state.radius;
+  $('#uiFont').value = state.font;
+  $('#uiSpace').value = state.space;
+  $('#uiBorder').value = state.border;
+  $('#uiVignette').value = state.vignette;
+  $('#uiHero').value = state.heroSrc;
+  $('#uiBgMode').value = state.bg.mode;
+  $('#uiBgSrc').value = state.bg.src;
 }
-window.addEventListener('DOMContentLoaded', applyAndInit);
-</script>
 
+/* ---------- Start ---------- */
+function start(){
+  applyState();
+  loadManifest();
+  load();
+}
+window.addEventListener('DOMContentLoaded', start);
+</script>
 </body>
 </html>
