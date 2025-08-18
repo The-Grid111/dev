@@ -1,0 +1,35 @@
+{
+  "logo": "assets/images/gc_logo.png",
+
+  "hero": {
+    "images": [
+      "assets/images/hero_1.jpg",
+      "assets/images/hero_2.jpg",
+      "assets/images/hero_3.jpg"
+    ],
+    "videos": [
+      "assets/videos/hero_1.mp4"
+    ]
+  },
+
+  "grid": {
+    "images": [
+      "assets/images/grid_interaction_1.jpg",
+      "assets/images/grid_natural_1.jpg",
+      "assets/images/grid_pour_1.jpg",
+      "assets/images/grid_spread_1.jpg",
+      "assets/images/grid_transform_1.jpg"
+    ],
+    "videos": [
+      "assets/videos/interaction_1.mp4",
+      "assets/videos/natural_1.mp4",
+      "assets/videos/pour_1.mp4",
+      "assets/videos/spread_1.mp4",
+      "assets/videos/transform_1.mp4"
+    ]
+  },
+
+  "extras": {
+    "logoSpin": "assets/videos/gc_spin.mp4"
+  }
+}
