@@ -1,294 +1,164 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>THE GRID — Black & Gold</title>
-<meta name="theme-color" content="#0b0b0f"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>THE GRID — Black & Gold</title>
+  <meta name="theme-color" content="#0b0b0f"/>
 
-<!-- Safe preloads -->
-<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
-<link rel="preload" href="assets/videos/gc_spin.mp4" as="video">
-<link rel="preload" href="assets/images/hero_1.jpg" as="image">
+  <!-- Core styles (your split files) -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/effects.css">
 
-<style>
-  :root{
-    --accent:#E7B84B; --accent-2:#95B2FF;
-    --ink:#E9ECF3; --soft:#b9c0cf;
-    --bg-a:#0b0b0f; --bg-b:#0a0b10;
-    --panel:#0f1219; --card:#10131b;
-    --radius:20px; --fontScale:1; --space:1;
-    --ring:24; --vignette:1; --grain:.35;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    color:var(--ink); background:#000; letter-spacing:.2px; --pad: calc(14px * var(--space));
-  }
-
-  /* FX layers */
-  .fx-wrap{position:fixed; inset:0; pointer-events:none; z-index:-1}
-  #bgGrad,#bgParticles{position:absolute; inset:0;width:100%;height:100%}
-  .vignette:before{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:-1;
-    background:
-      radial-gradient(1200px 600px at 50% -260px, #0000 30%, rgba(231,184,75,.16) 55%, #0000 70%),
-      radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
-      radial-gradient(1200px 600px at -200px 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%),
-      radial-gradient(1200px 600px at calc(100% + 200px) 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%);
-    opacity: calc(.55 * var(--vignette));
-  }
-  .grain:after{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:-1; mix-blend-mode:overlay;
-    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.12"/></svg>');
-    opacity:var(--grain);
-  }
-
-  .wrap{max-width:980px;margin-inline:auto;padding:24px}
-
-  /* Header */
-  header{
-    position:sticky; top:0; z-index:20; backdrop-filter:saturate(1.05) blur(10px);
-    background:color-mix(in srgb, #0b0c10 78%, #000 22%); border-bottom:1px solid #171a23;
-  }
-  .bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
-  .brand{display:flex;gap:12px;align-items:center; min-width:0}
-  .logo{width:44px;height:44px;border-radius:12px;overflow:hidden;background:#0c0f14;
-        box-shadow:0 0 0 1px #1a1f2c inset,0 0 22px rgba(231,184,75,.18)}
-  .logo video,.logo img{width:100%;height:100%;object-fit:cover;display:block}
-  .brand h1{font:800 20px/1.15 inherit; margin:0}
-  .brand small{display:block; color:var(--soft); font-size:.8em}
-  .spacer{flex:1}
-  .btn{
-    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit;
-    background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset;
-    transition:transform .12s ease, box-shadow .2s ease, background .2s ease, filter .2s ease; cursor:pointer;
-  }
-  .btn:hover{transform:translateY(-1px)}
-  .btn.primary{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%);
-    color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
-    filter: drop-shadow(0 0 6px rgba(231,184,75,.35));
-  }
-
-  /* Sections */
-  section{margin:28px 0}
-  .card{
-    background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 20%), color-mix(in srgb, var(--card), #07090D 0%));
-    border-radius:var(--radius); padding:calc(var(--pad)*1.2); position:relative;
-    box-shadow:0 0 0 1px #1b2130 inset, 0 8px 40px rgba(0,0,0,.45),
-               0 0 0 calc(var(--ring)*.12px) color-mix(in srgb, var(--accent), transparent 90%);
-  }
-  h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 10px}
-  .lede{color:var(--soft); margin:0 0 18px}
-
-  /* Hero */
-  .hero{border-radius:calc(var(--radius) - 6px); overflow:hidden; position:relative;
-        box-shadow:0 0 0 2px #202636 inset, 0 20px 60px rgba(0,0,0,.45); background:#0c0f15}
-  .hero-media{width:100%; height:min(62vw, 420px); display:block; object-fit:cover}
-  .heroOverlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45)); pointer-events:none}
-  .ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
-  .ctaRow .btn{padding:12px 18px}
-
-  /* Library */
-  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
-  .pill{padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
-        box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none; transition:.2s}
-  .pill:hover{box-shadow:0 0 0 2px color-mix(in srgb, var(--accent), #fff 15%) inset}
-  .pill.active{box-shadow:0 0 0 2px var(--accent) inset; background:#151a24}
-  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-  .tile{
-    padding:12px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer;
-    display:grid; grid-template-columns:64px 1fr; gap:12px; align-items:center; transition:.2s;
-  }
-  .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
-  .thumb{width:64px;height:64px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:#0b0e14;box-shadow:0 0 0 1px #202636 inset}
-  .thumb video,.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .meta{font-size:.9em; color:#93a0b8}
-
-  /* Pricing */
-  .plan{display:grid; gap:12px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
-  .plan .head{display:flex; justify-content:space-between; align-items:center}
-  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px; color:#0c1017;
-         background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
-  .price{font:800 34px/1.1 ui-sans-serif}
-  .plan ul{margin:0 0 4px 18px}
-  .plan .row{display:flex; gap:10px}
-  .plan .btn{flex:1}
-  .plan .ghost{background:#0f141d;color:#d7dbea}
-  .plan.gold{box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.15)}
-  .plan.diamond{box-shadow:0 0 0 1px #202636 inset, 0 0 0 2px rgba(149,178,255,.18)}
-
-  /* Forms / Modal */
-  form{display:grid;gap:10px}
-  input,textarea{width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)}
-  textarea{min-height:130px; resize:vertical}
-  dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,92vw)}
-  dialog::backdrop{background:rgba(0,0,0,.6)}
-  .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
-  .modalBody{padding:18px}
-  .x{background:#141926}
-  .muted{color:var(--soft)}
-</style>
+  <!-- Helpful preloads (safe if they miss) -->
+  <link rel="preload" href="assets/videos/hero_1.mp4" as="video">
+  <link rel="preload" href="assets/videos/gc_spin.mp4" as="video">
+  <link rel="preload" href="assets/images/hero_1.jpg" as="image">
 </head>
 <body class="vignette grain" id="app">
-
-<!-- Background FX canvases -->
-<div class="fx-wrap">
-  <canvas id="bgGrad" aria-hidden="true"></canvas>
-  <canvas id="bgParticles" aria-hidden="true"></canvas>
-</div>
-
-<header>
-  <div class="bar wrap">
-    <div class="brand">
-      <div class="logo" aria-label="Brand">
-        <video id="logoVid" muted autoplay loop playsinline></video>
-      </div>
-      <div>
-        <h1 id="hello">Good day — THE GRID</h1>
-        <small>Black & Gold</small>
-      </div>
-    </div>
-    <div class="spacer"></div>
-    <button id="btnCustomize" class="btn">Customize</button>
-    <a id="btnJoin" class="btn primary" href="#">Join Now</a>
+  <!-- Background FX (effects.css paints these) -->
+  <div class="fx-wrap">
+    <canvas id="bgGrad" aria-hidden="true"></canvas>
+    <canvas id="bgParticles" aria-hidden="true"></canvas>
   </div>
-</header>
 
-<main class="wrap">
-  <!-- HERO -->
-  <section class="card">
-    <h2 id="heroTitle">Black & Gold</h2>
-    <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    <div id="hero" class="hero" aria-label="Hero media">
-      <div class="heroOverlay"></div>
+  <!-- Sticky header -->
+  <header>
+    <div class="bar wrap">
+      <div class="brand">
+        <div class="logo" aria-label="Brand">
+          <video id="logoVid" muted autoplay loop playsinline></video>
+        </div>
+        <div>
+          <h1 id="hello">Good day — THE GRID</h1>
+          <small>Black & Gold</small>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <button id="btnCustomize" class="btn">Customize</button>
+      <button id="btnJoin" class="btn primary">Join Now</button>
     </div>
-    <div class="ctaRow">
-      <a href="#library" class="btn">Open Library</a>
-      <a href="#plans" class="btn primary">See Pricing</a>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO (media injected by JS) -->
+    <section class="card">
+      <h2 id="heroTitle">Black & Gold</h2>
+      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+      <div id="hero" class="hero" aria-label="Hero media">
+        <div class="heroOverlay"></div>
+      </div>
+      <div class="ctaRow">
+        <a href="#library" class="btn">Open Library</a>
+        <a href="#plans" class="btn primary">See Pricing</a>
+      </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section id="library" class="card">
+      <h2>Library</h2>
+      <p class="lede">
+        Tap a tile to set the hero media. Files come from <b>assets/manifest.json</b> (with sensible defaults).
+        Place media in <b>assets/videos</b> or <b>assets/images</b>.
+      </p>
+      <div class="tabs" id="libTabs"></div>
+      <div class="tabs" id="libTags" style="margin-top:-4px"></div>
+      <div class="grid" id="libGrid" aria-live="polite"></div>
+      <p class="meta">Tip: short names help (e.g. <i>hero_1.mp4</i>, <i>grid_pour_1.jpg</i>).</p>
+    </section>
+
+    <!-- PLANS -->
+    <section id="plans" class="card">
+      <h2>Plans</h2>
+      <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
+      <div class="grid" id="plansGrid"><!-- populated from assets/data/plans.json --></div>
+      <p class="meta" style="margin-top:10px">
+        All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.
+      </p>
+    </section>
+
+    <!-- À-la-carte -->
+    <section id="services" class="card">
+      <h2>À-la-carte Services</h2>
+      <div class="grid" id="servicesGrid"><!-- optional: main.js can render these too --></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="card">
+      <h2>Contact</h2>
+      <form id="contactForm">
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <input name="name" placeholder="Your name" required>
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <input name="topic" placeholder="How can we help?">
+        <textarea name="msg" placeholder="Write your message…"></textarea>
+        <button class="btn primary" style="width:180px">Send</button>
+        <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
+      </form>
+    </section>
+  </main>
+
+  <!-- PLAN DETAILS MODAL -->
+  <dialog id="planModal">
+    <div class="modalHead">
+      <strong id="mTitle">Plan details</strong>
+      <button class="btn x" onclick="planModal.close()">Close</button>
     </div>
-  </section>
+    <div class="modalBody" id="mBody"></div>
+  </dialog>
 
-  <!-- LIBRARY -->
-  <section id="library" class="card">
-    <h2>Library</h2>
-    <p class="lede">Tap a tile to set the hero media. Files come from <b>assets/manifest.json</b> (with sensible defaults).</p>
-    <div class="tabs" id="libTabs"></div>
-    <div class="tabs" id="libTags" style="margin-top:-4px"></div>
-    <div class="grid" id="libGrid" aria-live="polite"></div>
-    <p class="meta">Place your media in <b>assets/videos</b> or <b>assets/images</b>. Keep names short (e.g. <i>hero_1.mp4</i>).</p>
-  </section>
-
-  <!-- PLANS -->
-  <section id="plans" class="card">
-    <h2>Plans</h2>
-    <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
-    <div class="grid" id="plansGrid"><!-- filled by assets/data/plans.json --></div>
-    <p class="meta" style="margin-top:10px">Adjust copy & prices in <b>assets/data/plans.json</b>.</p>
-  </section>
-
-  <!-- À-la-carte -->
-  <section class="card">
-    <h2>À-la-carte Services</h2>
-    <div class="grid" id="servicesGrid"><!-- filled by assets/data/services.json --></div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="card">
-    <h2>Contact</h2>
-    <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
+  <!-- CUSTOMIZE PANEL -->
+  <dialog id="panel">
+    <div class="modalHead">
+      <strong>Design Panel</strong>
+      <button class="btn x" onclick="panel.close()">Close</button>
+    </div>
+    <div class="modalBody">
+      <!-- controls are injected/managed by main.js; keep container IDs -->
       <div class="grid" style="grid-template-columns:1fr 1fr">
-        <input placeholder="Your name" required>
-        <input type="email" placeholder="you@example.com" required>
+        <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B"></label>
+        <label>Secondary accent<br><input id="uiAccent2" type="color" value="#95B2FF"></label>
+
+        <label>Text color<br><input id="uiInk" type="color" value="#E9ECF3"></label>
+        <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf"></label>
+
+        <label>Card surface<br><input id="uiCard" type="color" value="#10131b"></label>
+        <label>Panel surface<br><input id="uiPanel" type="color" value="#0f1219"></label>
+
+        <label>Background A<br><input id="uiBgA" type="color" value="#0b0b0f"></label>
+        <label>Background B<br><input id="uiBgB" type="color" value="#0a0b10"></label>
+
+        <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20"></label>
+        <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="24"></label>
+
+        <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1"></label>
+        <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1"></label>
+
+        <label>Vignette<br>
+          <select id="uiVignette"><option value="1">On</option><option value="0">Off</option></select>
+        </label>
+        <label>Hero source<br><select id="uiHero"></select></label>
       </div>
-      <input placeholder="How can we help?">
-      <textarea placeholder="Write your message…"></textarea>
-      <button class="btn primary" style="width:180px">Send</button>
-      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
-    </form>
-  </section>
-</main>
-<!-- DETAILS MODAL -->
-<dialog id="planModal">
-  <div class="modalHead">
-    <strong id="mTitle">Plan details</strong>
-    <button class="btn x" onclick="planModal.close()">Close</button>
-  </div>
-  <div class="modalBody" id="mBody"></div>
-</dialog>
 
-<!-- CUSTOMIZE PANEL -->
-<dialog id="panel">
-  <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
-  <div class="modalBody">
-    <div class="grid" style="grid-template-columns:1fr 1fr">
-      <label>Accent<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Accent 2<br><input id="uiAccent2" type="color" value="#95B2FF" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <h3 style="margin-top:16px">Confetti</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="140" value="44"></label>
+        <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.4" max="2.2" step=".05" value="1.1"></label>
+      </div>
 
-      <label>Text<br><input id="uiInk" type="color" value="#E9ECF3" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>Card<br><input id="uiCard" type="color" value="#10131b" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Panel<br><input id="uiPanel" type="color" value="#0f1219" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>BG A<br><input id="uiBgA" type="color" value="#0b0b0f" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>BG B<br><input id="uiBgB" type="color" value="#0a0b10" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>Radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
-      <label>Border glow<br><input id="uiRing" type="range" min="0" max="100" value="24" style="width:100%"></label>
-
-      <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-      <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-
-      <label>Vignette<br>
-        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-          <option value="1">On</option><option value="0">Off</option>
-        </select>
-      </label>
-      <label>Hero source<br>
-        <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
-      </label>
+      <div class="ctaRow" style="margin-top:16px">
+        <button id="save" class="btn">Save to this device</button>
+        <button id="reset" class="btn x">Reset</button>
+      </div>
     </div>
+  </dialog>
 
-    <h3 style="margin-top:16px">Confetti</h3>
-    <div class="grid" style="grid-template-columns:1fr 1fr">
-      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="140" value="44" style="width:100%"></label>
-      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.4" max="2.2" step=".05" value="1.1" style="width:100%"></label>
-    </div>
+  <!-- Confetti canvas -->
+  <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
 
-    <div class="ctaRow" style="margin-top:16px">
-      <button id="save" class="btn">Save to this device</button>
-      <button id="reset" class="btn x">Reset</button>
-    </div>
-  </div>
-</dialog>
-
-<!-- Confetti canvas -->
-<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
-
-<!-- Controller: this file drives everything (library, pricing, confetti, greeting, logo fallback, etc.) -->
-<script src="assets/js/main.js"></script>
-
-<!-- Safety boot (in case CSP delays the file cache) -->
-<script>
-  // If the controller already binds DOMContentLoaded, this is harmless.
-  document.addEventListener('DOMContentLoaded', ()=> {
-    if (window.__gridBoot) return; // main.js can set this
-    try {
-      // Minimal boot so the page isn’t blank if main.js is late.
-      const v = document.getElementById('logoVid');
-      if (v) {
-        v.src = 'assets/videos/gc_spin.mp4';
-        v.onerror = () => v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/gc_logo.png',alt:'Logo'}));
-      }
-      const h = new Date().getHours();
-      const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-      const hello = document.getElementById('hello'); if (hello) hello.textContent = `${word} — THE GRID`;
-    } catch(e){}
-  });
-</script>
-
+  <!-- Your split scripts (must be last, and `defer`) -->
+  <script src="assets/js/confetti.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
