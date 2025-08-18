@@ -1,0 +1,20 @@
+[
+  {
+    "price": "£39",
+    "badge": "SETUP",
+    "bullets": ["Deploy & connect Pages", "Analytics hookup", "Best-practice sweep"],
+    "cta": "Start Setup"
+  },
+  {
+    "price": "£59",
+    "badge": "REELS",
+    "bullets": ["3 niche reels", "Captions & cuts", "IG/TikTok ready"],
+    "cta": "Order Pack"
+  },
+  {
+    "price": "£29",
+    "badge": "TEMPLATES",
+    "bullets": ["5 premium blocks", "Copy-paste ready", "Lifetime updates"],
+    "cta": "Get Pack"
+  }
+]
