@@ -1,42 +1,208 @@
-:root{
-  --bg:#0b0d0f; --panel:#0f1216; --text:#e9eaec;
-  --muted:#a7abb1; --gold:#e6c26e; --gold2:#f6e3a4;
-  --ring:#242a34; --soft:#141820;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:radial-gradient(1000px 500px at 20% -10%, rgba(246,203,92,.08), transparent 50%) ,#0b0d0f;color:var(--text);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-.wrap{max-width:1080px;margin:0 auto;padding:24px}
-.gold{color:var(--gold)}
-.card{background:linear-gradient(180deg,#0f1216,#0e1115);border:1px solid #232833;border-radius:20px;padding:16px;box-shadow:0 1px 0 #1a1f26,0 10px 40px rgba(0,0,0,.3)}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.chip{padding:10px 16px;border-radius:999px;background:#0e1115;border:1px solid #232833;box-shadow:0 0 0 1px rgba(230,194,110,.15) inset, 0 10px 30px rgba(0,0,0,.3)}
-.cta{padding:10px 16px;border-radius:999px;border:1px solid rgba(230,194,110,.4);color:var(--gold);text-decoration:none}
-.controls .row{display:flex;gap:12px;align-items:center;margin:8px 0}
-label{display:flex;gap:8px;align-items:center}
-select,input[type="color"],input[type="range"],input[type="text"],input[type="search"]{background:#0e1115;border:1px solid #232833;border-radius:10px;color:var(--text);padding:10px}
-.btn{background:#151a22;border:1px solid #232833;border-radius:12px;padding:10px 14px;color:var(--text);cursor:pointer;transition:transform .06s ease, filter .2s}
-.btn:active{transform:translateY(1px) scale(.98)}
-.btn.gold{background:linear-gradient(180deg,#f6d77f,#e6c26e);color:#0b0d0f;border-color:#5a4b1e}
-.btn.ghost{background:#0e1115;border:1px solid #232833;color:var(--muted)}
-.btn.outline{background:transparent;border:1px solid rgba(230,194,110,.5);color:var(--gold)}
-.hero{margin-top:10px}
-.hero-frame{aspect-ratio:16/9;background:radial-gradient(800px 400px at 20% -10%, rgba(246,203,92,.05), transparent 60%), #0b0d0f;border:1px solid #232833;border-radius:20px;display:grid;place-items:center;overflow:hidden}
-.hero-frame video,.hero-frame img{width:100%;height:100%;object-fit:cover}
-.pitch h1{font-size:40px;margin:16px 0 8px}
-.pitch p{color:var(--muted);margin:0 0 12px}
-.actions{display:flex;gap:12px;flex-wrap:wrap}
-.panel{position:fixed;right:12px;bottom:12px;width:min(420px,94vw);max-height:78vh;border:1px solid #242833;background:#0e1115;border-radius:14px;box-shadow:0 20px 80px rgba(0,0,0,.45);display:flex;flex-direction:column}
-.panel[hidden]{display:none}
-.panel-head{display:flex;align-items:center;gap:8px;padding:10px;border-bottom:1px solid #1d222b}
-.panel-head h3{margin:0}
-.icon{background:#151a22;border:1px solid #232833;border-radius:10px;color:#9aa3ad;padding:6px 10px;cursor:pointer}
-.panel-body{padding:12px;overflow:auto}
-.stack{display:flex;flex-direction:column;gap:6px;margin:6px 0}
-.panel-actions{display:flex;gap:8px;margin-top:6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
-.thumb{border:1px solid #232833;border-radius:10px;overflow:hidden;background:#0b0d0f}
-.thumb img,.thumb video{width:100%;height:100%;object-fit:cover}
-.foot{display:grid;place-items:center;padding:40px 8px;color:#9aa3ad}
+/* THE GRID — styles.css (full)
+   One stylesheet for header, sections, cards, hero, library, plans, modals & forms.
+   Variables are driven by Customize panel via JS.
+*/
 
-/* Confetti canvas covers page */
-#confetti{position:fixed;inset:0;pointer-events:none}
+/* --------------------- Design Tokens --------------------- */
+:root{
+  /* Brand palette (adjusted by Customize) */
+  --accent:#E7B84B;
+  --accent-2:#95B2FF;
+  --ink:#E9ECF3;
+  --soft:#b9c0cf;
+
+  /* Surfaces */
+  --bg-a:#0b0b0f;   /* moving gradient A */
+  --bg-b:#0a0b10;   /* moving gradient B */
+  --panel:#0f1219;  /* dialogs/panels */
+  --card:#10131b;   /* section cards */
+
+  /* Radii / scale */
+  --radius:20px;
+  --fontScale:1;
+  --space:1;
+
+  /* FX */
+  --ring:24;        /* 0–100 border glow */
+  --vignette:1;     /* 0/1 */
+  --grain:0.4;      /* 0–1 */
+}
+
+/* --------------------- Global base --------------------- */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+  color:var(--ink);
+  background:#000; /* canvases paint moving gradient/particles */
+  letter-spacing:.2px;
+  --pad: calc(14px * var(--space));
+}
+
+/* Common container */
+.wrap{max-width:980px;margin-inline:auto;padding:24px}
+@media (max-width:480px){
+  .wrap{padding:18px}
+}
+
+/* --------------------- Background FX helpers --------------------- */
+.fx-wrap{position:fixed; inset:0; pointer-events:none; z-index:-1}
+#bgGrad,#bgParticles{position:absolute; inset:0; width:100%; height:100%; display:block}
+
+/* vignette + golden corner glow */
+.vignette:before{
+  content:""; position:fixed; inset:0; pointer-events:none;
+  background:
+    radial-gradient(1200px 600px at 50% -260px, #0000 30%, rgba(231,184,75,.15) 55%, #0000 70%),
+    radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
+    radial-gradient(1200px 600px at -200px 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%),
+    radial-gradient(1200px 600px at calc(100% + 200px) 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%);
+  opacity: calc(.55 * var(--vignette));
+  z-index:-1;
+}
+
+/* subtle film grain overlay */
+.grain:after{
+  content:""; position:fixed; inset:0; pointer-events:none; mix-blend-mode:overlay; z-index:-1;
+  background-image:url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160">\
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter>\
+    <rect width="100%" height="100%" filter="url(%23n)" opacity="0.12"/></svg>');
+  opacity:var(--grain);
+}
+
+/* --------------------- Header / Masthead --------------------- */
+header{
+  position:sticky; top:0; z-index:20;
+  backdrop-filter:saturate(1.05) blur(10px);
+  background: color-mix(in srgb, #0b0c10 78%, #000 22%);
+  border-bottom:1px solid #171a23;
+}
+.bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
+.brand{display:flex;gap:12px;align-items:center; min-width:0}
+.logo{
+  width:40px;height:40px;border-radius:12px;overflow:hidden;position:relative;background:#0c0f14;
+  box-shadow:0 0 0 1px #1a1f2c inset, 0 0 22px rgba(231,184,75,.18);
+}
+.logo video,.logo img{width:100%;height:100%;object-fit:cover;display:block}
+.brand h1{
+  margin:0; font-weight:800; letter-spacing:.2px;
+  font-size: clamp(22px, 6vw, 44px); line-height:1.08;
+}
+.brand small{display:block; color:var(--soft); font-size:.9em}
+.spacer{flex:1}
+
+/* Buttons */
+.btn{
+  appearance:none; border:0; border-radius:12px; padding:12px 16px;
+  font:600 16px/1 inherit; cursor:pointer;
+  background:#161a24; color:var(--ink);
+  box-shadow:0 0 0 1px #232838 inset; transition:transform .12s ease, box-shadow .2s ease, background .2s ease, filter .2s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%);
+  color:#1a1300;
+  box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
+  filter: drop-shadow(0 0 6px rgba(231,184,75,.35));
+}
+.btn.x{background:#141926}
+
+@media (max-width:480px){
+  .bar{padding:12px 16px}
+  .btn{padding:10px 14px;font-size:15px}
+}
+
+/* --------------------- Sections / Cards --------------------- */
+section{margin:28px 0}
+.card{
+  background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 20%), color-mix(in srgb, var(--card), #07090D 0%));
+  border-radius:var(--radius);
+  padding:calc(var(--pad)*1.2);
+  position:relative;
+  box-shadow:
+    0 0 0 1px #1b2130 inset,
+    0 8px 40px rgba(0,0,0,.45),
+    0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
+}
+h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 10px}
+.lede{color:var(--soft); margin:0 0 18px}
+
+/* Border style preview utilities (optional) */
+.solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
+.none .card, .none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
+
+/* --------------------- Hero --------------------- */
+.hero{
+  border-radius:calc(var(--radius) - 6px); overflow:hidden; position:relative;
+  box-shadow:0 0 0 2px #202636 inset, 0 20px 60px rgba(0,0,0,.45);
+  background:#0c0f15;
+}
+.hero-media{width:100%; height:min(62vw, 420px); display:block; object-fit:cover}
+.heroOverlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45)); pointer-events:none}
+
+/* CTA row under hero */
+.ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
+.ctaRow .btn{padding:12px 18px}
+
+/* --------------------- Library --------------------- */
+.tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+.pill{
+  padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
+  box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none; transition:.2s;
+}
+.pill:hover{box-shadow:0 0 0 2px color-mix(in srgb, var(--accent), #fff 15%) inset}
+.pill.active{box-shadow:0 0 0 2px var(--accent) inset; background:#151a24}
+.grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.tile{
+  padding:12px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer;
+  display:grid; grid-template-columns:64px 1fr; gap:12px; align-items:center; transition:.2s;
+}
+.tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
+.thumb{
+  width:64px; height:64px; border-radius:10px; overflow:hidden; display:grid; place-items:center;
+  background:#0b0e14; box-shadow:0 0 0 1px #202636 inset;
+}
+.thumb video, .thumb img{width:100%;height:100%;object-fit:cover; display:block}
+.meta{font-size:.9em; color:#93a0b8}
+
+/* --------------------- Pricing / Plans --------------------- */
+.plan{
+  display:grid; gap:12px; padding:18px; border-radius:16px; background:#11141b;
+  box-shadow:0 0 0 1px #1c2130 inset;
+}
+.plan .head{display:flex; justify-content:space-between; align-items:center}
+.badge{
+  border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;
+  color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset
+}
+.price{font:800 34px/1.1 ui-sans-serif}
+.plan ul{margin:0 0 4px 18px}
+.plan .row{display:flex; gap:10px}
+.plan .btn{flex:1}
+.plan .ghost{background:#0f141d;color:#d7dbea}
+.plan.gold{box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.15)}
+.plan.diamond{box-shadow:0 0 0 1px #202636 inset, 0 0 0 2px rgba(149,178,255,.18)}
+
+/* --------------------- Forms / Contact --------------------- */
+form{display:grid;gap:10px}
+input,textarea{
+  width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink);
+  transition:border-color .2s, box-shadow .2s;
+}
+input:focus, textarea:focus{outline:none; border-color:color-mix(in srgb, var(--accent), #fff 10%); box-shadow:0 0 0 2px rgba(231,184,75,.18)}
+textarea{min-height:130px; resize:vertical}
+
+/* --------------------- Modals --------------------- */
+dialog{border:0; border-radius:16px; background:var(--panel); color:var(--ink); padding:0; width:min(680px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
+.modalBody{padding:18px}
+
+/* --------------------- Utilities --------------------- */
+.muted{color:var(--soft)}
+.hide{display:none !important}
+
+/* Keep confetti canvas above content but mouse-through */
+#fx{position:fixed;inset:0;pointer-events:none;}
