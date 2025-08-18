@@ -279,3 +279,176 @@
       <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
     </form>
   </section>
+    <!-- MODALS -->
+  <dialog id="planDialog">
+    <div class="modalHead">
+      <strong>Plan Details</strong>
+      <button class="btn x" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <div class="modalBody" id="planDetails">Loading…</div>
+  </dialog>
+
+  <dialog id="compareDialog">
+    <div class="modalHead">
+      <strong>Compare Plans</strong>
+      <button class="btn x" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <div class="modalBody">
+      <table style="width:100%;border-collapse:collapse;font-size:.95em">
+        <thead><tr><th align="left">Feature</th><th>Basic</th><th>Silver</th><th>Gold</th><th>Diamond</th></tr></thead>
+        <tbody>
+          <tr><td>Email support</td><td>48h</td><td>24h</td><td>Priority</td><td>Priority+</td></tr>
+          <tr><td>Templates</td><td>Starter</td><td>Advanced</td><td>+Custom</td><td>Full custom</td></tr>
+          <tr><td>Admin toolkit</td><td>–</td><td>–</td><td>✔</td><td>✔+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </dialog>
+
+  <dialog id="customizeDialog">
+    <div class="modalHead">
+      <strong>Customize</strong>
+      <button class="btn x" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <div class="modalBody">
+      <label>Accent <input type="color" id="cAccent" value="#E7B84B"></label><br>
+      <label>Accent 2 <input type="color" id="cAccent2" value="#9AB6FF"></label><br>
+      <label>Text <input type="color" id="cInk" value="#E9ECF3"></label><br>
+      <label>Soft <input type="color" id="cSoft" value="#B9C0CF"></label><br>
+      <label>Background <input type="color" id="cBg" value="#0B0C10"></label><br>
+      <label>Card <input type="color" id="cCard" value="#11131A"></label><br>
+      <label>Panel <input type="color" id="cPanel" value="#101218"></label><br>
+      <label>Border Glow <input type="range" id="cRing" min="0" max="100" value="24"></label><br>
+      <label>Font Scale <input type="range" id="cFont" min="0.9" max="1.2" step="0.05" value="1"></label><br>
+      <label>Spacing <input type="range" id="cSpace" min="0.9" max="1.2" step="0.05" value="1"></label><br>
+      <label>Border Style
+        <select id="cBorder">
+          <option value="glow">Glow</option>
+          <option value="solid">Solid</option>
+          <option value="none">None</option>
+        </select>
+      </label><br>
+      <label><input type="checkbox" id="cVignette" checked> Vignette</label>
+    </div>
+  </dialog>
+</main>
+
+<script>
+/* Greeting */
+(function(){
+  const h=document.getElementById('hello');
+  const hr=new Date().getHours();
+  h.textContent=(hr<12?"Good morning":hr<18?"Good afternoon":"Good evening")+" — THEGRID";
+})();
+
+/* Logo */
+const logo=document.getElementById('logoVid');
+if(logo){logo.src="assets/videos/logo.mp4"; logo.onerror=()=>logo.replaceWith(Object.assign(document.createElement("img"),{src:"assets/images/logo.png"}))}
+
+/* Hero filler */
+function setHero(src,isVideo){
+  const h=document.getElementById('hero');
+  h.innerHTML="";
+  if(isVideo){
+    const v=document.createElement("video");
+    v.src=src; v.controls=true; v.autoplay=true; v.loop=true; v.playsInline=true;
+    h.appendChild(v);
+  }else{
+    const i=document.createElement("img"); i.src=src; h.appendChild(i);
+  }
+}
+setHero("assets/videos/hero_1.mp4",true);
+
+/* Library builder */
+async function buildLibrary(){
+  const tabs=document.getElementById("libTabs");
+  const grid=document.getElementById("libGrid");
+  let files=[];
+  try{
+    const res=await fetch("assets/manifest.json"); if(res.ok) files=await res.json();
+  }catch(e){}
+  if(!files.length) files=[
+    {file:"hero_1.mp4",label:"Hero sample"},
+    {file:"reel_sample.mp4",label:"Reel"},
+    {file:"sample.jpg",label:"Image"}
+  ];
+  const groups={All:files,Video:files.filter(f=>f.file.endsWith(".mp4")),Image:files.filter(f=>!f.file.endsWith(".mp4"))};
+  let current="All";
+  function renderTabs(){
+    tabs.innerHTML="";
+    Object.keys(groups).forEach(k=>{
+      const b=document.createElement("div");
+      b.className="pill"+(k===current?" active":"");
+      b.textContent=k; b.onclick=()=>{current=k; renderTabs(); renderGrid();};
+      tabs.appendChild(b);
+    });
+  }
+  function renderGrid(){
+    grid.innerHTML="";
+    groups[current].forEach(f=>{
+      const t=document.createElement("div");
+      t.className="tile"; t.textContent=f.label;
+      t.onclick=()=>setHero("assets/"+(f.file.endsWith(".mp4")?"videos/":"images/")+f.file,f.file.endsWith(".mp4"));
+      grid.appendChild(t);
+    });
+  }
+  renderTabs(); renderGrid();
+}
+buildLibrary();
+
+/* Plan details */
+document.querySelectorAll(".plan .details").forEach(btn=>{
+  btn.onclick=()=>{
+    const plan=btn.closest(".plan").dataset.tier;
+    document.getElementById("planDetails").innerHTML="<p>Loading details for <b>"+plan+"</b>…</p>";
+    document.getElementById("planDialog").showModal();
+  };
+});
+
+/* Compare */
+document.getElementById("btnCompare").onclick=()=>document.getElementById("compareDialog").showModal();
+
+/* Customize panel */
+const cDlg=document.getElementById("customizeDialog");
+document.getElementById("btnCustomize").onclick=()=>cDlg.showModal();
+function applyCustom(){
+  const r=document.documentElement;
+  r.style.setProperty("--accent",document.getElementById("cAccent").value);
+  r.style.setProperty("--accent2",document.getElementById("cAccent2").value);
+  r.style.setProperty("--ink",document.getElementById("cInk").value);
+  r.style.setProperty("--soft",document.getElementById("cSoft").value);
+  r.style.setProperty("--bg",document.getElementById("cBg").value);
+  r.style.setProperty("--card",document.getElementById("cCard").value);
+  r.style.setProperty("--panel",document.getElementById("cPanel").value);
+  r.style.setProperty("--ring",document.getElementById("cRing").value);
+  r.style.setProperty("--fontScale",document.getElementById("cFont").value);
+  r.style.setProperty("--space",document.getElementById("cSpace").value);
+  document.body.classList.remove("glow","solid","none");
+  document.body.classList.add(document.getElementById("cBorder").value);
+  r.style.setProperty("--vignette",document.getElementById("cVignette").checked?1:0);
+  localStorage.setItem("gridTheme",r.getAttribute("style")+"; borderStyle:"+document.getElementById("cBorder").value);
+}
+["cAccent","cAccent2","cInk","cSoft","cBg","cCard","cPanel","cRing","cFont","cSpace","cBorder","cVignette"].forEach(id=>{
+  document.getElementById(id).oninput=applyCustom;
+});
+window.addEventListener("DOMContentLoaded",()=>{
+  const saved=localStorage.getItem("gridTheme");
+  if(saved){ document.documentElement.setAttribute("style",saved.split("; borderStyle:")[0]); document.body.classList.add(saved.split("; borderStyle:")[1]||"glow"); }
+});
+
+/* Confetti */
+function confettiAt(el){
+  const rect=el.getBoundingClientRect();
+  const x=rect.left+rect.width/2, y=rect.top+rect.height/2;
+  for(let i=0;i<20;i++){
+    const d=document.createElement("div");
+    d.style.cssText=`position:fixed;left:${x}px;top:${y}px;width:6px;height:6px;background:${Math.random()<.5?"var(--accent)":"var(--accent2)"};border-radius:50%;pointer-events:none;z-index:2000;`;
+    document.body.appendChild(d);
+    const dx=(Math.random()-.5)*220, dy=(Math.random()-.5)*220;
+    d.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${dx}px,${dy}px)`,opacity:0}],{duration:800+Math.random()*600,easing:"ease-out"}).onfinish=()=>d.remove();
+  }
+}
+document.querySelectorAll(".choose").forEach(btn=>btn.onclick=()=>confettiAt(btn));
+</script>
+</body>
+</html>
