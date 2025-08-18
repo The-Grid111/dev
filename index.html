@@ -6,7 +6,7 @@
 <title>THE GRID — Black & Gold</title>
 <meta name="theme-color" content="#0b0b0f"/>
 
-<!-- Preload (safe if missing) -->
+<!-- Safe preloads -->
 <link rel="preload" href="assets/videos/hero_1.mp4" as="video">
 <link rel="preload" href="assets/videos/gc_spin.mp4" as="video">
 <link rel="preload" href="assets/images/hero_1.jpg" as="image">
@@ -24,8 +24,7 @@
   html,body{height:100%}
   body{
     margin:0; font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    color:var(--ink); background:#000; letter-spacing:.2px;
-    --pad: calc(14px * var(--space));
+    color:var(--ink); background:#000; letter-spacing:.2px; --pad: calc(14px * var(--space));
   }
 
   /* FX layers */
@@ -48,6 +47,7 @@
 
   .wrap{max-width:980px;margin-inline:auto;padding:24px}
 
+  /* Header */
   header{
     position:sticky; top:0; z-index:20; backdrop-filter:saturate(1.05) blur(10px);
     background:color-mix(in srgb, #0b0c10 78%, #000 22%); border-bottom:1px solid #171a23;
@@ -72,6 +72,7 @@
     filter: drop-shadow(0 0 6px rgba(231,184,75,.35));
   }
 
+  /* Sections */
   section{margin:28px 0}
   .card{
     background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 20%), color-mix(in srgb, var(--card), #07090D 0%));
@@ -82,6 +83,7 @@
   h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 10px}
   .lede{color:var(--soft); margin:0 0 18px}
 
+  /* Hero */
   .hero{border-radius:calc(var(--radius) - 6px); overflow:hidden; position:relative;
         box-shadow:0 0 0 2px #202636 inset, 0 20px 60px rgba(0,0,0,.45); background:#0c0f15}
   .hero-media{width:100%; height:min(62vw, 420px); display:block; object-fit:cover}
@@ -89,6 +91,7 @@
   .ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
   .ctaRow .btn{padding:12px 18px}
 
+  /* Library */
   .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
   .pill{padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
         box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none; transition:.2s}
@@ -104,6 +107,7 @@
   .thumb video,.thumb img{width:100%;height:100%;object-fit:cover;display:block}
   .meta{font-size:.9em; color:#93a0b8}
 
+  /* Pricing */
   .plan{display:grid; gap:12px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
   .plan .head{display:flex; justify-content:space-between; align-items:center}
   .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px; color:#0c1017;
@@ -116,16 +120,15 @@
   .plan.gold{box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.15)}
   .plan.diamond{box-shadow:0 0 0 1px #202636 inset, 0 0 0 2px rgba(149,178,255,.18)}
 
+  /* Forms / Modal */
   form{display:grid;gap:10px}
   input,textarea{width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink)}
   textarea{min-height:130px; resize:vertical}
-
   dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,92vw)}
   dialog::backdrop{background:rgba(0,0,0,.6)}
   .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
   .modalBody{padding:18px}
   .x{background:#141926}
-
   .muted{color:var(--soft)}
 </style>
 </head>
@@ -171,7 +174,7 @@
   <!-- LIBRARY -->
   <section id="library" class="card">
     <h2>Library</h2>
-    <p class="lede">Tap a tile to set the hero media. Files come from <b>assets/manifest.json</b> (and fallback defaults).</p>
+    <p class="lede">Tap a tile to set the hero media. Files come from <b>assets/manifest.json</b> (with sensible defaults).</p>
     <div class="tabs" id="libTabs"></div>
     <div class="tabs" id="libTags" style="margin-top:-4px"></div>
     <div class="grid" id="libGrid" aria-live="polite"></div>
@@ -182,14 +185,14 @@
   <section id="plans" class="card">
     <h2>Plans</h2>
     <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
-    <div class="grid"><!-- filled by JS from assets/data/plans.json --></div>
+    <div class="grid" id="plansGrid"><!-- filled by assets/data/plans.json --></div>
     <p class="meta" style="margin-top:10px">Adjust copy & prices in <b>assets/data/plans.json</b>.</p>
   </section>
 
   <!-- À-la-carte -->
   <section class="card">
     <h2>À-la-carte Services</h2>
-    <div class="grid"><!-- filled by JS from assets/data/services.json --></div>
+    <div class="grid" id="servicesGrid"><!-- filled by assets/data/services.json --></div>
   </section>
 
   <!-- CONTACT -->
@@ -207,7 +210,6 @@
     </form>
   </section>
 </main>
-
 <!-- DETAILS MODAL -->
 <dialog id="planModal">
   <div class="modalHead">
@@ -266,11 +268,27 @@
 <!-- Confetti canvas -->
 <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
 
-<!-- Controller -->
+<!-- Controller: this file drives everything (library, pricing, confetti, greeting, logo fallback, etc.) -->
 <script src="assets/js/main.js"></script>
+
+<!-- Safety boot (in case CSP delays the file cache) -->
 <script>
-  // Boot after assets/js/main.js loads
-  // (init() is bound in main.js via DOMContentLoaded)
+  // If the controller already binds DOMContentLoaded, this is harmless.
+  document.addEventListener('DOMContentLoaded', ()=> {
+    if (window.__gridBoot) return; // main.js can set this
+    try {
+      // Minimal boot so the page isn’t blank if main.js is late.
+      const v = document.getElementById('logoVid');
+      if (v) {
+        v.src = 'assets/videos/gc_spin.mp4';
+        v.onerror = () => v.replaceWith(Object.assign(document.createElement('img'),{src:'assets/images/gc_logo.png',alt:'Logo'}));
+      }
+      const h = new Date().getHours();
+      const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+      const hello = document.getElementById('hello'); if (hello) hello.textContent = `${word} — THE GRID`;
+    } catch(e){}
+  });
 </script>
+
 </body>
 </html>
