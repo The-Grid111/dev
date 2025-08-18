@@ -450,5 +450,337 @@ function confettiAt(el){
 }
 document.querySelectorAll(".choose").forEach(btn=>btn.onclick=()=>confettiAt(btn));
 </script>
+    <!-- MODALS -->
+  <dialog id="planModal">
+    <div class="modalHead">
+      <strong id="mTitle">Plan details</strong>
+      <button class="btn x" onclick="planModal.close()">Close</button>
+    </div>
+    <div class="modalBody" id="mBody">Loading…</div>
+  </dialog>
+
+  <dialog id="compareDialog">
+    <div class="modalHead">
+      <strong>Compare Plans</strong>
+      <button class="btn x" onclick="compareDialog.close()">Close</button>
+    </div>
+    <div class="modalBody">
+      <table style="width:100%;border-collapse:collapse;font-size:.95em">
+        <thead>
+          <tr>
+            <th align="left" style="padding:8px;border-bottom:1px solid #293044">Feature</th>
+            <th style="padding:8px;border-bottom:1px solid #293044">Basic</th>
+            <th style="padding:8px;border-bottom:1px solid #293044">Silver</th>
+            <th style="padding:8px;border-bottom:1px solid #293044">Gold</th>
+            <th style="padding:8px;border-bottom:1px solid #293044">Diamond</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px">Email support</td><td align="center">48h</td><td align="center">24h</td><td align="center">Priority</td><td align="center">Priority+</td></tr>
+          <tr><td style="padding:8px">Templates</td><td align="center">Starter</td><td align="center">Advanced</td><td align="center">+Custom</td><td align="center">Full custom</td></tr>
+          <tr><td style="padding:8px">Admin toolkit</td><td align="center">–</td><td align="center">–</td><td align="center">✔</td><td align="center">✔+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </dialog>
+
+  <!-- OPTIONAL: Customize dialog (binds only if you already have buttons/inputs) -->
+  <dialog id="panel">
+    <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
+    <div class="modalBody">
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <label>Accent<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
+        <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="24" style="width:100%"></label>
+        <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
+        <label>Border style<br>
+          <select id="uiBorder" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+            <option value="glow">Glow</option><option value="solid">Solid</option><option value="none">None</option>
+          </select>
+        </label>
+        <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+        <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+        <label>Vignette<br>
+          <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+            <option value="1">On</option><option value="0">Off</option>
+          </select>
+        </label>
+        <label>Hero source<br>
+          <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
+        </label>
+      </div>
+
+      <h3 style="margin-top:16px">Confetti</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <label>Density<br><input id="uiConfettiDensity" type="range" min="5" max="80" value="28" style="width:100%"></label>
+        <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.3" max="2" step=".05" value="1.1" style="width:100%"></label>
+      </div>
+
+      <div class="ctaRow" style="margin-top:16px">
+        <button id="save" class="btn">Save to this device</button>
+        <button id="reset" class="btn x">Reset</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Confetti canvas -->
+  <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;z-index:1000"></canvas>
+
+<script>
+/* ---------- tiny helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() }
+function setCSS(v,val){ document.documentElement.style.setProperty(v,val) }
+
+/* ---------- state ---------- */
+const state = {
+  accent: getCSS('--accent') || '#E7B84B',
+  ring: +getCSS('--ring') || 24,
+  radius: parseInt(getCSS('--radius') || '20'),
+  border: (document.body.className.match(/(solid|none|glow)/)||['glow'])[0],
+  font: +getCSS('--fontScale') || 1,
+  space: +getCSS('--space') || 1,
+  vignette: +getCSS('--vignette') || 1,
+  heroSrc: 'assets/videos/hero_1.mp4',
+  confetti: {density:28, speed:1.1, sizeMin:2, sizeMax:5},
+  library: {}
+};
+function save(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)) }
+function load(){
+  const s = JSON.parse(localStorage.getItem('thegrid.settings')||'null');
+  if(!s) return;
+  Object.assign(state, s);
+  applyState();
+}
+
+/* ---------- greeting ---------- */
+(function(){
+  const h = new Date().getHours();
+  const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+  const el = $('#hello'); if(el) el.textContent = `${word} — THEGRID`;
+})();
+
+/* ---------- logo (your current files) ---------- */
+(function(){
+  const v = $('#logoVid');
+  if(!v) return;
+  v.src = 'assets/videos/gc_spin.mp4';
+  v.muted = true; v.autoplay = true; v.loop = true; v.playsInline = true;
+  v.onerror = () => {
+    const img = document.createElement('img');
+    img.src = 'assets/images/gc_logo.png';
+    img.alt = 'Logo';
+    v.replaceWith(img);
+  };
+})();
+
+/* ---------- hero ---------- */
+function setHero(src){
+  state.heroSrc = src; save(); renderHero();
+}
+function renderHero(){
+  const box = $('#hero'); if(!box) return; box.innerHTML='';
+  if(/\.(mp4|webm|mov)$/i.test(state.heroSrc)){
+    const v = Object.assign(document.createElement('video'), {
+      src: state.heroSrc, controls:true, playsInline:true
+    });
+    box.appendChild(v);
+  }else{
+    const i = Object.assign(document.createElement('img'), {src:state.heroSrc, alt:'hero'});
+    box.appendChild(i);
+  }
+}
+
+/* ---------- manifest loader (supports your layouts) ---------- */
+async function fetchJson(url){
+  try{ const r = await fetch(url,{cache:'no-store'}); if(r.ok) return await r.json(); }catch(e){}
+  return null;
+}
+function normalizeManifest(m){
+  // 1) New structured: {logo, hero:{images,videos}, grid:{images,videos}, extras:{logoSpin}}
+  if(m && m.hero && (m.hero.images || m.hero.videos)){
+    const lib = {
+      "Hero":  [ ...(m.hero.videos||[]), ...(m.hero.images||[]) ],
+      "Reels 9:16": [],
+      "Reels 16:9": m.grid?.videos || [],
+      "Backgrounds": m.grid?.images || [],
+      "Logos": [ m.extras?.logoSpin, m.logo ].filter(Boolean),
+      "Images": [ ...(m.hero.images||[]) ]
+    };
+    // set default hero if available
+    if((m.hero.videos||[])[0]) state.heroSrc = m.hero.videos[0];
+    else if((m.hero.images||[])[0]) state.heroSrc = m.hero.images[0];
+    return lib;
+  }
+  // 2) Category object with arrays (Hero, Logos, Images, etc.)
+  if(m && !Array.isArray(m)){
+    return m;
+  }
+  // 3) Array of {file,label} or strings
+  if(Array.isArray(m)){
+    const vids = m.map(x=>typeof x==='string'?x:x.file).filter(x=>/\.(mp4|webm|mov)$/i.test(x));
+    const imgs = m.map(x=>typeof x==='string'?x:x.file).filter(x=>!/\.(mp4|webm|mov)$/i.test(x));
+    return { "Hero":[...vids,...imgs], "Images":imgs, "Logos":[], "Reels 9:16":[], "Reels 16:9":[], "Backgrounds":[] };
+  }
+  // fallback minimal
+  return {
+    "Hero":[ "assets/videos/hero_1.mp4", "assets/images/hero_1.jpg" ],
+    "Images":[ "assets/images/hero_1.jpg" ],
+    "Logos":[ "assets/videos/gc_spin.mp4", "assets/images/gc_logo.png" ],
+    "Reels 9:16":[], "Reels 16:9":[], "Backgrounds":[]
+  };
+}
+
+async function loadManifest(){
+  // prefer assets/manifest.json (you moved it here), then fallback to assets/videos/manifest.json
+  let raw = await fetchJson('assets/manifest.json');
+  if(!raw) raw = await fetchJson('assets/videos/manifest.json');
+  state.library = normalizeManifest(raw);
+  buildLibrary();
+  populateHeroSelect();
+}
+
+/* ---------- library UI ---------- */
+function buildLibrary(){
+  const tabs = $('#libTabs'); const grid = $('#libGrid');
+  if(!tabs || !grid) return;
+  tabs.innerHTML=''; grid.innerHTML='';
+
+  const cats = Object.keys(state.library);
+  let active = localStorage.getItem('thegrid.activeTab') || cats[0];
+
+  cats.forEach(cat=>{
+    const b = Object.assign(document.createElement('div'),{
+      className:'pill'+(cat===active?' active':''), textContent:cat
+    });
+    b.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
+    tabs.appendChild(b);
+  });
+
+  (state.library[active]||[]).forEach(src=>{
+    const t = Object.assign(document.createElement('div'),{
+      className:'tile',
+      innerHTML:`<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`
+    });
+    t.onclick = ()=> setHero(src);
+    grid.appendChild(t);
+  });
+}
+
+function populateHeroSelect(){
+  const sel = $('#uiHero'); if(!sel) return;
+  sel.innerHTML='';
+  const all = [...new Set(Object.values(state.library).flat())];
+  all.forEach(src=>{
+    const o = new Option(src, src, src===state.heroSrc, src===state.heroSrc);
+    sel.add(o);
+  });
+}
+
+/* ---------- customize panel bindings (only if panel exists) ---------- */
+$('#btnCustomize') && ($('#btnCustomize').onclick = ()=>panel.showModal());
+$('#save') && ($('#save').onclick = ()=>{ save(); alert('Saved to this device.'); });
+$('#reset') && ($('#reset').onclick = ()=>{ localStorage.removeItem('thegrid.settings'); location.reload(); });
+
+$('#uiAccent') && ($('#uiAccent').oninput = e=>{ state.accent=e.target.value; setCSS('--accent',state.accent); save(); });
+$('#uiRing') && ($('#uiRing').oninput = e=>{ state.ring=+e.target.value; setCSS('--ring',state.ring); save(); });
+$('#uiRadius') && ($('#uiRadius').oninput = e=>{ state.radius=+e.target.value; setCSS('--radius', state.radius+'px'); save(); });
+$('#uiFont') && ($('#uiFont').oninput = e=>{ state.font=+e.target.value; setCSS('--fontScale', state.font); save(); });
+$('#uiSpace') && ($('#uiSpace').oninput = e=>{ state.space=+e.target.value; setCSS('--space', state.space); save(); });
+$('#uiBorder') && ($('#uiBorder').oninput = e=>{ state.border=e.target.value; document.body.classList.remove('solid','none','glow'); document.body.classList.add(state.border); save(); });
+$('#uiVignette') && ($('#uiVignette').oninput = e=>{ state.vignette=+e.target.value; setCSS('--vignette', state.vignette); save(); });
+$('#uiHero') && ($('#uiHero').oninput = e=> setHero(e.target.value));
+$('#uiConfettiDensity') && ($('#uiConfettiDensity').oninput = e=>{ state.confetti.density=+e.target.value; save(); });
+$('#uiConfettiSpeed') && ($('#uiConfettiSpeed').oninput = e=>{ state.confetti.speed=+e.target.value; save(); });
+
+function applyState(){
+  setCSS('--accent', state.accent);
+  setCSS('--ring', state.ring);
+  setCSS('--radius', state.radius+'px');
+  setCSS('--fontScale', state.font);
+  setCSS('--space', state.space);
+  setCSS('--vignette', state.vignette);
+  document.body.classList.add(state.border);
+  renderHero();
+  // sync selects if present
+  $('#uiAccent') && ($('#uiAccent').value = state.accent);
+  $('#uiRing') && ($('#uiRing').value = state.ring);
+  $('#uiRadius') && ($('#uiRadius').value = state.radius);
+  $('#uiFont') && ($('#uiFont').value = state.font);
+  $('#uiSpace') && ($('#uiSpace').value = state.space);
+  $('#uiBorder') && ($('#uiBorder').value = state.border);
+  $('#uiVignette') && ($('#uiVignette').value = state.vignette);
+}
+
+/* ---------- pricing details ---------- */
+const DETAILS = {
+  basic:`<section><h3>Who it’s for</h3><p>Creators getting started.</p><h3>What you get</h3><ul><li>Starter templates</li><li>Library access</li><li>Email support (48h)</li><li>7-day refund</li></ul><h3>How it works</h3><p>Copy blocks, swap media, publish.</p></section>`,
+  silver:`<section><h3>Who it’s for</h3><p>Creators who want faster, better visuals.</p><h3>What you get</h3><ul><li>Everything in Basic</li><li>Advanced effects & presets</li><li>Priority support (24h)</li><li>Quarterly drops</li></ul><h3>How it works</h3><p>Import premium blocks, apply presets.</p></section>`,
+  gold:`<section><h3>Who it’s for</h3><p>Brands needing hands-on help.</p><h3>What you get</h3><ul><li>Customization session</li><li>Admin toolkit</li><li>1:1 onboarding</li></ul><h3>How it works</h3><p>We tune the setup with you.</p></section>`,
+  diamond:`<section><h3>Who it’s for</h3><p>Teams needing pipelines & integrations.</p><h3>What you get</h3><ul><li>Everything in Gold</li><li>Custom pipelines</li><li>Priority roadmap</li></ul><h3>How it works</h3><p>We spec, implement, document.</p></section>`
+};
+$$('.details').forEach(b=>{
+  b.onclick = e=>{
+    const card = e.currentTarget.closest('.plan');
+    const tier = card.dataset.tier;
+    $('#mTitle').textContent = tier.toUpperCase() + ' plan';
+    $('#mBody').innerHTML = DETAILS[tier] + `<div class="ctaRow"><button class="btn primary" onclick="planModal.close()">Sounds good</button></div>`;
+    planModal.showModal();
+  };
+});
+$('#btnCompare') && ($('#btnCompare').onclick = () => compareDialog.showModal());
+
+/* ---------- confetti (clean left+right streamers from clicked button) ---------- */
+const canvas = $('#fx'), ctx = canvas.getContext('2d'); let W,H, parts=[];
+function size(){ W=canvas.width=innerWidth*devicePixelRatio; H=canvas.height=innerHeight*devicePixelRatio; }
+addEventListener('resize', size); size();
+
+function confettiBurstFromButton(btn){
+  const r = btn.getBoundingClientRect();
+  const y = (r.top + r.height/2) * devicePixelRatio;
+  const leftX  = (r.left - 6) * devicePixelRatio;
+  const rightX = (r.right + 6) * devicePixelRatio;
+  const n = state.confetti.density|0;
+  const s = +state.confetti.speed;
+  const colors = [state.accent,'#f5f7fb','#cdd6ee','#9fb6ff'];
+  for(let i=0;i<n;i++){
+    parts.push(piece(leftX, y,  1, s, colors));
+    parts.push(piece(rightX,y, -1, s, colors));
+  }
+}
+function piece(x,y,dir,s,colors){
+  const w = state.confetti.sizeMin + Math.random()*(state.confetti.sizeMax-state.confetti.sizeMin);
+  const h = w * (0.5 + Math.random()*0.6);
+  const tri = Math.random() < 0.35;
+  return {x,y,vx:(1.2+Math.random()*1.6)*dir*s, vy:(-2.2-Math.random()*2.2)*s, g:.09*s, r:Math.random()*Math.PI, life:110+Math.random()*50, w,h,tri,c:colors[(Math.random()*colors.length)|0], a:1};
+}
+function tick(){
+  ctx.clearRect(0,0,W,H);
+  const next=[];
+  for(const p of parts){
+    p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=.14; p.life--; p.a=Math.max(0,p.life/140);
+    if(p.life>0 && p.y<H+40){
+      next.push(p);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.globalAlpha=p.a; ctx.fillStyle=p.c;
+      if(p.tri){ ctx.beginPath(); ctx.moveTo(-p.w/2, p.h/2); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(0,-p.h/2); ctx.closePath(); ctx.fill(); }
+      else{ ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+      ctx.restore();
+    }
+  }
+  parts=next; requestAnimationFrame(tick);
+}
+tick();
+$$('.choose').forEach(b=> b.onclick = ()=>{ confettiBurstFromButton(b); b.closest('.plan').scrollIntoView({behavior:'smooth', block:'center'}); });
+
+/* ---------- init ---------- */
+function applyAndInit(){
+  applyState();
+  renderHero();
+  loadManifest();
+}
+window.addEventListener('DOMContentLoaded', applyAndInit);
+</script>
+
 </body>
 </html>
