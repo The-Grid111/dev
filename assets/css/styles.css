@@ -1,114 +1,197 @@
+/* =========================================================
+   THE GRID — White & Gold
+   assets/css/styles.css (FULL FILE)
+   ========================================================= */
+
+/* ---------- Root Theme Tokens ---------- */
 :root{
-  --accent:#F4C84A;        /* white-gold default */
-  --accent-2:#B5C7FF;
-  --txt:#F5F7FA;
-  --txt-soft:#C8CFD8;
-  --card:#121418;
-  --panel:#0E1013;
-  --bg-a:#0A0B0D;
-  --bg-b:#1A1200;
-  --radius:16px;
-  --glow:30;               /* 0–100 */
-  --fs:1.0;                /* font scale */
-  --space:1.0;             /* spacing scale */
+  --accent:        #F4C84A;   /* Gold */
+  --accent-2:      #B5C7FF;   /* Soft blue highlight */
+  --text:          #F5F7FA;
+  --text-soft:     #C8CFD8;
+  --card:          #121418;
+  --panel:         #0E1013;
+  --bg-a:          #0A0B0D;   /* Deep charcoal */
+  --bg-b:          #1A1200;   /* Warm gold vignette */
+  --border:        #1c212b;
+  --radius:        16px;
+  --glow:          30;        /* 0–100 (soft outer glow on cards) */
+
+  --font-scale:    1.00;      /* user-scalable via Design Panel */
+  --space-scale:   1.00;      /* user-scalable via Design Panel */
+
+  /* Derived */
+  --shadow-elev: 0 10px 30px rgba(0,0,0,.35);
 }
 
-/* Reset lite */
+/* ---------- Base ---------- */
 *{box-sizing:border-box}
 html,body{height:100%}
+html{scroll-behavior:smooth}
 body{
   margin:0;
-  font:calc(16px * var(--fs))/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
-  color:var(--txt);
+  font:400 calc(16px*var(--font-scale))/1.55 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue","Noto Sans",Arial,"Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
   background:
-    radial-gradient(1200px 400px at 70% -10%, rgba(244,200,74,0.08), transparent 60%),
-    linear-gradient(180deg,var(--bg-a),var(--bg-b));
+    radial-gradient(1200px 600px at 80% -10%, rgba(244,200,74,.12), transparent 60%),
+    radial-gradient(1000px 800px at -20% 0%, rgba(244,200,74,.08), transparent 60%),
+    linear-gradient(180deg, var(--bg-a), var(--bg-a) 40%, #0a0b0d 100%);
+  background-color:var(--bg-a);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
-/* Links should NOT be blue if CSS loads */
-a{color:inherit;text-decoration:none}
+img,video{max-width:100%;display:block;border-radius:calc(var(--radius) - 6px)}
+a{color:var(--accent);text-decoration:none}
+a:hover{opacity:.9}
 
-/* Topbar */
-.topbar{
-  position:sticky; top:0; z-index:10;
-  display:flex; gap:16px; align-items:center; justify-content:space-between;
-  padding:12px 16px;
-  background:color-mix(in srgb, var(--panel) 88%, transparent);
-  backdrop-filter: blur(8px);
-  border-bottom:1px solid rgba(255,255,255,0.06);
+/* ---------- Layout ---------- */
+.container{
+  max-width:1100px;
+  margin-inline:auto;
+  padding:calc(20px*var(--space-scale));
 }
-.brand{display:flex; gap:12px; align-items:center}
-#brandLogo{width:36px; height:36px; border-radius:50%; filter:drop-shadow(0 0 6px rgba(244,200,74,0.35))}
-.brand-copy{display:flex; flex-direction:column}
-.brand-copy .muted{color:var(--txt-soft); font-size:.9em}
-.actions{display:flex; gap:12px}
 
-/* Layout */
-.container{max-width:1100px; margin:24px auto; padding:0 16px; display:flex; flex-direction:column; gap:20px}
-
-/* Cards */
-.card{
-  background:linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), var(--card));
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:var(--radius);
-  padding:clamp(14px, 3vw, 22px);
-  box-shadow:0 0 calc(var(--glow) * 1px) rgba(244,200,74,0.08);
+.stack{display:grid;gap:calc(18px*var(--space-scale))}
+.grid{
+  display:grid;
+  gap:calc(18px*var(--space-scale));
 }
-h2,h3{margin:0 0 8px}
-.muted{color:var(--txt-soft)}
-.small{font-size:.9em}
+@media (min-width: 860px){
+  .grid.cols-2{grid-template-columns:1fr 1fr}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+}
 
-/* Buttons */
+/* ---------- Header Bar ---------- */
+.header{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:saturate(120%) blur(8px);
+  background:linear-gradient(180deg, rgba(10,11,13,.85), rgba(10,11,13,.55));
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;max-width:1100px;margin-inline:auto;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;min-width:0;
+}
+.brand img{width:28px;height:28px;border-radius:50%;box-shadow:0 0 0 2px rgba(244,200,74,.4)}
+.brand .title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .tag{color:var(--text-soft);font-size:.92em}
+
+.header-actions{margin-left:auto;display:flex;gap:10px}
 .btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:10px 16px; border-radius:999px; border:1px solid rgba(255,255,255,0.12);
-  transition:.2s transform,.2s box-shadow,.2s background;
+  appearance:none;border:0;
+  padding:12px 18px;border-radius:999px;font-weight:700;
+  background:var(--accent);color:#0b0c0e;box-shadow:0 8px 24px rgba(244,200,74,.25);
+  transition:transform .12s ease, box-shadow .2s ease, opacity .15s ease;
 }
-.btn.ghost{background:transparent}
-.btn.glow{
-  background:var(--accent); color:#111; border-color:transparent;
-  box-shadow:0 0 22px rgba(244,200,74,.35);
+.btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(244,200,74,.32)}
+.btn:active{transform:translateY(0)}
+.btn.hollow{
+  background:transparent;color:var(--text);
+  border:1px solid #2a2f3a;box-shadow:none;
 }
-.btn:hover{transform:translateY(-1px)}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#0f1217;border:1px solid #1f2531}
 
-/* Hero */
-.hero-wrap{
-  position:relative; width:100%; aspect-ratio:16/9;
-  border-radius:calc(var(--radius) - 4px); overflow:hidden;
-  background:#0d0f12; border:1px solid rgba(255,255,255,.06);
-  margin:12px 0 16px;
+/* ---------- Cards ---------- */
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)),
+             var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:calc(20px*var(--space-scale));
+  box-shadow:var(--shadow-elev);
+  position:relative;overflow:hidden;
 }
-#heroVideo{width:100%; height:100%; object-fit:cover; display:none}
-.hero-fallback{
-  position:absolute; inset:0; display:grid; place-items:center;
-  color:var(--txt-soft); font-weight:600; letter-spacing:.2px; text-align:center; padding:24px;
+.card.glow::before{
+  content:"";position:absolute;inset:-2px;border-radius:inherit;
+  pointer-events:none;
+  box-shadow:0 0 calc(var(--glow)*1px) rgba(244,200,74,.25);
 }
 
-/* Library / Showcase */
-.chips{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 10px}
-.chips .chip{
-  padding:8px 12px; border-radius:999px; background:#181b20; border:1px solid rgba(255,255,255,.07);
-}
-.grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-.tile{
-  background:#0f1115; border:1px solid rgba(255,255,255,.06);
-  border-radius:12px; overflow:hidden;
-}
-.tile .thumb{width:100%; aspect-ratio:16/9; object-fit:cover; display:block}
+/* ---------- Headings & Text ---------- */
+h1{font-size:clamp(28px, 4vw, 40px);line-height:1.1;margin:0 0 10px}
+h2{font-size:clamp(22px, 3.2vw, 30px);line-height:1.15;margin:0 0 12px}
+h3{font-size:clamp(18px, 2.2vw, 20px);line-height:1.2;margin:0 0 10px}
+.lead{color:var(--text-soft);font-size:1.05em}
 
-/* Plans */
-.plans{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.plan{background:#0f1115; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:14px}
-.plan .price{font-size:1.4em; margin:.2em 0}
-
-/* Form */
-.form{display:grid; gap:10px}
-.form input,.form textarea{
-  background:#0f1115; color:var(--txt); border:1px solid rgba(255,255,255,.08);
-  border-radius:10px; padding:10px 12px; outline:none;
+/* ---------- Hero ---------- */
+.hero-media{
+  background:#0b0d10;border:1px solid #262b35;border-radius:calc(var(--radius) - 4px);
+  padding:10px;display:grid;place-items:center;min-height:220px;
 }
-.form textarea{min-height:120px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
 
-/* Spin helper (for the logo) */
-@keyframes spin {to{transform:rotate(360deg)}}
-.spin-slow{animation:spin 24s linear infinite}
+/* ---------- Library ---------- */
+.library .tabs{
+  display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 16px;
+}
+.tab{
+  padding:8px 14px;border-radius:999px;background:#11151b;border:1px solid #232935;
+  color:var(--text);cursor:pointer;transition:all .15s ease;
+}
+.tab.active{background:var(--accent);color:#0d0f12;border-color:transparent;box-shadow:0 6px 18px rgba(244,200,74,.25)}
+.library .items{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (min-width:720px){.library .items{grid-template-columns:repeat(3,1fr)}}
+.item{
+  background:#0f1217;border:1px solid #232935;border-radius:12px;
+  padding:10px;display:grid;gap:8px;
+}
+.item .meta{display:flex;justify-content:space-between;font-size:.85em;color:var(--text-soft)}
+
+/* ---------- Showcase ---------- */
+.showcase .strip{
+  display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;
+}
+.showcase .card{scroll-snap-align:start}
+
+/* ---------- Pricing ---------- */
+.pricing .plans{display:grid;gap:16px}
+@media (min-width:860px){.pricing .plans{grid-template-columns:repeat(2,1fr)}}
+.plan{
+  background:linear-gradient(180deg,rgba(255,255,255,.02),transparent), var(--panel);
+  border:1px solid #262c38;border-radius:var(--radius);padding:20px;display:grid;gap:12px;
+}
+.price{font-size:32px;font-weight:800}
+.tier{letter-spacing:.06em;color:var(--text-soft);font-weight:800}
+.features{margin:0;padding-left:18px;color:var(--text-soft)}
+.features li{margin:.25rem 0}
+
+/* ---------- Contact ---------- */
+.form{display:grid;gap:12px}
+.input,textarea{
+  width:100%;background:#0f1217;border:1px solid #232935;border-radius:12px;
+  padding:12px 14px;color:var(--text);font:inherit;
+}
+textarea{min-height:130px;resize:vertical}
+
+/* ---------- Footer note ---------- */
+.note{color:var(--text-soft);font-size:.92em}
+
+/* ---------- Utility ---------- */
+.center{display:grid;place-items:center}
+.mt-1{margin-top:8px}.mt-2{margin-top:14px}.mt-3{margin-top:22px}
+.hidden{display:none !important}
+
+/* ---------- Animations (subtle) ---------- */
+@keyframes pulseGlow{0%{box-shadow:0 0 0 rgba(244,200,74,0)} 100%{box-shadow:0 0 18px rgba(244,200,74,.22)}}
+.pulse{animation:pulseGlow 1.2s ease-out 1}
+
+/* ---------- Support: when Design Panel writes CSS vars ---------- */
+[data-theme="custom"]{
+  --accent: var(--_accent, #F4C84A);
+  --accent-2: var(--_accent2, #B5C7FF);
+  --text: var(--_text, #F5F7FA);
+  --text-soft: var(--_soft, #C8CFD8);
+  --card: var(--_card, #121418);
+  --panel: var(--_panel, #0E1013);
+  --bg-a: var(--_bga, #0A0B0D);
+  --bg-b: var(--_bgb, #1A1200);
+  --radius: var(--_radius, 16px);
+  --glow: var(--_glow, 30);
+  --font-scale: var(--_fscale, 1.00);
+  --space-scale: var(--_sscale, 1.00);
+}
