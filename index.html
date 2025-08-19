@@ -2,177 +2,166 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>THE GRID — Studio</title>
-  <link rel="preload" href="assets/images/gc_logo.png" as="image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="stylesheet" href="assets/css/effects.css" />
 </head>
 <body>
-  <!-- Top bar -->
+
+  <!-- Compact top bar -->
   <header class="topbar">
-    <div class="topbar__brand">
-      <img src="assets/images/gc_logo.png" alt="" class="brand__logo" />
+    <div class="brand">
+      <img src="assets/images/gc_logo.png" alt="GC" class="brand__logo">
       <div class="brand__text">
-        <div class="brand__eyebrow" id="greeting">Good day — THE GRID</div>
-        <div class="brand__sub">White &amp; Gold</div>
+        <div class="brand__line1" id="greeting">Good day</div>
+        <div class="brand__line2">THE GRID</div>
+        <div class="brand__line3" id="themeLabel">White &amp; Gold</div>
       </div>
     </div>
-    <div class="topbar__actions">
-      <button class="btn btn--pill" id="openCustomize">Customize</button>
-      <a class="btn btn--cta" id="joinNow" href="#plans">Join Now</a>
-    </div>
+    <nav class="topbar__actions">
+      <button id="openCustomizer" class="btn btn--ghost">Customize</button>
+      <a class="btn btn--cta" href="#plans" id="joinCta">Join Now</a>
+    </nav>
   </header>
 
-  <main class="shell">
-    <!-- Hero block -->
-    <section class="card hero" id="hero">
-      <h1 class="card__title">Black &amp; Gold</h1>
-      <p class="card__lead">
-        Cinematic visuals. Owner controls. One-file updates with a premium finish.
-      </p>
+  <main class="wrap">
 
-      <div class="hero__media">
-        <video id="heroVideo" class="media" playsinline muted loop poster="assets/images/hero_1.jpg">
-          <source src="assets/videos/hero_1.mp4" type="video/mp4" />
-        </video>
-        <button class="media__play" id="playHero" aria-label="Play/Pause"></button>
+    <!-- HERO -->
+    <section class="card" id="hero">
+      <h1 class="h1">Black &amp; Gold</h1>
+      <p class="lead">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+
+      <div class="hero__player">
+        <video id="heroVideo" playsinline muted loop preload="metadata" poster="assets/images/hero_1.jpg"></video>
+        <button class="play" id="heroPlay" aria-label="Play/Pause"></button>
       </div>
 
-      <div class="card__cta">
-        <a class="btn" href="#library">Open Library</a>
-        <a class="btn btn--accent" href="#plans">See Pricing</a>
+      <div class="actions">
+        <a class="btn btn--ghost" href="#library">Open Library</a>
+        <a class="btn btn--accent" href="#plans" id="seePricing">See Pricing</a>
       </div>
     </section>
 
-    <!-- Library -->
+    <!-- LIBRARY -->
     <section class="card" id="library">
       <div class="card__header">
-        <h2 class="card__title">Library</h2>
-        <p class="card__lead">
-          Tap a library to browse. Sources: <code>assets/videos/manifest.json</code> &amp;
-          <code>assets/images/manifest.json</code>.
+        <h2 class="h2">Library</h2>
+        <p class="muted">
+          Tap a library to browse. Sources:
+          <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.
         </p>
       </div>
 
-      <div class="library__chips" id="libraryChips">
-        <!-- chips built by JS -->
+      <div id="libChips" class="chips">
+        <!-- chips populated by JS -->
       </div>
 
-      <div class="library__grid" id="libraryGrid" aria-live="polite">
-        <!-- thumbs built by JS -->
+      <div id="libGrid" class="grid grid--media">
+        <!-- thumbnails populated by JS -->
       </div>
 
-      <p class="card__hint">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
+      <p class="tip muted">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
     </section>
 
-    <!-- Showcase -->
+    <!-- SHOWCASE -->
     <section class="card" id="showcase">
       <div class="card__header">
-        <h2 class="card__title">Showcase</h2>
-        <p class="card__lead">Featured stills &amp; clips — quick browse.</p>
+        <h2 class="h2">Showcase</h2>
+        <p class="muted">Featured stills &amp; clips — quick browse.</p>
       </div>
-      <div class="showcase__grid" id="showcaseGrid">
-        <!-- featured items built by JS -->
-      </div>
+      <div id="showcaseGrid" class="grid grid--showcase"></div>
     </section>
 
-    <!-- Plans -->
+    <!-- PLANS -->
     <section class="card" id="plans">
       <div class="card__header">
-        <h2 class="card__title">Plans</h2>
-        <p class="card__lead">Fair pricing. No lock-in. 7-day refund.</p>
+        <h2 class="h2">Plans</h2>
+        <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
       </div>
-      <div class="plans" id="plansGrid">
-        <!-- plan cards built by JS -->
+      <div id="plansWrap" class="plans">
+        <!-- plans populated by JS -->
       </div>
-      <p class="card__hint">
-        All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.
-      </p>
+      <p class="muted center">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
     </section>
 
-    <!-- A-la-carte -->
+    <!-- À-LA-CARTE -->
     <section class="card" id="services">
       <div class="card__header">
-        <h2 class="card__title">À-la-carte Services</h2>
+        <h2 class="h2">À-la-carte Services</h2>
       </div>
-      <div class="services" id="servicesGrid">
-        <!-- service cards built by JS -->
-      </div>
+      <div id="servicesWrap" class="services"></div>
     </section>
 
-    <!-- Contact -->
+    <!-- CONTACT -->
     <section class="card" id="contact">
       <div class="card__header">
-        <h2 class="card__title">Contact</h2>
+        <h2 class="h2">Contact</h2>
       </div>
-      <form class="contact" action="https://formspree.io/f/mnqeyyyd" method="POST">
-        <div class="contact__row">
-          <input name="name" placeholder="Your name" required />
-          <input type="email" name="email" placeholder="you@example.com" required />
-        </div>
-        <input name="subject" placeholder="How can we help?" />
-        <textarea name="message" rows="5" placeholder="Write your message…" required></textarea>
+      <form class="form" id="contactForm" action="https://formspree.io/f/xbjnnjjp" method="POST">
+        <input class="input" type="text" name="name" placeholder="Your name" required>
+        <input class="input" type="email" name="email" placeholder="you@example.com" required>
+        <input class="input" type="text" name="subject" placeholder="How can we help?">
+        <textarea class="input input--area" name="message" placeholder="Write your message..." required></textarea>
         <button class="btn btn--cta" type="submit">Send</button>
       </form>
-      <p class="card__hint">
-        Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.
-      </p>
+      <p class="muted">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
     </section>
+
   </main>
 
-  <!-- Customize panel -->
-  <dialog id="customizePanel" class="panel">
-    <div class="panel__header">
+  <!-- CUSTOMIZER -->
+  <dialog id="customizer" class="customizer">
+    <div class="customizer__head">
       <h3>Design Panel</h3>
-      <button class="btn btn--pill" id="closeCustomize">Close</button>
+      <button class="btn btn--ghost" id="closeCustomizer">Close</button>
     </div>
 
-    <div class="panel__grid">
-      <label>Accent color <input type="color" id="cAccent" value="#F5C10E" /></label>
-      <label>Secondary accent <input type="color" id="cAccent2" value="#2463EB" /></label>
-      <label>Text color <input type="color" id="cText" value="#ffffff" /></label>
-      <label>Soft text <input type="color" id="cSoft" value="#aab1c0" /></label>
-      <label>Card surface <input type="color" id="cCard" value="#101318" /></label>
-      <label>Panel surface <input type="color" id="cPanel" value="#0c0f13" /></label>
-      <label>Background A <input type="color" id="cBgA" value="#0a0d11" /></label>
-      <label>Background B <input type="color" id="cBgB" value="#161a20" /></label>
+    <div class="customizer__grid">
+      <label>Accent color <input type="color" id="c_accent"></label>
+      <label>Secondary accent <input type="color" id="c_accent2"></label>
+      <label>Text color <input type="color" id="c_text"></label>
+      <label>Soft text <input type="color" id="c_soft"></label>
+      <label>Card surface <input type="color" id="c_card"></label>
+      <label>Panel surface <input type="color" id="c_panel"></label>
+      <label>Background A <input type="color" id="c_bgA"></label>
+      <label>Background B <input type="color" id="c_bgB"></label>
 
       <label>Card radius
-        <input type="range" id="rRadius" min="8" max="28" value="20" />
+        <input type="range" id="c_radius" min="6" max="28" step="1">
       </label>
+
       <label>Border glow (0–100)
-        <input type="range" id="rGlow" min="0" max="100" value="28" />
+        <input type="range" id="c_glow" min="0" max="100" step="1">
       </label>
+
       <label>Font size
-        <input type="range" id="rFont" min="14" max="20" value="16" />
+        <input type="range" id="c_font" min="14" max="18" step="1">
       </label>
+
       <label>Spacing
-        <input type="range" id="rSpace" min="12" max="28" value="18" />
+        <input type="range" id="c_space" min="10" max="20" step="1">
       </label>
 
       <label>Vignette
-        <select id="vignetteSelect">
-          <option value="on" selected>On</option>
+        <select id="c_vignette">
+          <option value="on">On</option>
           <option value="off">Off</option>
         </select>
       </label>
 
       <label>Hero source
-        <select id="heroSource"></select>
+        <select id="c_heroSrc"></select>
       </label>
+    </div>
 
-      <div class="panel__row">
-        <button class="btn" id="savePrefs">Save to this device</button>
-        <button class="btn btn--ghost" id="resetPrefs">Reset</button>
-      </div>
+    <div class="customizer__actions">
+      <button class="btn btn--ghost" id="saveTheme">Save to this device</button>
+      <button class="btn btn--ghost" id="resetTheme">Reset</button>
     </div>
   </dialog>
 
-  <!-- FX (kept tiny) -->
-  <canvas id="fx" class="fx"></canvas>
-
-  <script src="assets/js/confetti.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
