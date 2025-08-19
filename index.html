@@ -1,418 +1,162 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>THE GRID — Black & Gold</title>
-<meta name="theme-color" content="#0b0b0f"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>THE GRID</title>
+  <meta name="theme-color" content="#0b0b0f"/>
 
-<!-- Preloads (safe if missing) -->
-<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
-<link rel="preload" href="assets/videos/gc_spin.mp4" as="video">
-<link rel="preload" href="assets/images/hero_1.jpg" as="image">
-
-<style>
-  :root{
-    /* Brand palette (tweak in Customize panel) */
-    --accent:#E7B84B;
-    --accent-2:#95B2FF;
-    --ink:#E9ECF3;
-    --soft:#b9c0cf;
-
-    /* Surfaces */
-    --bg-a:#0b0b0f;     /* top-left blend */
-    --bg-b:#0a0b10;     /* bottom-right blend */
-    --panel:#0f1219;
-    --card:#10131b;
-
-    /* Radii / scale */
-    --radius:20px;
-    --fontScale:1;
-    --space:1;
-
-    /* FX */
-    --ring:24;          /* 0–100 border glow */
-    --vignette:1;       /* 0/1 */
-    --grain:0.4;        /* 0–1 overlay intensity */
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    color:var(--ink);
-    background:#000; /* canvases draw the moving gradient */
-    letter-spacing:.2px;
-    --pad: calc(14px * var(--space));
-  }
-
-  /* Background FX layers */
-  .fx-wrap{position:fixed; inset:0; pointer-events:none; z-index:-1}
-  #bgGrad, #bgParticles{position:absolute; inset:0; width:100%; height:100%; display:block}
-
-  /* vignette + soft golden glow corners */
-  .vignette:before{
-    content:""; position:fixed; inset:0; pointer-events:none;
-    background:
-      radial-gradient(1200px 600px at 50% -260px, #0000 30%, rgba(231,184,75,.15) 55%, #0000 70%),
-      radial-gradient(1400px 900px at 50% 120%, #0000 30%, rgba(231,184,75,.12) 70%, #0000 80%),
-      radial-gradient(1200px 600px at -200px 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%),
-      radial-gradient(1200px 600px at calc(100% + 200px) 50%, #0000 30%, rgba(231,184,75,.10) 55%, #0000 70%);
-    opacity: calc(.55 * var(--vignette));
-    z-index:-1;
-  }
-
-  /* Subtle film grain */
-  .grain:after{
-    content:""; position:fixed; inset:0; pointer-events:none; mix-blend-mode:overlay; z-index:-1;
-    background-image:url('data:image/svg+xml;utf8,\
-      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160">\
-      <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter>\
-      <rect width="100%" height="100%" filter="url(%23n)" opacity="0.12"/></svg>');
-    opacity:var(--grain);
-  }
-
-  .wrap{max-width:980px;margin-inline:auto;padding:24px}
-
-  /* Header */
-  header{
-    position:sticky; top:0; z-index:20; backdrop-filter:saturate(1.05) blur(10px);
-    background:color-mix(in srgb, #0b0c10 78%, #000 22%);
-    border-bottom:1px solid #171a23;
-  }
-  .bar{display:flex;align-items:center;gap:14px; padding:14px 20px}
-  .brand{display:flex;gap:12px;align-items:center; min-width:0}
-  .logo{
-    width:44px; height:44px; border-radius:12px; overflow:hidden; position:relative;
-    background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 22px rgba(231,184,75,.18);
-  }
-  .logo video,.logo img{width:100%;height:100%;object-fit:cover;display:block}
-  .brand h1{font:800 20px/1.15 inherit; margin:0}
-  .brand small{display:block; color:var(--soft); font-size:.8em}
-  .spacer{flex:1}
-  .btn{
-    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:600 16px/1 inherit;
-    background:#161a24; color:var(--ink); box-shadow:0 0 0 1px #232838 inset;
-    transition:transform .12s ease, box-shadow .2s ease, background .2s ease, filter .2s ease;
-    cursor:pointer;
-  }
-  .btn:hover{transform:translateY(-1px)}
-  .btn.primary{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%);
-    color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
-    filter: drop-shadow(0 0 6px rgba(231,184,75,.35));
-  }
-
-  /* Sections / cards */
-  section{margin:28px 0}
-  .card{
-    background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 20%), color-mix(in srgb, var(--card), #07090D 0%));
-    border-radius:var(--radius);
-    padding:calc(var(--pad)*1.2);
-    position:relative;
-    box-shadow:
-      0 0 0 1px #1b2130 inset,
-      0 8px 40px rgba(0,0,0,.45),
-      0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
-  }
-  h2{font:800 clamp(28px,5vw,44px)/1.15 ui-sans-serif,system-ui;margin:0 0 10px}
-  .lede{color:var(--soft); margin:0 0 18px}
-
-  /* Hero */
-  .hero{
-    border-radius:calc(var(--radius) - 6px); overflow:hidden; position:relative;
-    box-shadow:0 0 0 2px #202636 inset, 0 20px 60px rgba(0,0,0,.45);
-    background:#0c0f15;
-  }
-  .hero-media{width:100%; height:min(62vw, 420px); display:block; object-fit:cover}
-  .heroOverlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45)); pointer-events:none}
-
-  .ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
-  .ctaRow .btn{padding:12px 18px}
-
-  /* Library */
-  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
-  .pill{
-    padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
-    box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none; transition:.2s;
-  }
-  .pill:hover{box-shadow:0 0 0 2px color-mix(in srgb, var(--accent), #fff 15%) inset}
-  .pill.active{box-shadow:0 0 0 2px var(--accent) inset; background: #151a24}
-  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-  .tile{
-    padding:12px; border-radius:14px; background:#0f1218; border:1px dashed #2a3142; color:#c4cbda; cursor:pointer;
-    display:grid; grid-template-columns:64px 1fr; gap:12px; align-items:center; transition:.2s;
-  }
-  .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
-  .thumb{
-    width:64px; height:64px; border-radius:10px; overflow:hidden; display:grid; place-items:center;
-    background:#0b0e14; box-shadow:0 0 0 1px #202636 inset;
-  }
-  .thumb video, .thumb img{width:100%;height:100%;object-fit:cover; display:block}
-  .meta{font-size:.9em; color:#93a0b8}
-
-  /* Pricing */
-  .plan{display:grid; gap:12px; padding:18px; border-radius:16px; background:#11141b; box-shadow:0 0 0 1px #1c2130 inset}
-  .plan .head{display:flex; justify-content:space-between; align-items:center}
-  .badge{border-radius:999px; padding:6px 10px; font:700 12px/1 ui-sans-serif; letter-spacing:.7px;
-    color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%); box-shadow:0 0 0 1px #2b2110 inset}
-  .price{font:800 34px/1.1 ui-sans-serif}
-  .plan ul{margin:0 0 4px 18px}
-  .plan .row{display:flex; gap:10px}
-  .plan .btn{flex:1}
-  .plan .ghost{background:#0f141d;color:#d7dbea}
-  .plan.gold{box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.15)}
-  .plan.diamond{box-shadow:0 0 0 1px #202636 inset, 0 0 0 2px rgba(149,178,255,.18)}
-
-  /* Contact */
-  form{display:grid;gap:10px}
-  input,textarea{
-    width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink);
-    transition:border-color .2s, box-shadow .2s;
-  }
-  input:focus, textarea:focus{outline:none; border-color:color-mix(in srgb, var(--accent), #fff 10%); box-shadow:0 0 0 2px rgba(231,184,75,.18)}
-  textarea{min-height:130px; resize:vertical}
-
-  /* Modal / Panel */
-  dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,92vw)}
-  dialog::backdrop{background:rgba(0,0,0,.6)}
-  .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
-  .modalBody{padding:18px}
-  .x{background:#141926}
-
-  /* Border style preview (optional) */
-  .solid .card, .solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
-  .none .card, .none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
-
-  /* Utility */
-  .muted{color:var(--soft)}
-  .hide{display:none !important}
-</style>
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/effects.css">
 </head>
 <body class="vignette grain" id="app">
-
-<!-- FX canvases -->
-<div class="fx-wrap">
-  <canvas id="bgGrad" aria-hidden="true"></canvas>
-  <canvas id="bgParticles" aria-hidden="true"></canvas>
-</div>
-
-<header>
-  <div class="bar wrap">
-    <div class="brand">
-      <div class="logo" aria-label="Brand">
-        <video id="logoVid" muted autoplay loop playsinline></video>
-      </div>
-      <div>
-        <h1 id="hello">Good day — THE GRID</h1>
-        <small>Black & Gold</small>
-      </div>
-    </div>
-    <div class="spacer"></div>
-    <button id="btnCustomize" class="btn">Customize</button>
-    <button class="btn primary" id="btnJoin">Join Now</button>
+  <!-- FX canvases -->
+  <div class="fx-wrap" aria-hidden="true">
+    <canvas id="bgGrad"></canvas>
+    <canvas id="bgParticles"></canvas>
   </div>
-</header>
 
-<main class="wrap">
-  <!-- HERO -->
-  <section class="card">
-    <h2 id="heroTitle">Black & Gold</h2>
-    <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    <div id="hero" class="hero" aria-label="Hero media">
-      <!-- media injected by JS -->
-      <div class="heroOverlay"></div>
+  <!-- Compact header -->
+  <header class="hdr">
+    <div class="hdr__inner wrap">
+      <a class="brand" href="#top" aria-label="Home">
+        <span class="brand__logo">
+          <video id="logoVid" muted playsinline loop></video>
+        </span>
+        <span class="brand__text">
+          <b id="hello">Good day — THE GRID</b>
+          <small id="tagline">Black &amp; Gold</small>
+        </span>
+      </a>
+      <nav class="hdr__actions">
+        <button id="btnCustomize" class="btn btn--ghost">Customize</button>
+        <a id="btnJoin" class="btn btn--primary" href="#plans">Join&nbsp;Now</a>
+      </nav>
     </div>
-    <div class="ctaRow">
-      <a href="#library" class="btn">Open Library</a>
-      <a href="#plans" class="btn primary">See Pricing</a>
+  </header>
+
+  <main class="wrap" id="top">
+    <!-- HERO -->
+    <section class="card">
+      <h2 id="heroTitle">Black &amp; Gold</h2>
+      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+      <div id="hero" class="hero" aria-label="Hero media">
+        <div class="heroOverlay"></div>
+      </div>
+      <div class="ctaRow">
+        <a href="#library" class="btn btn--ghost">Open Library</a>
+        <a href="#plans" class="btn btn--primary">See Pricing</a>
+      </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section id="library" class="card">
+      <h2>Library</h2>
+      <p class="lede">
+        Tap a tile to set the hero media. Files come from
+        <b>assets/videos/manifest.json</b> (with sensible defaults).
+        Place media in <b>assets/videos</b> or <b>assets/images</b>.
+      </p>
+      <div class="tabs" id="libTabs"></div>
+      <div class="tabs" id="libTags" style="margin-top:-6px"></div>
+      <div class="grid" id="libGrid" aria-live="polite"></div>
+      <p class="meta">Tip: short names help (e.g. <i>hero_1.mp4</i>, <i>grid_pour_1.jpg</i>).</p>
+    </section>
+
+    <!-- PLANS -->
+    <section id="plans" class="card">
+      <h2>Plans</h2>
+      <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
+      <div class="grid" id="plansGrid">
+        <!-- populated by main.js from assets/data/plans.json -->
+      </div>
+      <p class="meta">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
+    </section>
+
+    <!-- À-la-carte -->
+    <section class="card" id="services">
+      <h2>À-la-carte Services</h2>
+      <div class="grid" id="servicesGrid">
+        <!-- populated by main.js from assets/data/services.json -->
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="card" id="contact">
+      <h2>Contact</h2>
+      <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <input placeholder="Your name" required>
+          <input type="email" placeholder="you@example.com" required>
+        </div>
+        <input placeholder="How can we help?">
+        <textarea placeholder="Write your message…"></textarea>
+        <button class="btn btn--primary" style="width:180px">Send</button>
+        <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
+      </form>
+    </section>
+  </main>
+
+  <!-- PLAN MODAL -->
+  <dialog id="planModal">
+    <div class="modalHead">
+      <strong id="mTitle">Plan details</strong>
+      <button class="btn x" onclick="planModal.close()">Close</button>
     </div>
-  </section>
+    <div class="modalBody" id="mBody"></div>
+  </dialog>
 
-  <!-- LIBRARY -->
-  <section id="library" class="card">
-    <h2>Library</h2>
-    <p class="lede">
-      Tap a tile to set the hero media. Files come from <b>assets/manifest.json</b> (with sensible defaults).
-      Place media in <b>assets/videos</b> or <b>assets/images</b>.
-    </p>
-    <div class="tabs" id="libTabs"></div>
-    <div class="tabs" id="libTags" style="margin-top:-4px"></div>
-    <div class="grid" id="libGrid" aria-live="polite"></div>
-    <p class="meta">Tip: short names help (e.g. <i>hero_1.mp4</i>, <i>grid_pour_1.jpg</i>).</p>
-  </section>
-
-  <!-- PLANS -->
-  <section id="plans" class="card">
-    <h2>Plans</h2>
-    <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
-    <div class="grid">
-      <article class="plan" data-tier="basic">
-        <div class="head">
-          <div><div class="price">£9<span class="muted">/mo</span></div></div>
-          <span class="badge">BASIC</span>
-        </div>
-        <ul>
-          <li>Starter templates &amp; blocks</li>
-          <li>Library access (videos, images, logos)</li>
-          <li>Email support (48h)</li>
-        </ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-
-      <article class="plan" data-tier="silver">
-        <div class="head">
-          <div class="price">£29<span class="muted">/mo</span></div>
-          <span class="badge">SILVER</span>
-        </div>
-        <ul>
-          <li>Everything in Basic</li>
-          <li>Advanced effects &amp; presets</li>
-          <li>Priority email (24h)</li>
-        </ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-
-      <article class="plan gold" data-tier="gold">
-        <div class="head">
-          <div class="price">£49<span class="muted">/mo</span></div>
-          <span class="badge">GOLD</span>
-        </div>
-        <ul>
-          <li>Full customization session</li>
-          <li>Admin toolkit &amp; automations</li>
-          <li>1:1 onboarding (45 min)</li>
-        </ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
-
-      <article class="plan diamond" data-tier="diamond">
-        <div class="head">
-          <div class="price">£99<span class="muted">/mo</span></div>
-          <span class="badge">DIAMOND</span>
-        </div>
-        <ul>
-          <li>Custom pipelines &amp; integrations</li>
-          <li>Hands-on help building your stack</li>
-          <li>Priority roadmap &amp; turnaround</li>
-        </ul>
-        <div class="row">
-          <button class="btn primary choose">Choose</button>
-          <button class="btn ghost details">Details</button>
-        </div>
-      </article>
+  <!-- CUSTOMIZE PANEL -->
+  <dialog id="panel">
+    <div class="modalHead">
+      <strong>Design Panel</strong>
+      <button class="btn x" onclick="panel.close()">Close</button>
     </div>
-    <p class="meta" style="margin-top:10px">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
-  </section>
-
-  <!-- À-la-carte -->
-  <section class="card">
-    <h2>À-la-carte Services</h2>
-    <div class="grid">
-      <article class="plan">
-        <div class="head"><div class="price" style="font-size:28px">£39</div><span class="badge">SETUP</span></div>
-        <ul><li>Deploy &amp; connect Pages</li><li>Analytics hookup</li><li>Best-practice sweep</li></ul>
-        <button class="btn primary">Start Setup</button>
-      </article>
-      <article class="plan">
-        <div class="head"><div class="price" style="font-size:28px">£59</div><span class="badge">REELS</span></div>
-        <ul><li>3 niche reels</li><li>Captions &amp; cuts</li><li>IG/TikTok ready</li></ul>
-        <button class="btn primary">Order Pack</button>
-      </article>
-      <article class="plan">
-        <div class="head"><div class="price" style="font-size:28px">£29</div><span class="badge">TEMPLATES</span></div>
-        <ul><li>5 premium blocks</li><li>Copy-paste ready</li><li>Lifetime updates</li></ul>
-        <button class="btn primary">Get Pack</button>
-      </article>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="card">
-    <h2>Contact</h2>
-    <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
+    <div class="modalBody">
       <div class="grid" style="grid-template-columns:1fr 1fr">
-        <input placeholder="Your name" required>
-        <input type="email" placeholder="you@example.com" required>
+        <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B" class="picker"></label>
+        <label>Secondary accent<br><input id="uiAccent2" type="color" value="#95B2FF" class="picker"></label>
+
+        <label>Text color<br><input id="uiInk" type="color" value="#E9ECF3" class="picker"></label>
+        <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf" class="picker"></label>
+
+        <label>Card surface<br><input id="uiCard" type="color" value="#10131b" class="picker"></label>
+        <label>Panel surface<br><input id="uiPanel" type="color" value="#0f1219" class="picker"></label>
+
+        <label>Background A<br><input id="uiBgA" type="color" value="#0b0b0f" class="picker"></label>
+        <label>Background B<br><input id="uiBgB" type="color" value="#0a0b10" class="picker"></label>
+
+        <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20"></label>
+        <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="24"></label>
+
+        <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1"></label>
+        <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1"></label>
+
+        <label>Vignette<br>
+          <select id="uiVignette"><option value="1">On</option><option value="0">Off</option></select>
+        </label>
+        <label>Hero source<br><select id="uiHero"></select></label>
       </div>
-      <input placeholder="How can we help?">
-      <textarea placeholder="Write your message…"></textarea>
-      <button class="btn primary" style="width:180px">Send</button>
-      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
-    </form>
-  </section>
-</main>
 
-<!-- DETAILS MODAL -->
-<dialog id="planModal">
-  <div class="modalHead">
-    <strong id="mTitle">Plan details</strong>
-    <button class="btn x" onclick="planModal.close()">Close</button>
-  </div>
-  <div class="modalBody" id="mBody"></div>
-</dialog>
+      <h3 class="sub">Confetti</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="140" value="44"></label>
+        <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.4" max="2.2" step=".05" value="1.1"></label>
+      </div>
 
-<!-- CUSTOMIZE PANEL -->
-<dialog id="panel">
-  <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
-  <div class="modalBody">
-    <div class="grid" style="grid-template-columns:1fr 1fr">
-      <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Secondary accent<br><input id="uiAccent2" type="color" value="#95B2FF" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>Text color<br><input id="uiInk" type="color" value="#E9ECF3" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>Card surface<br><input id="uiCard" type="color" value="#10131b" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Panel surface<br><input id="uiPanel" type="color" value="#0f1219" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>Background A<br><input id="uiBgA" type="color" value="#0b0b0f" style="width:100%;height:42px;border:0;background:transparent"></label>
-      <label>Background B<br><input id="uiBgB" type="color" value="#0a0b10" style="width:100%;height:42px;border:0;background:transparent"></label>
-
-      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
-      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="24" style="width:100%"></label>
-
-      <label>Font size<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-      <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
-
-      <label>Vignette<br>
-        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
-          <option value="1">On</option><option value="0">Off</option>
-        </select>
-      </label>
-      <label>Hero source<br>
-        <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
-      </label>
+      <div class="ctaRow" style="margin-top:16px">
+        <button id="save" class="btn btn--ghost">Save to this device</button>
+        <button id="reset" class="btn x">Reset</button>
+      </div>
     </div>
+  </dialog>
 
-    <h3 style="margin-top:16px">Confetti</h3>
-    <div class="grid" style="grid-template-columns:1fr 1fr">
-      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="140" value="44" style="width:100%"></label>
-      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.4" max="2.2" step=".05" value="1.1" style="width:100%"></label>
-    </div>
+  <!-- Confetti canvas -->
+  <canvas id="fx" aria-hidden="true"></canvas>
 
-    <div class="ctaRow" style="margin-top:16px">
-      <button id="save" class="btn">Save to this device</button>
-      <button id="reset" class="btn x">Reset</button>
-    </div>
-  </div>
-</dialog>
-
-<!-- Confetti canvas -->
-<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
-
-<!-- Scripts (must be last; nothing after </html>) -->
-<script src="assets/js/confetti.js" defer></script>
-<script src="assets/js/main.js" defer></script>
+  <!-- JS (paths must stay exactly like this) -->
+  <script src="assets/js/confetti.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
