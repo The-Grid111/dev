@@ -1,173 +1,124 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>THE GRID</title>
-<meta name="theme-color" content="#0b0b0f"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Grid — Black & Gold</title>
 
-<!-- Styles -->
-<link rel="stylesheet" href="assets/css/styles.css">
-<link rel="stylesheet" href="assets/css/effects.css">
-
-<!-- Preloads (safe if missing) -->
-<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
-<link rel="preload" href="assets/images/hero_1.jpg" as="image">
+  <!-- Styles -->
+  <link rel="preload" href="assets/css/styles.css" as="style">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/effects.css">
 </head>
 
-<body class="has-vignette has-grain">
-<!-- Background FX (canvas is behind everything, won’t block screenshots) -->
-<div class="fx-wrap" aria-hidden="true">
-  <canvas id="bgGrad"></canvas>
-  <canvas id="bgParticles"></canvas>
-</div>
-
-<!-- Header (compact on scroll) -->
-<header id="siteHeader" class="header">
-  <div class="wrap header-bar">
-    <a href="#" class="brand">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-lines">
-        <strong id="greet">Good day — THE GRID</strong>
-        <small class="brand-sub">Black &amp; Gold</small>
-      </span>
-    </a>
-    <nav class="header-cta">
-      <button id="btnCustomize" class="btn ghost">Customize</button>
-      <a class="btn primary" href="#plans">Join Now</a>
+<body>
+  <!-- Top bar (shorter, non-blocking) -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <strong>THE GRID</strong>
+      <span class="tag">Studio</span>
+    </div>
+    <nav class="topbar-actions">
+      <button class="btn ghost" data-scroll="#library">Customize</button>
+      <a class="btn solid" href="#plans" data-scroll="#plans">Join Now</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main class="wrap main">
-  <!-- HERO -->
-  <section class="card">
-    <div class="card-head">
-      <h2>Black &amp; Gold</h2>
-      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-    </div>
-    <div id="hero" class="hero" aria-label="Hero media">
-      <!-- media injected by JS -->
-      <div class="heroOverlay" aria-hidden="true"></div>
-    </div>
-    <div class="ctaRow">
-      <a href="#library" class="btn ghost">Open Library</a>
-      <a href="#plans" class="btn primary">See Pricing</a>
-    </div>
-  </section>
+  <main id="app">
 
-  <!-- LIBRARY -->
-  <section id="library" class="card">
-    <div class="card-head">
-      <h2>Library</h2>
-      <p class="lede">
+    <!-- Hero / Headline -->
+    <section class="hero card">
+      <div class="hero-copy">
+        <h1 class="h1">Black &amp; Gold</h1>
+        <p class="lead">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+      </div>
+      <div class="hero-media">
+        <!-- If videos/manifest.json has hero_1.mp4 it loads below via JS; otherwise image falls back -->
+        <video id="heroVideo" class="media" playsinline muted loop preload="metadata" poster="assets/images/hero_1.jpg"></video>
+        <div class="hero-ctas">
+          <button class="btn ghost" data-scroll="#library">Open Library</button>
+          <button class="btn solid" data-scroll="#plans">See Pricing</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Library (your picker stays, cleaned) -->
+    <section id="library" class="card">
+      <h2 class="h2">Library</h2>
+      <p class="muted">
         Tap a tile to set the hero media. Files come from
         <code>assets/videos/manifest.json</code> (with sensible defaults).
         Place media in <code>assets/videos</code> or <code>assets/images</code>.
       </p>
-    </div>
-    <div class="tabs" id="libTabs"></div>
-    <div class="tags" id="libTags"></div>
-    <div class="grid" id="libGrid" aria-live="polite"></div>
-    <p class="meta">Tip: short names help (e.g. <i>hero_1.mp4</i>, <i>grid_pour_1.jpg</i>).</p>
-  </section>
 
-  <!-- PLANS -->
-  <section id="plans" class="card">
-    <div class="card-head">
-      <h2>Plans</h2>
-      <p class="lede">Fair pricing. No lock-in. 7-day refund.</p>
-    </div>
-
-    <div id="plansGrid" class="grid plans-grid" aria-live="polite"></div>
-    <p class="meta">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
-  </section>
-
-  <!-- À-la-carte -->
-  <section class="card">
-    <div class="card-head">
-      <h2>À-la-carte Services</h2>
-    </div>
-    <div id="svcGrid" class="grid plans-grid" aria-live="polite"></div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="card">
-    <div class="card-head"><h2>Contact</h2></div>
-    <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
-      <div class="grid two">
-        <input placeholder="Your name" required>
-        <input type="email" placeholder="you@example.com" required>
+      <div class="chips" id="libFilters">
+        <button class="chip is-active" data-kind="hero">Hero</button>
+        <button class="chip" data-kind="reel-9-16">Reels 9:16</button>
+        <button class="chip" data-kind="reel-16-9">Reels 16:9</button>
+        <button class="chip" data-kind="backgrounds">Backgrounds</button>
+        <button class="chip" data-kind="logos">Logos</button>
+        <button class="chip" data-kind="images">Images</button>
       </div>
-      <input placeholder="How can we help?">
-      <textarea placeholder="Write your message…"></textarea>
-      <button class="btn primary" style="width:180px">Send</button>
-      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
-    </form>
-  </section>
-</main>
 
-<!-- PLAN DETAILS MODAL -->
-<dialog id="planModal" class="modal">
-  <div class="modalHead">
-    <strong id="mTitle">Plan details</strong>
-    <button class="btn x" onclick="planModal.close()">Close</button>
-  </div>
-  <div class="modalBody" id="mBody"></div>
-</dialog>
+      <div id="libGrid" class="media-grid" aria-live="polite"></div>
 
-<!-- CUSTOMIZE PANEL -->
-<dialog id="panel" class="modal">
-  <div class="modalHead">
-    <strong>Design Panel</strong>
-    <button class="btn x" onclick="panel.close()">Close</button>
-  </div>
-  <div class="modalBody">
-    <div class="grid two">
-      <label>Accent color<br><input id="uiAccent" type="color" value="#E7B84B"></label>
-      <label>Secondary accent<br><input id="uiAccent2" type="color" value="#95B2FF"></label>
+      <p class="tip">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
+    </section>
 
-      <label>Text color<br><input id="uiInk" type="color" value="#E9ECF3"></label>
-      <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf"></label>
+    <!-- NEW: Gallery / Work preview -->
+    <section id="gallery" class="card">
+      <div class="section-head">
+        <h2 class="h2">Showcase</h2>
+        <p class="muted">Browse featured clips and stills from the library.</p>
+      </div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+    </section>
 
-      <label>Card surface<br><input id="uiCard" type="color" value="#10131b"></label>
-      <label>Panel surface<br><input id="uiPanel" type="color" value="#0f1219"></label>
+    <!-- Pricing -->
+    <section id="plans" class="card">
+      <h2 class="h2">Plans</h2>
+      <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
 
-      <label>Background A<br><input id="uiBgA" type="color" value="#0b0b0f"></label>
-      <label>Background B<br><input id="uiBgB" type="color" value="#0a0b10"></label>
+      <div id="plansWrap" class="plan-grid" aria-live="polite"></div>
+      <p class="micro muted center">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
+    </section>
 
-      <label>Card radius<br><input id="uiRadius" type="range" min="6" max="28" value="18"></label>
-      <label>Border Glow (0–100)<br><input id="uiRing" type="range" min="0" max="100" value="22"></label>
+    <!-- A-la-carte services -->
+    <section id="services" class="card">
+      <h2 class="h2">À-la-carte Services</h2>
+      <div id="servicesWrap" class="plan-grid" aria-live="polite"></div>
+    </section>
 
-      <label>Font size<br><input id="uiFont" type="range" step=".01" min="0.9" max="1.15" value="1"></label>
-      <label>Spacing<br><input id="uiSpace" type="range" step=".01" min="0.9" max="1.15" value="1"></label>
+    <!-- Contact -->
+    <section id="contact" class="card">
+      <h2 class="h2">Contact</h2>
+      <form id="contactForm" class="form">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="you@example.com" required>
+        <input type="text" name="topic" placeholder="How can we help?">
+        <textarea name="message" placeholder="Write your message..." rows="5" required></textarea>
+        <button class="btn solid" type="submit">Send</button>
+      </form>
+      <p class="micro muted">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
+    </section>
 
-      <label>Vignette<br>
-        <select id="uiVignette"><option value="1">On</option><option value="0">Off</option></select>
-      </label>
-      <label>Hero source<br>
-        <select id="uiHero"></select>
-      </label>
-    </div>
+    <footer class="footer">
+      <p class="micro muted">© THE GRID. All rights reserved.</p>
+    </footer>
+  </main>
 
-    <h3>Confetti</h3>
-    <div class="grid two">
-      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="140" value="44"></label>
-      <label>Speed<br><input id="uiConfettiSpeed" type="range" step=".05" min="0.4" max="2.2" value="1.1"></label>
-    </div>
+  <!-- Lightweight modal for Gallery previews -->
+  <dialog id="lightbox" class="lightbox">
+    <button class="close" aria-label="Close" data-close>×</button>
+    <div id="lightboxBody"></div>
+  </dialog>
 
-    <div class="ctaRow" style="margin-top:12px">
-      <button id="save" class="btn ghost">Save to this device</button>
-      <button id="reset" class="btn x">Reset</button>
-    </div>
-  </div>
-</dialog>
+  <!-- Confetti canvas (optional fun on purchase) -->
+  <canvas id="fx" class="fx"></canvas>
 
-<!-- Confetti canvas (kept under UI layers to avoid screenshot black boxes) -->
-<canvas id="fx" class="fx" aria-hidden="true"></canvas>
-
-<!-- Scripts -->
-<script src="assets/js/confetti.js" defer></script>
-<script src="assets/js/main.js" defer></script>
+  <!-- Scripts (kept at end) -->
+  <script src="assets/js/confetti.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
