@@ -1,20 +1,26 @@
 [
   {
-    "price": "£39",
     "badge": "SETUP",
-    "bullets": ["Deploy & connect Pages", "Analytics hookup", "Best-practice sweep"],
-    "cta": "Start Setup"
+    "title": "Deploy & connect Pages",
+    "price": 39,
+    "desc": "Analytics hookup, best-practice sweep, and launch checklist.",
+    "cta": "Start Setup",
+    "pay": { "url": "https://buy.stripe.com/test_6oE4kA3qT8xk4I8eWX" }
   },
   {
-    "price": "£59",
     "badge": "REELS",
-    "bullets": ["3 niche reels", "Captions & cuts", "IG/TikTok ready"],
-    "cta": "Order Pack"
+    "title": "3 niche reels",
+    "price": 59,
+    "desc": "Captions, cuts, IG/TikTok ready. Delivered in 72h.",
+    "cta": "Order Pack",
+    "pay": { "url": "https://buy.stripe.com/test_00g6qQd4n1AW1kI3cd" }
   },
   {
-    "price": "£29",
     "badge": "TEMPLATES",
-    "bullets": ["5 premium blocks", "Copy-paste ready", "Lifetime updates"],
-    "cta": "Get Pack"
+    "title": "5 premium blocks",
+    "price": 29,
+    "desc": "Copy-paste ready, lifetime updates.",
+    "cta": "Get Pack",
+    "pay": { "url": "https://buy.stripe.com/test_28o4kA5hZc2y3SYaEI" }
   }
 ]
