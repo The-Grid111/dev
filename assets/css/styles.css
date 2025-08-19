@@ -1,232 +1,114 @@
-/* =========================================================
-   THE GRID — White & Gold UI
-   Full file replace for assets/css/style.css
-   ========================================================= */
-
-/* --------- Design Tokens (tweakable) --------- */
 :root{
-  /* Palette */
-  --bg:#0b0b0f;                 /* page background (kept dark for contrast) */
-  --panel:#0f1219;              /* header/panel surface */
-  --card:#10131b;               /* card surface */
-  --ink:#f5f7fb;                /* main text (lighter than before) */
-  --ink-soft:#c6ccda;           /* secondary */
-  --ink-muted:#9aa5bb;          /* meta */
-  --accent:#E7B84B;             /* gold */
-  --accent-2:#ffffff;           /* white accents */
-
-  /* Outline + glow */
-  --ring:24;                    /* 0–100 for border glow halo */
-  --line:#1b2130;               /* subtle inner stroke */
-
-  /* Radii + scale */
-  --radius:20px;
-  --radius-sm:12px;
-  --radius-xs:10px;
-  --font:18px;                  /* base rem seed */
-  --pad:14px;                   /* base spacing seed */
-
-  /* Effects */
-  --shadow-card: 0 10px 40px rgba(0,0,0,.45);
-  --shadow-elev: 0 16px 56px rgba(0,0,0,.55);
-  --blur: 10px;
+  --accent:#F4C84A;        /* white-gold default */
+  --accent-2:#B5C7FF;
+  --txt:#F5F7FA;
+  --txt-soft:#C8CFD8;
+  --card:#121418;
+  --panel:#0E1013;
+  --bg-a:#0A0B0D;
+  --bg-b:#1A1200;
+  --radius:16px;
+  --glow:30;               /* 0–100 */
+  --fs:1.0;                /* font scale */
+  --space:1.0;             /* spacing scale */
 }
 
-/* Optional light mode (if you ever toggle it via JS: body.light) */
-body.light{
-  --bg:#f7f8fb;
-  --panel:#ffffff;
-  --card:#ffffff;
-  --ink:#0f1220;
-  --ink-soft:#3a4254;
-  --ink-muted:#5e6a84;
-  --line:#e7eaf2;
-  --shadow-card: 0 8px 28px rgba(0,0,0,.08);
-  --shadow-elev: 0 16px 48px rgba(0,0,0,.10);
-}
-
-/* --------- Base --------- */
+/* Reset lite */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
-  color:var(--ink);
-  background:var(--bg);
-  font:400 var(--font)/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-  letter-spacing:.2px;
-}
-
-/* Subtle vignette + corner gold bloom (paired with your FX canvas) */
-.vignette:before{
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  font:calc(16px * var(--fs))/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+  color:var(--txt);
   background:
-    radial-gradient(1200px 600px at 50% -260px, #0000 40%, rgba(231,184,75,.16) 58%, #0000 72%),
-    radial-gradient(1200px 900px at 50% 120%, #0000 40%, rgba(231,184,75,.10) 70%, #0000 85%);
+    radial-gradient(1200px 400px at 70% -10%, rgba(244,200,74,0.08), transparent 60%),
+    linear-gradient(180deg,var(--bg-a),var(--bg-b));
 }
 
-/* Grain overlay (if enabled by adding .grain on body) */
-.grain:after{
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; mix-blend-mode:overlay;
-  background-image:url('data:image/svg+xml;utf8,\
-    <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160">\
-    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter>\
-    <rect width="100%" height="100%" filter="url(%23n)" opacity="0.12"/></svg>');
-  opacity:.4;
-}
+/* Links should NOT be blue if CSS loads */
+a{color:inherit;text-decoration:none}
 
-/* Layout container */
-.wrap{max-width:980px;margin-inline:auto;padding:24px}
+/* Topbar */
+.topbar{
+  position:sticky; top:0; z-index:10;
+  display:flex; gap:16px; align-items:center; justify-content:space-between;
+  padding:12px 16px;
+  background:color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.brand{display:flex; gap:12px; align-items:center}
+#brandLogo{width:36px; height:36px; border-radius:50%; filter:drop-shadow(0 0 6px rgba(244,200,74,0.35))}
+.brand-copy{display:flex; flex-direction:column}
+.brand-copy .muted{color:var(--txt-soft); font-size:.9em}
+.actions{display:flex; gap:12px}
 
-/* --------- Header (tighter, clearer) --------- */
-header{
-  position:sticky; top:0; z-index:20;
-  -webkit-backdrop-filter:saturate(1.05) blur(var(--blur));
-  backdrop-filter:saturate(1.05) blur(var(--blur));
-  background: color-mix(in srgb, var(--panel) 88%, transparent 12%);
-  border-bottom:1px solid color-mix(in srgb, var(--line), transparent 30%);
-}
-.bar{
-  display:flex;align-items:center;gap:12px;padding:10px 16px;
-}
-.brand{display:flex;gap:12px;align-items:center;min-width:0}
-.logo{
-  width:42px;height:42px;border-radius:12px;overflow:hidden;position:relative;
-  background:#0c0f14; box-shadow:0 0 0 1px #1a1f2c inset,0 0 22px rgba(231,184,75,.18);
-}
-.logo video,.logo img{width:100%;height:100%;object-fit:cover;display:block}
-.brand h1{font:800 18px/1.15 inherit;margin:0}
-.brand small{display:block;color:var(--ink-muted);font-size:.78em;margin-top:2px}
-.spacer{flex:1}
+/* Layout */
+.container{max-width:1100px; margin:24px auto; padding:0 16px; display:flex; flex-direction:column; gap:20px}
 
-/* --------- Buttons --------- */
+/* Cards */
+.card{
+  background:linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), var(--card));
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:var(--radius);
+  padding:clamp(14px, 3vw, 22px);
+  box-shadow:0 0 calc(var(--glow) * 1px) rgba(244,200,74,0.08);
+}
+h2,h3{margin:0 0 8px}
+.muted{color:var(--txt-soft)}
+.small{font-size:.9em}
+
+/* Buttons */
 .btn{
-  appearance:none; border:0; border-radius:12px; padding:12px 14px;
-  font:600 15px/1 inherit; color:var(--ink);
-  background:#161a24; box-shadow:0 0 0 1px #232838 inset;
-  transition:transform .12s ease, box-shadow .2s ease, filter .2s ease, background .2s ease;
-  cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:999px; border:1px solid rgba(255,255,255,0.12);
+  transition:.2s transform,.2s box-shadow,.2s background;
+}
+.btn.ghost{background:transparent}
+.btn.glow{
+  background:var(--accent); color:#111; border-color:transparent;
+  box-shadow:0 0 22px rgba(244,200,74,.35);
 }
 .btn:hover{transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
-.btn.primary{
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 14%) 0%, var(--accent) 100%);
-  color:#1e1600;
-  box-shadow:
-    0 10px 36px rgba(231,184,75,.28),
-    0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
-  filter: drop-shadow(0 0 6px rgba(231,184,75,.35));
+
+/* Hero */
+.hero-wrap{
+  position:relative; width:100%; aspect-ratio:16/9;
+  border-radius:calc(var(--radius) - 4px); overflow:hidden;
+  background:#0d0f12; border:1px solid rgba(255,255,255,.06);
+  margin:12px 0 16px;
 }
-.btn.ghost{
-  background:#0f141d;color:var(--ink);
-  box-shadow:0 0 0 1px #202636 inset;
+#heroVideo{width:100%; height:100%; object-fit:cover; display:none}
+.hero-fallback{
+  position:absolute; inset:0; display:grid; place-items:center;
+  color:var(--txt-soft); font-weight:600; letter-spacing:.2px; text-align:center; padding:24px;
 }
 
-/* --------- Sections / cards --------- */
-section{margin:26px 0}
-.card{
-  background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 18%), color-mix(in srgb, var(--card), #07090D 0%));
-  border-radius:var(--radius);
-  padding:calc(var(--pad)*1.2);
-  position:relative;
-  box-shadow:
-    0 0 0 1px var(--line) inset,
-    var(--shadow-card),
-    0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
+/* Library / Showcase */
+.chips{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 10px}
+.chips .chip{
+  padding:8px 12px; border-radius:999px; background:#181b20; border:1px solid rgba(255,255,255,.07);
 }
-h2{font:800 clamp(26px,5vw,40px)/1.15 ui-sans-serif,system-ui;margin:0 0 10px}
-.lede{color:var(--ink-soft); margin:0 0 16px}
-.muted{color:var(--ink-muted)}
-
-/* --------- Hero frame --------- */
-.hero{
-  border-radius:calc(var(--radius) - 6px);
-  overflow:hidden; position:relative;
-  box-shadow:0 0 0 2px #202636 inset, var(--shadow-elev);
-  background:#0c0f15;
-}
-.hero-media{width:100%; height:min(62vw, 420px); display:block; object-fit:cover}
-.heroOverlay{position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.45));
-}
-.ctaRow{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
-.ctaRow .btn{padding:12px 18px}
-
-/* --------- Library --------- */
-.tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px}
-.pill{
-  padding:10px 14px; border-radius:999px; background:#0f141d; color:var(--ink);
-  box-shadow:0 0 0 1px #252c3c inset; cursor:pointer; user-select:none; transition:.2s;
-}
-.pill:hover{box-shadow:0 0 0 2px color-mix(in srgb, var(--accent), #fff 15%) inset}
-.pill.active{box-shadow:0 0 0 2px var(--accent) inset; background:#151a24}
-
-.grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
 .tile{
-  padding:12px; border-radius:14px; background:#0f1218; border:1px solid #2a3142; color:#c4cbda; cursor:pointer;
-  display:grid; grid-template-columns:64px 1fr; gap:12px; align-items:center; transition:.2s;
+  background:#0f1115; border:1px solid rgba(255,255,255,.06);
+  border-radius:12px; overflow:hidden;
 }
-.tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
-.thumb{
-  width:64px; height:64px; border-radius:10px; overflow:hidden; display:grid; place-items:center;
-  background:#0b0e14; box-shadow:0 0 0 1px #202636 inset;
-}
-.thumb video,.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.meta{font-size:.9em; color:var(--ink-muted)}
+.tile .thumb{width:100%; aspect-ratio:16/9; object-fit:cover; display:block}
 
-/* --------- Pricing --------- */
-.plan{
-  display:grid; gap:12px; padding:18px; border-radius:16px;
-  background:#11141b; box-shadow:0 0 0 1px #1c2130 inset;
-}
-.plan .head{display:flex; justify-content:space-between; align-items:center}
-.badge{
-  border-radius:999px; padding:6px 10px; font:800 11px/1 ui-sans-serif; letter-spacing:.7px;
-  color:#0c1017; background: color-mix(in srgb, var(--accent), #fff 20%);
-  box-shadow:0 0 0 1px #2b2110 inset;
-}
-.price{font:800 32px/1.1 ui-sans-serif}
-.plan ul{margin:0 0 6px 18px}
-.plan .row{display:flex; gap:10px}
-.plan .btn{flex:1}
-.plan.gold{
-  box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.14);
-}
-.plan.diamond{
-  box-shadow:0 0 0 1px #1f2636 inset, 0 0 0 2px rgba(149,178,255,.16);
-}
+/* Plans */
+.plans{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.plan{background:#0f1115; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:14px}
+.plan .price{font-size:1.4em; margin:.2em 0}
 
-/* --------- Contact form --------- */
-form{display:grid;gap:10px}
-input,textarea{
-  width:100%; padding:12px 14px; border-radius:12px; border:1px solid #22283a; background:#0e1218; color:var(--ink);
-  transition:border-color .2s, box-shadow .2s;
+/* Form */
+.form{display:grid; gap:10px}
+.form input,.form textarea{
+  background:#0f1115; color:var(--txt); border:1px solid rgba(255,255,255,.08);
+  border-radius:10px; padding:10px 12px; outline:none;
 }
-input:focus, textarea:focus{outline:none; border-color:color-mix(in srgb, var(--accent), #fff 10%); box-shadow:0 0 0 2px rgba(231,184,75,.18)}
-textarea{min-height:130px; resize:vertical}
+.form textarea{min-height:120px}
 
-/* --------- Dialogs --------- */
-dialog{border:0; border-radius:16px; background:#0f1219; color:var(--ink); padding:0; width:min(680px,92vw)}
-dialog::backdrop{background:rgba(0,0,0,.55)}
-.modalHead{
-  display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #1d2331;
-  background: linear-gradient(180deg, #111521, #0f1219);
-}
-.modalBody{padding:16px}
-.btn.x{background:#151a22}
-
-/* --------- Utility --------- */
-.hide{display:none!important}
-
-/* --------- Confetti canvas layer --------- */
-#fx{position:fixed; inset:0; pointer-events:none; z-index:15}
-
-/* --------- Header compact on scroll --------- */
-@media (min-width: 680px){
-  .bar{padding:10px 18px}
-}
-
-/* --------- Reduced motion accessibility --------- */
-@media (prefers-reduced-motion: reduce){
-  .btn:hover{transform:none}
-  .heroOverlay{background:rgba(0,0,0,.35)}
-}
+/* Spin helper (for the logo) */
+@keyframes spin {to{transform:rotate(360deg)}}
+.spin-slow{animation:spin 24s linear infinite}
