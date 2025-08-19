@@ -1,0 +1,37 @@
+{
+  "version": "1.2",
+  "timestamp": "auto-fill-on-save",
+  "brand": {
+    "name": "THE GRID",
+    "tagline": "White & Gold",
+    "theme": "white-gold"
+  },
+  "design": {
+    "accent": "#F4C84A",
+    "accentSecondary": "#B5C7FF",
+    "text": "#F5F7FA",
+    "softText": "#C8CFD8",
+    "cardSurface": "#121418",
+    "panelSurface": "#0E1013",
+    "bgA": "#0A0B0D",
+    "bgB": "#1A1200",
+    "cardRadius": 16,
+    "borderGlow": 30,
+    "fontScale": 1.0,
+    "spacingScale": 1.0,
+    "vignette": true
+  },
+  "hero": {
+    "source": "assets/videos/hero_1.mp4",
+    "fallbackImage": "assets/images/hero_1.jpg"
+  },
+  "libraryTabs": [
+    "Hero", "Reels 9:16", "Reels 16:9",
+    "Backgrounds", "Logos", "Images", "Extras"
+  ],
+  "commerce": {
+    "plansEnabled": true,
+    "servicesEnabled": true
+  },
+  "notes": "Snapshot of the current working site after Library fixes; buttons working; pricing section to be restored next."
+}
