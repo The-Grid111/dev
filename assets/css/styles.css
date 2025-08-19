@@ -1,95 +1,110 @@
+/* ================ THE GRID — Clean Pro Theme ================ */
+/* Subtle, restrained look; better spacing, lighter glow, tighter header */
+
 :root{
+  /* Brand */
   --accent:#E7B84B;
   --accent-2:#95B2FF;
+
+  /* Text */
   --ink:#E9ECF3;
-  --soft:#b9c0cf;
+  --soft:#A7B1C6;
+  --muted:#8B95AA;
 
-  --bg-a:#0b0b0f;
-  --bg-b:#0a0b10;
-  --panel:#0f1219;
-  --card:#10131b;
+  /* Surfaces */
+  --bg-a:#0B0B0F;
+  --bg-b:#0A0B10;
+  --panel:#0E1218;
+  --panel-2:#0F1219;   /* dialogs/header */
+  --card:#0F1218;
 
-  --radius:20px;
+  /* Scale */
+  --radius:18px;
   --fontScale:1;
   --space:1;
 
-  --ring:24;      /* border glow */
-  --vignette:1;   /* 0/1 */
-  --grain:.4;
+  /* FX */
+  --ring:16;           /* 0–100 border glow */
+  --vignette:0.9;      /* 0–1 */
+  --grain:.35;         /* 0–1 */
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
-  font:400 calc(18px*var(--fontScale))/1.55 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+  font:450 calc(17px*var(--fontScale))/1.6 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
   color:var(--ink);
   background:#000;
   letter-spacing:.2px;
   --pad: calc(14px * var(--space));
 }
 
-/* Layout */
+/* ================= Layout ================= */
 .wrap{max-width:980px;margin-inline:auto;padding:20px}
 
-/* ================= Header (compact) ================= */
+/* ================= Header (compact & quiet) ================= */
 .hdr{
   position:sticky; top:0; z-index:20;
-  backdrop-filter:saturate(1.05) blur(10px);
-  background:color-mix(in srgb, #0b0c10 78%, #000 22%);
+  background:color-mix(in srgb, var(--panel-2) 88%, #000 12%);
+  backdrop-filter:blur(10px) saturate(1.02);
   border-bottom:1px solid #171a23;
 }
-.hdr__inner{display:flex;align-items:center;gap:14px; padding:10px 16px}
-.brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;min-width:0}
-.brand__logo{width:36px;height:36px;border-radius:10px;overflow:hidden;background:#0c0f14;box-shadow:0 0 0 1px #1a1f2c inset,0 0 18px rgba(231,184,75,.18)}
+.hdr__inner{display:flex;align-items:center;gap:12px;padding:8px 14px}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;min-width:0}
+.brand__logo{
+  width:32px;height:32px;border-radius:9px;overflow:hidden;
+  background:#0c0f14;box-shadow:0 0 0 1px #1a1f2c inset,0 0 14px rgba(231,184,75,.15)
+}
 .brand__logo video{width:100%;height:100%;object-fit:cover;display:block}
-.brand__text b{display:block;font:800 18px/1.2 inherit}
-.brand__text small{display:block;color:var(--soft);font-size:.85em;margin-top:2px}
-.hdr__actions{margin-left:auto;display:flex;gap:10px}
+.brand__text b{display:block;font:800 17px/1.2 inherit;letter-spacing:.3px}
+.brand__text small{display:block;color:var(--muted);font-size:.85em;margin-top:1px}
+.hdr__actions{margin-left:auto;display:flex;gap:8px}
 
-/* Buttons */
+/* ================= Buttons ================= */
 .btn{
-  appearance:none;border:0;border-radius:12px;padding:10px 14px;
-  font:600 15px/1 inherit;cursor:pointer;
-  transition:transform .12s ease, box-shadow .2s ease, background .2s ease, filter .2s ease;
+  appearance:none;border:0;border-radius:12px;padding:10px 13px;
+  font:700 14.5px/1 ui-sans-serif;cursor:pointer;user-select:none;
+  transition:transform .12s ease, box-shadow .2s ease, background .2s ease, filter .2s ease, color .2s ease;
 }
+.btn:active{transform:translateY(0)}
 .btn:hover{transform:translateY(-1px)}
-.btn--ghost{
-  background:#161a24;color:var(--ink);box-shadow:0 0 0 1px #232838 inset;
-}
+.btn--ghost{background:#141924;color:var(--ink);box-shadow:0 0 0 1px #22293A inset}
+.btn--ghost:hover{box-shadow:0 0 0 2px #2A3246 inset}
 .btn--primary{
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 12%) 0%, var(--accent) 100%);
-  color:#1a1300; box-shadow: 0 8px 28px rgba(231,184,75,.25), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
-  filter: drop-shadow(0 0 6px rgba(231,184,75,.35));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent), #fff 8%) 0%, var(--accent) 100%);
+  color:#1a1300; box-shadow: 0 10px 28px rgba(231,184,75,.22), 0 0 0 1px color-mix(in srgb, var(--accent), #000 45%) inset;
+  filter: drop-shadow(0 0 6px rgba(231,184,75,.28));
 }
 
-/* Cards & sections */
+/* ================= Sections & Cards ================= */
 section{margin:24px 0}
 .card{
-  background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 20%), color-mix(in srgb, var(--card), #07090D 0%));
+  background:linear-gradient(180deg, color-mix(in srgb, var(--card), #0a0c12 16%), color-mix(in srgb, var(--card), #07090D 0%));
   border-radius:var(--radius);
-  padding:calc(var(--pad)*1.2);
+  padding:calc(var(--pad)*1.15);
   position:relative;
   box-shadow:
-    0 0 0 1px #1b2130 inset,
-    0 8px 40px rgba(0,0,0,.45),
-    0 0 0 calc(var(--ring) * .12px) color-mix(in srgb, var(--accent), transparent 90%);
+    0 0 0 1px #1B2130 inset,
+    0 12px 38px rgba(0,0,0,.45),
+    0 0 0 calc(var(--ring) * .10px) color-mix(in srgb, var(--accent), transparent 92%);
 }
-h2{font:800 clamp(24px,4.8vw,40px)/1.15 ui-sans-serif;margin:0 0 10px}
-.lede{color:var(--soft);margin:0 0 16px}
+h2{font:900 clamp(22px,4.4vw,38px)/1.12 ui-sans-serif;margin:0 0 8px;letter-spacing:.2px}
+.lede{color:var(--soft);margin:0 0 14px}
+.meta{font-size:.92em;color:var(--muted)}
 
-/* Hero */
+/* ================= Hero ================= */
 .hero{
   border-radius:calc(var(--radius) - 6px);overflow:hidden;position:relative;
-  box-shadow:0 0 0 2px #202636 inset, 0 20px 60px rgba(0,0,0,.45);
+  box-shadow:0 0 0 1px #202636 inset, 0 18px 48px rgba(0,0,0,.46);
   background:#0c0f15;
 }
-.hero .hero-media{width:100%;height:min(62vw,420px);display:block;object-fit:cover}
-.heroOverlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45))}
+.hero .hero-media{width:100%;height:min(60vw, 400px);display:block;object-fit:cover}
+.heroOverlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.42))}
 
-.ctaRow{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+.ctaRow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 
-/* Tabs & grid (library) */
+/* ================= Tabs & Library Grid ================= */
 .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 12px}
 .pill{
   padding:10px 14px;border-radius:999px;background:#0f141d;color:var(--ink);
@@ -105,46 +120,55 @@ h2{font:800 clamp(24px,4.8vw,40px)/1.15 ui-sans-serif;margin:0 0 10px}
 .tile:hover{box-shadow:0 0 0 2px var(--accent) inset}
 .thumb{width:64px;height:64px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:#0b0e14;box-shadow:0 0 0 1px #202636 inset}
 .thumb video,.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.meta{font-size:.9em;color:#93a0b8}
 
-/* Plans & Services */
+/* ================= Plans & Services ================= */
 .plan{display:grid;gap:12px;padding:18px;border-radius:16px;background:#11141b;box-shadow:0 0 0 1px #1c2130 inset}
 .plan .head{display:flex;justify-content:space-between;align-items:center}
-.badge{border-radius:999px;padding:6px 10px;font:700 12px/1 ui-sans-serif;letter-spacing:.7px;color:#0c1017;background: color-mix(in srgb, var(--accent), #fff 20%);box-shadow:0 0 0 1px #2b2110 inset}
-.price{font:800 34px/1.1 ui-sans-serif}
+.badge{
+  border-radius:999px;padding:6px 10px;font:800 11.5px/1 ui-sans-serif;letter-spacing:.7px;
+  color:#0c1017;background: color-mix(in srgb, var(--accent), #fff 20%);box-shadow:0 0 0 1px #2b2110 inset
+}
+.price{font:900 32px/1.1 ui-sans-serif}
 .plan ul{margin:0 0 4px 18px}
 .plan .row{display:flex;gap:10px}
 .plan .btn{flex:1}
 .plan .ghost{background:#0f141d;color:#d7dbea}
-.plan.gold{box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.15)}
-.plan.diamond{box-shadow:0 0 0 1px #202636 inset, 0 0 0 2px rgba(149,178,255,.18)}
+.plan.gold{box-shadow:0 0 0 1px #2a2314 inset, 0 0 0 2px rgba(231,184,75,.12)}
+.plan.diamond{box-shadow:0 0 0 1px #202636 inset, 0 0 0 2px rgba(149,178,255,.14)}
 
-/* Forms */
+/* ================= Forms ================= */
 form{display:grid;gap:10px}
 input,textarea,select{
   width:100%;padding:12px 14px;border-radius:12px;border:1px solid #22283a;background:#0e1218;color:var(--ink);
   transition:border-color .2s, box-shadow .2s;
 }
-input:focus,textarea:focus,select:focus{outline:none;border-color:color-mix(in srgb, var(--accent), #fff 10%);box-shadow:0 0 0 2px rgba(231,184,75,.18)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:color-mix(in srgb, var(--accent), #fff 10%);box-shadow:0 0 0 2px rgba(231,184,75,.16)}
 textarea{min-height:130px;resize:vertical}
 .picker{width:100%;height:42px;border:0;background:transparent}
 
-/* Dialogs */
-dialog{border:0;border-radius:16px;background:#0f1219;color:var(--ink);padding:0;width:min(680px,92vw)}
+/* ================= Dialogs ================= */
+dialog{border:0;border-radius:16px;background:var(--panel-2);color:var(--ink);padding:0;width:min(680px,92vw)}
 dialog::backdrop{background:rgba(0,0,0,.6)}
 .modalHead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1d2331}
 .modalBody{padding:18px}
-.x{background:#141926}
+.x{background:#141926;color:var(--ink)}
 
-/* FX containers */
+/* ================= FX containers ================= */
 .fx-wrap{position:fixed;inset:0;pointer-events:none;z-index:-1}
 #bgGrad,#bgParticles,#fx{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-/* Utility */
+/* ================= Utilities ================= */
 .sub{margin:14px 0 6px}
 .muted{color:var(--soft)}
 .hide{display:none !important}
-
-/* Optional border style toggles (kept for panel) */
 .solid .card,.solid .plan{box-shadow:0 0 0 1px color-mix(in srgb, var(--accent), #000 40%) inset}
-.none .card,.none .plan{box-shadow:0 8px 40px rgba(0,0,0,.45), 0 0 0 1px #1b2130 inset}
+.none .card,.none .plan{box-shadow:0 8px 38px rgba(0,0,0,.42), 0 0 0 1px #1b2130 inset}
+
+/* ================= Mobile tuning ================= */
+@media (max-width:560px){
+  .wrap{padding:16px}
+  h2{margin-bottom:6px}
+  .btn{padding:10px 12px}
+  .brand__text b{font-size:16px}
+  .hero .hero-media{height:min(65vw, 360px)}
+}
