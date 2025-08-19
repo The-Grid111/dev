@@ -1,351 +1,200 @@
-/* THE GRID — main.js (stable v8)
-   Works with your structure:
-   - assets/data/owner_core_save_v1.2.json
-   - assets/videos/manifest.json
-   - assets/images/manifest.json
-   - assets/videos/* and assets/images/*
+/* THE GRID — core UI bootstrap
+   - Reads owner_core_save_v1.2.json (theme + hero)
+   - Loads assets/videos/manifest.json & assets/images/manifest.json
+   - Renders Library tabs + grid, Showcase picks
+   - Wires buttons (Open Library, See Pricing)
 */
 
-(() => {
-  const qs  = (s, r=document) => r.querySelector(s);
-  const qsa = (s, r=document) => [...r.querySelectorAll(s)];
+(async () => {
+  const qs = (sel, el=document) => el.querySelector(sel);
+  const qsa = (sel, el=document) => [...el.querySelectorAll(sel)];
+  const elHeroMount = qs('#heroMediaMount');
+  const elLibTabs   = qs('#libTabs');
+  const elLibGrid   = qs('#libGrid');
+  const elShowGrid  = qs('#showGrid');
 
-  // ---- CONFIG (matches your repo) ----
-  const OWNER_SAVE_URL   = 'assets/data/owner_core_save_v1.2.json';
-  const VIDEO_MANIFEST   = 'assets/videos/manifest.json';
-  const IMAGE_MANIFEST   = 'assets/images/manifest.json';
+  // ---------- 1) Owner core (theme + hero) ----------
+  let owner = null;
+  try {
+    const r = await fetch('assets/data/owner_core_save_v1.2.json', {cache:'no-store'});
+    if (r.ok) owner = await r.json();
+  } catch(e){ /* safe default */ }
 
-  // ---- STATE ----
-  const state = {
-    owner: null,
-    videoManifest: null,
-    imageManifest: null,
-    currentHero: null, // {type:'video'|'image', src:string, poster?:string}
-    library: {
-      active: 'Hero', // default tab
-      items: []       // populated from manifests
-    }
+  const design = owner?.design ?? {
+    accent:'#F4C84A', accentSecondary:'#B5C7FF',
+    text:'#F5F7FA', softText:'#C8CFD8',
+    cardSurface:'#121418', panelSurface:'#0E1013',
+    bgA:'#0A0B0D', bgB:'#1A1200',
+    cardRadius:16, borderGlow:30, fontScale:1, spacingScale:1, vignette:true,
   };
 
-  // ---- UTILS ----
-  const fetchJSON = async (url) => {
-    const res = await fetch(url, {cache:'no-store'});
-    if (!res.ok) throw new Error(`Fetch failed: ${url}`);
-    return res.json();
-  };
+  // apply theme
+  const root = document.documentElement;
+  root.style.setProperty('--accent', design.accent);
+  root.style.setProperty('--accent2', design.accentSecondary);
+  root.style.setProperty('--text', design.text);
+  root.style.setProperty('--soft', design.softText);
+  root.style.setProperty('--card', design.cardSurface);
+  root.style.setProperty('--panel', design.panelSurface);
+  root.style.setProperty('--bgA', design.bgA);
+  root.style.setProperty('--bgB', design.bgB);
+  root.style.setProperty('--radius', design.cardRadius);
+  root.style.setProperty('--glow', design.borderGlow);
+  root.style.setProperty('--fs', design.fontScale);
+  root.style.setProperty('--sp', design.spacingScale);
 
-  const saveLocal = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-  const getLocal  = (k, d=null) => {
-    try { return JSON.parse(localStorage.getItem(k)) ?? d; }
-    catch { return d; }
-  };
+  // greeting + tagline
+  if (owner?.brand?.tagline) qs('#tagline').textContent = owner.brand.tagline;
+  const hour = new Date().getHours();
+  const dayGreeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  qs('#greeting').textContent = `${dayGreeting} — ${owner?.brand?.name ?? 'THE GRID'}`;
 
-  const smoothScrollTo = (el) => {
-    if (!el) return;
-    el.scrollIntoView({behavior:'smooth', block:'start'});
-  };
+  // hero source (prefer video)
+  const heroVideo = owner?.hero?.source ?? 'assets/videos/hero_1.mp4';
+  const heroPoster = owner?.hero?.fallbackImage ?? 'assets/images/hero_1.jpg';
+  renderHero(heroVideo, heroPoster);
 
-  // ---- BRAND / THEME from owner save ----
-  const applyOwnerBrand = (owner) => {
-    document.documentElement.style.setProperty('--accent', owner.design?.accent || '#F4C84A');
-    document.documentElement.style.setProperty('--accent-2', owner.design?.accentSecondary || '#B5C7FF');
-    document.documentElement.style.setProperty('--text', owner.design?.text || '#F5F7FA');
-    document.documentElement.style.setProperty('--soft', owner.design?.softText || '#C8CFD8');
-    document.documentElement.style.setProperty('--card', owner.design?.cardSurface || '#121418');
-    document.documentElement.style.setProperty('--panel', owner.design?.panelSurface || '#0E1013');
-    document.documentElement.style.setProperty('--bga', owner.design?.bgA || '#0A0B0D');
-    document.documentElement.style.setProperty('--bgb', owner.design?.bgB || '#1A1200');
-    document.documentElement.style.setProperty('--radius', (owner.design?.cardRadius ?? 16) + 'px');
-
-    // greeting + brand text (non-breaking if missing)
-    const brandEl = qs('[data-brand-name]');
-    if (brandEl) brandEl.textContent = owner.brand?.name ?? 'THE GRID';
-
-    const tagEl = qs('[data-brand-tagline]');
-    if (tagEl) tagEl.textContent = owner.brand?.tagline ?? 'White & Gold';
-  };
-
-  // ---- HERO ----
-  const renderHero = () => {
-    const wrap = qs('[data-hero]');
-    if (!wrap) return;
-
-    wrap.innerHTML = ''; // reset
-
-    const hero = state.currentHero;
-    if (!hero) return;
-
-    if (hero.type === 'video') {
-      const v = document.createElement('video');
-      v.setAttribute('playsinline','');
-      v.setAttribute('muted','');
-      v.setAttribute('loop','');
-      v.setAttribute('controls','');
-      v.style.width = '100%';
-      v.style.borderRadius = 'var(--radius)';
-      v.src = hero.src;
-      if (hero.poster) v.poster = hero.poster;
-      wrap.appendChild(v);
-    } else {
+  function renderHero(videoSrc, posterImg){
+    elHeroMount.innerHTML = '';
+    const vid = document.createElement('video');
+    vid.src = videoSrc;
+    vid.muted = true; vid.autoplay = true; vid.loop = true; vid.playsInline = true;
+    vid.poster = posterImg;
+    // If autoplay blocked or error, swap to image fallback
+    const failToImg = () => {
+      elHeroMount.innerHTML = '';
       const img = document.createElement('img');
-      img.src = hero.src;
-      img.alt = 'Hero';
-      img.style.width = '100%';
-      img.style.borderRadius = 'var(--radius)';
-      wrap.appendChild(img);
-    }
-  };
-
-  const setHero = (payload) => {
-    state.currentHero = payload;
-    renderHero();
-    saveLocal('grid.hero', payload);
-  };
-
-  // ---- LIBRARY ----
-  const buildLibraryBuckets = () => {
-    // Normalize manifests to the buckets your UI shows
-    const buckets = {
-      'Hero': [],
-      'Reels 9:16': [],
-      'Reels 16:9': [],
-      'Backgrounds': [],
-      'Logos': [],
-      'Images': [],
-      'Extras': []
+      img.src = posterImg;
+      img.alt = 'Hero media';
+      elHeroMount.appendChild(img);
     };
+    vid.addEventListener('error', failToImg, {once:true});
+    vid.addEventListener('play', () => {/* ok */}, {once:true});
+    elHeroMount.appendChild(vid);
+    // nudge autoplay on iOS
+    setTimeout(()=> vid.play().catch(failToImg), 50);
+  }
 
-    // videos
-    (state.videoManifest?.items ?? []).forEach(it => {
-      const entry = {
-        type: 'video',
-        title: it.title || it.name || it.src.split('/').pop(),
-        src: it.src,
-        poster: it.poster || it.thumbnail || null,
-        tag: it.tag || it.category || 'Hero'
-      };
-      if (buckets[entry.tag]) buckets[entry.tag].push(entry);
-      else buckets['Extras'].push(entry);
-    });
+  // ---------- 2) Library (videos + images) ----------
+  const tabsOrder = owner?.libraryTabs ?? [
+    'Hero','Reels 9:16','Reels 16:9','Backgrounds','Logos','Images','Extras'
+  ];
 
-    // images
-    (state.imageManifest?.items ?? []).forEach(it => {
-      const entry = {
-        type: 'image',
-        title: it.title || it.name || it.src.split('/').pop(),
-        src: it.src,
-        tag: it.tag || it.category || 'Images'
-      };
-      if (buckets[entry.tag]) buckets[entry.tag].push(entry);
-      else buckets['Images'].push(entry);
-    });
+  // Load manifests (safe empty on failure)
+  const [vidManifest, imgManifest] = await Promise.all([
+    fetchJSON('assets/videos/manifest.json'),
+    fetchJSON('assets/images/manifest.json')
+  ]);
 
-    return buckets;
+  // Normalize library map
+  const lib = {
+    'Hero':           vidManifest?.hero ?? [],
+    'Reels 9:16':     vidManifest?.reels_9_16 ?? [],
+    'Reels 16:9':     vidManifest?.reels_16_9 ?? [],
+    'Backgrounds':    imgManifest?.backgrounds ?? [],
+    'Logos':          imgManifest?.logos ?? [],
+    'Images':         imgManifest?.images ?? [],
+    'Extras':         (vidManifest?.extras ?? []).concat(imgManifest?.extras ?? []),
   };
 
-  const renderLibraryTabs = (buckets) => {
-    const tabsWrap = qs('[data-lib-tabs]');
-    if (!tabsWrap) return;
-
-    tabsWrap.innerHTML = '';
-    Object.entries(buckets).forEach(([name, list]) => {
-      const btn = document.createElement('button');
-      btn.className = 'chip';
-      btn.textContent = `${name}${list.length ? ' ' + list.length : ' 0'}`;
-      if (name === state.library.active) btn.classList.add('active');
-      btn.addEventListener('click', () => {
-        state.library.active = name;
-        renderLibraryTabs(buckets);
-        renderLibraryGrid(buckets);
-      });
-      tabsWrap.appendChild(btn);
+  // Render tabs
+  elLibTabs.innerHTML = '';
+  tabsOrder.forEach((name, i) => {
+    const btn = document.createElement('button');
+    btn.className = `lib-tab${i===0?' active':''}`;
+    btn.textContent = `${name}${countBadge(lib[name])}`;
+    btn.addEventListener('click', () => {
+      qsa('.lib-tab', elLibTabs).forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderLibGrid(name);
     });
-  };
+    elLibTabs.appendChild(btn);
+  });
+  renderLibGrid(tabsOrder[0]);
 
-  const renderLibraryGrid = (buckets) => {
-    const grid = qs('[data-lib-grid]');
-    if (!grid) return;
+  function countBadge(arr){ return Array.isArray(arr) ? (arr.length?` (${arr.length})`: ' (0)') : ' (0)'; }
 
-    grid.innerHTML = '';
-    const items = buckets[state.library.active] || [];
-
-    if (!items.length) {
-      grid.innerHTML = `<div class="muted">No items yet in “${state.library.active}”.</div>`;
+  function renderLibGrid(tabName){
+    const items = lib[tabName] ?? [];
+    elLibGrid.innerHTML = '';
+    if (!items.length){
+      elLibGrid.innerHTML = `<div class="muted">Nothing here yet.</div>`;
       return;
     }
-
     items.forEach(it => {
-      const card = document.createElement('button');
-      card.className = 'tile';
-      card.setAttribute('aria-label', it.title);
-
-      const thumb = document.createElement(it.type === 'video' ? 'div' : 'img');
-      if (it.type === 'video') {
-        thumb.className = 'thumb thumb-video';
-        thumb.textContent = it.title;
+      const card = document.createElement('div');
+      card.className = 'item';
+      const isVideo = it.src?.endsWith('.mp4');
+      if (isVideo){
+        const v = document.createElement('video');
+        v.src = it.src; v.muted = true; v.loop = true; v.playsInline = true;
+        v.addEventListener('mouseenter', ()=>v.play().catch(()=>{}));
+        v.addEventListener('mouseleave', ()=>v.pause());
+        card.appendChild(v);
       } else {
-        thumb.className = 'thumb';
-        thumb.src = it.src;
-        thumb.loading = 'lazy';
-        thumb.alt = it.title;
-      }
-
-      const meta = document.createElement('div');
-      meta.className = 'tile-meta';
-      meta.innerHTML = `<div class="tile-title">${it.title}</div>
-                        <div class="tile-sub">${it.type === 'video' ? 'Video' : 'Image'}</div>`;
-
-      card.appendChild(thumb);
-      card.appendChild(meta);
-
-      card.addEventListener('click', () => openViewer(it));
-      grid.appendChild(card);
-    });
-  };
-
-  // ---- VIEWER (modal) ----
-  const openViewer = (item) => {
-    const modal = qs('[data-viewer]');
-    const body  = qs('[data-viewer-body]');
-    if (!modal || !body) return;
-
-    body.innerHTML = '';
-    if (item.type === 'video') {
-      const v = document.createElement('video');
-      v.setAttribute('playsinline','');
-      v.setAttribute('controls','');
-      v.src = item.src;
-      if (item.poster) v.poster = item.poster;
-      v.style.width = '100%';
-      body.appendChild(v);
-    } else {
-      const img = document.createElement('img');
-      img.src = item.src;
-      img.alt = item.title;
-      img.style.width = '100%';
-      body.appendChild(img);
-    }
-
-    const setBtn = qs('[data-set-hero]');
-    if (setBtn) {
-      setBtn.onclick = () => {
-        setHero({
-          type: item.type,
-          src: item.src,
-          poster: item.poster || null
-        });
-        closeViewer();
-        smoothScrollTo(qs('[data-hero]'));
-      };
-    }
-
-    modal.classList.add('open');
-  };
-
-  const closeViewer = () => {
-    const modal = qs('[data-viewer]');
-    if (modal) modal.classList.remove('open');
-  };
-
-  // ---- SHOWCASE (small grid) ----
-  const renderShowcase = (buckets) => {
-    const wrap = qs('[data-showcase]');
-    if (!wrap) return;
-
-    wrap.innerHTML = '';
-    // take first 8 mixed items from buckets in a deterministic order
-    const order = ['Hero','Reels 9:16','Reels 16:9','Images','Backgrounds','Logos','Extras'];
-    const pool = [];
-    order.forEach(k => (buckets[k]||[]).forEach(x => pool.push(x)));
-    const featured = pool.slice(0, 8);
-
-    featured.forEach(it => {
-      const a = document.createElement('button');
-      a.className = 'showcase-tile';
-      a.setAttribute('aria-label', it.title);
-
-      if (it.type === 'image') {
         const img = document.createElement('img');
-        img.src = it.src;
-        img.loading = 'lazy';
-        img.alt = it.title;
-        a.appendChild(img);
-      } else {
-        const dv = document.createElement('div');
-        dv.className = 'showcase-video';
-        dv.textContent = it.title;
-        a.appendChild(dv);
+        img.src = it.src; img.alt = it.title ?? '';
+        card.appendChild(img);
       }
+      const cap = document.createElement('div');
+      cap.className = 'cap';
+      cap.textContent = (it.title ?? it.name ?? it.src.split('/').pop());
+      card.appendChild(cap);
 
-      a.addEventListener('click', () => openViewer(it));
-      wrap.appendChild(a);
+      // click -> set hero
+      card.addEventListener('click', () => {
+        if (it.src.endsWith('.mp4')) renderHero(it.src, it.poster ?? owner?.hero?.fallbackImage ?? 'assets/images/hero_1.jpg');
+        else renderHero(heroVideo, it.src); // image clicked -> use as poster fallback
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+
+      elLibGrid.appendChild(card);
     });
-  };
+  }
 
-  // ---- BUTTONS / CTA ----
-  const wireCTAs = () => {
-    const pricingBtn = qs('[data-btn="pricing"]');
-    const libraryBtn = qs('[data-btn="library"]');
-    const joinBtns   = qsa('[data-btn="join"]');
+  // ---------- 3) Showcase (first few featured) ----------
+  renderShowcase();
 
-    if (pricingBtn) pricingBtn.onclick = () => smoothScrollTo(qs('[data-section="plans"]'));
-    if (libraryBtn) libraryBtn.onclick = () => smoothScrollTo(qs('[data-section="library"]'));
-    joinBtns.forEach(b => b.onclick = () => smoothScrollTo(qs('[data-section="plans"]')));
-  };
-
-  // ---- LOGO SPIN (subtle, GPU-safe) ----
-  const enableLogoSpin = () => {
-    const logo = qs('[data-brand-logo]');
-    if (!logo) return;
-    logo.addEventListener('mouseenter', () => logo.classList.add('spin'));
-    logo.addEventListener('mouseleave', () => logo.classList.remove('spin'));
-  };
-
-  // ---- INIT ----
-  const init = async () => {
-    try {
-      // Load owner + manifests
-      state.owner         = await fetchJSON(OWNER_SAVE_URL);
-      state.videoManifest = await fetchJSON(VIDEO_MANIFEST).catch(() => ({items:[]}));
-      state.imageManifest = await fetchJSON(IMAGE_MANIFEST).catch(() => ({items:[]}));
-
-      applyOwnerBrand(state.owner);
-
-      // Hero: device setting > owner default
-      const savedHero = getLocal('grid.hero', null);
-      if (savedHero) {
-        state.currentHero = savedHero;
-      } else if (state.owner?.hero?.source) {
-        state.currentHero = { type:'video', src: state.owner.hero.source, poster: state.owner.hero.fallbackImage || null };
+  function renderShowcase(){
+    elShowGrid.innerHTML = '';
+    const picks = [
+      ...(vidManifest?.hero ?? []).slice(0,2),
+      ...(vidManifest?.reels_16_9 ?? []).slice(0,1),
+      ...(imgManifest?.images ?? []).slice(0,3)
+    ];
+    picks.forEach(it=>{
+      const card = document.createElement('div'); card.className='item';
+      if (it.src.endsWith('.mp4')){
+        const v=document.createElement('video'); v.src=it.src; v.muted=true; v.loop=true; v.playsInline=true;
+        v.addEventListener('mouseenter', ()=>v.play().catch(()=>{}));
+        v.addEventListener('mouseleave', ()=>v.pause());
+        card.appendChild(v);
       } else {
-        // fail-safe placeholder (no crash)
-        state.currentHero = { type:'image', src:'assets/images/hero_1.jpg' };
+        const img=document.createElement('img'); img.src=it.src; img.alt=it.title??'';
+        card.appendChild(img);
       }
-      renderHero();
+      const cap=document.createElement('div'); cap.className='cap'; cap.textContent=(it.title ?? it.src.split('/').pop());
+      card.appendChild(cap);
+      card.addEventListener('click', ()=> {
+        if (it.src.endsWith('.mp4')) renderHero(it.src, it.poster ?? heroPoster);
+        else renderHero(heroVideo, it.src);
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+      elShowGrid.appendChild(card);
+    });
+  }
 
-      // library + showcase
-      const buckets = buildLibraryBuckets();
-      renderLibraryTabs(buckets);
-      renderLibraryGrid(buckets);
-      renderShowcase(buckets);
+  // ---------- 4) Buttons ----------
+  qs('#btnOpenLibrary')?.addEventListener('click', ()=> document.getElementById('library')?.scrollIntoView({behavior:'smooth'}));
+  qs('#btnSeePricing')?.addEventListener('click', ()=> document.getElementById('plans')?.scrollIntoView({behavior:'smooth'}));
+  qs('#btnCustomize')?.addEventListener('click', ()=> alert('Design Panel coming back next pass (saved per-device).'));
 
-      // IO
-      wireCTAs();
-      enableLogoSpin();
-
-      // modal close
-      const close = qs('[data-viewer-close]');
-      if (close) close.onclick = closeViewer;
-
-    } catch (err) {
-      console.error('Init error:', err);
-    }
-  };
-
-  // Run after DOM
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  // ---------- helpers ----------
+  async function fetchJSON(path){
+    try{
+      const r = await fetch(path, {cache:'no-store'});
+      if (!r.ok) return null;
+      return await r.json();
+    }catch(_){ return null; }
   }
 })();
