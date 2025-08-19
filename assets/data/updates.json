@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "date": "2025-08-19",
+    "title": "Library UX + Theme pass",
+    "changes": [
+      "Split video/image manifests",
+      "Design Panel stable (sliders + pickers)",
+      "Hero source wired to Library",
+      "Prepared pricing/services restore"
+    ],
+    "filesTouched": [
+      "index.html",
+      "assets/js/main.js",
+      "assets/css/styles.css",
+      "assets/videos/manifest.json",
+      "assets/images/manifest.json"
+    ]
+  }
+]
