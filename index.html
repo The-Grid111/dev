@@ -2,142 +2,176 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID — Studio</title>
-  <meta name="description" content="Cinematic visuals. Owner controls. One-file updates with a premium finish.">
-  <link rel="preload" href="assets/css/styles.css" as="style">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="stylesheet" href="assets/css/effects.css">
+  <link rel="preload" href="assets/images/gc_logo.png" as="image" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/effects.css" />
 </head>
 <body>
-  <!-- Compact top bar -->
-  <header class="nav">
-    <div class="nav__left">
-      <div class="brand-dot"></div>
-      <div class="brand">
-        <div class="brand-top" id="greeting">Good day — THE GRID</div>
-        <div class="brand-sub">White &amp; Gold</div>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <img src="assets/images/gc_logo.png" alt="" class="brand__logo" />
+      <div class="brand__text">
+        <div class="brand__eyebrow" id="greeting">Good day — THE GRID</div>
+        <div class="brand__sub">White &amp; Gold</div>
       </div>
     </div>
-    <div class="nav__right">
-      <button id="openCustomize" class="btn btn-ghost">Customize</button>
-      <a href="#contact" class="btn btn-primary glow">Join Now</a>
+    <div class="topbar__actions">
+      <button class="btn btn--pill" id="openCustomize">Customize</button>
+      <a class="btn btn--cta" id="joinNow" href="#plans">Join Now</a>
     </div>
   </header>
 
-  <main class="page">
-    <!-- Offer / Hero -->
+  <main class="shell">
+    <!-- Hero block -->
     <section class="card hero" id="hero">
-      <h1 class="h1">Black &amp; Gold</h1>
-      <p class="lead">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-
-      <div class="hero-media">
-        <video id="heroVideo" class="hidden" playsinline muted loop controls preload="metadata"></video>
-        <img id="heroImage" class="hidden" alt="Hero media">
-      </div>
-
-      <div class="cta-row">
-        <a class="btn btn-ghost" href="#library">Open Library</a>
-        <a class="btn btn-primary" href="#plans">See Pricing</a>
-      </div>
-    </section>
-
-    <!-- Library (picker + items) -->
-    <section class="panel" id="library">
-      <h2 class="h2">Library</h2>
-      <p class="muted">
-        Tap a library to browse. Sources: <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.
+      <h1 class="card__title">Black &amp; Gold</h1>
+      <p class="card__lead">
+        Cinematic visuals. Owner controls. One-file updates with a premium finish.
       </p>
 
-      <!-- Library picker (small cards) -->
-      <div class="lib-picker" id="libPicker">
-        <!-- JS renders small boxes -->
+      <div class="hero__media">
+        <video id="heroVideo" class="media" playsinline muted loop poster="assets/images/hero_1.jpg">
+          <source src="assets/videos/hero_1.mp4" type="video/mp4" />
+        </video>
+        <button class="media__play" id="playHero" aria-label="Play/Pause"></button>
       </div>
 
-      <!-- Items for selected picker -->
-      <div class="lib-items" id="libItems"></div>
-
-      <p class="help">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
+      <div class="card__cta">
+        <a class="btn" href="#library">Open Library</a>
+        <a class="btn btn--accent" href="#plans">See Pricing</a>
+      </div>
     </section>
 
-    <!-- Showcase (small, tidy) -->
-    <section class="panel" id="showcase">
-      <h2 class="h2">Showcase</h2>
-      <p class="muted">Featured stills &amp; clips — quick browse.</p>
-      <div class="gallery" id="gallery"></div>
+    <!-- Library -->
+    <section class="card" id="library">
+      <div class="card__header">
+        <h2 class="card__title">Library</h2>
+        <p class="card__lead">
+          Tap a library to browse. Sources: <code>assets/videos/manifest.json</code> &amp;
+          <code>assets/images/manifest.json</code>.
+        </p>
+      </div>
+
+      <div class="library__chips" id="libraryChips">
+        <!-- chips built by JS -->
+      </div>
+
+      <div class="library__grid" id="libraryGrid" aria-live="polite">
+        <!-- thumbs built by JS -->
+      </div>
+
+      <p class="card__hint">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
+    </section>
+
+    <!-- Showcase -->
+    <section class="card" id="showcase">
+      <div class="card__header">
+        <h2 class="card__title">Showcase</h2>
+        <p class="card__lead">Featured stills &amp; clips — quick browse.</p>
+      </div>
+      <div class="showcase__grid" id="showcaseGrid">
+        <!-- featured items built by JS -->
+      </div>
     </section>
 
     <!-- Plans -->
-    <section class="panel" id="plans">
-      <h2 class="h2">Plans</h2>
-      <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
-      <div class="plan-grid" id="planGrid"></div>
+    <section class="card" id="plans">
+      <div class="card__header">
+        <h2 class="card__title">Plans</h2>
+        <p class="card__lead">Fair pricing. No lock-in. 7-day refund.</p>
+      </div>
+      <div class="plans" id="plansGrid">
+        <!-- plan cards built by JS -->
+      </div>
+      <p class="card__hint">
+        All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.
+      </p>
     </section>
 
-    <!-- À-la-carte -->
-    <section class="panel" id="services">
-      <h2 class="h2">À-la-carte Services</h2>
-      <div class="service-grid" id="serviceGrid"></div>
+    <!-- A-la-carte -->
+    <section class="card" id="services">
+      <div class="card__header">
+        <h2 class="card__title">À-la-carte Services</h2>
+      </div>
+      <div class="services" id="servicesGrid">
+        <!-- service cards built by JS -->
+      </div>
     </section>
 
     <!-- Contact -->
-    <section class="panel" id="contact">
-      <h2 class="h2">Contact</h2>
-      <form class="form" id="contactForm">
-        <div class="row">
-          <input type="text" name="name" placeholder="Your name" required>
-          <input type="email" name="email" placeholder="you@example.com" required>
+    <section class="card" id="contact">
+      <div class="card__header">
+        <h2 class="card__title">Contact</h2>
+      </div>
+      <form class="contact" action="https://formspree.io/f/mnqeyyyd" method="POST">
+        <div class="contact__row">
+          <input name="name" placeholder="Your name" required />
+          <input type="email" name="email" placeholder="you@example.com" required />
         </div>
-        <input type="text" name="topic" placeholder="How can we help?">
+        <input name="subject" placeholder="How can we help?" />
         <textarea name="message" rows="5" placeholder="Write your message…" required></textarea>
-        <button class="btn btn-primary" type="submit">Send</button>
-        <p class="muted small">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
+        <button class="btn btn--cta" type="submit">Send</button>
       </form>
+      <p class="card__hint">
+        Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.
+      </p>
     </section>
   </main>
 
   <!-- Customize panel -->
-  <dialog id="designPanel" class="panel dialog">
-    <div class="dialog-head">
-      <div class="h3">Design Panel</div>
-      <button class="btn btn-ghost" id="closeCustomize">Close</button>
+  <dialog id="customizePanel" class="panel">
+    <div class="panel__header">
+      <h3>Design Panel</h3>
+      <button class="btn btn--pill" id="closeCustomize">Close</button>
     </div>
 
-    <div class="grid-2">
-      <label>Accent color <input type="color" id="accent" value="#f3c02f"></label>
-      <label>Secondary accent <input type="color" id="accent2" value="#9aa8ff"></label>
-      <label>Text color <input type="color" id="text" value="#ffffff"></label>
-      <label>Soft text <input type="color" id="soft" value="#b6bcc9"></label>
-      <label>Card surface <input type="color" id="card" value="#16181c"></label>
-      <label>Panel surface <input type="color" id="panel" value="#101216"></label>
-      <label>Background A <input type="color" id="bgA" value="#0a0b0d"></label>
-      <label>Background B <input type="color" id="bgB" value="#1f1a0a"></label>
-      <label>Card radius <input type="range" id="radius" min="4" max="24" value="14"></label>
-      <label>Border glow (0–100) <input type="range" id="glow" min="0" max="100" value="28"></label>
-      <label>Font size <input type="range" id="font" min="14" max="20" value="16"></label>
-      <label>Spacing <input type="range" id="space" min="12" max="28" value="20"></label>
+    <div class="panel__grid">
+      <label>Accent color <input type="color" id="cAccent" value="#F5C10E" /></label>
+      <label>Secondary accent <input type="color" id="cAccent2" value="#2463EB" /></label>
+      <label>Text color <input type="color" id="cText" value="#ffffff" /></label>
+      <label>Soft text <input type="color" id="cSoft" value="#aab1c0" /></label>
+      <label>Card surface <input type="color" id="cCard" value="#101318" /></label>
+      <label>Panel surface <input type="color" id="cPanel" value="#0c0f13" /></label>
+      <label>Background A <input type="color" id="cBgA" value="#0a0d11" /></label>
+      <label>Background B <input type="color" id="cBgB" value="#161a20" /></label>
+
+      <label>Card radius
+        <input type="range" id="rRadius" min="8" max="28" value="20" />
+      </label>
+      <label>Border glow (0–100)
+        <input type="range" id="rGlow" min="0" max="100" value="28" />
+      </label>
+      <label>Font size
+        <input type="range" id="rFont" min="14" max="20" value="16" />
+      </label>
+      <label>Spacing
+        <input type="range" id="rSpace" min="12" max="28" value="18" />
+      </label>
+
       <label>Vignette
-        <select id="vignette">
-          <option value="on">On</option>
+        <select id="vignetteSelect">
+          <option value="on" selected>On</option>
           <option value="off">Off</option>
         </select>
       </label>
-      <label>Hero source
-        <input id="heroSource" list="heroList" placeholder="assets/videos/hero_1.mp4">
-        <datalist id="heroList"></datalist>
-      </label>
-    </div>
 
-    <div class="row mt">
-      <button id="saveDesign" class="btn btn-ghost">Save to this device</button>
-      <button id="resetDesign" class="btn btn-ghost">Reset</button>
+      <label>Hero source
+        <select id="heroSource"></select>
+      </label>
+
+      <div class="panel__row">
+        <button class="btn" id="savePrefs">Save to this device</button>
+        <button class="btn btn--ghost" id="resetPrefs">Reset</button>
+      </div>
     </div>
   </dialog>
 
-  <!-- Confetti canvas (safe, non-blocking) -->
-  <canvas id="fx" aria-hidden="true"></canvas>
+  <!-- FX (kept tiny) -->
+  <canvas id="fx" class="fx"></canvas>
 
-  <!-- Scripts (last) -->
   <script src="assets/js/confetti.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
