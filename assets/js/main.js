@@ -1,252 +1,260 @@
-/* Main UI logic — zero config for you. */
+/* THE GRID — main.js (no manual edits needed) */
+
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const state = {
+    manifests: { videos: [], images: [] },
+    picker: 'hero',
+    featured: []
+  };
 
-  const heroVideo = $('#heroVideo');
-  const libGrid = $('#libGrid');
-  const galleryGrid = $('#galleryGrid');
-  const plansWrap = $('#plansWrap');
-  const servicesWrap = $('#servicesWrap');
-  const lightbox = $('#lightbox');
-  const lightboxBody = $('#lightboxBody');
+  // Greeting
+  const setGreeting = () => {
+    const h = new Date().getHours();
+    const g = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+    $('#greeting').textContent = `${g} — THE GRID`;
+  };
 
-  /* Smooth scroll on [data-scroll] */
-  $$('[data-scroll]').forEach(el => {
-    el.addEventListener('click', e => {
+  // Load JSON helper
+  const j = async url => (await fetch(url)).json().catch(_ => null);
+
+  // Fallback classifier from filename
+  const classify = (name) => {
+    const n = name.toLowerCase();
+    if (n.includes('reel') && (n.includes('9x16') || n.includes('9:16'))) return 'reels916';
+    if (n.includes('reel') && (n.includes('16x9') || n.includes('16:9'))) return 'reels169';
+    if (n.includes('logo')) return 'logos';
+    if (n.includes('bg') || n.includes('background')) return 'backgrounds';
+    if (n.includes('hero')) return 'hero';
+    if (/\.(jpg|jpeg|png|webp|gif)$/.test(n)) return 'images';
+    return 'extras';
+  };
+
+  // Load manifests (videos + images)
+  const loadManifests = async () => {
+    const videos = await j('assets/videos/manifest.json') || { items: [] };
+    const images = await j('assets/images/manifest.json') || { items: [] };
+    state.manifests.videos = (videos.items || []).map(v => ({
+      type: 'video',
+      src: v.src || v.path || '',
+      thumb: v.thumb || '',
+      tag: v.tag || classify(v.src || v.path || ''),
+      title: v.title || (v.src || '').split('/').pop(),
+      featured: !!v.featured
+    }));
+    state.manifests.images = (images.items || []).map(i => ({
+      type: 'image',
+      src: i.src || i.path || '',
+      thumb: i.thumb || i.src || '',
+      tag: i.tag || classify(i.src || i.path || ''),
+      title: i.title || (i.src || '').split('/').pop(),
+      featured: !!i.featured
+    }));
+    state.featured = [...state.manifests.videos, ...state.manifests.images].filter(x => x.featured).slice(0, 9);
+  };
+
+  // Library picker (small cards)
+  const LIBS = [
+    { key: 'hero', label: 'Hero' },
+    { key: 'reels916', label: 'Reels 9:16' },
+    { key: 'reels169', label: 'Reels 16:9' },
+    { key: 'backgrounds', label: 'Backgrounds' },
+    { key: 'logos', label: 'Logos' },
+    { key: 'images', label: 'Images' },
+    { key: 'extras', label: 'Extras' },
+  ];
+
+  const drawPicker = () => {
+    const wrap = $('#libPicker');
+    wrap.innerHTML = '';
+    LIBS.forEach(lib => {
+      const count = [...state.manifests.videos, ...state.manifests.images].filter(m => m.tag === lib.key).length;
+      const btn = document.createElement('button');
+      btn.className = `lib-tile${state.picker === lib.key ? ' active' : ''}`;
+      btn.innerHTML = `<span class="lbl">${lib.label}</span><span class="badge">${count}</span>`;
+      btn.addEventListener('click', () => { state.picker = lib.key; drawPicker(); drawItems(); });
+      wrap.appendChild(btn);
+    });
+  };
+
+  // Library items for selected picker
+  const drawItems = () => {
+    const area = $('#libItems');
+    const all = [...state.manifests.videos, ...state.manifests.images];
+    const items = all.filter(x => x.tag === state.picker);
+    area.innerHTML = '';
+    items.forEach(it => {
+      const card = document.createElement('div');
+      card.className = 'media-item';
+      const thumb = it.type === 'image'
+        ? `<img loading="lazy" src="${it.thumb || it.src}" alt="${it.title}">`
+        : `<video muted playsinline preload="metadata" src="${it.src}"></video>`;
+      card.innerHTML = `<button data-src="${it.src}" data-type="${it.type}">${thumb}</button><div class="cap">${it.title}</div>`;
+      card.querySelector('button').addEventListener('click', () => setHero(it));
+      area.appendChild(card);
+    });
+
+    // Also refresh hero datalist in the panel
+    const heroList = $('#heroList');
+    heroList.innerHTML = all.filter(x => x.type === 'video').map(v => `<option value="${v.src}"></option>`).join('');
+  };
+
+  // Set hero media
+  const setHero = (itemOrPath) => {
+    const video = $('#heroVideo');
+    const image = $('#heroImage');
+    video.classList.add('hidden');
+    image.classList.add('hidden');
+    if (typeof itemOrPath === 'string') {
+      const p = itemOrPath.toLowerCase();
+      if (p.endsWith('.mp4') || p.endsWith('.webm')) {
+        video.src = itemOrPath; video.classList.remove('hidden');
+      } else {
+        image.src = itemOrPath; image.classList.remove('hidden');
+      }
+      return;
+    }
+    if (itemOrPath.type === 'video') {
+      video.src = itemOrPath.src; video.classList.remove('hidden');
+    } else {
+      image.src = itemOrPath.src; image.classList.remove('hidden');
+    }
+  };
+
+  // Showcase (small grid)
+  const drawGallery = () => {
+    const g = $('#gallery');
+    const list = state.featured.length ? state.featured : [...state.manifests.images].slice(0, 9);
+    g.innerHTML = list.map(it => {
+      const el = it.type === 'image'
+        ? `<img loading="lazy" src="${it.thumb || it.src}" alt="${it.title}">`
+        : `<video muted playsinline preload="metadata" src="${it.src}"></video>`;
+      return `<div class="g">${el}</div>`;
+    }).join('');
+  };
+
+  // Plans
+  const drawPlans = async () => {
+    const plans = await j('assets/data/plans.json') || { plans: [] };
+    const wrap = $('#planGrid');
+    wrap.innerHTML = (plans.plans || []).map(p => `
+      <article class="plan">
+        <div class="tier">${(p.tier || '').toUpperCase()}</div>
+        <div class="price">£${p.price}/mo</div>
+        <h3 class="h3">${p.name}</h3>
+        <ul>${p.perks.map(x => `<li>${x}</li>`).join('')}</ul>
+        <div class="row">
+          <button class="btn btn-primary choose" data-tier="${p.name}">Choose</button>
+          <button class="btn btn-ghost details" data-tier="${p.name}">Details</button>
+        </div>
+      </article>
+    `).join('');
+
+    wrap.querySelectorAll('.choose').forEach(b => b.addEventListener('click', e => {
+      try { window.launchConfetti && window.launchConfetti(); } catch {}
+      location.hash = '#contact';
+    }));
+    wrap.querySelectorAll('.details').forEach(b => b.addEventListener('click', e => {
+      alert(`${e.currentTarget.dataset.tier}\n\n${plans.details?.[e.currentTarget.dataset.tier] || 'Plan details.'}`);
+    }));
+  };
+
+  // Services
+  const drawServices = async () => {
+    const services = await j('assets/data/services.json') || { services: [] };
+    $('#serviceGrid').innerHTML = (services.services || []).map(s => `
+      <article class="service">
+        <div class="price">£${s.price}</div>
+        <h3 class="h3">${s.name}</h3>
+        <ul>${s.perks.map(x => `<li>${x}</li>`).join('')}</ul>
+        <button class="btn btn-primary" onclick="location.hash='#contact'">Start</button>
+      </article>
+    `).join('');
+  };
+
+  // Contact
+  const bindContact = () => {
+    $('#contactForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const id = el.getAttribute('data-scroll');
-      const target = document.querySelector(id);
-      target?.scrollIntoView({behavior:'smooth', block:'start'});
+      const d = new FormData(e.currentTarget);
+      const mailto = `mailto:gridcoresystems@gmail.com?subject=${encodeURIComponent('[THE GRID] ' + (d.get('topic') || 'Enquiry'))}&body=${encodeURIComponent(
+        `Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\n${d.get('message')}`
+      )}`;
+      window.location.href = mailto;
     });
-  });
+  };
 
-  /* Close lightbox */
-  lightbox?.addEventListener('click', e => {
-    if (e.target === lightbox || e.target.hasAttribute('data-close')) lightbox.close();
-  });
+  // Design Panel
+  const openDesign = () => $('#designPanel').showModal();
+  const closeDesign = () => $('#designPanel').close();
+  const setVar = (k, v) => document.documentElement.style.setProperty(k, v);
+  const restoreSaved = () => {
+    const raw = localStorage.getItem('grid.design');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Object.entries(data.vars || {}).forEach(([k, v]) => setVar(k, v));
+    if (data.hero) setHero(data.hero);
+  };
+  const saveDesign = () => {
+    const vars = {
+      '--bg-a': getComputedStyle(document.documentElement).getPropertyValue('--bg-a'),
+      '--bg-b': getComputedStyle(document.documentElement).getPropertyValue('--bg-b'),
+      '--panel': getComputedStyle(document.documentElement).getPropertyValue('--panel'),
+      '--card': getComputedStyle(document.documentElement).getPropertyValue('--card'),
+      '--text': getComputedStyle(document.documentElement).getPropertyValue('--text'),
+      '--soft': getComputedStyle(document.documentElement).getPropertyValue('--soft'),
+      '--accent': getComputedStyle(document.documentElement).getPropertyValue('--accent'),
+      '--accent-2': getComputedStyle(document.documentElement).getPropertyValue('--accent-2'),
+      '--radius': getComputedStyle(document.documentElement).getPropertyValue('--radius'),
+      '--glow': getComputedStyle(document.documentElement).getPropertyValue('--glow'),
+      '--font': getComputedStyle(document.documentElement).getPropertyValue('--font'),
+      '--space': getComputedStyle(document.documentElement).getPropertyValue('--space'),
+    };
+    const hero = $('#heroVideo').classList.contains('hidden') ? $('#heroImage').src : $('#heroVideo').src;
+    localStorage.setItem('grid.design', JSON.stringify({ vars, hero }));
+    alert('Saved to this device.');
+  };
+  const resetDesign = () => { localStorage.removeItem('grid.design'); location.reload(); };
 
-  /* Load media manifest (videos) */
-  async function loadManifest(){
-    try{
-      const res = await fetch('assets/videos/manifest.json');
-      if(!res.ok) throw 0;
-      return await res.json();
-    }catch{
-      // sensible fallback based on the files you already have
-      return {
-        hero: [
-          {src: 'assets/videos/hero_1.mp4', poster: 'assets/images/hero_1.jpg', name:'hero_1.mp4'}
-        ],
-        reels_9_16: [],
-        reels_16_9: [],
-        backgrounds: [
-          {src: 'assets/videos/pour_1.mp4', name:'pour_1.mp4'},
-          {src: 'assets/videos/spread_1.mp4', name:'spread_1.mp4'},
-          {src: 'assets/videos/transform_1.mp4', name:'transform_1.mp4'},
-          {src: 'assets/videos/natural_1.mp4', name:'natural_1.mp4'},
-          {src: 'assets/videos/interaction_1.mp4', name:'interaction_1.mp4'}
-        ]
-      };
-    }
-  }
+  const wireDesignPanel = () => {
+    $('#openCustomize').addEventListener('click', openDesign);
+    $('#closeCustomize').addEventListener('click', closeDesign);
+    $('#saveDesign').addEventListener('click', saveDesign);
+    $('#resetDesign').addEventListener('click', resetDesign);
 
-  /* Load pricing/services JSON (your /data folder) */
-  async function loadJSON(path, fallback){
-    try{
-      const res = await fetch(path);
-      if(!res.ok) throw 0;
-      return await res.json();
-    }catch{
-      return fallback;
-    }
-  }
-
-  /* Paint library grid */
-  function paintLibrary(data){
-    const filters = $('#libFilters');
-    function render(kind='hero'){
-      const map = {
-        'hero': data.hero || [],
-        'reel-9-16': data.reels_9_16 || [],
-        'reel-16-9': data.reels_16_9 || [],
-        'backgrounds': data.backgrounds || [],
-        'logos': [],
-        'images': []
-      };
-      libGrid.innerHTML = '';
-      map[kind].forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'media-card';
-        card.innerHTML = `
-          <div class="thumb">${thumbEl(item)}</div>
-          <div class="meta">
-            <span class="name">${item.name || fileName(item.src)}</span>
-            <button class="btn ghost" data-set="${item.src}">Set hero</button>
-          </div>
-        `;
-        libGrid.append(card);
-      });
-    }
-    // initial
-    render('hero');
-
-    filters.addEventListener('click', ev => {
-      const btn = ev.target.closest('.chip'); if(!btn) return;
-      $$('.chip', filters).forEach(c => c.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      render(btn.dataset.kind);
-    });
-
-    libGrid.addEventListener('click', ev => {
-      const setBtn = ev.target.closest('[data-set]'); if(!setBtn) return;
-      const src = setBtn.dataset.set;
-      setHero(src);
-      pulse(setBtn);
-    });
-  }
-
-  function thumbEl(item){
-    const poster = item.poster ? `<img src="${item.poster}" alt="">` : `<video src="${item.src}#t=1"></video>`;
-    return poster;
-  }
-
-  function setHero(src){
-    if (!heroVideo) return;
-    heroVideo.src = src;
-    heroVideo.play().catch(()=>{});
-  }
-
-  function fileName(path){ return path.split('/').pop(); }
-
-  /* Paint gallery from manifest + known images */
-  function paintGallery(data){
-    const images = [
-      'assets/images/hero_1.jpg',
-      'assets/images/grid_pour_1.jpg',
-      'assets/images/grid_spread_1.jpg',
-      'assets/images/grid_transform_1.jpg',
-      'assets/images/grid_interaction_1.jpg',
-      'assets/images/grid_natural_1.jpg'
+    const map = [
+      ['accent','--accent'], ['accent2','--accent-2'], ['text','--text'], ['soft','--soft'],
+      ['card','--card'], ['panel','--panel'], ['bgA','--bg-a'], ['bgB','--bg-b'],
+      ['radius','--radius', v => `${v}px`], ['glow','--glow'], ['font','--font', v => `${v}px`],
+      ['space','--space', v => `${v}px`]
     ];
-    const videos =
-      (data.hero||[]).concat(data.backgrounds||[]).concat(data.reels_16_9||[]).slice(0,12);
-
-    // build grid
-    galleryGrid.innerHTML = '';
-
-    images.forEach(src => {
-      const el = document.createElement('div');
-      el.className = 'gallery-item';
-      el.innerHTML = `<img src="${src}" alt="">`;
-      el.addEventListener('click', () => openLightbox(`<img src="${src}" alt="">`));
-      galleryGrid.append(el);
+    map.forEach(([id, css, fmt]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', e => setVar(css, fmt ? fmt(e.target.value) : e.target.value));
     });
 
-    videos.forEach(v => {
-      const el = document.createElement('div');
-      el.className = 'gallery-item';
-      el.innerHTML = `
-        <video src="${v.src}#t=1" muted></video>
-        <span class="badge">Video</span>`;
-      el.addEventListener('click', () => openLightbox(`<video src="${v.src}" controls autoplay></video>`));
-      galleryGrid.append(el);
+    $('#vignette').addEventListener('change', e => {
+      const on = e.target.value === 'on';
+      $('#fx').style.opacity = on ? '.9' : '0';
     });
-  }
+    $('#heroSource').addEventListener('change', e => setHero(e.target.value));
+  };
 
-  function openLightbox(html){
-    lightboxBody.innerHTML = html;
-    lightbox.showModal();
-  }
+  // Boot
+  const init = async () => {
+    setGreeting();
+    await loadManifests();
+    drawPicker();
+    drawItems();
+    drawGallery();
+    drawPlans();
+    drawServices();
+    bindContact();
+    wireDesignPanel();
+    restoreSaved();
+  };
 
-  /* Pricing + Services */
-  function paintPlans(plans){
-    plansWrap.innerHTML = '';
-    plans.forEach(p => {
-      const el = document.createElement('article');
-      el.className = 'plan';
-      el.innerHTML = `
-        <span class="tag">${p.tier.toUpperCase()}</span>
-        <h3>${p.price}/mo</h3>
-        <ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-        <button class="btn solid" data-plan="${p.tier}">Choose</button>
-        <button class="btn ghost" data-plan-detail="${p.tier}">Details</button>
-      `;
-      plansWrap.append(el);
-    });
-
-    plansWrap.addEventListener('click', (e)=>{
-      const choose = e.target.closest('[data-plan]');
-      const detail = e.target.closest('[data-plan-detail]');
-      if(choose){
-        confetti && confetti.start && confetti.start(); // if lib present
-        // mailto fallback; feel free to swap to Stripe link by editing plans.json later
-        const tier = choose.dataset.plan;
-        window.location.href = `mailto:gridcoresystems@gmail.com?subject=Plan%20signup:%20${encodeURIComponent(tier)}&body=Hi%20Grid%20team,%20I'd%20like%20the%20${tier}%20plan.`;
-      }
-      if(detail){
-        const tier = detail.dataset.planDetail;
-        const p = plans.find(x=>x.tier===tier);
-        openLightbox(`
-          <div style="padding:18px;background:#fff;color:#111;border-radius:12px">
-            <h3 style="margin-top:0">${p.tier.toUpperCase()} plan</h3>
-            <p><strong>${p.price}/mo</strong></p>
-            <ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-            <button class="btn solid" onclick="location.href='mailto:gridcoresystems@gmail.com?subject=Plan%20signup:%20${encodeURIComponent(tier)}'">Sounds good</button>
-          </div>
-        `);
-      }
-    });
-  }
-
-  function paintServices(items){
-    servicesWrap.innerHTML = '';
-    items.forEach(s=>{
-      const el = document.createElement('article');
-      el.className = 'plan';
-      el.innerHTML = `
-        <span class="tag">${s.tag.toUpperCase()}</span>
-        <h3>£${s.price}</h3>
-        <ul>${s.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-        <button class="btn solid" onclick="location.href='mailto:gridcoresystems@gmail.com?subject=Service%20order:%20${encodeURIComponent(s.tag)}'">Start ${s.cta || 'Order'}</button>
-      `;
-      servicesWrap.append(el);
-    });
-  }
-
-  /* Contact form (simple mailto) */
-  $('#contactForm')?.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target).entries());
-    const body = encodeURIComponent(`${data.message || ''}\n\n— ${data.name} <${data.email}> (${data.topic||'General'})`);
-    location.href = `mailto:gridcoresystems@gmail.com?subject=Website%20message&body=${body}`;
-  });
-
-  /* Tiny helper */
-  function pulse(el){
-    el.style.boxShadow = `0 0 0 6px ${getComputedStyle(document.documentElement).getPropertyValue('--ring')}`;
-    setTimeout(()=> el.style.boxShadow = '', 300);
-  }
-
-  /* Boot */
-  (async function init(){
-    const manifest = await loadManifest();
-    if (manifest?.hero?.[0]?.src) setHero(manifest.hero[0].src);
-    paintLibrary(manifest);
-    paintGallery(manifest);
-
-    const plans = await loadJSON('data/plans.json', [
-      { tier: 'BASIC', price: '£9', features: ['Starter templates & blocks','Library access (videos, images, logos)','Email support (48h)'] },
-      { tier: 'GOLD', price: '£49', features: ['Full customization session','Admin toolkit & automations','1:1 onboarding (45 min)'] },
-      { tier: 'DIAMOND', price: '£99', features: ['Custom pipelines & integrations','Hands-on help building your stack','Priority roadmap & turnaround'] }
-    ]);
-    paintPlans(plans);
-
-    const services = await loadJSON('data/services.json', [
-      { tag:'Setup', price:39, features:['Deploy & connect Pages','Analytics hookup','Best-practice sweep'], cta:'Setup' },
-      { tag:'Reels', price:59, features:['3 niche reels','Captions & cuts','IG/TikTok ready'], cta:'Pack' },
-      { tag:'Templates', price:29, features:['5 premium blocks','Copy-paste ready','Lifetime updates'], cta:'Pack' }
-    ]);
-    paintServices(services);
-  })();
+  document.addEventListener('DOMContentLoaded', init);
 })();
