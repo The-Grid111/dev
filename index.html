@@ -1,167 +1,155 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE GRID — Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>THE GRID — White & Gold</title>
+<meta name="theme-color" content="#0b0b0f"/>
+
+<!-- Core CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- Safe preloads (won’t break if missing) -->
+<link rel="preload" href="assets/videos/gc_spin.mp4" as="video">
+<link rel="preload" href="assets/videos/hero_1.mp4" as="video">
+<link rel="preload" href="assets/images/hero_1.jpg" as="image">
 </head>
-<body>
 
-  <!-- Compact top bar -->
-  <header class="topbar">
+<body class="vignette grain" id="app">
+
+<header class="site-header">
+  <div class="wrap bar">
     <div class="brand">
-      <img src="assets/images/gc_logo.png" alt="GC" class="brand__logo">
-      <div class="brand__text">
-        <div class="brand__line1" id="greeting">Good day</div>
-        <div class="brand__line2">THE GRID</div>
-        <div class="brand__line3" id="themeLabel">White &amp; Gold</div>
+      <div class="logo">
+        <!-- JS sets src to assets/videos/gc_spin.mp4 with fallback to assets/images/gc_logo.png -->
+        <video id="logoVid" muted autoplay loop playsinline></video>
+      </div>
+      <div class="brand-copy">
+        <h1 id="hello">Welcome — THE GRID</h1>
+        <small>White &amp; Gold</small>
       </div>
     </div>
-    <nav class="topbar__actions">
-      <button id="openCustomizer" class="btn btn--ghost">Customize</button>
-      <a class="btn btn--cta" href="#plans" id="joinCta">Join Now</a>
-    </nav>
-  </header>
+    <div class="spacer"></div>
+    <button id="btnCustomize" class="btn">Customize</button>
+    <a href="#plans" class="btn primary" id="btnJoin">Join Now</a>
+  </div>
+</header>
 
-  <main class="wrap">
-
-    <!-- HERO -->
-    <section class="card" id="hero">
-      <h1 class="h1">Black &amp; Gold</h1>
-      <p class="lead">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
-
-      <div class="hero__player">
-        <video id="heroVideo" playsinline muted loop preload="metadata" poster="assets/images/hero_1.jpg"></video>
-        <button class="play" id="heroPlay" aria-label="Play/Pause"></button>
-      </div>
-
-      <div class="actions">
-        <a class="btn btn--ghost" href="#library">Open Library</a>
-        <a class="btn btn--accent" href="#plans" id="seePricing">See Pricing</a>
-      </div>
-    </section>
-
-    <!-- LIBRARY -->
-    <section class="card" id="library">
-      <div class="card__header">
-        <h2 class="h2">Library</h2>
-        <p class="muted">
-          Tap a library to browse. Sources:
-          <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.
-        </p>
-      </div>
-
-      <div id="libChips" class="chips">
-        <!-- chips populated by JS -->
-      </div>
-
-      <div id="libGrid" class="grid grid--media">
-        <!-- thumbnails populated by JS -->
-      </div>
-
-      <p class="tip muted">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
-    </section>
-
-    <!-- SHOWCASE -->
-    <section class="card" id="showcase">
-      <div class="card__header">
-        <h2 class="h2">Showcase</h2>
-        <p class="muted">Featured stills &amp; clips — quick browse.</p>
-      </div>
-      <div id="showcaseGrid" class="grid grid--showcase"></div>
-    </section>
-
-    <!-- PLANS -->
-    <section class="card" id="plans">
-      <div class="card__header">
-        <h2 class="h2">Plans</h2>
-        <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
-      </div>
-      <div id="plansWrap" class="plans">
-        <!-- plans populated by JS -->
-      </div>
-      <p class="muted center">All plans billed monthly. Cancel anytime. Prices are fair-value — adjust in Customize.</p>
-    </section>
-
-    <!-- À-LA-CARTE -->
-    <section class="card" id="services">
-      <div class="card__header">
-        <h2 class="h2">À-la-carte Services</h2>
-      </div>
-      <div id="servicesWrap" class="services"></div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="card" id="contact">
-      <div class="card__header">
-        <h2 class="h2">Contact</h2>
-      </div>
-      <form class="form" id="contactForm" action="https://formspree.io/f/xbjnnjjp" method="POST">
-        <input class="input" type="text" name="name" placeholder="Your name" required>
-        <input class="input" type="email" name="email" placeholder="you@example.com" required>
-        <input class="input" type="text" name="subject" placeholder="How can we help?">
-        <textarea class="input input--area" name="message" placeholder="Write your message..." required></textarea>
-        <button class="btn btn--cta" type="submit">Send</button>
-      </form>
-      <p class="muted">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
-    </section>
-
-  </main>
-
-  <!-- CUSTOMIZER -->
-  <dialog id="customizer" class="customizer">
-    <div class="customizer__head">
-      <h3>Design Panel</h3>
-      <button class="btn btn--ghost" id="closeCustomizer">Close</button>
+<main class="wrap">
+  <!-- HERO -->
+  <section class="card">
+    <h2>Featured</h2>
+    <p class="lede">Tap items in the Library to set this hero.</p>
+    <div id="hero" class="hero">
+      <!-- main.js will inject <video> or <img> here -->
+      <div class="heroOverlay"></div>
     </div>
+  </section>
 
-    <div class="customizer__grid">
-      <label>Accent color <input type="color" id="c_accent"></label>
-      <label>Secondary accent <input type="color" id="c_accent2"></label>
-      <label>Text color <input type="color" id="c_text"></label>
-      <label>Soft text <input type="color" id="c_soft"></label>
-      <label>Card surface <input type="color" id="c_card"></label>
-      <label>Panel surface <input type="color" id="c_panel"></label>
-      <label>Background A <input type="color" id="c_bgA"></label>
-      <label>Background B <input type="color" id="c_bgB"></label>
+  <!-- LIBRARY -->
+  <section id="library" class="card">
+    <h2>Library</h2>
+    <p class="lede">Reads from <b>assets/manifest.json</b>. If missing, uses a safe default.</p>
+    <div id="libTabs" class="tabs"></div>
+    <div id="libGrid" class="grid" aria-live="polite"></div>
+    <p class="meta">Tip: place files in <code>assets/videos</code> and <code>assets/images</code>. Update <code>assets/manifest.json</code> to list them.</p>
+  </section>
 
-      <label>Card radius
-        <input type="range" id="c_radius" min="6" max="28" step="1">
-      </label>
+  <!-- PRICING (placeholder so buttons exist; we’ll style next pass) -->
+  <section id="plans" class="card">
+    <h2>Plans</h2>
+    <div class="grid">
+      <article class="plan" data-tier="basic">
+        <div class="head"><div class="price">£9<span class="muted">/mo</span></div><span class="badge">BASIC</span></div>
+        <ul><li>Starter templates</li><li>Library access</li><li>Email support</li></ul>
+        <div class="row"><button class="btn primary choose">Choose</button><button class="btn ghost details">Details</button></div>
+      </article>
+      <article class="plan" data-tier="silver">
+        <div class="head"><div class="price">£29<span class="muted">/mo</span></div><span class="badge">SILVER</span></div>
+        <ul><li>Advanced effects</li><li>Priority support</li></ul>
+        <div class="row"><button class="btn primary choose">Choose</button><button class="btn ghost details">Details</button></div>
+      </article>
+      <article class="plan" data-tier="gold">
+        <div class="head"><div class="price">£49<span class="muted">/mo</span></div><span class="badge">GOLD</span></div>
+        <ul><li>Full customization</li><li>Admin toolkit</li><li>Onboarding</li></ul>
+        <div class="row"><button class="btn primary choose">Choose</button><button class="btn ghost details">Details</button></div>
+      </article>
+      <article class="plan" data-tier="diamond">
+        <div class="head"><div class="price">£99<span class="muted">/mo</span></div><span class="badge">DIAMOND</span></div>
+        <ul><li>Custom pipelines</li><li>Hands-on help</li><li>Priority turnaround</li></ul>
+        <div class="row"><button class="btn primary choose">Choose</button><button class="btn ghost details">Details</button></div>
+      </article>
+    </div>
+  </section>
 
-      <label>Border glow (0–100)
-        <input type="range" id="c_glow" min="0" max="100" step="1">
-      </label>
+  <!-- CONTACT -->
+  <section class="card">
+    <h2>Contact</h2>
+    <form onsubmit="event.preventDefault(); alert('Thanks — we’ll reply from gridcoresystems@gmail.com'); this.reset()">
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <input placeholder="Your name" required>
+        <input type="email" placeholder="you@example.com" required>
+      </div>
+      <input placeholder="How can we help?">
+      <textarea placeholder="Write your message…"></textarea>
+      <button class="btn primary" style="width:180px">Send</button>
+      <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
+    </form>
+  </section>
+</main>
 
-      <label>Font size
-        <input type="range" id="c_font" min="14" max="18" step="1">
-      </label>
+<!-- MODALS (for plan details & customize) -->
+<dialog id="planModal">
+  <div class="modalHead">
+    <strong id="mTitle">Plan details</strong>
+    <button class="btn x" onclick="planModal.close()">Close</button>
+  </div>
+  <div class="modalBody" id="mBody"></div>
+</dialog>
 
-      <label>Spacing
-        <input type="range" id="c_space" min="10" max="20" step="1">
-      </label>
-
-      <label>Vignette
-        <select id="c_vignette">
-          <option value="on">On</option>
-          <option value="off">Off</option>
+<dialog id="panel">
+  <div class="modalHead"><strong>Design Panel</strong><button class="btn x" onclick="panel.close()">Close</button></div>
+  <div class="modalBody">
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <label>Accent<br><input id="uiAccent" type="color" value="#E7B84B" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Secondary<br><input id="uiAccent2" type="color" value="#95B2FF" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Text<br><input id="uiInk" type="color" value="#E9ECF3" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Soft text<br><input id="uiSoft" type="color" value="#b9c0cf" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Card<br><input id="uiCard" type="color" value="#10131b" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Panel<br><input id="uiPanel" type="color" value="#0f1219" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>BG A<br><input id="uiBgA" type="color" value="#0b0b0f" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>BG B<br><input id="uiBgB" type="color" value="#0a0b10" style="width:100%;height:42px;border:0;background:transparent"></label>
+      <label>Radius<br><input id="uiRadius" type="range" min="6" max="28" value="20" style="width:100%"></label>
+      <label>Glow<br><input id="uiRing" type="range" min="0" max="100" value="24" style="width:100%"></label>
+      <label>Font<br><input id="uiFont" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+      <label>Spacing<br><input id="uiSpace" type="range" min="0.9" max="1.2" step=".01" value="1" style="width:100%"></label>
+      <label>Vignette<br>
+        <select id="uiVignette" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a">
+          <option value="1">On</option><option value="0">Off</option>
         </select>
       </label>
-
-      <label>Hero source
-        <select id="c_heroSrc"></select>
+      <label>Hero source<br>
+        <select id="uiHero" style="width:100%;padding:10px;border-radius:10px;background:#0e1217;color:var(--ink);border:1px solid #22283a"></select>
       </label>
     </div>
 
-    <div class="customizer__actions">
-      <button class="btn btn--ghost" id="saveTheme">Save to this device</button>
-      <button class="btn btn--ghost" id="resetTheme">Reset</button>
+    <h3 style="margin-top:16px">Confetti</h3>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <label>Density<br><input id="uiConfettiDensity" type="range" min="10" max="140" value="44" style="width:100%"></label>
+      <label>Speed<br><input id="uiConfettiSpeed" type="range" min="0.4" max="2.2" step=".05" value="1.1" style="width:100%"></label>
     </div>
-  </dialog>
 
-  <script src="assets/js/main.js" defer></script>
+    <div class="ctaRow" style="margin-top:16px">
+      <button id="save" class="btn">Save to this device</button>
+      <button id="reset" class="btn x">Reset</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- FX canvas (confetti & future effects) -->
+<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+
+<!-- JS (cache-busted to avoid old GitHub Pages cache) -->
+<script src="assets/js/main.js?v=20250815-1" defer></script>
 </body>
 </html>
