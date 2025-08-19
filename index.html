@@ -2,88 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID — White & Gold</title>
-
-  <!-- Core CSS (must load) -->
-  <link rel="preload" href="assets/css/styles.css" as="style">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <!-- Optional effects (keep your existing file) -->
-  <link rel="stylesheet" href="assets/css/effects.css">
-
-  <!-- Favicons (optional) -->
-  <link rel="icon" href="assets/images/gc_logo.png">
+  <link rel="preload" href="assets/js/main.js" as="script" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-  <header class="topbar">
+  <header class="site-header">
     <div class="brand">
-      <img id="brandLogo" alt="GC" src="assets/images/gc_logo.png">
+      <video class="brand-badge" src="assets/gc_spin.mp4" autoplay muted loop playsinline></video>
       <div class="brand-copy">
-        <div id="greeting">Good day — THE GRID</div>
-        <div id="tagline" class="muted">White &amp; Gold</div>
+        <div class="greeting" id="greeting">Good day — THE GRID</div>
+        <div class="tagline" id="tagline">White &amp; Gold</div>
       </div>
     </div>
-    <div class="actions">
-      <a class="btn ghost" href="#customize" id="openCustomize">Customize</a>
-      <a class="btn glow" href="#join">Join Now</a>
-    </div>
+    <nav class="actions">
+      <button class="pill" id="btnCustomize">Customize</button>
+      <a class="cta" href="#plans" id="btnJoin">Join<br/>Now</a>
+    </nav>
   </header>
 
-  <main class="container">
-    <!-- Hero card -->
-    <section class="card">
-      <h2>Black &amp; Gold</h2>
-      <p class="muted">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+  <main>
+    <!-- HERO -->
+    <section class="card hero" id="hero">
+      <h1 class="h1">Black &amp; Gold</h1>
+      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
 
-      <div id="heroWrap" class="hero-wrap">
-        <video id="heroVideo" playsinline muted loop poster="assets/images/hero_1.jpg"></video>
-        <div id="heroFallback" class="hero-fallback">HERO PLACEHOLDER • Replace with your top niche video frame</div>
+      <div class="hero-media">
+        <!-- Filled by JS with <video> (preferred) or <img> fallback -->
+        <div id="heroMediaMount" class="hero-media-mount"></div>
       </div>
 
-      <div class="row">
-        <a class="btn ghost" href="#library">Open Library</a>
-        <a class="btn glow" href="#plans">See Pricing</a>
+      <div class="row gap">
+        <button class="btn btn-soft" id="btnOpenLibrary">Open Library</button>
+        <button class="btn btn-primary" id="btnSeePricing">See Pricing</button>
       </div>
     </section>
 
-    <!-- Library -->
-    <section id="library" class="card">
-      <h3>Library</h3>
+    <!-- LIBRARY -->
+    <section class="card" id="library">
+      <h2 class="h2">Library</h2>
       <p class="muted">Tap a library to browse. Sources: <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.</p>
-      <div id="libraryTabs" class="chips"></div>
-      <div id="libraryGrid" class="grid"></div>
-      <p class="tip muted">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
+
+      <div class="lib-tabs" id="libTabs">
+        <!-- Tabs injected by JS -->
+      </div>
+
+      <div class="lib-grid" id="libGrid" aria-live="polite">
+        <!-- Items injected by JS -->
+      </div>
+      <p class="tip">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
     </section>
 
-    <!-- Showcase -->
-    <section class="card">
-      <h3>Showcase</h3>
+    <!-- SHOWCASE -->
+    <section class="card" id="showcase">
+      <h2 class="h2">Showcase</h2>
       <p class="muted">Featured stills &amp; clips — quick browse.</p>
-      <div id="showcase" class="grid"></div>
+      <div class="show-grid" id="showGrid">
+        <!-- Featured injected by JS -->
+      </div>
     </section>
 
-    <!-- Plans -->
-    <section id="plans" class="card">
-      <h3>Plans</h3>
+    <!-- PLANS -->
+    <section class="card" id="plans">
+      <h2 class="h2">Plans</h2>
       <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
-      <div id="plansWrap" class="plans"></div>
+
+      <div class="plans">
+        <div class="plan">
+          <div class="price">£9/mo</div>
+          <div class="tier">BASIC</div>
+          <ul>
+            <li>Starter templates</li>
+            <li>Library access</li>
+            <li>Email support</li>
+          </ul>
+          <button class="btn btn-primary">Choose</button>
+        </div>
+
+        <div class="plan">
+          <div class="price">£29/mo</div>
+          <div class="tier">SILVER</div>
+          <ul>
+            <li>Advanced effects</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn btn-primary">Choose</button>
+        </div>
+
+        <div class="plan">
+          <div class="price">£49/mo</div>
+          <div class="tier">GOLD</div>
+          <ul>
+            <li>Full customization</li>
+            <li>Admin toolkit</li>
+            <li>Onboarding</li>
+          </ul>
+          <button class="btn btn-primary">Choose</button>
+        </div>
+
+        <div class="plan">
+          <div class="price">£99/mo</div>
+          <div class="tier">DIAMOND</div>
+          <ul>
+            <li>Custom pipelines</li>
+            <li>Hands-on help</li>
+            <li>Priority turnaround</li>
+          </ul>
+          <button class="btn btn-primary">Choose</button>
+        </div>
+      </div>
     </section>
 
-    <!-- Contact -->
-    <section class="card">
-      <h3>Contact</h3>
-      <form class="form">
-        <input type="text" placeholder="Your name">
-        <input type="email" placeholder="you@example.com">
-        <input type="text" placeholder="How can we help?">
-        <textarea placeholder="Write your message..."></textarea>
-        <button class="btn glow" type="button">Send</button>
+    <!-- CONTACT -->
+    <section class="card" id="contact">
+      <h2 class="h2">Contact</h2>
+      <form class="contact-form" onsubmit="return false;">
+        <input type="text" placeholder="Your name" />
+        <input type="email" placeholder="you@example.com" />
+        <input type="text" placeholder="How can we help?" />
+        <textarea rows="4" placeholder="Write your message..."></textarea>
+        <button class="btn btn-primary" type="submit">Send</button>
       </form>
-      <p class="muted small">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
+      <p class="muted">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
     </section>
   </main>
 
-  <!-- Core JS (must load after HTML) -->
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
