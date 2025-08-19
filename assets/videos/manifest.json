@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "categories": [
+    {
+      "name": "Hero",
+      "items": [
+        {
+          "src": "assets/videos/hero_1.mp4",
+          "title": "GC Logo Spin 3D",
+          "poster": "assets/images/hero_1.jpg",
+          "tags": ["hero", "logo", "white-gold"]
+        }
+      ]
+    },
+    {
+      "name": "Reels 9:16",
+      "items": [
+        {
+          "src": "assets/videos/interaction_1.mp4",
+          "title": "Hypnotic Object Interaction",
+          "poster": "assets/images/hero_2.jpg",
+          "tags": ["reels", "9:16", "hypnotic"]
+        }
+      ]
+    },
+    {
+      "name": "Reels 16:9",
+      "items": [
+        {
+          "src": "assets/videos/natural_1.mp4",
+          "title": "Natural Motion Flow",
+          "poster": "assets/images/hero_3.jpg",
+          "tags": ["reels", "16:9", "flow"]
+        }
+      ]
+    },
+    {
+      "name": "Backgrounds",
+      "items": [
+        {
+          "src": "assets/videos/pour_1.mp4",
+          "title": "Cinematic Pour & Flow",
+          "poster": "assets/images/grid_pour_1.jpg",
+          "tags": ["background", "liquid", "cinematic"]
+        }
+      ]
+    },
+    {
+      "name": "Extras",
+      "items": [
+        {
+          "src": "assets/videos/spread_1.mp4",
+          "title": "Particle Spread",
+          "poster": "assets/images/grid_spread_1.jpg",
+          "tags": ["fx", "particles"]
+        },
+        {
+          "src": "assets/videos/transform_1.mp4",
+          "title": "Grid Transform",
+          "poster": "assets/images/grid_transform_1.jpg",
+          "tags": ["fx", "transform"]
+        }
+      ]
+    }
+  ]
+}
