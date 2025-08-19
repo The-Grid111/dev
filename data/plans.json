@@ -1,83 +1,53 @@
 [
   {
     "tier": "basic",
-    "badge": "BASIC",
-    "price": "£9/mo",
-    "bullets": [
+    "title": "BASIC plan",
+    "price": 9,
+    "who": "Creators getting started or teams who want a clean base fast.",
+    "features": [
       "Starter templates & blocks",
       "Library access (videos, images, logos)",
-      "Email support (48h)"
+      "Email support (48h)",
+      "7-day refund guarantee",
+      "Upgrade anytime — keep your settings"
     ],
-    "modal": {
-      "title": "BASIC plan",
-      "who": "Creators getting started or teams who want a clean base fast.",
-      "gets": [
-        "Starter site templates and blocks",
-        "Access to the media library (videos, images, logos)",
-        "Email support within 48h",
-        "7-day refund guarantee",
-        "Upgrade any time — keep your settings, no rebuilds"
-      ]
-    }
+    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_9AQ7tQ4i74Jk7bG7ss" }
   },
   {
     "tier": "silver",
-    "badge": "SILVER",
-    "price": "£29/mo",
-    "bullets": [
+    "title": "SILVER plan",
+    "price": 29,
+    "who": "Teams needing advanced effects and presets.",
+    "features": [
       "Everything in Basic",
       "Advanced effects & presets",
       "Priority email (24h)"
     ],
-    "modal": {
-      "title": "SILVER plan",
-      "who": "Growing creators who want better visuals and faster support.",
-      "gets": [
-        "Everything in Basic",
-        "Advanced visual effects & presets",
-        "Priority email support within 24h",
-        "Quarterly tune-ups"
-      ]
-    }
+    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_bIY3eE1nD8zU0SYeUU" }
   },
   {
     "tier": "gold",
-    "badge": "GOLD",
-    "price": "£49/mo",
-    "bullets": [
+    "title": "GOLD plan",
+    "price": 49,
+    "who": "Hands-on setup and admin automations.",
+    "features": [
       "Full customization session",
       "Admin toolkit & automations",
       "1:1 onboarding (45 min)"
     ],
-    "modal": {
-      "title": "GOLD plan",
-      "who": "Teams that need hands-on help and admin tools.",
-      "gets": [
-        "Hands-on customization session",
-        "Admin toolkit & automation setup",
-        "Onboarding call (45 min)",
-        "Template & block requests"
-      ]
-    }
+    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_8wM5l46jP1AWe9m3cc" }
   },
   {
     "tier": "diamond",
-    "badge": "DIAMOND",
-    "price": "£99/mo",
-    "bullets": [
+    "title": "DIAMOND plan",
+    "price": 99,
+    "who": "Custom pipelines, integrations, priority roadmap & turnaround.",
+    "features": [
       "Custom pipelines & integrations",
       "Hands-on help building your stack",
-      "Priority roadmap & turnaround"
+      "Priority roadmap & turnaround",
+      "Private components when needed"
     ],
-    "modal": {
-      "title": "DIAMOND plan",
-      "who": "Creators/businesses needing custom pipelines and priority turnaround.",
-      "gets": [
-        "Custom pipelines & integrations",
-        "Hands-on help building your stack",
-        "Priority roadmap & turnaround",
-        "Private components when needed"
-      ]
-    }
+    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_bIYg2s6jP1AW0SYaEF" }
   }
 ]
