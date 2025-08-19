@@ -1,53 +1,115 @@
-[
-  {
-    "tier": "basic",
-    "title": "BASIC plan",
-    "price": 9,
-    "who": "Creators getting started or teams who want a clean base fast.",
-    "features": [
-      "Starter templates & blocks",
-      "Library access (videos, images, logos)",
-      "Email support (48h)",
-      "7-day refund guarantee",
-      "Upgrade anytime — keep your settings"
-    ],
-    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_9AQ7tQ4i74Jk7bG7ss" }
-  },
-  {
-    "tier": "silver",
-    "title": "SILVER plan",
-    "price": 29,
-    "who": "Teams needing advanced effects and presets.",
-    "features": [
-      "Everything in Basic",
-      "Advanced effects & presets",
-      "Priority email (24h)"
-    ],
-    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_bIY3eE1nD8zU0SYeUU" }
-  },
-  {
-    "tier": "gold",
-    "title": "GOLD plan",
-    "price": 49,
-    "who": "Hands-on setup and admin automations.",
-    "features": [
-      "Full customization session",
-      "Admin toolkit & automations",
-      "1:1 onboarding (45 min)"
-    ],
-    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_8wM5l46jP1AWe9m3cc" }
-  },
-  {
-    "tier": "diamond",
-    "title": "DIAMOND plan",
-    "price": 99,
-    "who": "Custom pipelines, integrations, priority roadmap & turnaround.",
-    "features": [
-      "Custom pipelines & integrations",
-      "Hands-on help building your stack",
-      "Priority roadmap & turnaround",
-      "Private components when needed"
-    ],
-    "pay": { "label": "Choose", "url": "https://buy.stripe.com/test_bIYg2s6jP1AW0SYaEF" }
-  }
-]
+{
+  "currency": "GBP",
+  "interval": "mo",
+  "note": "All plans billed monthly. Cancel anytime. 7-day refund.",
+  "plans": [
+    {
+      "id": "basic",
+      "order": 1,
+      "badge": "BASIC",
+      "title": "£9/mo",
+      "price": 9,
+      "who": "Creators getting started or teams who want a clean base fast.",
+      "features": [
+        "Starter templates & blocks",
+        "Library access (videos, images, logos)",
+        "Email support (48h)"
+      ],
+      "gets": [
+        "Starter templates & blocks",
+        "Library access (videos, images, logos)",
+        "Email support within 48h"
+      ],
+      "primaryCta": {
+        "label": "Choose",
+        "url": "https://example.com/checkout/basic"
+      },
+      "secondaryCta": {
+        "label": "Details",
+        "url": "#plan-basic"
+      },
+      "show": true
+    },
+    {
+      "id": "silver",
+      "order": 2,
+      "badge": "SILVER",
+      "title": "£29/mo",
+      "price": 29,
+      "who": "Growing creators who want better visuals and faster help.",
+      "features": [
+        "Everything in Basic",
+        "Advanced effects & presets",
+        "Priority email (24h)"
+      ],
+      "gets": [
+        "Everything in Basic",
+        "Advanced effects & presets",
+        "Priority email within 24h"
+      ],
+      "primaryCta": {
+        "label": "Choose",
+        "url": "https://example.com/checkout/silver"
+      },
+      "secondaryCta": {
+        "label": "Details",
+        "url": "#plan-silver"
+      },
+      "show": true
+    },
+    {
+      "id": "gold",
+      "order": 3,
+      "badge": "GOLD",
+      "title": "£49/mo",
+      "price": 49,
+      "who": "Teams that want hands-on setup and the admin toolkit.",
+      "features": [
+        "Full customization session",
+        "Admin toolkit & automations",
+        "1:1 onboarding (45 min)"
+      ],
+      "gets": [
+        "Full customization session",
+        "Admin toolkit & automations",
+        "1:1 onboarding (45 min)"
+      ],
+      "primaryCta": {
+        "label": "Choose",
+        "url": "https://example.com/checkout/gold"
+      },
+      "secondaryCta": {
+        "label": "Details",
+        "url": "#plan-gold"
+      },
+      "show": true
+    },
+    {
+      "id": "diamond",
+      "order": 4,
+      "badge": "DIAMOND",
+      "title": "£99/mo",
+      "price": 99,
+      "who": "Businesses needing custom pipelines, integrations, and priority turnaround.",
+      "features": [
+        "Custom pipelines & integrations",
+        "Hands-on help building your stack",
+        "Priority roadmap & turnaround"
+      ],
+      "gets": [
+        "Custom pipelines & integrations",
+        "Hands-on help building your stack",
+        "Priority roadmap & turnaround"
+      ],
+      "primaryCta": {
+        "label": "Choose",
+        "url": "https://example.com/checkout/diamond"
+      },
+      "secondaryCta": {
+        "label": "Details",
+        "url": "#plan-diamond"
+      },
+      "show": true
+    }
+  ]
+}
