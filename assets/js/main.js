@@ -1,373 +1,341 @@
-/* assets/js/main.js — GridCoreSystems core */
+/* =========================================================
+   THE GRID — Main JS (full file replace)
+   Works with:
+   - assets/css/style.css   (your File 6)
+   - assets/manifest.json   (optional, auto-loaded)
+   - assets/videos/gc_spin.mp4 (logo, optional)
+   - assets/images/gc_logo.png (logo fallback)
+   - assets/videos/hero_1.mp4  (default hero)
+   Folders you showed: /assets/css /assets/js /assets/images /assets/videos /data
+   ========================================================= */
 
-const $  = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
+(() => {
+  /* ---------- Quick DOM helpers ---------- */
+  const $  = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-/* ---------------- State & helpers ---------------- */
-const CSS = (k,v)=> (v===undefined? getComputedStyle(document.documentElement).getPropertyValue(k).trim()
-                                   : document.documentElement.style.setProperty(k,v));
-
-const STORE_KEY = 'thegrid.settings';
-const state = {
-  theme: null, // "light" | "dark" | null (auto)
-  accent: CSS('--accent'),
-  accent2: CSS('--accent-2'),
-  ink: CSS('--ink'),
-  soft: CSS('--soft'),
-  bgA: CSS('--bg-a'),
-  bgB: CSS('--bg-b'),
-  panel: CSS('--panel'),
-  card: CSS('--card'),
-  ring: +CSS('--ring'),
-  radius: parseInt(CSS('--radius')),
-  font: +CSS('--fontScale'),
-  space: +CSS('--space'),
-  vignette: +CSS('--vignette'),
-  heroSrc: 'assets/videos/hero_1.mp4',
-  confetti: { density: 44, speed: 1.1 },
-  library: { Hero:[], 'Reels 9:16':[], 'Reels 16:9':[], Backgrounds:[], Logos:[], Images:[] },
-  tags: []
-};
-
-const save = ()=> localStorage.setItem(STORE_KEY, JSON.stringify(state));
-const load = ()=>{
-  try{
-    const s = JSON.parse(localStorage.getItem(STORE_KEY)||'null');
-    if(!s) return;
-    Object.assign(state, s);
-  }catch{}
-};
-
-/* ---------------- Greeting & Header ---------------- */
-(function greeting(){
-  const h = new Date().getHours();
-  const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-  const el = $('#hello'); if(el) el.textContent = `${word} — THE GRID`;
-})();
-
-(function logo(){
-  const v = $('#logoVid'); if(!v) return;
-  v.src = 'assets/videos/gc_spin.mp4';
-  v.onerror = () => {
-    const img = document.createElement('img');
-    img.src = 'assets/images/gc_logo.png';
-    img.alt = 'Logo';
-    v.replaceWith(img);
+  /* ---------- State ---------- */
+  const state = {
+    accent: readCSS('--accent'),
+    heroSrc: 'assets/videos/hero_1.mp4',
+    confetti: { density: 60, speed: 1.1, size: [3, 8] },
+    library: { Hero:[], 'Reels 9:16':[], 'Reels 16:9':[], Backgrounds:[], Logos:[], Images:[] },
+    activeTab: null
   };
-})();
 
-/* ---------------- Theme toggle ---------------- */
-(function themeInit(){
-  load();
-  // apply saved theme
-  if(state.theme === 'light') document.body.setAttribute('data-theme','light');
-  if(state.theme === 'dark')  document.body.setAttribute('data-theme','dark');
+  /* ---------- Init ---------- */
+  document.addEventListener('DOMContentLoaded', () => {
+    setGreeting();
+    mountLogo();
+    mountHero(state.heroSrc);
+    bootCustomize();
+    bootPricing();
+    bootConfettiCanvas();
+    bootLibrary().then(() => {
+      // populate hero selector after library ready
+      populateHeroSelect();
+    });
+  });
 
-  const btn = $('#themeToggle');
-  if(btn){
-    const apply = next=>{
-      if(next==='auto'){ document.body.removeAttribute('data-theme'); state.theme=null; }
-      else { document.body.setAttribute('data-theme', next); state.theme=next; }
-      save();
-      btn.textContent = (state.theme==='light'?'Dark':'Light') + ' Mode';
+  /* =======================================================
+     GREETING + LOGO
+  ======================================================= */
+  function setGreeting(){
+    const h = new Date().getHours();
+    const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+    const hello = $('#hello');
+    if (hello) hello.textContent = `${word} — THE GRID`;
+  }
+
+  function mountLogo(){
+    const v = $('#logoVid');
+    if (!v) return;
+    v.src = 'assets/videos/gc_spin.mp4';
+    v.playsInline = true; v.muted = true; v.autoplay = true; v.loop = true;
+    v.onerror = () => {
+      const img = document.createElement('img');
+      img.src = 'assets/images/gc_logo.png';
+      img.alt = 'Logo';
+      v.replaceWith(img);
     };
-    // initial label
-    btn.textContent = (state.theme==='light'?'Dark':'Light') + ' Mode';
-    btn.addEventListener('click', ()=>{
-      const cur = state.theme ?? (matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');
-      apply(cur==='light'?'dark':'light');
-    });
   }
-})();
 
-/* ---------------- Hero render ---------------- */
-function setHero(src){ state.heroSrc = src; save(); renderHero(); }
-function renderHero(){
-  const box = $('#hero'); if(!box) return;
-  box.innerHTML = '<div class="heroOverlay"></div>';
-  if(/\.(mp4|webm|mov)$/i.test(state.heroSrc)){
-    const v = Object.assign(document.createElement('video'), {
-      src: state.heroSrc, controls:true, playsInline:true, className:'hero-media'
-    });
-    box.prepend(v);
-  }else{
-    const i = Object.assign(document.createElement('img'), {
-      src: state.heroSrc, alt: 'hero', className:'hero-media'
-    });
-    box.prepend(i);
-  }
-}
-
-/* ---------------- Library (manifest-aware) ---------------- */
-const defaultManifest = {
-  "Hero": [
-    "assets/videos/hero_1.mp4",
-    "assets/videos/interaction_1.mp4",
-    "assets/videos/pour_1.mp4",
-    "assets/images/hero_1.jpg",
-    "assets/images/hero_2.jpg",
-    "assets/images/hero_3.jpg"
-  ],
-  "Reels 9:16": [],
-  "Reels 16:9": [
-    "assets/videos/hero_1.mp4",
-    "assets/videos/natural_1.mp4",
-    "assets/videos/spread_1.mp4",
-    "assets/videos/transform_1.mp4"
-  ],
-  "Backgrounds": [
-    "assets/images/grid_natural_1.jpg",
-    "assets/images/grid_spread_1.jpg",
-    "assets/images/grid_transform_1.jpg"
-  ],
-  "Logos": ["assets/videos/gc_spin.mp4","assets/images/gc_logo.png"],
-  "Images": [
-    "assets/images/hero_1.jpg",
-    "assets/images/hero_2.jpg",
-    "assets/images/hero_3.jpg",
-    "assets/images/grid_interaction_1.jpg",
-    "assets/images/grid_pour_1.jpg"
-  ]
-};
-
-async function loadManifest(){
-  try{
-    const res = await fetch('assets/manifest.json',{cache:'no-store'});
-    if(res.ok){
-      const data = await res.json();
-      Object.assign(state.library, data);
-    }else{
-      Object.assign(state.library, defaultManifest);
+  /* =======================================================
+     HERO
+  ======================================================= */
+  function mountHero(src){
+    state.heroSrc = src;
+    const hero = $('#hero');
+    if (!hero) return;
+    hero.innerHTML = '<div class="heroOverlay"></div>';
+    if (/\.(mp4|webm|mov)$/i.test(src)) {
+      const vid = document.createElement('video');
+      vid.src = src; vid.controls = true; vid.playsInline = true; vid.className = 'hero-media';
+      hero.prepend(vid);
+    } else {
+      const img = document.createElement('img');
+      img.src = src; img.alt = 'hero'; img.className = 'hero-media';
+      hero.prepend(img);
     }
-  }catch{
-    Object.assign(state.library, defaultManifest);
   }
-  buildLibrary();
-  populateHeroSelect();
-}
 
-function pill(txt, active){
-  const b = document.createElement('div');
-  b.className = 'pill' + (active?' active':'');
-  b.textContent = txt;
-  return b;
-}
+  /* =======================================================
+     CUSTOMIZE PANEL
+  ======================================================= */
+  function bootCustomize(){
+    const panel = $('#panel');
+    const btnCustomize = $('#btnCustomize');
+    if (btnCustomize && panel) {
+      btnCustomize.onclick = () => panel.showModal();
+    }
 
-function buildLibrary(){
-  const tabs = $('#libTabs'), grid = $('#libGrid'), tagBar = $('#libTags');
-  if(!tabs || !grid) return;
-  tabs.innerHTML = ''; grid.innerHTML = ''; if(tagBar) tagBar.innerHTML='';
+    bindColor('#uiAccent','--accent', v => { state.accent=v; });
+    bindSelect('#uiHero', v => mountHero(v));
 
-  const cats = Object.keys(state.library);
-  let active = localStorage.getItem('thegrid.activeTab') || cats[0];
+    // density/speed sliders (stored but read by confettiBurst on click)
+    const d = $('#uiConfettiDensity'); const s = $('#uiConfettiSpeed');
+    if (d) d.oninput = e => state.confetti.density = +e.target.value;
+    if (s) s.oninput = e => state.confetti.speed   = +e.target.value;
 
-  cats.forEach(cat=>{
-    const b = pill(cat, cat===active);
-    b.onclick = ()=>{ localStorage.setItem('thegrid.activeTab',cat); buildLibrary(); };
-    tabs.appendChild(b);
-  });
+    const saveBtn = $('#save');
+    const resetBtn = $('#reset');
+    if (saveBtn) saveBtn.onclick = () => { localStorage.setItem('thegrid.settings', JSON.stringify(state)); alert('Saved to this device.'); };
+    if (resetBtn) resetBtn.onclick = () => { localStorage.removeItem('thegrid.settings'); location.reload(); };
 
-  const list = state.library[active] || [];
-  // quick tags from filenames
-  const tags = [...new Set(list.flatMap(x=>{
-    const name = x.split('/').pop().toLowerCase();
-    return name.split(/[_\-\.]/g).filter(w=>w.length>2 && !/mp4|jpg|jpeg|png|webm|mov/.test(w));
-  }))].slice(0,6);
-  state.tags = tags;
+    // restore persisted state (accent + hero)
+    const saved = localStorage.getItem('thegrid.settings');
+    if (saved) {
+      try {
+        const loaded = JSON.parse(saved);
+        if (loaded.accent) setCSS('--accent', loaded.accent);
+        if (loaded.heroSrc) mountHero(loaded.heroSrc);
+        if (loaded.confetti) state.confetti = loaded.confetti;
+        Object.assign(state, loaded);
+      } catch {}
+    }
+  }
 
-  if(tagBar){
-    tags.forEach(t=>{
-      const b = pill(t,false); b.style.opacity=.9;
-      b.onclick = ()=> renderGrid(list.filter(x=>x.toLowerCase().includes(t)));
-      tagBar.appendChild(b);
+  function bindColor(inputSel, cssVar, onState){
+    const el = $(inputSel);
+    if (!el) return;
+    el.oninput = e => { const v = e.target.value; setCSS(cssVar, v); onState(v); };
+  }
+  function bindSelect(sel, on){
+    const el = $(sel);
+    if (!el) return;
+    el.oninput = e => on(e.target.value);
+  }
+
+  /* =======================================================
+     LIBRARY (manifest-aware)
+  ======================================================= */
+  async function bootLibrary(){
+    // Try assets/manifest.json first, else fallback to reasonable defaults
+    let manifest = {
+      "Hero": ["assets/videos/hero_1.mp4","assets/images/hero_1.jpg"],
+      "Reels 9:16": [],
+      "Reels 16:9": [],
+      "Backgrounds": [],
+      "Logos": ["assets/videos/gc_spin.mp4","assets/images/gc_logo.png"],
+      "Images": ["assets/images/hero_1.jpg","assets/images/hero_2.jpg","assets/images/hero_3.jpg"]
+    };
+    try {
+      const res = await fetch('assets/manifest.json', { cache: 'no-store' });
+      if (res.ok) manifest = await res.json();
+    } catch {}
+
+    state.library = manifest;
+    buildTabsAndGrid();
+  }
+
+  function buildTabsAndGrid(){
+    const tabs = $('#libTabs');
+    const grid = $('#libGrid');
+    if (!tabs || !grid) return;
+
+    tabs.innerHTML = '';
+    grid.innerHTML = '';
+
+    const cats = Object.keys(state.library);
+    const active = state.activeTab || localStorage.getItem('thegrid.activeTab') || cats[0];
+    state.activeTab = active;
+
+    cats.forEach(cat => {
+      const pill = document.createElement('div');
+      pill.className = 'pill' + (cat===active ? ' active' : '');
+      pill.textContent = cat;
+      pill.onclick = () => {
+        localStorage.setItem('thegrid.activeTab', cat);
+        state.activeTab = cat;
+        buildTabsAndGrid();
+      };
+      tabs.appendChild(pill);
+    });
+
+    renderGrid(active);
+  }
+
+  function renderGrid(category){
+    const grid = $('#libGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    (state.library[category] || []).forEach(src => {
+      const row = document.createElement('div');
+      row.className = 'tile';
+      const th = document.createElement('div'); th.className = 'thumb';
+      const label = document.createElement('div');
+      label.innerHTML = `<b>${basename(src)}</b><div class="meta">${src}</div>`;
+
+      if (/\.(mp4|webm|mov)$/i.test(src)) {
+        const v = document.createElement('video');
+        v.src = src; v.muted = true; v.playsInline = true; v.loop = true; v.autoplay = true;
+        th.appendChild(v);
+      } else {
+        const i = document.createElement('img');
+        i.src = src; th.appendChild(i);
+      }
+
+      row.appendChild(th); row.appendChild(label);
+      row.onclick = () => {
+        // Set as hero media when a tile is chosen
+        mountHero(src);
+        state.heroSrc = src;
+        persist();
+      };
+      grid.appendChild(row);
     });
   }
-  renderGrid(list);
-}
 
-function renderGrid(list){
-  const grid = $('#libGrid'); if(!grid) return;
-  grid.innerHTML='';
-  list.forEach(src=>{
-    const row = document.createElement('div'); row.className='tile';
-    const th  = document.createElement('div'); th.className='thumb';
-    const label = document.createElement('div');
-    label.innerHTML = `<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`;
-    if(/\.(mp4|webm|mov)$/i.test(src)){
-      const v = document.createElement('video'); Object.assign(v,{src,muted:true,playsInline:true,loop:true,autoplay:true});
-      th.appendChild(v);
-    }else{
-      const i = document.createElement('img'); i.src = src; th.appendChild(i);
+  function populateHeroSelect(){
+    const sel = $('#uiHero'); if (!sel) return;
+    sel.innerHTML = '';
+    const all = [...new Set(Object.values(state.library).flat())];
+    all.forEach(src => sel.add(new Option(src, src, src===state.heroSrc, src===state.heroSrc)));
+  }
+
+  /* =======================================================
+     PRICING: Details modal + Confetti burst on choose
+  ======================================================= */
+  function bootPricing(){
+    const detailsByTier = {
+      basic:   `<ul><li>Starter templates & blocks</li><li>Library access (videos, images, logos)</li><li>Email support (48h)</li></ul>`,
+      silver:  `<ul><li>Everything in Basic</li><li>Advanced effects & presets</li><li>Priority email (24h)</li></ul>`,
+      gold:    `<ul><li>Full customization session</li><li>Admin toolkit & automations</li><li>1:1 onboarding (45 min)</li></ul>`,
+      diamond: `<ul><li>Custom pipelines & integrations</li><li>Hands-on help building your stack</li><li>Priority roadmap & turnaround</li></ul>`
+    };
+
+    $$('.details').forEach(btn => {
+      btn.onclick = e => {
+        const card = e.currentTarget.closest('.plan');
+        const tier = card?.dataset?.tier || 'Plan';
+        $('#mTitle').textContent = `${tier.toUpperCase()} plan`;
+        $('#mBody').innerHTML = detailsByTier[tier] || 'Details coming soon.';
+        $('#planModal')?.showModal();
+      };
+    });
+
+    $$('.choose').forEach(btn => {
+      btn.onclick = e => {
+        const card = e.currentTarget.closest('.plan');
+        if (!card) return;
+        // scroll to center and celebrate
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        confettiBurst(card);
+      };
+    });
+
+    // Join Now scrolls to plans
+    const join = $('#btnJoin');
+    if (join) join.onclick = () => {
+      $('#plans')?.scrollIntoView({ behavior:'smooth' });
+      // tasteful small confetti to tease
+      confettiBurst($('#plans'), {density: 40, speed: 1, size:[2,6]});
+    };
+  }
+
+  /* =======================================================
+     CONFETTI (two-side, denser, faster but efficient)
+  ======================================================= */
+  let fx, ctx, W=0, H=0, parts=[];
+  function bootConfettiCanvas(){
+    fx = $('#fx');
+    if (!fx) return;
+    ctx = fx.getContext('2d');
+    onResize();
+    addEventListener('resize', onResize);
+    tick();
+  }
+  function onResize(){
+    const dpr = Math.max(1, devicePixelRatio || 1);
+    W = fx.width  = innerWidth  * dpr;
+    H = fx.height = innerHeight * dpr;
+  }
+  function confettiBurst(anchor, opts={}){
+    if (!ctx) return;
+    const rect = (anchor?.getBoundingClientRect?.() || {left:0,right:innerWidth,top:innerHeight/2,height:0});
+    const dpr = Math.max(1, devicePixelRatio || 1);
+    const originY = (rect.top + rect.height*0.25) * dpr;
+    const leftX   = (rect.left - 12) * dpr;
+    const rightX  = (rect.right + 12) * dpr;
+
+    const density = (opts.density ?? state.confetti.density) | 0;
+    const speed   = +(opts.speed ?? state.confetti.speed);
+    const sizeMin = (opts.size?.[0] ?? state.confetti.size[0]);
+    const sizeMax = (opts.size?.[1] ?? state.confetti.size[1]);
+    const colors  = [ readCSS('--accent'), '#ffffff', '#c9d2e8', '#9ec5ff' ];
+
+    for (let i=0;i<density;i++){
+      parts.push(makeBit(leftX,  originY,  1, speed, sizeMin, sizeMax, colors));
+      parts.push(makeBit(rightX, originY, -1, speed, sizeMin, sizeMax, colors));
     }
-    row.appendChild(th); row.appendChild(label);
-    row.onclick = ()=> setHero(src);
-    grid.appendChild(row);
-  });
-}
-
-function populateHeroSelect(){
-  const sel = $('#uiHero'); if(!sel) return;
-  sel.innerHTML='';
-  const all = [...new Set(Object.values(state.library).flat())];
-  all.forEach(src=>{
-    const o = new Option(src, src, src===state.heroSrc, src===state.heroSrc);
-    sel.add(o);
-  });
-}
-
-/* ---------------- Customize panel ---------------- */
-function bind(id, handler){
-  const el = $('#'+id); if(el) el.oninput = handler;
-}
-
-function applyState(){
-  CSS('--accent', state.accent);
-  CSS('--accent-2', state.accent2);
-  CSS('--ink', state.ink);
-  CSS('--soft', state.soft);
-  CSS('--bg-a', state.bgA);
-  CSS('--bg-b', state.bgB);
-  CSS('--panel', state.panel);
-  CSS('--card', state.card);
-  CSS('--ring', state.ring);
-  CSS('--radius', state.radius+'px');
-  CSS('--fontScale', state.font);
-  CSS('--space', state.space);
-  CSS('--vignette', state.vignette);
-  renderHero();
-
-  // reflect to inputs if present
-  const map = {
-    uiAccent:'accent', uiAccent2:'accent2', uiInk:'ink', uiSoft:'soft',
-    uiCard:'card', uiPanel:'panel', uiBgA:'bgA', uiBgB:'bgB',
-    uiRing:'ring', uiRadius:'radius', uiFont:'font', uiSpace:'space', uiVignette:'vignette'
-  };
-  Object.entries(map).forEach(([input, key])=>{
-    const el = $('#'+input);
-    if(el){ el.value = state[key]; }
-  });
-}
-
-function setupCustomize(){
-  const open = $('#btnCustomize'), saveBtn = $('#save'), resetBtn=$('#reset');
-  if(open) open.onclick = ()=> panel.showModal();
-  if(saveBtn) saveBtn.onclick = ()=>{ save(); alert('Saved to this device.'); };
-  if(resetBtn) resetBtn.onclick = ()=>{ localStorage.removeItem(STORE_KEY); location.reload(); };
-
-  bind('uiAccent',  e=>{ state.accent=e.target.value; CSS('--accent',state.accent); save(); });
-  bind('uiAccent2', e=>{ state.accent2=e.target.value; CSS('--accent-2',state.accent2); save(); });
-  bind('uiInk',     e=>{ state.ink=e.target.value; CSS('--ink',state.ink); save(); });
-  bind('uiSoft',    e=>{ state.soft=e.target.value; CSS('--soft',state.soft); save(); });
-  bind('uiCard',    e=>{ state.card=e.target.value; CSS('--card',state.card); save(); });
-  bind('uiPanel',   e=>{ state.panel=e.target.value; CSS('--panel',state.panel); save(); });
-  bind('uiBgA',     e=>{ state.bgA=e.target.value; CSS('--bg-a',state.bgA); save(); });
-  bind('uiBgB',     e=>{ state.bgB=e.target.value; CSS('--bg-b',state.bgB); save(); });
-  bind('uiRing',    e=>{ state.ring=+e.target.value; CSS('--ring',state.ring); save(); });
-  bind('uiRadius',  e=>{ state.radius=+e.target.value; CSS('--radius',state.radius+'px'); save(); });
-  bind('uiFont',    e=>{ state.font=+e.target.value; CSS('--fontScale',state.font); save(); });
-  bind('uiSpace',   e=>{ state.space=+e.target.value; CSS('--space',state.space); save(); });
-  bind('uiVignette',e=>{ state.vignette=+e.target.value; CSS('--vignette',state.vignette); save(); });
-
-  const heroSel = $('#uiHero'); if(heroSel) heroSel.oninput = e=> setHero(e.target.value);
-}
-
-/* ---------------- Pricing: details + confetti ---------------- */
-const DETAILS = {
-  basic:`<ul><li>Starter templates & blocks</li><li>Library access (videos, images, logos)</li><li>Email support (48h)</li></ul>`,
-  silver:`<ul><li>Everything in Basic</li><li>Advanced effects & presets</li><li>Priority email (24h)</li></ul>`,
-  gold:`<ul><li>Full customization session</li><li>Admin toolkit & automations</li><li>Onboarding call (45 min)</li></ul>`,
-  diamond:`<ul><li>Custom pipelines & integrations</li><li>Hands-on help building your stack</li><li>Priority roadmap & turnaround</li></ul>`
-};
-
-function setupPlans(){
-  $$('.details').forEach(b=>{
-    b.onclick = e=>{
-      const card = e.currentTarget.closest('.plan');
-      const tier = card.dataset.tier;
-      $('#mTitle').textContent = tier.toUpperCase() + ' plan';
-      $('#mBody').innerHTML = DETAILS[tier] + `<div class="ctaRow"><button class="btn primary" onclick="planModal.close()">Sounds good</button></div>`;
-      planModal.showModal();
-    };
-  });
-  $$('.choose').forEach(b=>{
-    b.onclick = e=>{
-      const card = e.currentTarget.closest('.plan');
-      card.scrollIntoView({behavior:'smooth', block:'center'});
-      confettiBurst(card);
-    };
-  });
-}
-
-/* ---------------- Confetti FX (gold-first, faster, tasteful) ---------------- */
-const fx = $('#fx'); const ctx = fx ? fx.getContext('2d') : null;
-let W=0,H=0, parts=[];
-function resizeFX(){
-  if(!fx) return;
-  W=fx.width=innerWidth*devicePixelRatio;
-  H=fx.height=innerHeight*devicePixelRatio;
-}
-function rand(a,b){ return a + Math.random()*(b-a); }
-
-function confettiBurst(el){
-  if(!ctx) return;
-  const r = el.getBoundingClientRect();
-  const y = (r.top + r.height*0.2) * devicePixelRatio;
-  const leftX  = (r.left - 8) * devicePixelRatio;
-  const rightX = (r.right + 8) * devicePixelRatio;
-  const n = Math.max(8, Math.min(180, state.confetti.density|0));
-  const s = +state.confetti.speed;
-
-  const colors = [
-    state.accent, '#fff8e6', '#f4d27a',
-    '#c9d2e8', '#9ec5ff'
-  ];
-
-  for(let i=0;i<n;i++){
-    parts.push(drop(leftX,  y,  1, s, colors));
-    parts.push(drop(rightX, y, -1, s, colors));
   }
-}
-
-function drop(x,y,dir,s,colors){
-  const sz = rand(3,7);
-  return {
-    x, y,
-    vx: (rand(1.2,2.2))*dir*s,
-    vy: (rand(-3.2,-1.5))*s,
-    g:  .10*s,
-    r:  Math.random()*Math.PI,
-    w:  sz,
-    h:  sz*rand(.5,.9),
-    life: 120+Math.random()*60,
-    c: colors[(Math.random()*colors.length)|0],
-    a: rand(.8,1)
-  };
-}
-
-function tick(){
-  if(!ctx) return;
-  ctx.clearRect(0,0,W,H);
-  parts = parts.filter(p=>p.life>0);
-  for(const p of parts){
-    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.r += .18; p.life--;
-    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-    ctx.globalAlpha = Math.max(0, p.life/160) * p.a;
-    ctx.fillStyle = p.c;
-    ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-    ctx.restore();
+  function makeBit(x,y,dir,s,szMin,szMax,colors){
+    const w = szMin + Math.random()*(szMax - szMin);
+    const h = w*0.6;
+    return {
+      x, y,
+      vx:(1.6+Math.random()*1.6)*dir*s,
+      vy:(-2.2 - Math.random()*2.2)*s,
+      g:.09*s,
+      r:Math.random()*Math.PI,
+      w, h,
+      life: 120 + Math.random()*40,
+      c: colors[(Math.random()*colors.length)|0],
+      a: 0.9
+    };
   }
-  requestAnimationFrame(tick);
-}
+  function tick(){
+    if (!ctx){ requestAnimationFrame(tick); return; }
+    ctx.clearRect(0,0,W,H);
+    const alive = [];
+    for (let i=0;i<parts.length;i++){
+      const p = parts[i];
+      p.vy += p.g;
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.r  += .12;
+      p.life--;
+      if (p.life > 0 && p.y < H+40){
+        alive.push(p);
+        ctx.save();
+        ctx.translate(p.x,p.y); ctx.rotate(p.r);
+        ctx.globalAlpha = Math.max(0, p.life/160) * p.a;
+        ctx.fillStyle = p.c;
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        ctx.restore();
+      }
+    }
+    parts = alive;
+    requestAnimationFrame(tick);
+  }
 
-/* ---------------- Boot ---------------- */
-function boot(){
-  resizeFX(); addEventListener('resize', resizeFX);
+  /* =======================================================
+     UTIL
+  ======================================================= */
+  function readCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function setCSS(v,val){ document.documentElement.style.setProperty(v,val); persist(); }
+  function persist(){ localStorage.setItem('thegrid.settings', JSON.stringify(state)); }
+  function basename(p){ return (p||'').split('/').pop(); }
 
-  load();          // load saved settings first
-  applyState();    // apply saved CSS/state to UI + hero
-  loadManifest();  // build library (manifest-aware)
-  setupCustomize();
-  setupPlans();
-}
-boot();
-requestAnimationFrame(tick);
+})();
