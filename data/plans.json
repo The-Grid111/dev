@@ -1,115 +1,59 @@
 {
-  "currency": "GBP",
-  "interval": "mo",
-  "note": "All plans billed monthly. Cancel anytime. 7-day refund.",
-  "plans": [
+  "items": [
     {
       "id": "basic",
-      "order": 1,
-      "badge": "BASIC",
-      "title": "£9/mo",
+      "tier": "BASIC",
+      "title": "BASIC plan",
       "price": 9,
       "who": "Creators getting started or teams who want a clean base fast.",
       "features": [
         "Starter templates & blocks",
-        "Library access (videos, images, logos)",
-        "Email support (48h)"
+        "Access to the media library (videos, images, logos)",
+        "Email support within 48h",
+        "7-day refund guarantee",
+        "Upgrade anytime — keep your settings, no rebuilds"
       ],
-      "gets": [
-        "Starter templates & blocks",
-        "Library access (videos, images, logos)",
-        "Email support within 48h"
-      ],
-      "primaryCta": {
-        "label": "Choose",
-        "url": "https://example.com/checkout/basic"
-      },
-      "secondaryCta": {
-        "label": "Details",
-        "url": "#plan-basic"
-      },
-      "show": true
+      "checkout": "https://buy.stripe.com/test_6oE6qN7qR6pQdQk4gg"
     },
     {
       "id": "silver",
-      "order": 2,
-      "badge": "SILVER",
-      "title": "£29/mo",
+      "tier": "SILVER",
+      "title": "SILVER plan",
       "price": 29,
-      "who": "Growing creators who want better visuals and faster help.",
+      "who": "Growing creators who need more polish and presets.",
       "features": [
         "Everything in Basic",
         "Advanced effects & presets",
         "Priority email (24h)"
       ],
-      "gets": [
-        "Everything in Basic",
-        "Advanced effects & presets",
-        "Priority email within 24h"
-      ],
-      "primaryCta": {
-        "label": "Choose",
-        "url": "https://example.com/checkout/silver"
-      },
-      "secondaryCta": {
-        "label": "Details",
-        "url": "#plan-silver"
-      },
-      "show": true
+      "checkout": "https://buy.stripe.com/test_cN26rT7qR9ZQfQk6op"
     },
     {
       "id": "gold",
-      "order": 3,
-      "badge": "GOLD",
-      "title": "£49/mo",
+      "tier": "GOLD",
+      "title": "GOLD plan",
       "price": 49,
-      "who": "Teams that want hands-on setup and the admin toolkit.",
+      "who": "Teams who want hands-on setup and admin tools.",
       "features": [
         "Full customization session",
         "Admin toolkit & automations",
         "1:1 onboarding (45 min)"
       ],
-      "gets": [
-        "Full customization session",
-        "Admin toolkit & automations",
-        "1:1 onboarding (45 min)"
-      ],
-      "primaryCta": {
-        "label": "Choose",
-        "url": "https://example.com/checkout/gold"
-      },
-      "secondaryCta": {
-        "label": "Details",
-        "url": "#plan-gold"
-      },
-      "show": true
+      "checkout": "https://buy.stripe.com/test_7sI6qN8eZfM07Ak8wq"
     },
     {
       "id": "diamond",
-      "order": 4,
-      "badge": "DIAMOND",
-      "title": "£99/mo",
+      "tier": "DIAMOND",
+      "title": "DIAMOND plan",
       "price": 99,
-      "who": "Businesses needing custom pipelines, integrations, and priority turnaround.",
+      "who": "Businesses needing custom pipelines & priority turnaround.",
       "features": [
         "Custom pipelines & integrations",
         "Hands-on help building your stack",
-        "Priority roadmap & turnaround"
+        "Priority roadmap & turnaround",
+        "Private components when needed"
       ],
-      "gets": [
-        "Custom pipelines & integrations",
-        "Hands-on help building your stack",
-        "Priority roadmap & turnaround"
-      ],
-      "primaryCta": {
-        "label": "Choose",
-        "url": "https://example.com/checkout/diamond"
-      },
-      "secondaryCta": {
-        "label": "Details",
-        "url": "#plan-diamond"
-      },
-      "show": true
+      "checkout": "https://buy.stripe.com/test_8wM2cHa9u1hIbwE6oq"
     }
   ]
 }
