@@ -1,260 +1,213 @@
-/* THE GRID — main.js (no manual edits needed) */
+/* ===== Utilities ===== */
+const $ = (s, sc = document) => sc.querySelector(s);
+const $$ = (s, sc = document) => [...sc.querySelectorAll(s)];
+const fmtCurrency = (n, cur="GBP") =>
+  new Intl.NumberFormat("en-GB",{style:"currency",currency:cur,maximumFractionDigits:0}).format(n);
 
+/* ===== Greeting ===== */
 (() => {
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const state = {
-    manifests: { videos: [], images: [] },
-    picker: 'hero',
-    featured: []
-  };
+  const h = new Date().getHours();
+  const part = h < 12 ? "morning" : h < 18 ? "afternoon" : "evening";
+  $("#greeting").textContent = `Good ${part} — THE GRID`;
+})();
 
-  // Greeting
-  const setGreeting = () => {
-    const h = new Date().getHours();
-    const g = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
-    $('#greeting').textContent = `${g} — THE GRID`;
-  };
-
-  // Load JSON helper
-  const j = async url => (await fetch(url)).json().catch(_ => null);
-
-  // Fallback classifier from filename
-  const classify = (name) => {
-    const n = name.toLowerCase();
-    if (n.includes('reel') && (n.includes('9x16') || n.includes('9:16'))) return 'reels916';
-    if (n.includes('reel') && (n.includes('16x9') || n.includes('16:9'))) return 'reels169';
-    if (n.includes('logo')) return 'logos';
-    if (n.includes('bg') || n.includes('background')) return 'backgrounds';
-    if (n.includes('hero')) return 'hero';
-    if (/\.(jpg|jpeg|png|webp|gif)$/.test(n)) return 'images';
-    return 'extras';
-  };
-
-  // Load manifests (videos + images)
-  const loadManifests = async () => {
-    const videos = await j('assets/videos/manifest.json') || { items: [] };
-    const images = await j('assets/images/manifest.json') || { items: [] };
-    state.manifests.videos = (videos.items || []).map(v => ({
-      type: 'video',
-      src: v.src || v.path || '',
-      thumb: v.thumb || '',
-      tag: v.tag || classify(v.src || v.path || ''),
-      title: v.title || (v.src || '').split('/').pop(),
-      featured: !!v.featured
-    }));
-    state.manifests.images = (images.items || []).map(i => ({
-      type: 'image',
-      src: i.src || i.path || '',
-      thumb: i.thumb || i.src || '',
-      tag: i.tag || classify(i.src || i.path || ''),
-      title: i.title || (i.src || '').split('/').pop(),
-      featured: !!i.featured
-    }));
-    state.featured = [...state.manifests.videos, ...state.manifests.images].filter(x => x.featured).slice(0, 9);
-  };
-
-  // Library picker (small cards)
-  const LIBS = [
-    { key: 'hero', label: 'Hero' },
-    { key: 'reels916', label: 'Reels 9:16' },
-    { key: 'reels169', label: 'Reels 16:9' },
-    { key: 'backgrounds', label: 'Backgrounds' },
-    { key: 'logos', label: 'Logos' },
-    { key: 'images', label: 'Images' },
-    { key: 'extras', label: 'Extras' },
-  ];
-
-  const drawPicker = () => {
-    const wrap = $('#libPicker');
-    wrap.innerHTML = '';
-    LIBS.forEach(lib => {
-      const count = [...state.manifests.videos, ...state.manifests.images].filter(m => m.tag === lib.key).length;
-      const btn = document.createElement('button');
-      btn.className = `lib-tile${state.picker === lib.key ? ' active' : ''}`;
-      btn.innerHTML = `<span class="lbl">${lib.label}</span><span class="badge">${count}</span>`;
-      btn.addEventListener('click', () => { state.picker = lib.key; drawPicker(); drawItems(); });
-      wrap.appendChild(btn);
-    });
-  };
-
-  // Library items for selected picker
-  const drawItems = () => {
-    const area = $('#libItems');
-    const all = [...state.manifests.videos, ...state.manifests.images];
-    const items = all.filter(x => x.tag === state.picker);
-    area.innerHTML = '';
-    items.forEach(it => {
-      const card = document.createElement('div');
-      card.className = 'media-item';
-      const thumb = it.type === 'image'
-        ? `<img loading="lazy" src="${it.thumb || it.src}" alt="${it.title}">`
-        : `<video muted playsinline preload="metadata" src="${it.src}"></video>`;
-      card.innerHTML = `<button data-src="${it.src}" data-type="${it.type}">${thumb}</button><div class="cap">${it.title}</div>`;
-      card.querySelector('button').addEventListener('click', () => setHero(it));
-      area.appendChild(card);
-    });
-
-    // Also refresh hero datalist in the panel
-    const heroList = $('#heroList');
-    heroList.innerHTML = all.filter(x => x.type === 'video').map(v => `<option value="${v.src}"></option>`).join('');
-  };
-
-  // Set hero media
-  const setHero = (itemOrPath) => {
-    const video = $('#heroVideo');
-    const image = $('#heroImage');
-    video.classList.add('hidden');
-    image.classList.add('hidden');
-    if (typeof itemOrPath === 'string') {
-      const p = itemOrPath.toLowerCase();
-      if (p.endsWith('.mp4') || p.endsWith('.webm')) {
-        video.src = itemOrPath; video.classList.remove('hidden');
-      } else {
-        image.src = itemOrPath; image.classList.remove('hidden');
+/* ===== Customize Panel ===== */
+const customize = {
+  open(){ $("#customizePanel").showModal(); },
+  close(){ $("#customizePanel").close(); },
+  load(){
+    try{
+      const s = JSON.parse(localStorage.getItem("grid:style")||"{}");
+      if(!Object.keys(s).length) return;
+      for(const [k,v] of Object.entries(s)){
+        document.documentElement.style.setProperty(`--${k}`, v);
       }
-      return;
-    }
-    if (itemOrPath.type === 'video') {
-      video.src = itemOrPath.src; video.classList.remove('hidden');
-    } else {
-      image.src = itemOrPath.src; image.classList.remove('hidden');
-    }
-  };
-
-  // Showcase (small grid)
-  const drawGallery = () => {
-    const g = $('#gallery');
-    const list = state.featured.length ? state.featured : [...state.manifests.images].slice(0, 9);
-    g.innerHTML = list.map(it => {
-      const el = it.type === 'image'
-        ? `<img loading="lazy" src="${it.thumb || it.src}" alt="${it.title}">`
-        : `<video muted playsinline preload="metadata" src="${it.src}"></video>`;
-      return `<div class="g">${el}</div>`;
-    }).join('');
-  };
-
-  // Plans
-  const drawPlans = async () => {
-    const plans = await j('assets/data/plans.json') || { plans: [] };
-    const wrap = $('#planGrid');
-    wrap.innerHTML = (plans.plans || []).map(p => `
-      <article class="plan">
-        <div class="tier">${(p.tier || '').toUpperCase()}</div>
-        <div class="price">£${p.price}/mo</div>
-        <h3 class="h3">${p.name}</h3>
-        <ul>${p.perks.map(x => `<li>${x}</li>`).join('')}</ul>
-        <div class="row">
-          <button class="btn btn-primary choose" data-tier="${p.name}">Choose</button>
-          <button class="btn btn-ghost details" data-tier="${p.name}">Details</button>
-        </div>
-      </article>
-    `).join('');
-
-    wrap.querySelectorAll('.choose').forEach(b => b.addEventListener('click', e => {
-      try { window.launchConfetti && window.launchConfetti(); } catch {}
-      location.hash = '#contact';
-    }));
-    wrap.querySelectorAll('.details').forEach(b => b.addEventListener('click', e => {
-      alert(`${e.currentTarget.dataset.tier}\n\n${plans.details?.[e.currentTarget.dataset.tier] || 'Plan details.'}`);
-    }));
-  };
-
-  // Services
-  const drawServices = async () => {
-    const services = await j('assets/data/services.json') || { services: [] };
-    $('#serviceGrid').innerHTML = (services.services || []).map(s => `
-      <article class="service">
-        <div class="price">£${s.price}</div>
-        <h3 class="h3">${s.name}</h3>
-        <ul>${s.perks.map(x => `<li>${x}</li>`).join('')}</ul>
-        <button class="btn btn-primary" onclick="location.hash='#contact'">Start</button>
-      </article>
-    `).join('');
-  };
-
-  // Contact
-  const bindContact = () => {
-    $('#contactForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const d = new FormData(e.currentTarget);
-      const mailto = `mailto:gridcoresystems@gmail.com?subject=${encodeURIComponent('[THE GRID] ' + (d.get('topic') || 'Enquiry'))}&body=${encodeURIComponent(
-        `Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\n${d.get('message')}`
-      )}`;
-      window.location.href = mailto;
-    });
-  };
-
-  // Design Panel
-  const openDesign = () => $('#designPanel').showModal();
-  const closeDesign = () => $('#designPanel').close();
-  const setVar = (k, v) => document.documentElement.style.setProperty(k, v);
-  const restoreSaved = () => {
-    const raw = localStorage.getItem('grid.design');
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    Object.entries(data.vars || {}).forEach(([k, v]) => setVar(k, v));
-    if (data.hero) setHero(data.hero);
-  };
-  const saveDesign = () => {
-    const vars = {
-      '--bg-a': getComputedStyle(document.documentElement).getPropertyValue('--bg-a'),
-      '--bg-b': getComputedStyle(document.documentElement).getPropertyValue('--bg-b'),
-      '--panel': getComputedStyle(document.documentElement).getPropertyValue('--panel'),
-      '--card': getComputedStyle(document.documentElement).getPropertyValue('--card'),
-      '--text': getComputedStyle(document.documentElement).getPropertyValue('--text'),
-      '--soft': getComputedStyle(document.documentElement).getPropertyValue('--soft'),
-      '--accent': getComputedStyle(document.documentElement).getPropertyValue('--accent'),
-      '--accent-2': getComputedStyle(document.documentElement).getPropertyValue('--accent-2'),
-      '--radius': getComputedStyle(document.documentElement).getPropertyValue('--radius'),
-      '--glow': getComputedStyle(document.documentElement).getPropertyValue('--glow'),
-      '--font': getComputedStyle(document.documentElement).getPropertyValue('--font'),
-      '--space': getComputedStyle(document.documentElement).getPropertyValue('--space'),
+    }catch{}
+  },
+  save(){
+    const style = {
+      "accent": $("#cAccent").value,
+      "accent-2": $("#cAccent2").value,
+      "text": $("#cText").value,
+      "soft": $("#cSoft").value,
+      "card": $("#cCard").value,
+      "panel": $("#cPanel").value,
+      "bg-a": $("#cBgA").value,
+      "bg-b": $("#cBgB").value,
+      "radius": $("#rRadius").value+"px",
+      "glow": $("#rGlow").value,
+      "font": $("#rFont").value+"px",
+      "space": $("#rSpace").value+"px"
     };
-    const hero = $('#heroVideo').classList.contains('hidden') ? $('#heroImage').src : $('#heroVideo').src;
-    localStorage.setItem('grid.design', JSON.stringify({ vars, hero }));
-    alert('Saved to this device.');
-  };
-  const resetDesign = () => { localStorage.removeItem('grid.design'); location.reload(); };
+    localStorage.setItem("grid:style", JSON.stringify(style));
+    customize.apply(style);
+  },
+  apply(style){
+    for(const [k,v] of Object.entries(style)){
+      document.documentElement.style.setProperty(`--${k}`, v);
+    }
+  },
+  reset(){
+    localStorage.removeItem("grid:style");
+    location.reload();
+  }
+};
+$("#openCustomize").addEventListener("click", customize.open);
+$("#closeCustomize").addEventListener("click", customize.close);
+$("#savePrefs").addEventListener("click", customize.save);
+$("#resetPrefs").addEventListener("click", customize.reset);
+customize.load();
 
-  const wireDesignPanel = () => {
-    $('#openCustomize').addEventListener('click', openDesign);
-    $('#closeCustomize').addEventListener('click', closeDesign);
-    $('#saveDesign').addEventListener('click', saveDesign);
-    $('#resetDesign').addEventListener('click', resetDesign);
+/* ===== Hero controls ===== */
+(() => {
+  const v = $("#heroVideo");
+  const btn = $("#playHero");
+  btn.addEventListener("click", ()=> {
+    if(v.paused){ v.play(); } else { v.pause(); }
+  });
+})();
 
-    const map = [
-      ['accent','--accent'], ['accent2','--accent-2'], ['text','--text'], ['soft','--soft'],
-      ['card','--card'], ['panel','--panel'], ['bgA','--bg-a'], ['bgB','--bg-b'],
-      ['radius','--radius', v => `${v}px`], ['glow','--glow'], ['font','--font', v => `${v}px`],
-      ['space','--space', v => `${v}px`]
-    ];
-    map.forEach(([id, css, fmt]) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener('input', e => setVar(css, fmt ? fmt(e.target.value) : e.target.value));
+/* ===== Data loaders ===== */
+async function getJSON(path){
+  const res = await fetch(path, {cache:"no-store"});
+  if(!res.ok) throw new Error(`Failed ${path}`);
+  return res.json();
+}
+
+/* Build plan cards */
+async function buildPlans(){
+  const plans = await getJSON("assets/data/plans.json");
+  const grid = $("#plansGrid");
+  grid.innerHTML = "";
+  plans.forEach(p=>{
+    const li = document.createElement("article");
+    li.className = "plan";
+    li.innerHTML = `
+      <div class="plan__head">
+        <div class="plan__price">${fmtCurrency(p.price)}/mo</div>
+        <span class="badge">${p.tier.toUpperCase()}</span>
+      </div>
+      <ul>${p.features.map(f=>`<li>${f}</li>`).join("")}</ul>
+      <div class="plan__cta">
+        <a class="btn btn--accent" href="${p.pay.url}" target="_blank" rel="noopener">Choose</a>
+        <button class="btn btn--ghost" data-details='${JSON.stringify(p)}'>Details</button>
+      </div>`;
+    grid.appendChild(li);
+    li.querySelector("button").addEventListener("click", (e)=>{
+      const d = JSON.parse(e.currentTarget.dataset.details);
+      alert(`${d.title}\n\nWho it’s for:\n${d.who}\n\nWhat you get:\n- ${d.features.join("\n- ")}`);
     });
+  });
+}
 
-    $('#vignette').addEventListener('change', e => {
-      const on = e.target.value === 'on';
-      $('#fx').style.opacity = on ? '.9' : '0';
+/* Build services */
+async function buildServices(){
+  const services = await getJSON("assets/data/services.json");
+  const grid = $("#servicesGrid");
+  grid.innerHTML = "";
+  services.forEach(s=>{
+    const el = document.createElement("article");
+    el.className = "service";
+    el.innerHTML = `
+      <div class="plan__head">
+        <div class="service__price">${fmtCurrency(s.price)}</div>
+        <span class="badge">${s.badge}</span>
+      </div>
+      <p>${s.desc}</p>
+      <div class="service__cta">
+        <a class="btn btn--accent" target="_blank" rel="noopener" href="${s.pay.url}">${s.cta}</a>
+      </div>`;
+    grid.appendChild(el);
+  });
+}
+
+/* Library + Showcase */
+async function buildLibrary(){
+  const [vjson, ij] = await Promise.all([
+    getJSON("assets/videos/manifest.json").catch(()=>({groups:{}})),
+    getJSON("assets/images/manifest.json").catch(()=>({groups:{}}))
+  ]);
+  const groups = {
+    "Hero": vjson.groups?.hero || [],
+    "Reels 9:16": vjson.groups?.reels_9x16 || [],
+    "Reels 16:9": vjson.groups?.reels_16x9 || [],
+    "Backgrounds": ij.groups?.backgrounds || [],
+    "Logos": ij.groups?.logos || [],
+    "Images": ij.groups?.images || [],
+    "Extras": ij.groups?.extras || []
+  };
+
+  const chips = $("#libraryChips");
+  const grid = $("#libraryGrid");
+  chips.innerHTML = ""; grid.innerHTML = "";
+  const names = Object.keys(groups);
+  let active = names[0];
+
+  function paintChips(){
+    chips.innerHTML = "";
+    names.forEach(n=>{
+      const b = document.createElement("button");
+      b.textContent = `${n}${groups[n].length?"" : "0"}`;
+      b.setAttribute("aria-pressed", String(n===active));
+      b.addEventListener("click", ()=>{ active=n; paintChips(); paintGrid(); });
+      chips.appendChild(b);
     });
-    $('#heroSource').addEventListener('change', e => setHero(e.target.value));
-  };
+  }
+  function mediaThumb(item){
+    const ext = item.src.split(".").pop().toLowerCase();
+    const wrap = document.createElement("div");
+    wrap.className = "thumb";
+    if(["mp4","webm"].includes(ext)){
+      wrap.innerHTML = `<video muted preload="metadata" src="${item.src}"></video><div class="thumb__cap">${item.name||item.src}</div>`;
+      wrap.addEventListener("mouseenter",()=> wrap.querySelector("video").play());
+      wrap.addEventListener("mouseleave",()=> wrap.querySelector("video").pause());
+    } else {
+      wrap.innerHTML = `<img loading="lazy" src="${item.src}" alt=""><div class="thumb__cap">${item.name||item.src}</div>`;
+    }
+    wrap.addEventListener("click", ()=>{
+      // Set hero
+      const v = $("#heroVideo");
+      if(["mp4","webm"].includes(ext)){
+        v.src = item.src; v.play().catch(()=>{});
+      } else {
+        v.pause(); v.removeAttribute("src"); v.load();
+        v.setAttribute("poster", item.src);
+      }
+      confetti && confetti({particles:60});
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+    return wrap;
+  }
+  function paintGrid(){
+    grid.innerHTML = "";
+    groups[active].forEach(it=> grid.appendChild(mediaThumb(it)));
+  }
+  paintChips(); paintGrid();
 
-  // Boot
-  const init = async () => {
-    setGreeting();
-    await loadManifests();
-    drawPicker();
-    drawItems();
-    drawGallery();
-    drawPlans();
-    drawServices();
-    bindContact();
-    wireDesignPanel();
-    restoreSaved();
-  };
+  // Showcase = first 6 mixed
+  const featured = [...(vjson.featured||[]), ...(ij.featured||[])].slice(0,6);
+  const show = $("#showcaseGrid");
+  show.innerHTML = "";
+  featured.forEach(it => show.appendChild(mediaThumb(it)));
+}
 
-  document.addEventListener('DOMContentLoaded', init);
+/* Hero source dropdown (videos only) */
+async function buildHeroSelect(){
+  const vjson = await getJSON("assets/videos/manifest.json").catch(()=>({groups:{}}));
+  const opts = (vjson.groups?.hero||[]).concat(vjson.groups?.reels_16x9||[]);
+  const sel = $("#heroSource");
+  sel.innerHTML = "";
+  opts.forEach(o=>{
+    const op = document.createElement("option");
+    op.value = o.src; op.textContent = o.name || o.src;
+    sel.appendChild(op);
+  });
+  sel.addEventListener("change", e=>{
+    const v = $("#heroVideo"); v.src = e.target.value; v.play().catch(()=>{});
+  });
+}
+
+/* Boot */
+(async function boot(){
+  await Promise.all([buildLibrary(), buildHeroSelect(), buildPlans(), buildServices()]);
 })();
