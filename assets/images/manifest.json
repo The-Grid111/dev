@@ -1,16 +1,58 @@
-{
-  "Backgrounds": [
-    { "name": "grid_natural_1",   "file": "grid_natural_1.jpg" },
-    { "name": "grid_pour_1",      "file": "grid_pour_1.jpg" },
-    { "name": "grid_spread_1",    "file": "grid_spread_1.jpg" },
-    { "name": "grid_transform_1", "file": "grid_transform_1.jpg" }
-  ],
-  "Logos": [
-    { "name": "gc_logo", "file": "gc_logo.png" }
-  ],
-  "Images": [
-    { "name": "hero_1", "file": "hero_1.jpg" },
-    { "name": "hero_2", "file": "hero_2.jpg" },
-    { "name": "hero_3", "file": "hero_3.jpg" }
-  ]
-}
+[
+  {
+    "id": "hero_1",
+    "title": "Hero Still 1",
+    "src": "./assets/images/hero_1.jpg",
+    "thumb": "./assets/images/hero_1.jpg",
+    "tags": ["hero","still"]
+  },
+  {
+    "id": "hero_2",
+    "title": "Hero Still 2",
+    "src": "./assets/images/hero_2.jpg",
+    "thumb": "./assets/images/hero_2.jpg",
+    "tags": ["hero","still"]
+  },
+  {
+    "id": "hero_3",
+    "title": "Hero Still 3",
+    "src": "./assets/images/hero_3.jpg",
+    "thumb": "./assets/images/hero_3.jpg",
+    "tags": ["hero","still"]
+  },
+  {
+    "id": "gc_logo",
+    "title": "GC Logo",
+    "src": "./assets/images/gc_logo.png",
+    "thumb": "./assets/images/gc_logo.png",
+    "tags": ["logo"]
+  },
+  {
+    "id": "grid_pour_1",
+    "title": "Grid Pour",
+    "src": "./assets/images/grid_pour_1.jpg",
+    "thumb": "./assets/images/grid_pour_1.jpg",
+    "tags": ["effect"]
+  },
+  {
+    "id": "grid_spread_1",
+    "title": "Grid Spread",
+    "src": "./assets/images/grid_spread_1.jpg",
+    "thumb": "./assets/images/grid_spread_1.jpg",
+    "tags": ["effect"]
+  },
+  {
+    "id": "grid_natural_1",
+    "title": "Grid Natural",
+    "src": "./assets/images/grid_natural_1.jpg",
+    "thumb": "./assets/images/grid_natural_1.jpg",
+    "tags": ["background"]
+  },
+  {
+    "id": "grid_transform_1",
+    "title": "Grid Transform",
+    "src": "./assets/images/grid_transform_1.jpg",
+    "thumb": "./assets/images/grid_transform_1.jpg",
+    "tags": ["effect"]
+  }
+]
