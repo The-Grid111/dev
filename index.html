@@ -1,110 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+  <!-- === META (NO-TOUCH) ================================================== -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>THE GRID — Black & Gold</title>
+  <meta name="description" content="Cinematic visuals. Owner controls. One-file updates with a premium finish." />
 
-  <!-- Correct paths (root/assets/...) -->
-  <link rel="preload" as="style" href="assets/css/styles.css">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="stylesheet" href="assets/css/effects.css">
+  <!-- Fav/OG (safe to replace later) -->
+  <link rel="icon" href="./assets/images/gc_logo.png" />
 
-  <meta name="color-scheme" content="dark light" />
-  <meta name="theme-color" content="#0A0B0D" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+  <link rel="stylesheet" href="./assets/css/effects.css" />
 </head>
-<body>
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="brand">
-      <img class="brand__logo" src="assets/images/gc_logo.png" alt="GC" width="28" height="28">
-      <div class="brand__text">
-        <div class="brand__greet"><span id="greet">Good day</span> — <strong>THE GRID</strong></div>
-        <div class="brand__tag">White &amp; Gold</div>
-      </div>
+
+<body class="theme-dark">
+  <!-- === TOP BAR =========================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#hero" aria-label="THE GRID home">
+        <img class="brand-mark" src="./assets/images/gc_logo.png" alt="GC logo" />
+        <span class="brand-text">THE GRID</span>
+      </a>
+
+      <nav class="header-cta">
+        <button class="btn btn-ghost" id="btn-customize">Customize</button>
+        <a class="btn btn-gold" id="btn-join" href="#contact">Join<br/>Now</a>
+      </nav>
     </div>
-    <nav class="topbar__actions">
-      <button id="btnCustomize" class="btn btn--outline">Customize</button>
-      <a class="btn btn--primary" href="#plans">Join Now</a>
-    </nav>
   </header>
 
-  <main class="container">
-    <!-- Hero card -->
-    <section class="card" id="hero">
-      <h1>Black &amp; Gold</h1>
-      <p class="muted">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+  <main id="content">
 
-      <div class="hero__frame">
-        <!-- If you want the spinning coin, rename your file to hero_1.mp4 or update the src below -->
-        <video id="heroVideo" class="hero__media" playsinline muted autoplay loop
-               poster="assets/images/hero_1.jpg">
-          <source src="assets/videos/hero_1.mp4" type="video/mp4">
-        </video>
-        <!-- Fallback (shows if the video can’t load) -->
-        <img id="heroFallback" class="hero__media hidden" src="assets/images/hero_1.jpg" alt="Hero still">
+    <!-- === HERO / INTRO ==================================================== -->
+    <section id="hero" class="section hero">
+      <div class="container card hero-card">
+
+        <!-- === HERO TITLE (PATCH HERE) ==================================== -->
+        <!-- PATCH: HERO_TITLE_START -->
+        <h1 class="h1">Black &amp; Gold</h1>
+        <p class="lead">
+          Cinematic visuals. Owner controls. One-file updates with a premium finish.
+        </p>
+        <!-- PATCH: HERO_TITLE_END -->
+
+        <!-- Media frame populated by JS (falls back to poster) -->
+        <div class="hero-media">
+          <!-- JS looks for #heroVideoMount and will try videos/manifest.json -->
+          <div id="heroVideoMount" class="media-mount" role="region" aria-label="Hero clip">
+            <!-- Fallback image shown until JS swaps in video -->
+            <img src="./assets/images/hero_1.jpg" alt="Hero placeholder" class="media-fallback" />
+          </div>
+        </div>
+
+        <div class="hero-ctas">
+          <a class="btn btn-dark" id="btn-open-library" href="#library">Open Library</a>
+          <a class="btn btn-gold" id="btn-see-pricing" href="#plans">See Pricing</a>
+        </div>
       </div>
+    </section>
 
-      <div class="row gap">
-        <button id="btnOpenLibrary" class="btn btn--surface">Open Library</button>
-        <a class="btn btn--accent" href="#plans">See Pricing</a>
+    <!-- === LIBRARY ========================================================= -->
+    <section id="library" class="section">
+      <div class="container card">
+        <h2 class="h2">Library</h2>
+
+        <!-- === LIBRARY DESC (PATCH HERE) =================================== -->
+        <!-- PATCH: LIBRARY_COPY_START -->
+        <p>Tap a library to browse. Sources:</p>
+        <p class="mono small">assets/videos/manifest.json &amp; assets/images/manifest.json.</p>
+        <!-- PATCH: LIBRARY_COPY_END -->
+
+        <div class="library-grid">
+          <!-- video gallery mount -->
+          <div class="lib-block">
+            <div class="lib-head">
+              <h3 class="h4">Clips</h3>
+              <button class="btn btn-ghost small" data-action="open-videos">Open</button>
+            </div>
+            <div id="videosMount" class="grid-mount" aria-live="polite"></div>
+          </div>
+
+          <!-- image gallery mount -->
+          <div class="lib-block">
+            <div class="lib-head">
+              <h3 class="h4">Stills</h3>
+              <button class="btn btn-ghost small" data-action="open-images">Open</button>
+            </div>
+            <div id="imagesMount" class="grid-mount" aria-live="polite"></div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Library -->
-    <section class="card" id="library">
-      <h2>Library</h2>
-      <p class="muted">Tap a library to browse. Sources:
-        <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.
-      </p>
-      <div id="libraryTabs" class="chips"></div>
-      <div id="libraryGrid" class="grid"></div>
-      <p id="libraryEmpty" class="muted hidden">Nothing here yet. Add files and update the manifests.</p>
+    <!-- === SHOWCASE ======================================================== -->
+    <section id="showcase" class="section">
+      <div class="container card">
+        <h2 class="h2">Showcase</h2>
+        <p>Featured stills &amp; clips — quick browse.</p>
+        <div id="showcaseMount" class="showcase-grid"></div>
+      </div>
     </section>
 
-    <!-- Showcase -->
-    <section class="card" id="showcase">
-      <h2>Showcase</h2>
-      <p class="muted">Featured stills &amp; clips — quick browse.</p>
-      <div id="showcaseGrid" class="grid"></div>
+    <!-- === PLANS / PRICING ================================================ -->
+    <section id="plans" class="section">
+      <div class="container card">
+        <h2 class="h2">Plans</h2>
+        <p>Fair pricing. No lock-in. 7-day refund.</p>
+
+        <!-- pricing cards mount -->
+        <div id="plansMount" class="plans-grid" aria-live="polite"></div>
+
+        <!-- optional services micro-cards -->
+        <div class="services-wrap">
+          <h3 class="h5">Add-ons</h3>
+          <div id="servicesMount" class="services-grid"></div>
+        </div>
+      </div>
     </section>
 
-    <!-- Plans -->
-    <section class="card" id="plans">
-      <h2>Plans</h2>
-      <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
-      <div id="plansGrid" class="plans"></div>
-    </section>
+    <!-- === CONTACT ========================================================= -->
+    <section id="contact" class="section">
+      <div class="container card">
+        <h2 class="h2">Contact</h2>
 
-    <!-- Contact -->
-    <section class="card" id="contact">
-      <h2>Contact</h2>
-      <form id="contactForm" class="form">
-        <input name="name" placeholder="Your name" required />
-        <input name="email" type="email" placeholder="you@example.com" required />
-        <input name="topic" placeholder="How can we help?" />
-        <textarea name="message" placeholder="Write your message..." rows="4"></textarea>
-        <button class="btn btn--accent" type="submit">Send</button>
-      </form>
-      <p class="muted">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>.
-        No spam, no sharing.</p>
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="field-row">
+            <label class="sr-only" for="name">Your name</label>
+            <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" />
+          </div>
+          <div class="field-row">
+            <label class="sr-only" for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div class="field-row">
+            <label class="sr-only" for="topic">How can we help?</label>
+            <input id="topic" name="topic" type="text" placeholder="How can we help?" />
+          </div>
+          <div class="field-row">
+            <label class="sr-only" for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Write your message..."></textarea>
+          </div>
+          <button id="btn-send" class="btn btn-gold btn-wide" type="submit">Send</button>
+        </form>
+
+        <!-- === CONTACT FOOTER (PATCH HERE) ================================= -->
+        <!-- PATCH: CONTACT_FOOTER_START -->
+        <p class="small dim">
+          Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
+        </p>
+        <!-- PATCH: CONTACT_FOOTER_END -->
+      </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <small>&copy; <span id="year"></span> THE GRID. All rights reserved.</small>
+  <!-- === FOOTER ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; <span id="year"></span> THE GRID. All rights reserved.</small>
+    </div>
   </footer>
 
-  <!-- Scripts (correct paths) -->
+  <!-- === SCRIPTS (ORDER MATTERS) ========================================== -->
   <script>
-    // Very small inline bootstrap so the page doesn’t look broken if JS fails later
+    // minimal inline to avoid FOUC; keep logic in main.js
     document.getElementById('year').textContent = new Date().getFullYear();
-    const h = (new Date()).getHours();
-    document.getElementById('greet').textContent = h < 12 ? 'Good morning' : (h < 18 ? 'Good afternoon' : 'Good evening');
   </script>
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/effects.js" defer></script>
-  <script src="assets/js/commerce.js" defer></script>
-  <script src="assets/js/confetti.js" defer></script>
+  <script src="./assets/js/effects.js" defer></script>
+  <script src="./assets/js/main.js" defer></script>
 </body>
 </html>
