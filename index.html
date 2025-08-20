@@ -1,118 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>THE GRID — White & Gold</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THE GRID — Black & Gold</title>
 
-  <!-- HARD paths (GitHub Pages is case-sensitive) -->
-  <link rel="stylesheet" href="./dev/assets/css/styles.css">
-  <link rel="stylesheet" href="./dev/assets/css/effects.css">
+  <!-- Correct paths (root/assets/...) -->
+  <link rel="preload" as="style" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/effects.css">
 
-  <style>
-    /* Minimal fallback so the page isn't blank if CSS fails to load */
-    body{background:#0A0B0D;color:#F5F7FA;font:16px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:0}
-    .fallback-note{display:none}
-    .no-css .fallback-note{display:block;padding:12px;background:#1a1f28;color:#ffd}
-  </style>
-
-  <script>
-    // Flag to detect if CSS didn't load (class applied in DOMContentLoaded)
-    document.documentElement.classList.add('no-css');
-    window.addEventListener('load',()=>document.documentElement.classList.remove('no-css'));
-
-    // Global guard: never let a JS error blank the page
-    window.addEventListener('error', function(e){
-      const box = document.getElementById('bootErrors');
-      if (box) {
-        const li=document.createElement('li');
-        li.textContent = (e.error && e.error.message) ? e.error.message : (e.message||'Unknown script error');
-        box.appendChild(li);
-        document.getElementById('bootErrorWrap').style.display='block';
-      }
-    });
-  </script>
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0A0B0D" />
 </head>
 <body>
-
-  <div class="fallback-note">Basic view loaded (CSS/JS may still be initializing)…</div>
-
-  <!-- Top Bar -->
+  <!-- Topbar -->
   <header class="topbar">
     <div class="brand">
-      <img class="brand__logo" src="./dev/assets/images/gc_logo.png" alt="GC">
-      <div>
-        <div class="brand__greet" id="greeting">Good day —</div>
-        <div class="brand__name" id="brandName">THE GRID</div>
-        <div class="brand__tag" id="brandTag">White & Gold</div>
+      <img class="brand__logo" src="assets/images/gc_logo.png" alt="GC" width="28" height="28">
+      <div class="brand__text">
+        <div class="brand__greet"><span id="greet">Good day</span> — <strong>THE GRID</strong></div>
+        <div class="brand__tag">White &amp; Gold</div>
       </div>
     </div>
-    <div class="topbar__actions">
-      <button class="btn btn--ghost" id="btnCustomize" type="button">Customize</button>
+    <nav class="topbar__actions">
+      <button id="btnCustomize" class="btn btn--outline">Customize</button>
       <a class="btn btn--primary" href="#plans">Join Now</a>
-    </div>
+    </nav>
   </header>
 
   <main class="container">
-    <section class="card hero">
-      <h1 class="card__title">Black & Gold</h1>
-      <p class="card__desc">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+    <!-- Hero card -->
+    <section class="card" id="hero">
+      <h1>Black &amp; Gold</h1>
+      <p class="muted">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
 
       <div class="hero__frame">
-        <div id="heroMount" class="hero__mount">
-          <!-- Immediate visual fallback -->
-          <img class="hero__image" src="./dev/assets/images/hero_1.jpg" alt="Hero" />
-        </div>
+        <!-- If you want the spinning coin, rename your file to hero_1.mp4 or update the src below -->
+        <video id="heroVideo" class="hero__media" playsinline muted autoplay loop
+               poster="assets/images/hero_1.jpg">
+          <source src="assets/videos/hero_1.mp4" type="video/mp4">
+        </video>
+        <!-- Fallback (shows if the video can’t load) -->
+        <img id="heroFallback" class="hero__media hidden" src="assets/images/hero_1.jpg" alt="Hero still">
       </div>
 
-      <div class="hero__actions">
-        <a href="#library" class="btn btn--ghost">Open Library</a>
-        <a href="#plans" class="btn btn--glow">See Pricing</a>
+      <div class="row gap">
+        <button id="btnOpenLibrary" class="btn btn--surface">Open Library</button>
+        <a class="btn btn--accent" href="#plans">See Pricing</a>
       </div>
     </section>
 
-    <section id="library" class="card">
-      <h2 class="card__title">Library</h2>
-      <p class="card__desc">Tap a library to browse. Sources:
-        <code>dev/assets/videos/manifest.json</code> & <code>dev/assets/images/manifest.json</code>.
+    <!-- Library -->
+    <section class="card" id="library">
+      <h2>Library</h2>
+      <p class="muted">Tap a library to browse. Sources:
+        <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.
       </p>
-      <div id="libraryTabs" class="pills"></div>
+      <div id="libraryTabs" class="chips"></div>
       <div id="libraryGrid" class="grid"></div>
+      <p id="libraryEmpty" class="muted hidden">Nothing here yet. Add files and update the manifests.</p>
     </section>
 
-    <section id="showcase" class="card">
-      <h2 class="card__title">Showcase</h2>
-      <p class="card__desc">Featured stills & clips — quick browse.</p>
-      <div id="showcaseGrid" class="grid grid--featured"></div>
+    <!-- Showcase -->
+    <section class="card" id="showcase">
+      <h2>Showcase</h2>
+      <p class="muted">Featured stills &amp; clips — quick browse.</p>
+      <div id="showcaseGrid" class="grid"></div>
     </section>
 
-    <section id="plans" class="card">
-      <h2 class="card__title">Plans</h2>
-      <p class="card__desc">Fair pricing. No lock-in. 7-day refund.</p>
-      <div id="plansMount" class="plans"></div>
+    <!-- Plans -->
+    <section class="card" id="plans">
+      <h2>Plans</h2>
+      <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
+      <div id="plansGrid" class="plans"></div>
     </section>
 
-    <section id="contact" class="card">
-      <h2 class="card__title">Contact</h2>
-      <form id="contactForm" class="contact" novalidate>
-        <input type="text" name="name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="you@example.com" required>
-        <input type="text" name="subject" placeholder="How can we help?">
+    <!-- Contact -->
+    <section class="card" id="contact">
+      <h2>Contact</h2>
+      <form id="contactForm" class="form">
+        <input name="name" placeholder="Your name" required />
+        <input name="email" type="email" placeholder="you@example.com" required />
+        <input name="topic" placeholder="How can we help?" />
         <textarea name="message" placeholder="Write your message..." rows="4"></textarea>
-        <button class="btn btn--glow" type="submit">Send</button>
+        <button class="btn btn--accent" type="submit">Send</button>
       </form>
-      <p class="card__foot">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
-    </section>
-
-    <!-- Visible error area if anything breaks -->
-    <section id="bootErrorWrap" class="card" style="display:none">
-      <h3 class="card__title">Boot errors</h3>
-      <ul id="bootErrors" style="margin:0;padding-left:18px"></ul>
+      <p class="muted">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>.
+        No spam, no sharing.</p>
     </section>
   </main>
 
-  <!-- Scripts -->
-  <script src="./dev/assets/js/effects.js" defer></script>
-  <script src="./dev/assets/js/main.js" defer></script>
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> THE GRID. All rights reserved.</small>
+  </footer>
+
+  <!-- Scripts (correct paths) -->
+  <script>
+    // Very small inline bootstrap so the page doesn’t look broken if JS fails later
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const h = (new Date()).getHours();
+    document.getElementById('greet').textContent = h < 12 ? 'Good morning' : (h < 18 ? 'Good afternoon' : 'Good evening');
+  </script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/effects.js" defer></script>
+  <script src="assets/js/commerce.js" defer></script>
+  <script src="assets/js/confetti.js" defer></script>
 </body>
 </html>
