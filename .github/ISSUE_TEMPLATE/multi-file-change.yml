@@ -1,0 +1,10 @@
+name: 🧩 Multi-file change
+description: Apply multiple file changes in one go
+labels: ["multi","auto"]
+body:
+  - type: textarea
+    id: patch
+    attributes:
+      label: Full multi-file patch
+      description: Paste a single comment with multiple *** Begin/End Patch blocks.
+      render: text
