@@ -1,198 +1,202 @@
-(function () {
-  // Helpers
-  const $ = (sel, root=document) => root.querySelector(sel);
-  const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+/* THE GRID — Main App (dev/assets/js/main.js)
+   Paths are rooted to dev/assets as per repo layout.
+*/
 
-  // Greeting
-  const hours = new Date().getHours();
-  const greeting =
-    hours < 12 ? "Good morning" :
-    hours < 17 ? "Good afternoon" :
-    "Good evening";
-  const brandGreeting = $("#brandGreeting");
-  if (brandGreeting) brandGreeting.textContent = `${greeting} — THE GRID`;
+// -------- Paths (single source of truth) --------
+const ASSETS_BASE = 'dev/assets';
+const VIDEO_DIR = `${ASSETS_BASE}/videos`;
+const IMAGE_DIR = `${ASSETS_BASE}/images`;
+const DATA_DIR  = `${ASSETS_BASE}/data`;
 
-  // Buttons
-  $("#btnCustomize")?.addEventListener("click", () => {
-    alert("Design Panel coming back next pass (saved per-device).");
-  });
-  $("#btnOpenLibrary")?.addEventListener("click", e => {
-    if (location.hash !== "#library") location.hash = "library";
-  });
-  $("#btnSeePricing")?.addEventListener("click", e => {
-    if (location.hash !== "#plans") location.hash = "plans";
-  });
-  $$(".plan-choose").forEach(b =>
-    b.addEventListener("click", () => alert(`Plan selected: ${b.dataset.plan}`))
-  );
+const OWNER_CORE_SAVE = `${DATA_DIR}/owner_core_save_v1.2.json`;
+const PLANS_JSON      = `${DATA_DIR}/plans.json`;
+const SERVICES_JSON   = `${DATA_DIR}/services.json`;
 
-  // HERO loader: prefer assets/gc_spin.mp4 → assets/videos/hero_1.mp4 → image fallback
-  async function loadHero() {
-    const frame = $("#heroFrame");
-    const loading = $("#heroLoading");
-    if (!frame) return;
+const LIB_VIDEOS_MANIFEST = `${VIDEO_DIR}/manifest.json`;
+const LIB_IMAGES_MANIFEST = `${IMAGE_DIR}/manifest.json`;
 
-    const candidates = [
-      {type:"video", src:"assets/gc_spin.mp4"},
-      {type:"video", src:"assets/videos/hero_1.mp4"},
-      {type:"image", src:"assets/images/hero_1.jpg"}
-    ];
+// -------- Small helpers --------
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+const el = (tag, cls, html) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (html !== undefined) n.innerHTML = html;
+  return n;
+};
+const fetchJSON = async (url) => {
+  const res = await fetch(url, {cache: 'no-cache'});
+  if (!res.ok) throw new Error(`Fetch failed ${res.status} for ${url}`);
+  return res.json();
+};
 
-    for (const c of candidates) {
-      try {
-        const ok = await fetch(c.src, {method:"HEAD"}).then(r=>r.ok).catch(()=>false);
-        if (!ok) continue;
+// -------- Greeting --------
+function greetingText() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning —';
+  if (hour < 18) return 'Good afternoon —';
+  return 'Good evening —';
+}
 
-        if (c.type === "video") {
-          const v = document.createElement("video");
-          v.src = c.src;
-          v.autoplay = true;
-          v.loop = true;
-          v.muted = true;
-          v.playsInline = true;
-          v.setAttribute("playsinline","true");
-          v.style.display = "block";
-          frame.innerHTML = "";
-          frame.appendChild(v);
-          return;
-        } else {
-          const img = document.createElement("img");
-          img.src = c.src;
-          img.alt = "Hero";
-          frame.innerHTML = "";
-          frame.appendChild(img);
-          return;
-        }
-      } catch (_) {}
-    }
+// -------- Owner Core (brand + hero) --------
+async function loadOwnerCore() {
+  try {
+    const core = await fetchJSON(OWNER_CORE_SAVE);
+    $('#greeting').textContent = greetingText();
+    if (core.brand?.name) $('#brandName').textContent = core.brand.name;
+    if (core.brand?.tagline) $('#brandTag').textContent = core.brand.tagline;
 
-    // If none found
-    loading.textContent = "Add a hero to assets/gc_spin.mp4 or assets/videos/hero_1.mp4";
-  }
+    // Hero
+    const mount = $('#heroMount');
+    mount.innerHTML = '';
+    const src = core.hero?.source;
+    const fallback = core.hero?.fallbackImage;
 
-  // LIBRARY loader (videos + images manifests)
-  async function loadLibrary() {
-    const grid = $("#libraryGrid");
-    const empty = $("#libraryEmpty");
-    if (!grid) return;
-
-    const sources = [
-      "assets/videos/manifest.json",
-      "assets/images/manifest.json"
-    ];
-
-    let items = [];
-    for (const src of sources) {
-      try {
-        const res = await fetch(src, {cache:"no-store"});
-        if (!res.ok) continue;
-        const data = await res.json();
-        if (Array.isArray(data.items)) items = items.concat(data.items);
-      } catch (e) { /* ignore */
-      }
-    }
-
-    // If still empty, try sensible defaults by scanning known files
-    if (items.length === 0) {
-      // fallback placeholders (use what you already have in repo)
-      items = [
-        { type:"video", src:"assets/videos/hero_1.mp4", title:"Hero clip" },
-        { type:"image", src:"assets/images/hero_1.jpg", title:"Hero still" }
-      ];
-    }
-
-    grid.innerHTML = "";
-    let rendered = 0;
-    items.forEach(it => {
-      if (!it || !it.src) return;
-      const card = document.createElement("div");
-      card.className = "library-card";
-      card.innerHTML = `
-        <div class="card-thumb">
-          ${it.type === "video"
-            ? `<video src="${it.src}" muted loop playsinline></video>`
-            : `<img src="${it.src}" alt="${(it.title||'Media')}" />`}
-        </div>
-        <div class="card-meta">
-          <span>${it.title || (it.type==='video'?'Video':'Image')}</span>
-        </div>
-      `;
-      grid.appendChild(card);
-      rendered++;
-    });
-
-    if (rendered === 0) {
-      empty.classList.remove("hidden");
+    if (src && src.endsWith('.mp4')) {
+      const v = el('video', 'hero__video');
+      v.setAttribute('playsinline','');
+      v.setAttribute('muted','');
+      v.setAttribute('autoplay','');
+      v.setAttribute('loop','');
+      v.src = src;
+      mount.appendChild(v);
+    } else if (fallback) {
+      const img = el('img', 'hero__image');
+      img.src = fallback;
+      img.alt = 'Hero';
+      mount.appendChild(img);
     } else {
-      empty.classList.add("hidden");
+      mount.innerHTML = `<div class="hero__placeholder">HERO PLACEHOLDER • Replace with your top niche video frame</div>`;
     }
+  } catch (e) {
+    console.warn('Owner core load failed:', e);
+  }
+}
 
-    // Tabs filter
-    $$(".library-tabs .chip").forEach(chip => {
-      chip.addEventListener("click", () => {
-        $$(".library-tabs .chip").forEach(c => c.classList.remove("active"));
-        chip.classList.add("active");
-        const filter = chip.dataset.filter;
-        $$(".library-card").forEach(card => {
-          const isVideo = !!card.querySelector("video");
-          const type = isVideo ? "video" : "image";
-          card.style.display =
-            filter === "all" || filter === type ? "" : "none";
-        });
+// -------- Library (videos + images) --------
+function flattenManifest(manifest, baseDir) {
+  const out = [];
+  Object.entries(manifest || {}).forEach(([group, items]) => {
+    (items || []).forEach((it) => {
+      out.push({
+        group,
+        name: it.name || it.file,
+        // files in manifests are short (e.g., "hero_1.mp4")
+        src: `${baseDir}/${it.file}`,
+        cover: it.cover ? `${IMAGE_DIR}/${it.cover}` : null,
+        type: (it.file || '').toLowerCase().endsWith('.mp4') ? 'video' : 'image'
       });
     });
-  }
-
-  // SHOWCASE (first 6 items across manifests)
-  async function loadShowcase() {
-    const strip = $("#showcaseStrip");
-    if (!strip) return;
-
-    const srcs = [
-      "assets/videos/manifest.json",
-      "assets/images/manifest.json"
-    ];
-
-    let items = [];
-    for (const s of srcs) {
-      try {
-        const r = await fetch(s, {cache:"no-store"});
-        if (!r.ok) continue;
-        const d = await r.json();
-        if (Array.isArray(d.items)) items = items.concat(d.items);
-      } catch (_) {}
-    }
-
-    if (items.length === 0) {
-      strip.innerHTML = `<div class="muted">Add items to manifests to fill the showcase.</div>`;
-      return;
-    }
-
-    strip.innerHTML = "";
-    items.slice(0, 6).forEach(it => {
-      const box = document.createElement("div");
-      box.className = "library-card";
-      box.style.minWidth = "220px";
-      box.innerHTML = `
-        <div class="card-thumb">
-          ${it.type === "video"
-            ? `<video src="${it.src}" muted loop playsinline></video>`
-            : `<img src="${it.src}" alt="${(it.title||'Media')}" />`}
-        </div>
-        <div class="card-meta"><span>${it.title || ''}</span></div>
-      `;
-      strip.appendChild(box);
-    });
-  }
-
-  // Contact (demo only)
-  $("#contactForm")?.addEventListener("submit", e => {
-    e.preventDefault();
-    alert("Thanks — message captured locally. Hook this up to your email/API next.");
   });
+  return out;
+}
 
-  // Boot
-  loadHero();
-  loadLibrary();
-  loadShowcase();
-})();
+function buildPills(tabs, mount, onSelect) {
+  mount.innerHTML = '';
+  tabs.forEach((tab, i) => {
+    const b = el('button', 'pill', `${tab.label} <span class="pill__count">(${tab.count})</span>`);
+    if (i === 0) b.classList.add('is-active');
+    b.addEventListener('click', () => {
+      $$('.pill', mount).forEach(p => p.classList.remove('is-active'));
+      b.classList.add('is-active');
+      onSelect(tab.value);
+    });
+    mount.appendChild(b);
+  });
+}
+
+function renderGrid(items, mount) {
+  mount.innerHTML = '';
+  if (!items.length) {
+    mount.innerHTML = `<div class="empty">Nothing here yet.</div>`;
+    return;
+  }
+  items.forEach((it) => {
+    const card = el('div', 'media-card');
+    if (it.type === 'video') {
+      const v = el('video', 'media-card__video');
+      v.src = it.src; v.controls = true; v.playsInline = true;
+      card.appendChild(v);
+    } else {
+      const img = el('img', 'media-card__img');
+      img.src = it.src; img.alt = it.name;
+      card.appendChild(img);
+    }
+    const cap = el('div', 'media-card__cap', `<strong>${it.name}</strong><div class="cap__sub">${it.src}</div>`);
+    card.appendChild(cap);
+    mount.appendChild(card);
+  });
+}
+
+async function loadLibrary() {
+  try {
+    const [vman, iman] = await Promise.all([
+      fetchJSON(LIB_VIDEOS_MANIFEST),
+      fetchJSON(LIB_IMAGES_MANIFEST)
+    ]);
+    const vids = flattenManifest(vman, VIDEO_DIR);
+    const imgs = flattenManifest(iman, IMAGE_DIR);
+    const all = [...vids, ...imgs];
+
+    const groups = ['Hero', 'Reels 9:16', 'Reels 16:9', 'Backgrounds', 'Logos', 'Images', 'Extras'];
+    const tabs = groups.map(g => ({
+      label: g, value: g, count: all.filter(i => i.group === g).length
+    }));
+
+    const tabsMount = $('#libraryTabs');
+    const gridMount = $('#libraryGrid');
+    buildPills(tabs, tabsMount, (group) => {
+      renderGrid(all.filter(i => i.group === group), gridMount);
+    });
+    // initial
+    renderGrid(all.filter(i => i.group === groups[0]), gridMount);
+
+    // quick showcase: take first of each group that has items
+    const featured = groups.flatMap(g => all.find(i => i.group === g) ? [all.find(i => i.group === g)] : []);
+    renderGrid(featured, $('#showcaseGrid'));
+  } catch (e) {
+    console.warn('Library load failed:', e);
+    $('#libraryGrid').innerHTML = `<div class="empty">Library failed to load. Check manifests & paths.</div>`;
+  }
+}
+
+// -------- Plans (from data/plans.json) --------
+async function loadPlans() {
+  try {
+    const data = await fetchJSON(PLANS_JSON);
+    const mount = $('#plansMount');
+    mount.innerHTML = '';
+    (data.plans || []).forEach(plan => {
+      const row = el('div', 'plan');
+      row.innerHTML = `
+        <div class="plan__price">${plan.price}/mo</div>
+        <div class="plan__name">${plan.name}</div>
+        <ul class="plan__features">${
+          (plan.features || []).map(f => `<li>${f}</li>`).join('')
+        }</ul>
+        <button class="btn btn--glow">Choose</button>
+      `;
+      mount.appendChild(row);
+    });
+  } catch (e) {
+    console.warn('Plans load failed:', e);
+  }
+}
+
+// -------- Contact (dummy handler) --------
+function wireContact() {
+  $('#contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Thanks! We will reply from gridcoresystems@gmail.com.');
+    e.target.reset();
+  });
+}
+
+// -------- Init --------
+window.addEventListener('DOMContentLoaded', async () => {
+  $('#greeting').textContent = greetingText();
+  await loadOwnerCore();
+  await loadLibrary();
+  await loadPlans();
+  wireContact();
+});
