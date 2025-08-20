@@ -4,130 +4,138 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID — White & Gold</title>
-  <link rel="preload" href="assets/js/main.js" as="script" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-  <header class="site-header">
+  <!-- Top bar -->
+  <header class="topbar">
     <div class="brand">
-      <video class="brand-badge" src="assets/gc_spin.mp4" autoplay muted loop playsinline></video>
-      <div class="brand-copy">
-        <div class="greeting" id="greeting">Good day — THE GRID</div>
-        <div class="tagline" id="tagline">White &amp; Gold</div>
+      <img src="assets/images/gc_logo.png" alt="GC" class="brand-logo" />
+      <div class="brand-text">
+        <div class="brand-greeting" id="brandGreeting">Good day — THE GRID</div>
+        <div class="brand-tag">White &amp; Gold</div>
       </div>
     </div>
-    <nav class="actions">
-      <button class="pill" id="btnCustomize">Customize</button>
-      <a class="cta" href="#plans" id="btnJoin">Join<br/>Now</a>
-    </nav>
+    <div class="top-actions">
+      <button class="btn btn-hollow" id="btnCustomize">Customize</button>
+      <a href="#plans" class="btn btn-primary">Join<br/>Now</a>
+    </div>
   </header>
 
   <main>
     <!-- HERO -->
-    <section class="card hero" id="hero">
-      <h1 class="h1">Black &amp; Gold</h1>
-      <p class="lede">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
+    <section class="panel" id="heroPanel">
+      <h2>Black &amp; Gold</h2>
+      <p>Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
 
-      <div class="hero-media">
-        <!-- Filled by JS with <video> (preferred) or <img> fallback -->
-        <div id="heroMediaMount" class="hero-media-mount"></div>
+      <div class="hero-frame" id="heroFrame">
+        <!-- JS will load: assets/gc_spin.mp4 → assets/videos/hero_1.mp4 → assets/images/hero_1.jpg -->
+        <div class="hero-loading" id="heroLoading">Loading hero…</div>
       </div>
 
-      <div class="row gap">
-        <button class="btn btn-soft" id="btnOpenLibrary">Open Library</button>
-        <button class="btn btn-primary" id="btnSeePricing">See Pricing</button>
+      <div class="actions">
+        <a href="#library" class="btn btn-hollow" id="btnOpenLibrary">Open Library</a>
+        <a href="#plans" class="btn btn-primary" id="btnSeePricing">See Pricing</a>
       </div>
     </section>
 
     <!-- LIBRARY -->
-    <section class="card" id="library">
-      <h2 class="h2">Library</h2>
-      <p class="muted">Tap a library to browse. Sources: <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.</p>
+    <section class="panel" id="library">
+      <h3>Library</h3>
+      <p class="muted">
+        Tap a library to browse. Sources:
+        <code>assets/videos/manifest.json</code> &amp; <code>assets/images/manifest.json</code>.
+      </p>
 
-      <div class="lib-tabs" id="libTabs">
-        <!-- Tabs injected by JS -->
+      <div class="library-tabs">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="video">Hero / Reels</button>
+        <button class="chip" data-filter="image">Images / Logos / BG</button>
       </div>
 
-      <div class="lib-grid" id="libGrid" aria-live="polite">
-        <!-- Items injected by JS -->
+      <div class="library-grid" id="libraryGrid">
+        <!-- Cards inserted by JS -->
       </div>
-      <p class="tip">Tip: short names help (e.g. <code>hero_1.mp4</code>, <code>grid_pour_1.jpg</code>).</p>
+
+      <div class="empty-note hidden" id="libraryEmpty">
+        Nothing here yet. Add files and update the manifests.
+      </div>
     </section>
 
     <!-- SHOWCASE -->
-    <section class="card" id="showcase">
-      <h2 class="h2">Showcase</h2>
+    <section class="panel" id="showcase">
+      <h3>Showcase</h3>
       <p class="muted">Featured stills &amp; clips — quick browse.</p>
-      <div class="show-grid" id="showGrid">
-        <!-- Featured injected by JS -->
+      <div class="showcase-strip" id="showcaseStrip">
+        <!-- Featured items (first 6) from manifests -->
       </div>
     </section>
 
     <!-- PLANS -->
-    <section class="card" id="plans">
-      <h2 class="h2">Plans</h2>
+    <section class="panel" id="plans">
+      <h3>Plans</h3>
       <p class="muted">Fair pricing. No lock-in. 7-day refund.</p>
 
-      <div class="plans">
-        <div class="plan">
-          <div class="price">£9/mo</div>
-          <div class="tier">BASIC</div>
+      <div class="plans-grid">
+        <article class="plan">
+          <div class="price">£9<small>/mo</small></div>
+          <h4>BASIC</h4>
           <ul>
             <li>Starter templates</li>
             <li>Library access</li>
             <li>Email support</li>
           </ul>
-          <button class="btn btn-primary">Choose</button>
-        </div>
+          <button class="btn btn-primary plan-choose" data-plan="Basic">Choose</button>
+        </article>
 
-        <div class="plan">
-          <div class="price">£29/mo</div>
-          <div class="tier">SILVER</div>
+        <article class="plan">
+          <div class="price">£29<small>/mo</small></div>
+          <h4>SILVER</h4>
           <ul>
             <li>Advanced effects</li>
             <li>Priority support</li>
           </ul>
-          <button class="btn btn-primary">Choose</button>
-        </div>
+          <button class="btn btn-primary plan-choose" data-plan="Silver">Choose</button>
+        </article>
 
-        <div class="plan">
-          <div class="price">£49/mo</div>
-          <div class="tier">GOLD</div>
+        <article class="plan">
+          <div class="price">£49<small>/mo</small></div>
+          <h4>GOLD</h4>
           <ul>
             <li>Full customization</li>
             <li>Admin toolkit</li>
             <li>Onboarding</li>
           </ul>
-          <button class="btn btn-primary">Choose</button>
-        </div>
+          <button class="btn btn-primary plan-choose" data-plan="Gold">Choose</button>
+        </article>
 
-        <div class="plan">
-          <div class="price">£99/mo</div>
-          <div class="tier">DIAMOND</div>
+        <article class="plan">
+          <div class="price">£99<small>/mo</small></div>
+          <h4>DIAMOND</h4>
           <ul>
             <li>Custom pipelines</li>
             <li>Hands-on help</li>
             <li>Priority turnaround</li>
           </ul>
-          <button class="btn btn-primary">Choose</button>
-        </div>
+          <button class="btn btn-primary plan-choose" data-plan="Diamond">Choose</button>
+        </article>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section class="card" id="contact">
-      <h2 class="h2">Contact</h2>
-      <form class="contact-form" onsubmit="return false;">
-        <input type="text" placeholder="Your name" />
-        <input type="email" placeholder="you@example.com" />
-        <input type="text" placeholder="How can we help?" />
-        <textarea rows="4" placeholder="Write your message..."></textarea>
-        <button class="btn btn-primary" type="submit">Send</button>
+    <section class="panel" id="contact">
+      <h3>Contact</h3>
+      <form class="contact-form" id="contactForm">
+        <input type="text" placeholder="Your name" name="name" required />
+        <input type="email" placeholder="you@example.com" name="email" required />
+        <input type="text" placeholder="How can we help?" name="subject" />
+        <textarea placeholder="Write your message…" name="message" rows="5"></textarea>
+        <button type="submit" class="btn btn-primary">Send</button>
+        <div class="muted tiny">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</div>
       </form>
-      <p class="muted">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
     </section>
   </main>
 
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
