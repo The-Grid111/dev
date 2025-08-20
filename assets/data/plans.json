@@ -1,0 +1,58 @@
+[
+  {
+    "tier": "basic",
+    "name": "Basic",
+    "price": 9,
+    "period": "mo",
+    "badge": "BASIC",
+    "sku": "plan_basic",
+    "bullets": [
+      "Starter templates & blocks",
+      "Library access (videos, images, logos)",
+      "Email support (48h)"
+    ],
+    "highlight": false
+  },
+  {
+    "tier": "silver",
+    "name": "Silver",
+    "price": 29,
+    "period": "mo",
+    "badge": "SILVER",
+    "sku": "plan_silver",
+    "bullets": [
+      "Everything in Basic",
+      "Advanced effects & presets",
+      "Priority email (24h)"
+    ],
+    "highlight": false
+  },
+  {
+    "tier": "gold",
+    "name": "Gold",
+    "price": 49,
+    "period": "mo",
+    "badge": "GOLD",
+    "sku": "plan_gold",
+    "bullets": [
+      "Full customization session",
+      "Admin toolkit & automations",
+      "1:1 onboarding (45 min)"
+    ],
+    "highlight": true
+  },
+  {
+    "tier": "diamond",
+    "name": "Diamond",
+    "price": 99,
+    "period": "mo",
+    "badge": "DIAMOND",
+    "sku": "plan_diamond",
+    "bullets": [
+      "Custom pipelines & integrations",
+      "Hands-on help building your stack",
+      "Priority roadmap & turnaround"
+    ],
+    "highlight": false
+  }
+]
