@@ -1,208 +1,206 @@
-/* assets/js/main.js — SAFE, DEFENSIVE INITIALIZER
-   Works with dev/ folder structure shown in your screenshots.
-   - Hydrates brand header from dev/assets/data/owner_core_save_v1.2.json (if present)
-   - Renders GC spin hero video from dev/assets/gc_spin.mp4 (if present)
-   - Wires "Open Library" / "See Pricing" buttons
-   - Loads image/video manifests defensively and updates any count badges if they exist
+/* THE GRID — main.js (FULL REDO)
+   - Wires buttons (Join/Customize/See Pricing/Open Library)
+   - Smooth scroll to sections
+   - Loads manifests robustly (works from / and /dev/)
+   - Initializes hero video (falls back gracefully)
+   - Populates Library counts
+   - Tiny diagnostics via console
 */
+
 (() => {
-  "use strict";
+  // ---------- Utilities
+  const qs  = (s, r = document) => r.querySelector(s);
+  const qsa = (s, r = document) => [...r.querySelectorAll(s)];
+  const log = (...a) => console.log("[GRID]", ...a);
 
-  // ---------- Helpers ----------
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-  const setText = (el, text) => { if (el) el.textContent = text; };
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const PATHS = {
-    owner: "dev/assets/data/owner_core_save_v1.2.json",
-    plans: "dev/assets/data/plans.json",
-    services: "dev/assets/data/services.json",
-    videosManifest: "dev/assets/videos/manifest.json",
-    imagesManifest: "dev/assets/images/manifest.json",
-    heroSpin: "dev/assets/gc_spin.mp4"
-  };
-
-  const cache = new Map();
-  async function safeFetchJSON(url, fallback = null) {
+  const scrollToEl = (el) => {
+    if (!el) return;
     try {
-      if (cache.has(url)) return cache.get(url);
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      cache.set(url, data);
-      return data;
-    } catch (err) {
-      console.warn(`[main.js] Failed to load ${url}:`, err);
-      return fallback;
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch {
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 12;
+      window.scrollTo(0, y);
     }
-  }
+  };
 
-  // ---------- Brand / Header ----------
-  async function hydrateHeader() {
-    const data = await safeFetchJSON(PATHS.owner, null);
-    if (!data) return;
+  // ---------- DOM
+  const dom = {
+    // hero
+    heroWrap:   qs("[data-hero]") || qs("#hero"),
+    heroVideo:  qs("[data-hero-video]") || qs("#heroVideo"),
+    heroSource: qs("[data-hero-source]") || qs("#heroSource"),
 
-    const brandName = data?.brand?.name || "THE GRID";
-    const tagline = data?.brand?.tagline || "White & Gold";
+    // buttons
+    btnCustomize:  qs('[data-action="customize"]') || qs("#btn-customize"),
+    btnJoin:       qs('[data-action="join"]')       || qs("#btn-join"),
+    btnOpenLib:    qs('[data-action="open-library"]') || qs("#btn-open-library"),
+    btnSeePricing: qs('[data-action="see-pricing"]')   || qs("#btn-see-pricing"),
 
-    setText($("[data-brand-name]"), brandName);
-    setText($("[data-brand-tagline]"), tagline);
+    // sections
+    secLibrary: qs('[data-section="library"]') || qs("#library"),
+    secPricing: qs('[data-section="pricing"]') || qs("#pricing") || qs("#plans"),
+    secContact: qs('[data-section="contact"]') || qs("#contact"),
 
-    // Small glow on CTA if design theme indicates (non-fatal)
-    const theme = data?.brand?.theme || "";
-    if (theme && theme.includes("gold")) {
-      $$("[data-cta]").forEach((btn) => btn.classList.add("glow"));
-    }
-  }
+    // library chips/counts (optional)
+    countHero:        qs('[data-count="hero"]'),
+    countReels916:    qs('[data-count="reels-916"]'),
+    countReels169:    qs('[data-count="reels-169"]'),
+    countBackgrounds: qs('[data-count="backgrounds"]'),
+    countLogos:       qs('[data-count="logos"]'),
+    countImages:      qs('[data-count="images"]'),
 
-  // ---------- Hero (video first; fallback ready) ----------
-  function renderHero() {
-    const heroSlot = $("#hero-slot");
-    if (!heroSlot) return;
+    // choose buttons inside plans (rendered by commerce.js)
+    planChooseBtns: () => qsa(".plan-choose,[data-plan]")
+  };
 
-    // Clear any previous content
-    heroSlot.innerHTML = "";
+  // ---------- Paths (work for / or /dev/)
+  const PATHS = [
+    "./assets/",      // site at /
+    "./dev/assets/",  // assets nested under /dev
+    "../assets/"      // when index is inside /dev
+  ];
+  const urlTry = (subpath) => PATHS.map(p => p + subpath);
 
-    // Prefer GC spin video if exists (we don't know at runtime; we try and handle error)
-    const video = document.createElement("video");
-    video.setAttribute("playsinline", "");
-    video.setAttribute("muted", "");
-    video.setAttribute("loop", "");
-    video.setAttribute("autoplay", "");
-    video.setAttribute("preload", "metadata");
-    video.style.width = "100%";
-    video.style.height = "auto";
-    video.style.borderRadius = "16px";
-
-    const source = document.createElement("source");
-    source.src = PATHS.heroSpin;
-    source.type = "video/mp4";
-    video.appendChild(source);
-
-    // If video fails to load, we just leave the slot empty gracefully
-    video.addEventListener("error", () => {
-      console.warn("[main.js] Hero video failed to load:", PATHS.heroSpin);
-    });
-
-    heroSlot.appendChild(video);
-  }
-
-  // ---------- Buttons / Navigation ----------
-  function wireButtons() {
-    // Buttons by data-action attribute
-    $$("[data-action='open-library']").forEach((btn) =>
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        scrollToId("library");
-      })
-    );
-
-    $$("[data-action='see-pricing']").forEach((btn) =>
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        scrollToId("plans");
-      })
-    );
-
-    // Optional: "Customize" and "Join Now" anchors may exist in header
-    $$("[data-action='customize']").forEach((btn) =>
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        alert("Design Panel coming back next pass (saved per-device).");
-      })
-    );
-    $$("[data-action='join']").forEach((btn) =>
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        scrollToId("contact");
-      })
-    );
-  }
-
-  // ---------- Library counters (defensive) ----------
-  function countItemsFromManifest(json) {
-    if (!json) return 0;
-    // Accept either array or object-with-array-lists
-    if (Array.isArray(json)) return json.length;
-    if (typeof json === "object") {
+  const fetchJSONFirstOK = async (candidates) => {
+    for (const u of candidates) {
       try {
-        // Sum all array-like properties
-        return Object.values(json).reduce((sum, v) => {
-          if (Array.isArray(v)) return sum + v.length;
-          return sum;
-        }, 0);
-      } catch {
-        return 0;
+        const r = await fetch(u, { cache: "no-store" });
+        if (r.ok) { log("Loaded", u); return await r.json(); }
+      } catch(e) { /* try next */ }
+    }
+    return null;
+  };
+
+  // ---------- Hero setup
+  const pickHeroFromVideoManifest = (vman) => {
+    if (!vman || !Array.isArray(vman.items)) return null;
+
+    // Prefer explicit hero item
+    const byTag = vman.items.find(it =>
+      (it.tags && (it.tags.includes("hero") || it.tags.includes("HERO"))) ||
+      /hero/i.test(it.name || it.file || "")
+    );
+    if (byTag) return byTag.file || byTag.src;
+
+    // Otherwise first mp4
+    const first = vman.items.find(it => (it.file || it.src || "").toLowerCase().endsWith(".mp4"));
+    return first ? (first.file || first.src) : null;
+  };
+
+  const setHeroVideo = (src) => {
+    if (!dom.heroVideo || !dom.heroSource) return;
+    if (!src) return;
+
+    dom.heroVideo.pause();
+    dom.heroSource.setAttribute("src", src);
+    dom.heroVideo.load();
+    // Autoplay muted on iOS is allowed if muted + playsinline
+    dom.heroVideo.muted = true;
+    dom.heroVideo.setAttribute("playsinline", "");
+    dom.heroVideo.play().catch(() => {
+      // user gesture will be required; show the native play button
+      dom.heroVideo.controls = true;
+    });
+  };
+
+  const initHero = async () => {
+    // Try video manifest
+    const vman = await fetchJSONFirstOK(urlTry("videos/manifest.json"));
+    let heroSrc = null;
+
+    if (vman) {
+      const choice = pickHeroFromVideoManifest(vman);
+      if (choice) heroSrc = choice.startsWith("http") ? choice : (PATHS[0] + "videos/" + choice);
+    }
+
+    // Fallback to a known local file if the manifest has nothing
+    if (!heroSrc) {
+      for (const base of PATHS) {
+        const guess = base + "videos/hero_1.mp4";
+        try {
+          const r = await fetch(guess, { method: "HEAD", cache: "no-store" });
+          if (r.ok) { heroSrc = guess; break; }
+        } catch {}
       }
     }
-    return 0;
-  }
 
-  async function updateLibraryCounts() {
-    const [videos, images] = await Promise.all([
-      safeFetchJSON(PATHS.videosManifest, null),
-      safeFetchJSON(PATHS.imagesManifest, null),
-    ]);
+    if (heroSrc) {
+      setHeroVideo(heroSrc);
+      dom.heroWrap && dom.heroWrap.setAttribute("data-has-hero", "1");
+    } else {
+      log("No hero video found; placeholder remains.");
+    }
+  };
 
-    const videoCount = countItemsFromManifest(videos);
-    const imageCount = countItemsFromManifest(images);
+  // ---------- Library counts
+  const setText = (node, v) => { if (node) node.textContent = String(v); };
 
-    // If the chips exist, update their counts. These selectors are optional.
-    const setCount = (id, n) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      // If element text looks like "Hero (0)" keep label, change number. Otherwise just set number.
-      const m = el.textContent.match(/^(.*)\(\d+\)\s*$/);
-      if (m) el.textContent = `${m[1]}(${n})`;
-      else el.textContent = `${el.textContent.trim()} (${n})`;
+  const initLibrary = async () => {
+    // videos
+    const vman = await fetchJSONFirstOK(urlTry("videos/manifest.json"));
+    if (vman && Array.isArray(vman.items)) {
+      const count = (fn) => vman.items.filter(fn).length;
+      setText(dom.countHero,        count(it => /hero/i.test(it.name||it.file||"") || (it.tags||[]).includes("hero")));
+      setText(dom.countReels916,    count(it => /9:?16/.test((it.aspect||it.ratio||"").toString())));
+      setText(dom.countReels169,    count(it => /16:?9/.test((it.aspect||it.ratio||"").toString())));
+      setText(dom.countBackgrounds, count(it => (it.tags||[]).includes("background")));
+    }
+
+    // images
+    const iman = await fetchJSONFirstOK(urlTry("images/manifest.json"));
+    if (iman && Array.isArray(iman.items)) {
+      const count = (fn) => iman.items.filter(fn).length;
+      setText(dom.countLogos,  count(it => /logo/i.test(it.name||it.file||"") || (it.tags||[]).includes("logo")));
+      setText(dom.countImages, iman.items.length);
+    }
+  };
+
+  // ---------- Buttons & plans
+  const wireButtons = () => {
+    // Customize (toast)
+    dom.btnCustomize && dom.btnCustomize.addEventListener("click", (e) => {
+      e.preventDefault();
+      alert("Design Panel coming back next pass (saved per-device).");
+    });
+
+    // Join Now -> Contact
+    dom.btnJoin && dom.btnJoin.addEventListener("click", (e) => {
+      e.preventDefault();
+      scrollToEl(dom.secContact || document.body);
+    });
+
+    // See Pricing -> Plans
+    dom.btnSeePricing && dom.btnSeePricing.addEventListener("click", (e) => {
+      e.preventDefault();
+      scrollToEl(dom.secPricing || document.body);
+    });
+
+    // Open Library -> Library
+    dom.btnOpenLib && dom.btnOpenLib.addEventListener("click", (e) => {
+      e.preventDefault();
+      scrollToEl(dom.secLibrary || document.body);
+    });
+
+    // Plans choose (delegated after pricing render)
+    const hookPlanButtons = () => {
+      dom.planChooseBtns().forEach(btn => {
+        btn.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          const plan = btn.dataset.plan || "BASIC";
+          scrollToEl(dom.secContact || document.body);
+          console.log(`[GRID] Plan selected: ${plan}`);
+        }, { once: false });
+      });
     };
 
-    setCount("chip-hero", videoCount);       // generic: all videos until you split per category
-    setCount("chip-reels-9x16", 0);          // keep 0 if you haven't split yet
-    setCount("chip-reels-16x9", 0);
-    setCount("chip-backgrounds", imageCount);
-    setCount("chip-logos", imageCount);
-    setCount("chip-images", imageCount);
-    setCount("chip-extras", 0);
-  }
+    // re-hook after pricing renders
+    document.addEventListener("grid:pricing-rendered", hookPlanButtons, { once: true });
+  };
 
-  // ---------- Plans (optional gentle hydrate) ----------
-  async function hydratePlans() {
-    const plans = await safeFetchJSON(PATHS.plans, null);
-    if (!plans) return;
-
-    // If specific plan nodes exist, hydrate their price labels.
-    const byKey = (key) => $(`[data-plan='${key}'] [data-price]`);
-    const setPrice = (key, price) => {
-      const el = byKey(key);
-      if (el && price != null) setText(el, String(price));
-    };
-
-    try {
-      // Expecting a structure like { basic: { price }, silver: { price }, ... }
-      setPrice("basic", plans?.basic?.price);
-      setPrice("silver", plans?.silver?.price);
-      setPrice("gold", plans?.gold?.price);
-      setPrice("diamond", plans?.diamond?.price);
-    } catch (e) {
-      console.warn("[main.js] Could not hydrate plan prices:", e);
-    }
-  }
-
-  // ---------- Boot ----------
-  document.addEventListener("DOMContentLoaded", () => {
-    try {
-      hydrateHeader();
-      renderHero();
-      wireButtons();
-      updateLibraryCounts();
-      hydratePlans();
-    } catch (err) {
-      console.error("[main.js] init error:", err);
-    }
+  // ---------- Boot
+  window.addEventListener("DOMContentLoaded", () => {
+    wireButtons();
+    initHero();
+    initLibrary();
   });
 })();
