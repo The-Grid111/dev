@@ -1,25 +1,19 @@
 {
-  "version": "1.0",
-  "categories": [
-    {
-      "name": "Logos",
-      "items": [
-        {
-          "src": "assets/images/gc_logo.png",
-          "title": "GC Mark",
-          "tags": ["logo", "brand"]
-        }
-      ]
-    },
-    {
-      "name": "Images",
-      "items": [
-        { "src": "assets/images/grid_interaction_1.jpg", "title": "Interaction Still" },
-        { "src": "assets/images/grid_natural_1.jpg", "title": "Natural Still" },
-        { "src": "assets/images/grid_pour_1.jpg", "title": "Pour Still" },
-        { "src": "assets/images/grid_spread_1.jpg", "title": "Spread Still" },
-        { "src": "assets/images/grid_transform_1.jpg", "title": "Transform Still" }
-      ]
-    }
-  ]
+  "logos": [
+    { "src": "assets/images/gc_logo.png",        "title": "GC Logo" }
+  ],
+  "heroStills": [
+    { "src": "assets/images/hero_1.jpg", "title": "Hero still 1" },
+    { "src": "assets/images/hero_2.jpg", "title": "Hero still 2" },
+    { "src": "assets/images/hero_3.jpg", "title": "Hero still 3" }
+  ],
+  "images": [
+    { "src": "assets/images/grid_interaction_1.jpg", "title": "Interaction still" },
+    { "src": "assets/images/grid_natural_1.jpg",     "title": "Natural still" },
+    { "src": "assets/images/grid_pour_1.jpg",        "title": "Pour still" },
+    { "src": "assets/images/grid_spread_1.jpg",      "title": "Spread still" },
+    { "src": "assets/images/grid_transform_1.jpg",   "title": "Transform still" }
+  ],
+  "backgrounds": [],
+  "extras": []
 }
