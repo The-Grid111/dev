@@ -1,19 +1,16 @@
 {
-  "logos": [
-    { "src": "assets/images/gc_logo.png",        "title": "GC Logo" }
+  "Backgrounds": [
+    { "name": "grid_natural_1",   "file": "grid_natural_1.jpg" },
+    { "name": "grid_pour_1",      "file": "grid_pour_1.jpg" },
+    { "name": "grid_spread_1",    "file": "grid_spread_1.jpg" },
+    { "name": "grid_transform_1", "file": "grid_transform_1.jpg" }
   ],
-  "heroStills": [
-    { "src": "assets/images/hero_1.jpg", "title": "Hero still 1" },
-    { "src": "assets/images/hero_2.jpg", "title": "Hero still 2" },
-    { "src": "assets/images/hero_3.jpg", "title": "Hero still 3" }
+  "Logos": [
+    { "name": "gc_logo", "file": "gc_logo.png" }
   ],
-  "images": [
-    { "src": "assets/images/grid_interaction_1.jpg", "title": "Interaction still" },
-    { "src": "assets/images/grid_natural_1.jpg",     "title": "Natural still" },
-    { "src": "assets/images/grid_pour_1.jpg",        "title": "Pour still" },
-    { "src": "assets/images/grid_spread_1.jpg",      "title": "Spread still" },
-    { "src": "assets/images/grid_transform_1.jpg",   "title": "Transform still" }
-  ],
-  "backgrounds": [],
-  "extras": []
+  "Images": [
+    { "name": "hero_1", "file": "hero_1.jpg" },
+    { "name": "hero_2", "file": "hero_2.jpg" },
+    { "name": "hero_3", "file": "hero_3.jpg" }
+  ]
 }
