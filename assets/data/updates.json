@@ -1,20 +1,14 @@
-[
-  {
-    "id": 1,
-    "date": "2025-08-19",
-    "title": "Library UX + Theme pass",
-    "changes": [
-      "Split video/image manifests",
-      "Design Panel stable (sliders + pickers)",
-      "Hero source wired to Library",
-      "Prepared pricing/services restore"
-    ],
-    "filesTouched": [
-      "index.html",
-      "assets/js/main.js",
-      "assets/css/styles.css",
-      "assets/videos/manifest.json",
-      "assets/images/manifest.json"
-    ]
+{
+  "version": "2025-08-15a",
+  "notes": [
+    "Stabilised confetti engine with tier-aware colours and smoother performance.",
+    "Header compact mode and micro-interactions added.",
+    "Non-blocking owner signature shim to prevent white-screen on missing meta.",
+    "JSON-driven plans/services to restore monetisation sections cleanly."
+  ],
+  "features": {
+    "library": "manifest-aware, tabs + tags",
+    "customize": "color, spacing, radius, vignette, hero source, confetti",
+    "payments": "plans + services pulled from JSON (UI only for now)"
   }
-]
+}
