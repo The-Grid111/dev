@@ -5,16 +5,42 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID — White & Gold</title>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="dev/assets/css/styles.css">
-  <link rel="stylesheet" href="dev/assets/css/effects.css">
+  <!-- HARD paths (GitHub Pages is case-sensitive) -->
+  <link rel="stylesheet" href="./dev/assets/css/styles.css">
+  <link rel="stylesheet" href="./dev/assets/css/effects.css">
+
+  <style>
+    /* Minimal fallback so the page isn't blank if CSS fails to load */
+    body{background:#0A0B0D;color:#F5F7FA;font:16px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:0}
+    .fallback-note{display:none}
+    .no-css .fallback-note{display:block;padding:12px;background:#1a1f28;color:#ffd}
+  </style>
+
+  <script>
+    // Flag to detect if CSS didn't load (class applied in DOMContentLoaded)
+    document.documentElement.classList.add('no-css');
+    window.addEventListener('load',()=>document.documentElement.classList.remove('no-css'));
+
+    // Global guard: never let a JS error blank the page
+    window.addEventListener('error', function(e){
+      const box = document.getElementById('bootErrors');
+      if (box) {
+        const li=document.createElement('li');
+        li.textContent = (e.error && e.error.message) ? e.error.message : (e.message||'Unknown script error');
+        box.appendChild(li);
+        document.getElementById('bootErrorWrap').style.display='block';
+      }
+    });
+  </script>
 </head>
 <body>
+
+  <div class="fallback-note">Basic view loaded (CSS/JS may still be initializing)…</div>
 
   <!-- Top Bar -->
   <header class="topbar">
     <div class="brand">
-      <img class="brand__logo" src="dev/assets/images/gc_logo.png" alt="GC">
+      <img class="brand__logo" src="./dev/assets/images/gc_logo.png" alt="GC">
       <div>
         <div class="brand__greet" id="greeting">Good day —</div>
         <div class="brand__name" id="brandName">THE GRID</div>
@@ -22,20 +48,21 @@
       </div>
     </div>
     <div class="topbar__actions">
-      <button class="btn btn--ghost" id="btnCustomize">Customize</button>
+      <button class="btn btn--ghost" id="btnCustomize" type="button">Customize</button>
       <a class="btn btn--primary" href="#plans">Join Now</a>
     </div>
   </header>
 
   <main class="container">
-    <!-- Hero Card -->
     <section class="card hero">
       <h1 class="card__title">Black & Gold</h1>
       <p class="card__desc">Cinematic visuals. Owner controls. One-file updates with a premium finish.</p>
 
       <div class="hero__frame">
-        <!-- Filled by JS with <video> or <img> -->
-        <div id="heroMount" class="hero__mount"></div>
+        <div id="heroMount" class="hero__mount">
+          <!-- Immediate visual fallback -->
+          <img class="hero__image" src="./dev/assets/images/hero_1.jpg" alt="Hero" />
+        </div>
       </div>
 
       <div class="hero__actions">
@@ -44,36 +71,30 @@
       </div>
     </section>
 
-    <!-- Library -->
     <section id="library" class="card">
       <h2 class="card__title">Library</h2>
       <p class="card__desc">Tap a library to browse. Sources:
-        <code>dev/assets/videos/manifest.json</code> &
-        <code>dev/assets/images/manifest.json</code>.
+        <code>dev/assets/videos/manifest.json</code> & <code>dev/assets/images/manifest.json</code>.
       </p>
-
       <div id="libraryTabs" class="pills"></div>
       <div id="libraryGrid" class="grid"></div>
     </section>
 
-    <!-- Showcase -->
     <section id="showcase" class="card">
       <h2 class="card__title">Showcase</h2>
       <p class="card__desc">Featured stills & clips — quick browse.</p>
       <div id="showcaseGrid" class="grid grid--featured"></div>
     </section>
 
-    <!-- Plans -->
     <section id="plans" class="card">
       <h2 class="card__title">Plans</h2>
       <p class="card__desc">Fair pricing. No lock-in. 7-day refund.</p>
       <div id="plansMount" class="plans"></div>
     </section>
 
-    <!-- Contact -->
     <section id="contact" class="card">
       <h2 class="card__title">Contact</h2>
-      <form id="contactForm" class="contact">
+      <form id="contactForm" class="contact" novalidate>
         <input type="text" name="name" placeholder="Your name" required>
         <input type="email" name="email" placeholder="you@example.com" required>
         <input type="text" name="subject" placeholder="How can we help?">
@@ -82,10 +103,16 @@
       </form>
       <p class="card__foot">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
     </section>
+
+    <!-- Visible error area if anything breaks -->
+    <section id="bootErrorWrap" class="card" style="display:none">
+      <h3 class="card__title">Boot errors</h3>
+      <ul id="bootErrors" style="margin:0;padding-left:18px"></ul>
+    </section>
   </main>
 
   <!-- Scripts -->
-  <script src="dev/assets/js/effects.js" defer></script>
-  <script src="dev/assets/js/main.js" defer></script>
+  <script src="./dev/assets/js/effects.js" defer></script>
+  <script src="./dev/assets/js/main.js" defer></script>
 </body>
 </html>
