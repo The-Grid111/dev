@@ -1,0 +1,105 @@
+name: Apply issue comment patches
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  apply:
+    if: ${{ github.event.issue.pull_request == null }}  # only on issues, not PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check trigger phrase and fenced block
+        id: gate
+        run: |
+          body=$(jq -r '.comment.body' "$GITHUB_EVENT_PATH")
+          echo "BODY<<'EOF'" >> $GITHUB_OUTPUT
+          echo "$body" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          # Require the word APPLY anywhere to avoid accidental writes
+          if ! echo "$body" | grep -qi '^APPLY\b\|^[[:space:]]*APPLY\b'; then
+            echo "noapply=true" >> $GITHUB_OUTPUT
+          fi
+          # Look for a code fence like: ```file=path/inside/repo.ext ... ```
+          if echo "$body" | grep -Pzo '(?s)```file=.*?\n.*?```'; then
+            echo "hasblock=true" >> $GITHUB_OUTPUT
+          else
+            echo "hasblock=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if not a patch comment
+        if: steps.gate.outputs.noapply == 'true' || steps.gate.outputs.hasblock != 'true'
+        run: echo "No APPLY + code fence found; skipping."
+
+      - name: Extract file path and content
+        if: steps.gate.outputs.noapply != 'true' && steps.gate.outputs.hasblock == 'true'
+        id: parse
+        run: |
+          body=$(jq -r '.comment.body' "$GITHUB_EVENT_PATH")
+
+          # Grab the FIRST fenced block that starts with ```file=...
+          block=$(printf "%s" "$body" | perl -0777 -ne 'print $1 if /```file=([^\n]+)\n([\s\S]*?)```/;')
+          if [ -z "$block" ]; then
+            echo "Could not parse fenced block." >&2
+            exit 1
+          fi
+
+          # Using perl again to capture path and content separately
+          path=$(printf "%s" "$body" | perl -0777 -ne 'print $1 if /```file=([^\n]+)\n/;')
+          content=$(printf "%s" "$body" | perl -0777 -ne 'print $2 if /```file=([^\n]+)\n([\s\S]*?)```/;')
+
+          # Save to workspace
+          mkdir -p "$(dirname "$path")"
+          printf "%s" "$content" > "$path"
+
+          echo "path=$path" >> $GITHUB_OUTPUT
+
+      - name: Checkout repo
+        if: steps.parse.outputs.path
+        uses: actions/checkout@v4
+
+      - name: Commit file (create or update)
+        if: steps.parse.outputs.path
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const path = process.env.FILE_PATH || core.getInput('path', { required: false }) || '${{ steps.parse.outputs.path }}';
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const branch = process.env.GITHUB_REF_NAME || 'main';
+            const content = fs.readFileSync(path, 'utf8');
+            const b64 = Buffer.from(content, 'utf8').toString('base64');
+
+            // Try to get current file to obtain sha
+            let sha = null;
+            try {
+              const { data } = await github.repos.getContent({ owner, repo, path, ref: branch });
+              if (Array.isArray(data)) throw new Error('Path is a directory');
+              sha = data.sha;
+            } catch (e) {
+              // new file
+            }
+
+            const message = `apply: ${path} via issue #${context.payload.issue.number} (comment ${context.payload.comment.id})`;
+
+            await github.repos.createOrUpdateFileContents({
+              owner, repo, path, message, content: b64, branch, sha
+            });
+
+      - name: Report back in issue
+        if: steps.parse.outputs.path
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const path = '${{ steps.parse.outputs.path }}';
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `✅ Updated \`${path}\` on **main** from this comment.`
+            })
