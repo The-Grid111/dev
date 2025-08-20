@@ -1,24 +1,32 @@
-/* THE GRID — micro effects (dev/assets/js/effects.js)
-   Only safe visual touches; no network.
+/* THE GRID — effects.js (FULL REDO)
+   Small tasteful effects: header glow on scroll, soft card lift, focus rings fix.
 */
 
-(function () {
-  // subtle ring glow on all .btn--glow
-  const pulse = () => {
-    document.querySelectorAll('.btn--glow').forEach((b) => {
-      b.style.boxShadow = '0 0 0 0 rgba(244,200,74,0.35)';
-      setTimeout(() => (b.style.boxShadow = '0 0 40px 4px rgba(244,200,74,0.25)'), 60);
-    });
+(() => {
+  const qs = (s, r = document) => r.querySelector(s);
+  const qsa = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const header = qs("[data-appbar]") || qs(".appbar");
+  const cards  = qsa(".card, .plan-card, .panel");
+
+  const onScroll = () => {
+    const y = window.scrollY || 0;
+    if (!header) return;
+    if (y > 8) header.classList.add("scrolled");
+    else header.classList.remove("scrolled");
   };
-  window.addEventListener('load', () => {
-    pulse();
-    setInterval(pulse, 2600);
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("DOMContentLoaded", onScroll);
+
+  // subtle hover lift for cards (touch-safe)
+  cards.forEach(c => {
+    c.addEventListener("pointerenter", () => c.classList.add("hovered"));
+    c.addEventListener("pointerleave", () => c.classList.remove("hovered"));
   });
 
-  // parallax vignette on scroll
-  const body = document.body;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY || 0;
-    body.style.backgroundPosition = `center ${-y * 0.08}px`;
-  }, {passive:true});
+  // fix :focus-visible in some iOS cases
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") document.body.classList.add("kbd-nav");
+  });
 })();
