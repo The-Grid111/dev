@@ -1,0 +1,15 @@
+name: 🔧 Update file
+description: Update an existing file via patch comment
+labels: ["update","auto"]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Target file path
+      placeholder: e.g. index.html
+  - type: textarea
+    id: patch
+    attributes:
+      label: Paste your patch comment
+      description: Use the Update / Add / Delete templates in comments.
+      render: text
