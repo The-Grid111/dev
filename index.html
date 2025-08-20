@@ -1,11 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE GRID — Live</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Grid</title>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/effects.css" />
+  <script src="/assets/js/confetti.js" defer></script>
+  <script src="/assets/js/main.js" defer></script>
 </head>
 <body>
-  <h1 style="display:none">Site updated via /apply ✅</h1>
+  <div id="loader" class="loader"></div>
+
+  <header class="site-header">
+    <video autoplay muted loop playsinline id="intro-video">
+      <source src="/assets/gc_spin.mp4" type="video/mp4" />
+    </video>
+    <h1 class="site-title">Welcome to THE GRID</h1>
+    <p class="site-subtitle">Where creators connect and ideas grow.</p>
+  </header>
+
+  <main>
+    <section id="greeting" class="highlight">
+      <h2 class="time-greeting"></h2>
+      <p>Explore the system, discover niches, and build your vision.</p>
+    </section>
+
+    <section id="featured">
+      <h2>Featured Creations</h2>
+      <div class="grid">
+        <img src="/assets/images/sample1.jpg" alt="Preview 1" />
+        <img src="/assets/images/sample2.jpg" alt="Preview 2" />
+        <video autoplay muted loop playsinline>
+          <source src="/assets/videos/sample.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+
+    <section id="plans">
+      <h2>Our Plans</h2>
+      <div id="plans-container"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 THE GRID. All rights reserved.</p>
+    <nav>
+      <a href="/privacy.html">Privacy</a> |
+      <a href="/terms.html">Terms</a>
+    </nav>
+  </footer>
 </body>
 </html>
