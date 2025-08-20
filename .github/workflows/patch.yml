@@ -1,73 +1,61 @@
-name: Apply file from issue body
+name: Patch from issue comments
 
 on:
-  issues:
-    types: [opened, edited]
   issue_comment:
     types: [created]
 
+# lets the bot write to the repo
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
 jobs:
-  apply:
-    # Run when:
-    # - an issue is opened/edited and its body contains `/patch`
-    # - OR a new comment starts with `/patch`
-    if: >
-      (github.event_name == 'issues' &&
-       contains(github.event.issue.body, '/patch ')) ||
-      (github.event_name == 'issue_comment' &&
-       startsWith(github.event.comment.body, '/patch '))
+  patch:
+    # only run when the comment contains our directive
+    if: contains(github.event.comment.body, '/patch path=')
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repo
+      - name: Checkout default branch
         uses: actions/checkout@v4
-
-      - name: Extract patch block
-        id: extract
-        uses: actions/github-script@v7
         with:
-          script: |
-            const body = context.payload.comment
-              ? context.payload.comment.body
-              : context.payload.issue.body;
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
 
-            const m = body.match(/\/patch\s+path=([^\s]+)[\s\S]*?<<<FILE\s*\n([\s\S]*?)\nFILE/);
-            if (!m) {
-              core.setFailed('No valid /patch block found. Expected:\n/patch path=relative/file\n<<<FILE\n...content...\nFILE');
-              return;
-            }
-            const filePath = m[1].trim();
-            const content  = m[2];
-
-            core.setOutput('path', filePath);
-            core.setOutput('content', content);
-
-      - name: Write file
+      - name: Apply patch from comment
+        env:
+          BODY: ${{ github.event.comment.body }}
+          BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          mkdir -p "$(dirname '${{ steps.extract.outputs.path }}')"
-          printf "%s" "${{ steps.extract.outputs.content }}" > "${{ steps.extract.outputs.path }}"
+          set -euo pipefail
 
-      - name: Commit & push
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: "${{ steps.extract.outputs.path }}"
-          message: "chore(patch): ${{ steps.extract.outputs.path }} via issue body/comment"
-          default_author: github_actions
+          # 1) find target path
+          PATH_LINE=$(printf '%s' "$BODY" | grep -oE '/patch path=[^[:space:]]+' || true)
+          if [ -z "$PATH_LINE" ]; then
+            echo "No '/patch path=' found in comment"; exit 1
+          fi
+          TARGET="${PATH_LINE#*=}"
+          echo "Target file: $TARGET"
 
-      - name: Confirm in issue
-        if: always()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issue_number = (context.payload.issue?.number) ||
-              Number(context.payload.comment.issue_url.split('/').pop());
-            const ok = '${{ job.status }}' === 'success';
-            const path = '${{ steps.extract.outputs.path }}';
-            const body = ok
-              ? `✅ Applied and pushed: \`${path}\``
-              : `❌ Patch failed for \`${path}\`. See workflow logs.`;
-            await github.rest.issues.createComment({
-              ...context.repo,
-              issue_number,
-              body
-            });
+          # 2) extract file content between <<<FILE and a line that's exactly 'FILE'
+          CONTENT=$(printf '%s\n' "$BODY" | awk '/<<<FILE/{flag=1;next}/^FILE$/{flag=0}flag')
+          if [ -z "$CONTENT" ]; then
+            echo "No content found between <<<FILE and FILE markers"; exit 1
+          fi
+
+          # 3) write, commit, push
+          mkdir -p "$(dirname "$TARGET")"
+          printf '%s\n' "$CONTENT" > "$TARGET"
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$TARGET"
+
+          # if nothing changed, exit gracefully (prevents failures)
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Patch ${TARGET} via issue comment #${{ github.event.issue.number }}"
+          git push origin HEAD:"$BRANCH"
