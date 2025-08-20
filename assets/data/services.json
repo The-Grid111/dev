@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Setup",
+    "sku": "svc_setup",
+    "price": 39,
+    "badge": "SETUP",
+    "bullets": ["Deploy & connect Pages", "Analytics hookup", "Best-practice sweep"]
+  },
+  {
+    "name": "Reels Pack",
+    "sku": "svc_reels",
+    "price": 59,
+    "badge": "REELS",
+    "bullets": ["3 niche reels", "Captions & cuts", "IG/TikTok ready"]
+  },
+  {
+    "name": "Templates Pack",
+    "sku": "svc_templates",
+    "price": 29,
+    "badge": "TEMPLATES",
+    "bullets": ["5 premium blocks", "Copy-paste ready", "Lifetime updates"]
+  }
+]
