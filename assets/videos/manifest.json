@@ -1,14 +1,44 @@
-{
-  "Hero": [
-    { "name": "hero_1", "file": "hero_1.mp4", "cover": "hero_1.jpg" }
-  ],
-  "Reels 9:16": [
-    { "name": "interaction_1", "file": "interaction_1.mp4" }
-  ],
-  "Reels 16:9": [
-    { "name": "natural_1", "file": "natural_1.mp4" },
-    { "name": "pour_1", "file": "pour_1.mp4" },
-    { "name": "spread_1", "file": "spread_1.mp4" },
-    { "name": "transform_1", "file": "transform_1.mp4" }
-  ]
-}
+[
+  {
+    "id": "hero_1",
+    "title": "Hero 1",
+    "src": "./assets/videos/hero_1.mp4",
+    "thumb": "./assets/images/hero_1.jpg",
+    "tags": ["hero"]
+  },
+  {
+    "id": "interaction_1",
+    "title": "Interaction 1",
+    "src": "./assets/videos/interaction_1.mp4",
+    "thumb": "./assets/images/grid_interaction_1.jpg",
+    "tags": ["interaction"]
+  },
+  {
+    "id": "natural_1",
+    "title": "Natural 1",
+    "src": "./assets/videos/natural_1.mp4",
+    "thumb": "./assets/images/grid_natural_1.jpg",
+    "tags": ["background"]
+  },
+  {
+    "id": "pour_1",
+    "title": "Pour 1",
+    "src": "./assets/videos/pour_1.mp4",
+    "thumb": "./assets/images/grid_pour_1.jpg",
+    "tags": ["effect"]
+  },
+  {
+    "id": "spread_1",
+    "title": "Spread 1",
+    "src": "./assets/videos/spread_1.mp4",
+    "thumb": "./assets/images/grid_spread_1.jpg",
+    "tags": ["effect"]
+  },
+  {
+    "id": "transform_1",
+    "title": "Transform 1",
+    "src": "./assets/videos/transform_1.mp4",
+    "thumb": "./assets/images/grid_transform_1.jpg",
+    "tags": ["effect"]
+  }
+]
