@@ -1,0 +1,14 @@
+name: ➕ Add file
+description: Add a new file via patch comment
+labels: ["add","auto"]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: New file path
+      placeholder: e.g. assets/data/services.json
+  - type: textarea
+    id: content
+    attributes:
+      label: File contents (or Add-File patch)
+      render: text
