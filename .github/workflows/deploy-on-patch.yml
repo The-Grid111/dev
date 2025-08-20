@@ -1,0 +1,45 @@
+name: Deploy on Patch
+
+on:
+  # Run automatically when your patch/apply workflow finishes
+  workflow_run:
+    workflows:
+      - "Patch from issue comments"
+      - "Apply file from issue comment"
+    types: [completed]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # If you have a build step (e.g., npm run build), do it here.
+      # Replace the echo with your real build and change the artifact path.
+      - name: Build (no-op)
+        run: echo "No build step"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
