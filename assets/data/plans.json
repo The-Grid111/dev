@@ -1,8 +1,46 @@
-{
-  "plans": [
-    { "name": "BASIC",   "price": "£9",  "features": ["Starter templates","Library access","Email support"] },
-    { "name": "SILVER",  "price": "£29", "features": ["Advanced effects","Priority support"] },
-    { "name": "GOLD",    "price": "£49", "features": ["Full customization","Admin toolkit","Onboarding"] },
-    { "name": "DIAMOND", "price": "£99", "features": ["Custom pipelines","Hands-on help","Priority turnaround"] }
-  ]
-}
+[
+  {
+    "tier": "basic",
+    "price": 9,
+    "period": "mo",
+    "description": "Starter access to blocks, library and email support.",
+    "features": [
+      "Starter templates & blocks",
+      "Media library (videos, images, logos)",
+      "Email support (48h response)"
+    ]
+  },
+  {
+    "tier": "silver",
+    "price": 29,
+    "period": "mo",
+    "description": "Everything in Basic plus advanced effects and faster help.",
+    "features": [
+      "Everything in Basic",
+      "Advanced visual effects & presets",
+      "Priority email (24h response)"
+    ]
+  },
+  {
+    "tier": "gold",
+    "price": 49,
+    "period": "mo",
+    "description": "Full customization session, admin toolkit and onboarding.",
+    "features": [
+      "Full customization session",
+      "Admin toolkit & automations",
+      "1:1 onboarding (45 min)"
+    ]
+  },
+  {
+    "tier": "diamond",
+    "price": 99,
+    "period": "mo",
+    "description": "Custom pipelines, integrations and priority roadmap.",
+    "features": [
+      "Custom pipelines & integrations",
+      "Hands-on implementation",
+      "Priority roadmap & turnaround"
+    ]
+  }
+]
