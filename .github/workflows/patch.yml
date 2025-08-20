@@ -1,55 +1,73 @@
-name: Patch file from issue comment
+name: Apply file from issue body
 
 on:
+  issues:
+    types: [opened, edited]
   issue_comment:
     types: [created]
 
-permissions:
-  contents: write
-  issues: read
-
 jobs:
-  patch:
-    # Only run when a comment contains "/patch "
-    if: contains(github.event.comment.body, '/patch ')
+  apply:
+    # Run when:
+    # - an issue is opened/edited and its body contains `/patch`
+    # - OR a new comment starts with `/patch`
+    if: >
+      (github.event_name == 'issues' &&
+       contains(github.event.issue.body, '/patch ')) ||
+      (github.event_name == 'issue_comment' &&
+       startsWith(github.event.comment.body, '/patch '))
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
-        with:
-          ref: main
 
-      - name: Extract path and file contents from comment
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Extract patch block
         id: extract
-        run: |
-          python - <<'PY'
-          import os, re, sys, pathlib
-          body = os.environ['BODY']
-          m = re.search(r'/patch\s+path=([^\s]+)\s+<<<FILE\s*(.*?)\s*FILE', body, re.S|re.I)
-          if not m:
-            print("::error::Could not find /patch command with <<<FILE ... FILE block.")
-            sys.exit(1)
-          path = m.group(1).strip()
-          content = m.group(2)
-          pathlib.Path(path).parent.mkdir(parents=True, exist_ok=True)
-          with open("patch_path.txt","w", encoding="utf-8") as f: f.write(path)
-          with open("patch_content.txt","w", encoding="utf-8") as f: f.write(content)
-          PY
-        env:
-          BODY: ${{ github.event.comment.body }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.comment
+              ? context.payload.comment.body
+              : context.payload.issue.body;
+
+            const m = body.match(/\/patch\s+path=([^\s]+)[\s\S]*?<<<FILE\s*\n([\s\S]*?)\nFILE/);
+            if (!m) {
+              core.setFailed('No valid /patch block found. Expected:\n/patch path=relative/file\n<<<FILE\n...content...\nFILE');
+              return;
+            }
+            const filePath = m[1].trim();
+            const content  = m[2];
+
+            core.setOutput('path', filePath);
+            core.setOutput('content', content);
 
       - name: Write file
-        id: write
         run: |
-          path="$(cat patch_path.txt)"
-          mkdir -p "$(dirname "$path")"
-          mv patch_content.txt "$path"
-          echo "path=$path" >> "$GITHUB_OUTPUT"
+          mkdir -p "$(dirname '${{ steps.extract.outputs.path }}')"
+          printf "%s" "${{ steps.extract.outputs.content }}" > "${{ steps.extract.outputs.path }}"
 
       - name: Commit & push
-        run: |
-          git config user.name  "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git add -A
-          git commit -m "Patch: ${{ steps.write.outputs.path }}" || echo "No changes to commit."
-          git push
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "${{ steps.extract.outputs.path }}"
+          message: "chore(patch): ${{ steps.extract.outputs.path }} via issue body/comment"
+          default_author: github_actions
+
+      - name: Confirm in issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = (context.payload.issue?.number) ||
+              Number(context.payload.comment.issue_url.split('/').pop());
+            const ok = '${{ job.status }}' === 'success';
+            const path = '${{ steps.extract.outputs.path }}';
+            const body = ok
+              ? `✅ Applied and pushed: \`${path}\``
+              : `❌ Patch failed for \`${path}\`. See workflow logs.`;
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number,
+              body
+            });
