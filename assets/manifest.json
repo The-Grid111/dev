@@ -1,26 +1,12 @@
 {
   "Hero": [
     "assets/videos/hero_1.mp4",
-    "assets/videos/interaction_1.mp4",
     "assets/images/hero_1.jpg",
-    "assets/images/hero_2.jpg",
-    "assets/images/hero_3.jpg"
+    "assets/images/hero_2.jpg"
   ],
   "Reels 9:16": [],
-  "Reels 16:9": [
-    "assets/videos/hero_1.mp4",
-    "assets/videos/natural_1.mp4",
-    "assets/videos/spread_1.mp4",
-    "assets/videos/transform_1.mp4",
-    "assets/videos/pour_1.mp4",
-    "assets/videos/interaction_1.mp4",
-    "assets/videos/gc_spin.mp4"
-  ],
-  "Backgrounds": [
-    "assets/images/hero_1.jpg",
-    "assets/images/hero_2.jpg",
-    "assets/images/hero_3.jpg"
-  ],
+  "Reels 16:9": [],
+  "Backgrounds": [],
   "Logos": [
     "assets/videos/gc_spin.mp4",
     "assets/images/gc_logo.png"
