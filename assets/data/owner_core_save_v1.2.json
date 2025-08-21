@@ -1,24 +1,47 @@
 {
-  "version": "1.2",
-  "timestamp": "auto",
-  "brand": { "name": "THE GRID", "tagline": "White & Gold", "theme": "white-gold" },
-  "design": {
-    "accent": "#F4C84A",
-    "accentSecondary": "#B5C7FF",
-    "text": "#F5F7FA",
-    "softText": "#C8CFD8",
-    "cardSurface": "#121418",
-    "panelSurface": "#0E1013",
-    "bgA": "#0A0B0D",
-    "bgB": "#1A1200",
-    "cardRadius": 16,
-    "borderGlow": 30,
-    "fontScale": 1.0,
-    "spacingScale": 1.0,
-    "vignette": true
+  "owner": {
+    "site_title": "THE GRID",
+    "tagline": "Cinematic AI visuals & TikTok creator hub",
+    "email": "hello@example.com",
+    "tiktok": "https://www.tiktok.com/@YOUR_HANDLE"
   },
-  "hero": {
-    "source": "assets/videos/hero_1.mp4",
-    "fallbackImage": "assets/images/hero_1.jpg"
+  "pricing": [
+    {
+      "id": "starter",
+      "name": "Starter",
+      "currency": "£",
+      "price": 49,
+      "features": ["1 short", "Basic upscale", "Standard export"],
+      "cta": "Enquire"
+    },
+    {
+      "id": "creator",
+      "name": "Creator",
+      "currency": "£",
+      "price": 149,
+      "features": ["4 shorts", "HDR + faces", "TikTok-ready"],
+      "cta": "Enquire"
+    },
+    {
+      "id": "studio",
+      "name": "Studio",
+      "currency": "£",
+      "price": 399,
+      "features": ["12 shorts", "Full pipeline", "Priority"],
+      "cta": "Enquire"
+    }
+  ],
+  "gallery": [
+    "assets/images/p1.jpg",
+    "assets/images/p2.jpg",
+    "assets/images/p3.jpg",
+    "assets/images/p4.jpg",
+    "assets/images/p5.jpg",
+    "assets/images/p6.jpg"
+  ],
+  "updated": "2025-01-01T00:00:00Z",
+  "_meta": {
+    "version": "1.2",
+    "schema": "owner_core_save"
   }
 }
