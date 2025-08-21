@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>THE GRID — Cinematic AI (v13)</title>
-  <link rel="stylesheet" href="./assets/css/styles.css?v=13">
+  <title>THE GRID — Cinematic AI</title>
+  <link rel="stylesheet" href="./assets/css/styles.css?v=12">
 </head>
 <body>
   <header class="wrap">
     <h1 id="site-title">THE GRID</h1>
-    <nav class="nav">
+    <nav>
       <a href="#about">About</a>
       <a href="#showcase">Showcase</a>
       <a href="#services">Services</a>
@@ -17,10 +17,10 @@
       <a href="#gallery">Gallery</a>
       <a href="#contact">Contact</a>
       <a class="btn" href="https://www.tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener">TikTok</a>
-      <button id="open-customize" class="btn ghost" type="button">Customize</button>
+      <a id="open-customize" class="btn ghost" href="#customize">Customize</a>
     </nav>
-    <p id="tagline" class="tagline">Cinematic AI visuals & TikTok creator hub</p>
-    <small id="build">Build: v13</small>
+    <p id="tagline">Cinematic AI visuals & TikTok creator hub</p>
+    <small id="build" class="muted">Build: v12</small>
   </header>
 
   <main class="wrap">
@@ -41,32 +41,56 @@
     <section id="services">
       <h2>Services</h2>
       <ul class="cards">
-        <li><h3>HDR upscales</h3><p>Cleaner, sharper, punchier frames for social.</p></li>
-        <li><h3>Face-consistent characters</h3><p>Stable identities across shots & edits.</p></li>
-        <li><h3>TikTok-ready exports</h3><p>Auto aspect, captions, and safe margins.</p></li>
+        <li class="card">
+          <h3>HDR upscales</h3>
+          <p>Cleaner, sharper, punchier frames for social.</p>
+        </li>
+        <li class="card">
+          <h3>Face-consistent characters</h3>
+          <p>Stable identities across shots & edits.</p>
+        </li>
+        <li class="card">
+          <h3>TikTok-ready exports</h3>
+          <p>Auto aspect, captions, and safe margins.</p>
+        </li>
       </ul>
     </section>
 
     <section id="pricing">
       <h2>Pricing</h2>
+
       <div class="pricing">
         <article class="price">
           <h3>Starter</h3>
           <p class="amount">£49</p>
-          <ul><li>1 short</li><li>Basic upscale</li><li>Standard export</li></ul>
-          <a class="btn" href="#contact">Enquire</a>
+          <ul>
+            <li>1 short</li>
+            <li>Basic upscale</li>
+            <li>Standard export</li>
+          </ul>
+          <a class="btn" href="mailto:hello@example.com?subject=Starter%20Enquiry">Enquire</a>
         </article>
+
         <article class="price featured">
           <h3>Creator</h3>
           <p class="amount">£149</p>
-          <ul><li>4 shorts</li><li>HDR + faces</li><li>TikTok-ready</li></ul>
-          <a class="btn" href="#contact">Enquire</a>
+          <ul>
+            <li>4 shorts</li>
+            <li>HDR + faces</li>
+            <li>TikTok-ready</li>
+          </ul>
+          <a class="btn" href="mailto:hello@example.com?subject=Creator%20Enquiry">Enquire</a>
         </article>
+
         <article class="price">
           <h3>Studio</h3>
           <p class="amount">£399</p>
-          <ul><li>12 shorts</li><li>Full pipeline</li><li>Priority</li></ul>
-          <a class="btn" href="#contact">Enquire</a>
+          <ul>
+            <li>12 shorts</li>
+            <li>Full pipeline</li>
+            <li>Priority</li>
+          </ul>
+          <a class="btn" href="mailto:hello@example.com?subject=Studio%20Enquiry">Enquire</a>
         </article>
       </div>
     </section>
@@ -74,20 +98,20 @@
     <section id="gallery">
       <h2>Gallery</h2>
       <div class="grid">
-        <img src="./assets/images/p1.svg" alt="Preview 1">
-        <img src="./assets/images/p2.svg" alt="Preview 2">
-        <img src="./assets/images/p3.svg" alt="Preview 3">
-        <img src="./assets/images/p4.svg" alt="Preview 4">
-        <img src="./assets/images/p5.svg" alt="Preview 5">
-        <img src="./assets/images/p6.svg" alt="Preview 6">
+        <img src="./assets/images/placeholder-1.jpg" alt="Placeholder 1">
+        <img src="./assets/images/placeholder-2.jpg" alt="Placeholder 2">
+        <img src="./assets/images/placeholder-3.jpg" alt="Placeholder 3">
+        <img src="./assets/images/placeholder-4.jpg" alt="Placeholder 4">
+        <img src="./assets/images/placeholder-5.jpg" alt="Placeholder 5">
+        <img src="./assets/images/placeholder-6.jpg" alt="Placeholder 6">
       </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" class="contact">
       <h2>Contact</h2>
       <p>Ready to start? Email us or DM on TikTok.</p>
-      <div class="contact-cta">
-        <a class="btn" href="mailto:hello@yourdomain.com">Email us</a>
+      <div class="cta">
+        <a class="btn" href="mailto:hello@example.com">Email us</a>
         <a class="btn ghost" href="https://www.tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener">TikTok DM</a>
       </div>
     </section>
@@ -97,212 +121,162 @@
     <p>© 2025 THE GRID</p>
   </footer>
 
-  <!-- Customize Panel -->
-  <aside id="customize" class="panel" hidden>
-    <header>
-      <h3>Customize</h3>
-      <button id="close-customize" class="btn ghost" type="button">Close</button>
-    </header>
-    <div class="panel-body">
-      <label>Site title
-        <input id="cfg-title" type="text" placeholder="THE GRID">
-      </label>
-      <label>Tagline
-        <input id="cfg-tagline" type="text" placeholder="Cinematic AI visuals & TikTok creator hub">
-      </label>
+  <!-- Customize panel -->
+  <aside id="customize" hidden>
+    <div class="panel">
+      <header>
+        <h3>Customize</h3>
+        <button id="close-customize" class="btn ghost">Close</button>
+      </header>
 
-      <div class="row">
-        <label>Accent <input id="cfg-accent" type="color" value="#00d1ff"></label>
-        <label>Background <input id="cfg-bg" type="color" value="#0f1418"></label>
-        <label>Panel <input id="cfg-panel" type="color" value="#0d232a"></label>
-        <label>Text <input id="cfg-text" type="color" value="#dfe7ee"></label>
+      <div class="panel-body">
+        <label>Site title <input id="cfg-title" type="text" placeholder="THE GRID"></label>
+        <label>Tagline <input id="cfg-tagline" type="text" placeholder="Cinematic AI visuals & TikTok creator hub"></label>
+        <label>Accent <input id="cfg-accent" type="color"></label>
+        <label>Background <input id="cfg-bg" type="color"></label>
+        <label>Panel <input id="cfg-panel" type="color"></label>
+        <label>Text <input id="cfg-text" type="color"></label>
+        <label>Radius <input id="cfg-radius" type="range" min="0" max="28"></label>
       </div>
 
-      <label>Corner radius
-        <input id="cfg-radius" type="range" min="6" max="28" value="20">
-      </label>
-
-      <div class="row">
-        <button id="cfg-save" class="btn" type="button">Save</button>
-        <button id="cfg-reset" class="btn ghost" type="button">Reset</button>
-        <button id="cfg-export" class="btn ghost" type="button">Export JSON</button>
-      </div>
-      <small>Saved locally in your browser. No backend required.</small>
+      <footer>
+        <button id="cfg-save" class="btn">Save</button>
+        <button id="cfg-reset" class="btn ghost">Reset</button>
+        <button id="cfg-export" class="btn ghost">Export theme</button>
+      </footer>
     </div>
   </aside>
 
-  <script src="./assets/js/main.js?v=13"></script>
+  <script src="./assets/js/main.js?v=12"></script>
 </body>
 </html>
-/* v13 styles with CSS variables for easy theming */
+/* v12 theme */
 :root{
-  --accent:#00d1ff; --bg:#0f1418; --panel:#0d232a; --text:#dfe7ee;
-  --muted:#9fb3c8; --ring:rgba(0,209,255,.35); --radius:20px;
+  --accent:#00d1ff;
+  --bg:#0f1418;
+  --panel:#0d232a;
+  --text:#dfe7ee;
+  --muted:#9fb3c8;
+  --ring:rgba(0,209,255,.35);
+  --radius:20px;
 }
 *{box-sizing:border-box}
-html,body{
-  margin:0;padding:0;background:var(--bg);color:var(--text);
-  font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
-}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 .wrap{max-width:1060px;margin:auto;padding:24px}
-h1{font-size:44px;margin:24px 0;border-left:6px solid var(--accent);
-  padding-left:12px;background:rgba(0,209,255,.08);border-radius:10px}
+h1{font-size:44px;margin:24px 0;border-left:6px solid var(--accent);padding-left:12px;
+   background:rgba(0,209,255,.08)}
 h2{font-size:28px;margin:32px 0 12px}
-h3{margin:0 0 8px}
+h3{margin:8px 0}
 p{margin:0 0 16px;color:var(--muted)}
-.tagline{margin:8px 0 0;color:var(--muted)}
-.nav{display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 16px}
-.nav a{color:var(--text);text-decoration:none;opacity:.85}
-.nav a:hover{opacity:1}
-.btn{
-  display:inline-block;background:var(--accent);color:#081217;
-  text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px;
-  border:0
-}
-.btn.ghost{background:transparent;color:var(--text);border:2px solid var(--accent)}
-.btn:focus,.btn:hover{outline:0;box-shadow:0 0 0 3px var(--ring)}
-.hero-video{width:100%;height:auto;border:3px solid var(--ring);
-  border-radius:var(--radius);background:#081217}
 
-.cards{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:16px}
-.cards li{
-  background:var(--panel);border-radius:var(--radius);padding:20px;
-  border:1px solid rgba(0,209,255,.12)
-}
+nav a{color:var(--text);text-decoration:none;font-weight:700;margin-right:12px}
+nav a:hover{opacity:.85}
+.btn{display:inline-block;background:var(--accent);color:#081217;text-decoration:none;
+  font-weight:700;padding:12px 18px;border-radius:12px}
+.btn.ghost{background:transparent;color:var(--text);border:2px solid var(--accent)}
+.btn:focus,.btn:hover{outline:0;box-shadow:0 0 0 3px rgba(0,209,255,.2)}
+
+.hero-video{width:100%;height:auto;border:3px solid var(--ring);border-radius:var(--radius);
+  background:#081217}
+
+.cards{list-style:none;margin:24px 0;padding:0;display:grid;gap:16px}
+.card{padding:16px;border:1px solid rgba(0,209,255,.15);background:var(--panel);border-radius:12px}
 
 .pricing{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.price{
-  background:var(--panel);border-radius:var(--radius);padding:20px;
-  border:1px solid rgba(0,209,255,.12)
-}
-.price .amount{font-size:32px;margin:6px 0 12px;color:var(--text)}
-.price ul{margin:0 0 16px 18px}
-.price.featured{border:2px solid var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.price{background:var(--panel);border-radius:var(--radius);border:1px solid rgba(0,209,255,.15);padding:16px}
+.price .amount{font-size:24px;margin:6px 0 12px;color:var(--text)}
+.price.featured{border:2px solid var(--ring);box-shadow:0 0 0 3px var(--ring)}
 
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
-.grid img{width:100%;height:auto;border-radius:12px;border:2px solid rgba(0,209,255,.15);background:#081217}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.grid img{width:100%;height:auto;display:block;border-radius:12px;border:2px solid rgba(0,209,255,.15);background:#081217}
 
-.contact-cta{display:flex;gap:12px;flex-wrap:wrap}
-
+.contact .cta{display:flex;gap:12px;flex-wrap:wrap}
 footer{opacity:.85;margin:32px 0 24px}
 
 /* Customize panel */
-.panel{
-  position:fixed;inset:auto 12px 12px auto;width:min(92vw,360px);
-  background:var(--panel);border:1px solid rgba(0,209,255,.25);
-  border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:50;
-}
-.panel header{display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+#customize{position:fixed;inset:auto 12px 12px 12px;max-width:920px;z-index:10}
+.panel{background:var(--panel);border:1px solid rgba(0,209,255,.25);border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.panel header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,209,255,.1);padding:12px}
 .panel h3{margin:0}
-.panel .panel-body{padding:16px;display:grid;gap:12px}
+.panel-body{padding:16px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .panel label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
-.panel .row{display:flex;gap:10px;flex-wrap:wrap}
-input[type="text"]{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0c151a;color:var(--text)}
-input[type="color"]{width:48px;height:36px;padding:0;border:0;background:transparent}
-input[type="range"]{width:100%}
-// v13 — site init + Customize panel (saves to localStorage)
-const KEY = "the-grid.settings";
+.panel input[type="text"]{padding:10px;border:1px solid #2b5565;border-radius:10px;background:#0c151a;color:var(--text)}
+.panel input[type="color"]{height:36px;padding:0;border:0;background:transparent}
+.panel input[type="range"]{width:100%}
+// v12 – theme customizer (small & stable)
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+  const ROOT = document.documentElement;
+  const KEY = "the-grid-theme";
 
-const $ = (s, r=document) => r.querySelector(s);
-function applySettings(s){
-  if(!s) return;
-  document.documentElement.style.setProperty("--accent", s.accent || "#00d1ff");
-  document.documentElement.style.setProperty("--bg", s.bg || "#0f1418");
-  document.documentElement.style.setProperty("--panel", s.panel || "#0d232a");
-  document.documentElement.style.setProperty("--text", s.text || "#dfe7ee");
-  document.documentElement.style.setProperty("--radius", (s.radius || 20) + "px");
-  if(s.title) $("#site-title").textContent = s.title;
-  if(s.tagline) $("#tagline").textContent = s.tagline;
-  // inputs
-  $("#cfg-title").value   = s.title   ?? $("#site-title").textContent;
-  $("#cfg-tagline").value = s.tagline ?? $("#tagline").textContent;
-  $("#cfg-accent").value  = s.accent  ?? "#00d1ff";
-  $("#cfg-bg").value      = s.bg      ?? "#0f1418";
-  $("#cfg-panel").value   = s.panel   ?? "#0d232a";
-  $("#cfg-text").value    = s.text    ?? "#dfe7ee";
-  $("#cfg-radius").value  = s.radius  ?? 20;
-}
+  const defaults = {
+    title: "THE GRID",
+    tagline: "Cinematic AI visuals & TikTok creator hub",
+    accent: "#00d1ff", bg: "#0f1418", panel: "#0d232a", text: "#dfe7ee", radius: 20
+  };
 
-function readSettings(){
-  try { return JSON.parse(localStorage.getItem(KEY) || "{}"); }
-  catch { return {}; }
-}
+  function apply(s){
+    ROOT.style.setProperty("--accent", s.accent);
+    ROOT.style.setProperty("--bg", s.bg);
+    ROOT.style.setProperty("--panel", s.panel);
+    ROOT.style.setProperty("--text", s.text);
+    ROOT.style.setProperty("--radius", (s.radius|0) + "px");
+    $("#site-title").textContent = s.title;
+    $("#tagline").textContent = s.tagline;
+  }
 
-function saveSettings(s){
-  localStorage.setItem(KEY, JSON.stringify(s));
-}
+  function read(){ try { return JSON.parse(localStorage.getItem(KEY)||"{}"); } catch { return {}; } }
+  function save(s){ localStorage.setItem(KEY, JSON.stringify(s)); }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Load defaults, then saved
-  fetch("./assets/data/site-defaults.json")
-    .then(r => r.json()).catch(() => ({}))
-    .then(defaults => applySettings({...defaults, ...readSettings()}));
+  document.addEventListener("DOMContentLoaded", () => {
+    // init theme
+    apply({ ...defaults, ...read() });
 
-  $("#open-customize")?.addEventListener("click", () => $("#customize").hidden = false);
-  $("#close-customize")?.addEventListener("click", () => $("#customize").hidden = true);
+    // open/close panel
+    $("#open-customize").addEventListener("click", (e)=>{ e.preventDefault(); $("#customize").hidden=false; fillInputs(); });
+    $("#close-customize").addEventListener("click", (e)=>{ e.preventDefault(); $("#customize").hidden=true; });
 
-  // Live-binding inputs
-  const onColor = () => applySettings({
-    title:   $("#cfg-title").value,
-    tagline: $("#cfg-tagline").value,
-    accent:  $("#cfg-accent").value,
-    bg:      $("#cfg-bg").value,
-    panel:   $("#cfg-panel").value,
-    text:    $("#cfg-text").value,
-    radius:  +$("#cfg-radius").value
-  });
-  ["cfg-title","cfg-tagline","cfg-accent","cfg-bg","cfg-panel","cfg-text","cfg-radius"]
-    .forEach(id => $("#"+id)?.addEventListener("input", onColor));
+    // wire inputs
+    const bindings = [
+      ["#cfg-title","title"],["#cfg-tagline","tagline"],
+      ["#cfg-accent","accent"],["#cfg-bg","bg"],["#cfg-panel","panel"],
+      ["#cfg-text","text"],["#cfg-radius","radius"]
+    ];
 
-  $("#cfg-save")?.addEventListener("click", () => {
-    saveSettings({
-      title:   $("#cfg-title").value,
-      tagline: $("#cfg-tagline").value,
-      accent:  $("#cfg-accent").value,
-      bg:      $("#cfg-bg").value,
-      panel:   $("#cfg-panel").value,
-      text:    $("#cfg-text").value,
-      radius:  +$("#cfg-radius").value
+    function current(){
+      const s = { ...defaults, ...read() };
+      for (const [sel,key] of bindings){ const el=$(sel); if(el){ s[key] = (el.type==="range"||el.type==="text") ? el.value : el.value; } }
+      return s;
+    }
+
+    function fillInputs(){
+      const s = { ...defaults, ...read() };
+      $("#cfg-title").value = s.title;
+      $("#cfg-tagline").value = s.tagline;
+      $("#cfg-accent").value = s.accent;
+      $("#cfg-bg").value = s.bg;
+      $("#cfg-panel").value = s.panel;
+      $("#cfg-text").value = s.text;
+      $("#cfg-radius").value = s.radius;
+    }
+
+    for (const [sel,_] of bindings){
+      const el = $(sel);
+      el && el.addEventListener("input", ()=> apply(current()));
+    }
+
+    $("#cfg-save").addEventListener("click", ()=>{ save(current()); alert("Saved!"); });
+    $("#cfg-reset").addEventListener("click", ()=>{ localStorage.removeItem(KEY); apply(defaults); fillInputs(); });
+    $("#cfg-export").addEventListener("click", ()=>{
+      const blob = new Blob([ JSON.stringify({ ...defaults, ...read() }, null, 2) ], { type:"application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = Object.assign(document.createElement("a"), { href:url, download:"the-grid-theme.json" });
+      a.click(); URL.revokeObjectURL(url);
     });
-    alert("Saved!");
-  });
 
-  $("#cfg-reset")?.addEventListener("click", async () => {
-    localStorage.removeItem(KEY);
-    const defaults = await fetch("./assets/data/site-defaults.json").then(r=>r.json()).catch(()=>({}));
-    applySettings(defaults);
+    console.log("THE GRID main.js v12 loaded");
   });
-
-  $("#cfg-export")?.addEventListener("click", () => {
-    const blob = new Blob([localStorage.getItem(KEY) || "{}"], {type:"application/json"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = "the-grid-settings.json"; a.click();
-    URL.revokeObjectURL(url);
-  });
-
-  console.log("THE GRID main.js v13 loaded");
-});
-{
-  "title": "THE GRID",
-  "tagline": "Cinematic AI visuals & TikTok creator hub",
-  "accent": "#00d1ff",
-  "bg": "#0f1418",
-  "panel": "#0d232a",
-  "text": "#dfe7ee",
-  "radius": 20
-}
-# images
-- Put site images here (e.g. `poster.jpg` for video placeholder).
-- Gallery uses `p1.svg` .. `p6.svg` for now (SVG text placeholders).
-- Replace them with real JPG/PNG and keep filenames or update `index.html`.
-# videos
-- Put showcase videos here (e.g. `demo.mp4`).
-- Keep the filename `demo.mp4` or update the `<source>` in `index.html`.
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#0d232a"/><rect x="20" y="20" width="760" height="560" rx="18" fill="#132f38" stroke="#00d1ff" stroke-opacity=".35" stroke-width="6"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#9fb3c8" font-family="system-ui" font-size="28">Placeholder 1</text></svg>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#0d232a"/><rect x="20" y="20" width="760" height="560" rx="18" fill="#132f38" stroke="#00d1ff" stroke-opacity=".35" stroke-width="6"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#9fb3c8" font-family="system-ui" font-size="28">Placeholder 2</text></svg>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#0d232a"/><rect x="20" y="20" width="760" height="560" rx="18" fill="#132f38" stroke="#00d1ff" stroke-opacity=".35" stroke-width="6"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#9fb3c8" font-family="system-ui" font-size="28">Placeholder 3</text></svg>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#0d232a"/><rect x="20" y="20" width="760" height="560" rx="18" fill="#132f38" stroke="#00d1ff" stroke-opacity=".35" stroke-width="6"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#9fb3c8" font-family="system-ui" font-size="28">Placeholder 4</text></svg>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#0d232a"/><rect x="20" y="20" width="760" height="560" rx="18" fill="#132f38" stroke="#00d1ff" stroke-opacity=".35" stroke-width="6"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#9fb3c8" font-family="system-ui" font-size="28">Placeholder 5</text></svg>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#0d232a"/><rect x="20" y="20" width="760" height="560" rx="18" fill="#132f38" stroke="#00d1ff" stroke-opacity=".35" stroke-width="6"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#9fb3c8" font-family="system-ui" font-size="28">Placeholder 6</text></svg>
+})();
