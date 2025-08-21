@@ -1,1 +1,8 @@
-console.log("THE GRID main.js v8 loaded");
+console.log("THE GRID main.js v9 loaded");
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href').slice(1);
+    const el=document.getElementById(id);
+    if(el){ e.preventDefault(); el.scrollIntoView({behavior:"smooth"}); }
+  });
+});
