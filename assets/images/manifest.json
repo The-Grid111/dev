@@ -1,58 +1,61 @@
-[
-  {
-    "id": "hero_1",
-    "title": "Hero Still 1",
-    "src": "./assets/images/hero_1.jpg",
-    "thumb": "./assets/images/hero_1.jpg",
-    "tags": ["hero","still"]
-  },
-  {
-    "id": "hero_2",
-    "title": "Hero Still 2",
-    "src": "./assets/images/hero_2.jpg",
-    "thumb": "./assets/images/hero_2.jpg",
-    "tags": ["hero","still"]
-  },
-  {
-    "id": "hero_3",
-    "title": "Hero Still 3",
-    "src": "./assets/images/hero_3.jpg",
-    "thumb": "./assets/images/hero_3.jpg",
-    "tags": ["hero","still"]
-  },
-  {
-    "id": "gc_logo",
-    "title": "GC Logo",
-    "src": "./assets/images/gc_logo.png",
-    "thumb": "./assets/images/gc_logo.png",
-    "tags": ["logo"]
-  },
-  {
-    "id": "grid_pour_1",
-    "title": "Grid Pour",
-    "src": "./assets/images/grid_pour_1.jpg",
-    "thumb": "./assets/images/grid_pour_1.jpg",
-    "tags": ["effect"]
-  },
-  {
-    "id": "grid_spread_1",
-    "title": "Grid Spread",
-    "src": "./assets/images/grid_spread_1.jpg",
-    "thumb": "./assets/images/grid_spread_1.jpg",
-    "tags": ["effect"]
-  },
-  {
-    "id": "grid_natural_1",
-    "title": "Grid Natural",
-    "src": "./assets/images/grid_natural_1.jpg",
-    "thumb": "./assets/images/grid_natural_1.jpg",
-    "tags": ["background"]
-  },
-  {
-    "id": "grid_transform_1",
-    "title": "Grid Transform",
-    "src": "./assets/images/grid_transform_1.jpg",
-    "thumb": "./assets/images/grid_transform_1.jpg",
-    "tags": ["effect"]
-  }
-]
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "interaction-1",
+      "title": "Hypnotic Object Interaction",
+      "category": "tiktok",
+      "src": "assets/images/grid_interaction_1.jpg",
+      "alt": "Close-up, hypnotic object interaction"
+    },
+    {
+      "id": "natural-1",
+      "title": "Natural Element Power",
+      "category": "vfx",
+      "src": "assets/images/grid_natural_1.jpg",
+      "alt": "Natural element power visual"
+    },
+    {
+      "id": "transform-1",
+      "title": "Transform & Reveal",
+      "category": "vfx",
+      "src": "assets/images/grid_transform_1.jpg",
+      "alt": "Transform and reveal effect"
+    },
+    {
+      "id": "pour-1",
+      "title": "Cinematic Pour & Flow",
+      "category": "tiktok",
+      "src": "assets/images/grid_pour_1.jpg",
+      "alt": "Cinematic pour and flow"
+    },
+    {
+      "id": "spread-1",
+      "title": "Satisfying Spread/Smear",
+      "category": "tiktok",
+      "src": "assets/images/grid_spread_1.jpg",
+      "alt": "Satisfying spread / smear texture"
+    },
+    {
+      "id": "hero-1",
+      "title": "Hero Image 1",
+      "category": "all",
+      "src": "assets/images/hero_1.jpg",
+      "alt": "Hero visual 1"
+    },
+    {
+      "id": "hero-2",
+      "title": "Hero Image 2",
+      "category": "all",
+      "src": "assets/images/hero_2.jpg",
+      "alt": "Hero visual 2"
+    },
+    {
+      "id": "hero-3",
+      "title": "Hero Image 3",
+      "category": "all",
+      "src": "assets/images/hero_3.jpg",
+      "alt": "Hero visual 3"
+    }
+  ]
+}
