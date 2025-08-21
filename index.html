@@ -2,64 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="description" content="Cinematic AI visuals & TikTok creator hub" />
+
+  <!-- App icons / theme -->
+  <meta name="theme-color" content="#0b1216" />
+  <link rel="icon" href="assets/images/gc_logo.png" />
+
+  <!-- Styles -->
   <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body>
+
   <header class="wrap">
-    <h1 id="site-title">THE GRID</h1>
-    <p id="tagline" class="muted">Cinematic AI visuals & TikTok creator hub</p>
-    <nav class="nav">
-      <a href="#about">About</a>
-      <a href="#showcase">Showcase</a>
-      <a href="#services">Services</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#contact">Contact</a>
+    <nav class="row">
+      <a class="logo" href="#top">THE GRID</a>
+      <div class="grow"></div>
+      <!-- Any element with text 'Customize' will open the panel; explicit IDs also provided -->
+      <a id="open-customize" class="btn ghost" href="#customize">Customize</a>
     </nav>
-    <div class="row">
-      <a class="btn" id="open-customize" href="#customize">Customize</a>
-    </div>
+    <section class="hero">
+      <h1 id="site-title">THE GRID</h1>
+      <p id="tagline">Cinematic AI visuals & TikTok creator hub</p>
+      <div class="row">
+        <a class="btn primary" href="#plans">View plans</a>
+        <button class="btn" id="show-details" type="button">Details</button>
+      </div>
+    </section>
   </header>
 
   <main>
-    <!-- About -->
-    <section id="about" class="wrap">
-      <h2>About</h2>
-      <p>Ultra-realistic AI content pipelines for creators.</p>
-    </section>
+    <!-- Plans -->
+    <section id="plans" class="wrap plans">
+      <h2>Plans</h2>
 
-    <!-- Showcase (left as-is; your video/embed here) -->
-    <section id="showcase" class="wrap">
-      <h2>Showcase</h2>
-      <div class="card"><!-- video or hero image --></div>
-    </section>
-
-    <!-- Services -->
-    <section id="services" class="wrap">
-      <h2>Services</h2>
-      <div class="grid">
-        <div class="card"><h3>HDR upscales</h3><p>Cleaner, sharper, punchier frames for social.</p></div>
-        <div class="card"><h3>Face-consistent characters</h3><p>Stable identities across shots & edits.</p></div>
-        <div class="card"><h3>TikTok-ready exports</h3><p>Auto aspect, captions, and safe margins.</p></div>
-      </div>
-    </section>
-
-    <!-- Pricing -->
-    <section id="pricing" class="wrap">
-      <h2>Pricing</h2>
-
-      <!-- Diamond -->
       <article class="plan diamond" data-tier="diamond">
         <div class="head">
-          <div class="price">£399<span class="muted">/mo</span></div>
+          <div class="price">£99<span class="muted">/mo</span></div>
           <span class="badge">DIAMOND</span>
         </div>
         <ul>
           <li>Full customization session</li>
-          <li>Admin toolkit & automations</li>
+          <li>Admin toolkit &amp; automations</li>
           <li>1:1 onboarding (45 min)</li>
         </ul>
         <div class="row">
@@ -68,68 +53,65 @@
         </div>
       </article>
 
-      <!-- Gold -->
       <article class="plan gold" data-tier="gold">
         <div class="head">
-          <div class="price">£149<span class="muted">/mo</span></div>
+          <div class="price">£49<span class="muted">/mo</span></div>
           <span class="badge">GOLD</span>
         </div>
         <ul>
-          <li>4 shorts</li>
-          <li>HDR + faces</li>
-          <li>TikTok-ready</li>
+          <li>Priority support</li>
+          <li>Tool presets</li>
+          <li>Template library</li>
         </ul>
         <div class="row">
           <button class="btn primary choose" data-plan="Gold">Choose</button>
           <button class="btn ghost details" data-plan="Gold">Details</button>
         </div>
       </article>
-
-      <!-- Starter -->
-      <article class="plan" data-tier="starter">
-        <div class="head">
-          <div class="price">£49<span class="muted">/mo</span></div>
-          <span class="badge">STARTER</span>
-        </div>
-        <ul>
-          <li>1 short</li>
-          <li>Basic upscale</li>
-          <li>Standard export</li>
-        </ul>
-        <div class="row">
-          <button class="btn primary choose" data-plan="Starter">Choose</button>
-          <button class="btn ghost details" data-plan="Starter">Details</button>
-        </div>
-      </article>
     </section>
 
-    <!-- Gallery (HTML kept minimal; JS does filtering) -->
+    <!-- Gallery -->
     <section id="gallery" class="wrap">
       <h2>Gallery</h2>
+
       <div class="filters" role="tablist" aria-label="Filter gallery">
-        <button data-filter="all" aria-selected="true" class="active">All</button>
-        <button data-filter="tiktok">TikTok</button>
-        <button data-filter="characters">Characters</button>
-        <button data-filter="vfx">VFX</button>
+        <button class="active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button data-filter="tiktok" role="tab">TikTok</button>
+        <button data-filter="characters" role="tab">Characters</button>
+        <button data-filter="vfx" role="tab">VFX</button>
       </div>
-      <div class="grid gallery">
-        <!-- Example items (replace with your thumbnails or leave; JS filters by data-cat) -->
-        <figure class="item" data-cat="tiktok"><img src="assets/images/placeholder.svg" alt="TikTok sample 1"></figure>
-        <figure class="item" data-cat="characters"><img src="assets/images/placeholder.svg" alt="Character sample 1"></figure>
-        <figure class="item" data-cat="vfx"><img src="assets/images/placeholder.svg" alt="VFX sample 1"></figure>
+
+      <div class="grid">
+        <figure class="item" data-cat="tiktok">
+          <img src="assets/images/grid_interaction_1.jpg" alt="TikTok sample" />
+        </figure>
+        <figure class="item" data-cat="characters">
+          <img src="assets/images/grid_natural_1.jpg" alt="Character sample" />
+        </figure>
+        <figure class="item" data-cat="vfx">
+          <img src="assets/images/grid_transform_1.jpg" alt="VFX sample" />
+        </figure>
+        <figure class="item" data-cat="tiktok">
+          <img src="assets/images/grid_pour_1.jpg" alt="TikTok sample 2" />
+        </figure>
+        <figure class="item" data-cat="characters">
+          <img src="assets/images/grid_spread_1.jpg" alt="Character sample 2" />
+        </figure>
       </div>
     </section>
 
     <!-- Contact -->
-    <section class="card" id="contact">
+    <section class="wrap card" id="contact">
       <h2>Contact</h2>
-      <form id="contactForm" onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset();">
+      <form id="contactForm" onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset()">
         <div class="grid" style="grid-template-columns:1fr 1fr">
           <label>Name<br><input type="text" required></label>
           <label>Email<br><input type="email" required></label>
-          <label style="grid-column:1 / -1">Message<br><textarea rows="4" required></textarea></label>
+          <label style="grid-column:1/-1">Message<br><textarea rows="4" required></textarea></label>
         </div>
-        <button class="btn">Send</button>
+        <div class="row">
+          <button class="btn primary" type="submit">Send</button>
+        </div>
       </form>
     </section>
   </main>
@@ -142,7 +124,7 @@
   <dialog id="planModal">
     <div class="modalHead">
       <strong id="mTitle">Plan details</strong>
-      <button class="btn x" type="button" onclick="planModal.close()">Close</button>
+      <button class="btn x" onclick="planModal.close()">Close</button>
     </div>
     <div class="modalBody" id="mBody"></div>
   </dialog>
@@ -154,23 +136,32 @@
       <button id="close-customize" class="btn ghost" type="button">Close</button>
     </div>
     <div class="panel-body">
-      <div class="grid" style="grid-template-columns:1fr 1fr">
-        <label>Accent<br><input id="cfg-accent" type="color" value="#10b9e3"></label>
-        <label>Accent 2<br><input id="cfg-accent2" type="color" value="#B5C7FF"></label>
-        <label>Text<br><input id="cfg-ink" type="color" value="#F5F7FA"></label>
-        <label>Soft Text<br><input id="cfg-soft" type="color" value="#C8CFD8"></label>
-        <label>Card Surface<br><input id="cfg-card" type="color" value="#0f1b20"></label>
-        <label>Background<br><input id="cfg-bg" type="color" value="#0b1216"></label>
-        <label>Panel<br><input id="cfg-panel" type="color" value="#0f1b20"></label>
-        <label>Text (legacy)<br><input id="cfg-text" type="color" value="#e6f5ff"></label>
-        <label style="grid-column:1 / -1">Radius<br><input id="cfg-radius" type="range" min="0" max="28" value="20"></label>
-        <label style="grid-column:1 / -1">Title <input id="cfg-title" type="text" inputmode="text" value="THE GRID"></label>
-        <label style="grid-column:1 / -1">Tagline <input id="cfg-tagline" type="text" inputmode="text" value="Cinematic AI visuals & TikTok creator hub"></label>
-      </div>
+      <label>Title
+        <input id="cfg-title" type="text" inputmode="text" />
+      </label>
+      <label>Tagline
+        <input id="cfg-tagline" type="text" inputmode="text" />
+      </label>
+      <label>Accent
+        <input id="cfg-accent" type="color" value="#10b9e3" />
+      </label>
+      <label>Background
+        <input id="cfg-bg" type="color" value="#0b1216" />
+      </label>
+      <label>Panel
+        <input id="cfg-panel" type="color" value="#0f1b20" />
+      </label>
+      <label>Text
+        <input id="cfg-text" type="color" value="#e6f5ff" />
+      </label>
+      <label>Radius
+        <input id="cfg-radius" type="range" min="0" max="28" />
+      </label>
 
       <div class="panel-actions">
-        <button id="cfg-save" class="btn" type="button">Save (device)</button>
+        <button id="cfg-save" class="btn" type="button">Save</button>
         <button id="cfg-reset" class="btn ghost" type="button">Reset</button>
+        <!-- Optional export button supported by main.js -->
         <button id="cfg-export" class="btn ghost" type="button">Export JSON</button>
       </div>
     </div>
