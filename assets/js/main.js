@@ -1,126 +1,172 @@
-(() => {
-  const $  = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-  const ROOT = document.documentElement;
-  const KEY  = "the-grid-theme";
-  const defaults = {
-    title: "THE GRID",
-    tagline: "Cinematic AI visuals & TikTok creator hub",
-    tiktok: "https://www.tiktok.com/@YOUR_HANDLE",
-    accent: "#00d1ff",
-    bg: "#0f1418",
-    panel: "#0d232a",
-    text: "#dfe7ee",
-    radius: 20
-  };
+// THE GRID — UI HOTFIX (safe, compact)
+// Restores: Customize panel, Join Now scroll, spinning logo video fallback,
+// and Library tabs + hero picker from assets/manifest.json.
 
-  function applyTheme(s){
-    ROOT.style.setProperty("--accent", s.accent);
-    ROOT.style.setProperty("--bg", s.bg);
-    ROOT.style.setProperty("--panel", s.panel);
-    ROOT.style.setProperty("--text", s.text);
-    ROOT.style.setProperty("--radius", (s.radius|0) + "px");
-    $("#site-title").textContent = s.title;
-    $("#tagline").textContent    = s.tagline;
-    // external links
-    const tk = s.tiktok || defaults.tiktok;
-    const links = ["#tiktok","#see-tiktok","#dm-tiktok"];
-    links.forEach(sel => { const el=$(sel); if(el){ el.href = tk; }});
+(() => {
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  // ---------- Greeting ----------
+  try {
+    const h = new Date().getHours();
+    const word = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+    const hello = $('#hello'); if (hello) hello.textContent = `${word} — THE GRID`;
+  } catch {}
+
+  // ---------- Spinning logo (video with img fallback) ----------
+  try {
+    const v = $('#logoVid');
+    if (v) {
+      v.src = 'assets/videos/gc_spin.mp4';
+      v.muted = true; v.autoplay = true; v.loop = true; v.playsInline = true;
+      v.onerror = () => { 
+        const img = new Image(); img.src = 'assets/images/gc_logo.png'; img.alt = 'Logo';
+        v.replaceWith(img);
+      };
+    }
+  } catch {}
+
+  // ---------- Customize panel open ----------
+  try {
+    const btn = $('#btnCustomize');
+    const dlg = $('#panel');
+    if (btn && dlg && typeof dlg.showModal === 'function') {
+      btn.onclick = () => dlg.showModal();
+    }
+    // Keep Save/Reset working if present
+    const save = $('#save'), reset = $('#reset');
+    if (save) save.onclick = () => {
+      try { localStorage.setItem('thegrid.settings.savedAt', Date.now()); alert('Saved to this device.'); } catch {}
+    };
+    if (reset) reset.onclick = () => { localStorage.clear(); location.reload(); };
+  } catch {}
+
+  // ---------- Join Now scroll to pricing ----------
+  try {
+    const j = $('#btnJoin'), target = $('#plans');
+    if (j && target) j.onclick = () => target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch {}
+
+  // ---------- Hero swap helper ----------
+  function setHero(src) {
+    const box = $('#hero'); if (!box || !src) return;
+    box.innerHTML = '<div class="heroOverlay"></div>';
+    const isVid = /\.(mp4|webm|mov)$/i.test(src);
+    const el = document.createElement(isVid ? 'video' : 'img');
+    if (isVid) Object.assign(el, { src, controls: true, playsInline: true, className:'hero-media' });
+    else       Object.assign(el, { src, alt:'hero', className:'hero-media' });
+    box.prepend(el);
+    // sync dropdown if present
+    const sel = $('#uiHero'); if (sel) sel.value = src;
   }
 
-  const read  = () => { try { return JSON.parse(localStorage.getItem(KEY)||"{}"); } catch { return {}; } };
-  const save  = (s) => localStorage.setItem(KEY, JSON.stringify(s));
-  const state = () => ({ ...defaults, ...read() });
+  // ---------- Library (manifest-aware) ----------
+  async function buildLibrary() {
+    const tabsEl = $('#libTabs'), gridEl = $('#libGrid');
+    if (!tabsEl || !gridEl) return; // page might be mid-update
 
-  document.addEventListener("DOMContentLoaded", () => {
-    // init
-    applyTheme(state());
-
-    // open/close panel
-    $("#open-customize")?.addEventListener("click", (e)=>{
-      e.preventDefault();
-      $("#customize").hidden = false;
-      fill();
-    });
-    $("#close-customize")?.addEventListener("click", (e)=>{
-      e.preventDefault();
-      $("#customize").hidden = true;
-    });
-
-    // wire live inputs if panel exists
-    const bindings = [
-      ["#cfg-title","title"],["#cfg-tagline","tagline"],["#cfg-tiktok","tiktok"],
-      ["#cfg-accent","accent"],["#cfg-bg","bg"],["#cfg-panel","panel"],["#cfg-text","text"],["#cfg-radius","radius"]
-    ];
-    function current(){ const s={...defaults, ...read()}; bindings.forEach(([sel,key])=>{
-      const el=$(sel); if(el){ s[key] = el.type==="range"||el.type==="text" ? el.value : el.value; }
-    }); return s; }
-    function fill(){ const s={...defaults, ...read()};
-      $("#cfg-title").value=s.title; $("#cfg-tagline").value=s.tagline; $("#cfg-tiktok").value=s.tiktok;
-      $("#cfg-accent").value=s.accent; $("#cfg-bg").value=s.bg; $("#cfg-panel").value=s.panel; $("#cfg-text").value=s.text; $("#cfg-radius").value=s.radius;
+    let manifest;
+    try {
+      const res = await fetch('assets/manifest.json', { cache: 'no-store' });
+      if (res.ok) manifest = await res.json();
+    } catch {}
+    if (!manifest) {
+      manifest = {
+        "Hero": ["assets/videos/hero_1.mp4","assets/images/hero_1.jpg"],
+        "Reels 9:16": [],
+        "Reels 16:9": [],
+        "Backgrounds": [],
+        "Logos": ["assets/videos/gc_spin.mp4","assets/images/gc_logo.png"],
+        "Images": ["assets/images/hero_1.jpg"]
+      };
     }
-    bindings.forEach(([sel])=> $(sel)?.addEventListener("input", ()=> applyTheme(current())));
-    $("#cfg-save")?.addEventListener("click", ()=>{ save(current()); alert("Saved!"); });
-    $("#cfg-reset")?.addEventListener("click", ()=>{ localStorage.removeItem(KEY); applyTheme(defaults); fill(); });
 
-    // build a small inline panel if not present (keeps it working)
-    if(!$("#customize")){
-      const panel = document.createElement("div");
-      panel.id = "customize";
-      panel.className = "panel";
-      panel.hidden = true;
-      panel.innerHTML = `
-        <div class="panel header"><h3>Customize</h3><a href="#" id="close-customize" class="btn ghost">Close</a></div>
-        <div class="panel body">
-          <label>Title<input id="cfg-title" type="text"></label>
-          <label>Tagline<input id="cfg-tagline" type="text"></label>
-          <label>TikTok URL<input id="cfg-tiktok" type="text"></label>
-          <label>Accent<input id="cfg-accent" type="color"></label>
-          <label>Background<input id="cfg-bg" type="color"></label>
-          <label>Panel<input id="cfg-panel" type="color"></label>
-          <label>Text<input id="cfg-text" type="color"></label>
-          <label>Radius<input id="cfg-radius" type="range" min="0" max="28"></label>
-          <div class="panel actions">
-            <a class="btn" id="cfg-save">Save</a>
-            <a class="btn ghost" id="cfg-reset">Reset</a>
-          </div>
-        </div>`;
-      document.body.append(panel);
+    const cats = Object.keys(manifest);
+    const active = localStorage.getItem('thegrid.activeTab') || cats[0];
+
+    // tabs
+    tabsEl.innerHTML = '';
+    cats.forEach(cat => {
+      const pill = document.createElement('div');
+      pill.className = 'pill' + (cat === active ? ' active' : '');
+      pill.textContent = cat;
+      pill.onclick = () => { localStorage.setItem('thegrid.activeTab', cat); renderGrid(cat); renderTabs(cat); };
+      tabsEl.appendChild(pill);
+    });
+
+    function renderTabs(cur) {
+      $$('.pill', tabsEl).forEach(p => p.classList.toggle('active', p.textContent === cur));
     }
+
+    function renderGrid(cat) {
+      const list = manifest[cat] || [];
+      gridEl.innerHTML = '';
+      list.forEach(src => {
+        const row = document.createElement('div'); row.className = 'tile';
+        const th  = document.createElement('div'); th.className  = 'thumb';
+        const label = document.createElement('div');
+        label.innerHTML = `<b>${src.split('/').pop()}</b><div class="meta">${src}</div>`;
+
+        if (/\.(mp4|webm|mov)$/i.test(src)) {
+          const v = document.createElement('video');
+          Object.assign(v, { src, muted:true, playsInline:true, loop:true, autoplay:true });
+          th.appendChild(v);
+        } else {
+          const i = new Image(); i.src = src; th.appendChild(i);
+        }
+
+        row.append(th, label);
+        row.onclick = () => setHero(src);
+        gridEl.appendChild(row);
+      });
+
+      // Fill hero select if present
+      const sel = $('#uiHero');
+      if (sel) {
+        const all = [...new Set(Object.values(manifest).flat())];
+        sel.innerHTML = '';
+        all.forEach(src => sel.add(new Option(src, src, false, false)));
+        sel.oninput = e => setHero(e.target.value);
+      }
+    }
+
+    renderGrid(active);
+    renderTabs(active);
+  }
+
+  // ---------- Apply saved design (from owner-core.json + localStorage) ----------
+  async function applyDesign() {
+    try {
+      const res = await fetch('assets/data/owner-core.json', { cache:'no-store' });
+      if (!res.ok) return;
+      const cfg = await res.json();
+      const r = document.documentElement.style;
+
+      // Theme
+      const d = cfg.design || {};
+      if (d.accent)          r.setProperty('--accent', d.accent);
+      if (d.accentSecondary) r.setProperty('--accent-2', d.accentSecondary);
+      if (d.text)            r.setProperty('--ink', d.text);
+      if (d.softText)        r.setProperty('--soft', d.softText);
+      if (d.cardSurface)     r.setProperty('--card', d.cardSurface);
+      if (d.panelSurface)    r.setProperty('--panel', d.panelSurface);
+      if (d.bgA)             r.setProperty('--bg-a', d.bgA);
+      if (d.bgB)             r.setProperty('--bg-b', d.bgB);
+      if (d.cardRadius != null) r.setProperty('--radius', d.cardRadius + 'px');
+      if (d.borderGlow != null) r.setProperty('--ring', d.borderGlow);
+      if (d.fontScale != null)  r.setProperty('--fontScale', d.fontScale);
+      if (d.spacingScale != null) r.setProperty('--space', d.spacingScale);
+      if (d.vignette != null)  r.setProperty('--vignette', d.vignette ? 1 : 0);
+
+      // Hero
+      const hero = cfg.hero?.source;
+      if (hero) setHero(hero);
+    } catch {}
+  }
+
+  // Kickoff
+  document.addEventListener('DOMContentLoaded', () => {
+    applyDesign();
+    buildLibrary();
   });
 })();
-:root{
-  --accent:#00d1ff; --bg:#0f1418; --panel:#0d232a; --text:#dfe7ee; --ring:rgba(0,209,255,.35); --radius:20px;
-}
-*,*:before,*:after{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial}
-.wrap{max-width:1060px;margin:auto;padding:24px}
-h1{font-size:44px;margin:24px 0;border-left:6px solid var(--accent);padding-left:12px;background:rgba(0,209,255,.08);border-radius:10px}
-h2{font-size:28px;margin:32px 0 12px}
-h3{margin:8px 0}
-p{margin:0 0 16px;color:#9fb3c8}
-nav{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0}
-nav a{color:var(--text);text-decoration:none;font-weight:700}
-nav a:hover{opacity:.85}
-.btn{display:inline-block;background:var(--accent);color:#081217;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px}
-.btn.ghost{background:transparent;color:var(--text);border:2px solid var(--accent)}
-.btn:focus,.btn:hover{outline:0;box-shadow:0 0 0 3px var(--ring)}
-.hero-video{width:100%;height:auto;border:3px solid var(--ring);border-radius:var(--radius);background:#081217}
-.cards{list-style:none;margin:24px 0;padding:0;display:grid;gap:16px}
-.card{padding:16px;border:1px solid rgba(0,209,255,.15);background:var(--panel);border-radius:12px}
-.pricing{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.price{background:var(--panel);border-radius:var(--radius);border:1px solid rgba(0,209,255,.15);padding:16px}
-.price .amount{font-size:24px;margin:6px 0 12px;color:var(--text)}
-.price.featured{border:2px solid var(--ring);box-shadow:0 0 3px var(--ring)}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
-.ph{width:100%;height:auto;display:block;border-radius:12px;border:2px solid rgba(0,209,255,.15);background:#081217;fill:#9fb3c8}
-footer{opacity:.85;margin:32px 0 24px}
-
-/* Customizer */
-.panel{position:fixed;inset:auto 12px 12px;max-width:920px;z-index:10;background:var(--panel);border:1px solid rgba(0,209,255,.25);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-.panel .header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,209,255,1);padding:12px}
-.panel .body{padding:16px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.panel label{display:grid;gap:6px;font-size:14px;color:#9fb3c8}
-.panel input[type="text"]{padding:10px;border:1px solid #2b5565;border-radius:10px;background:#0c151a;color:var(--text)}
-.panel input[type="color"]{height:36px;padding:0;border:0;background:transparent}
-.panel input[type="range"]{width:100%}
