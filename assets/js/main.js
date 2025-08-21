@@ -1,2 +1,1 @@
-// v3 placeholder – add tracking or UI hooks here
-console.log("THE GRID ready");
+console.log("THE GRID main.js v8 loaded");
