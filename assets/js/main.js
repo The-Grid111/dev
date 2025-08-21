@@ -1,259 +1,213 @@
-/* assets/js/main.js
- * THE GRID — main.js v15b
- * - Smooth Customize drawer (open/close, hash support)
- * - Live theme editing + save/load/export (localStorage)
- * - Gallery category filters (robust text + data-* fallback)
- * - Safe, idempotent; runs once even if re-initialized
- */
+/* assets/js/main.js — full redo
+   - Smooth scrolling for CTAs & nav
+   - “Choose / Details / Start Setup / Order Pack / Get Pack” → scroll & prefill contact form
+   - Builds simple Library tiles from assets/manifest.json (optional)
+   - Contact form uses mailto: with prefilled subject/body (no backend needed)
+*/
+
 (() => {
-  // ----------------------------
-  // Helpers
-  // ----------------------------
-  const $  = (sel, r = document) => r.querySelector(sel);
-  const $$ = (sel, r = document) => [...r.querySelectorAll(sel)];
-  const on = (el, ev, fn, opts) => el && el.addEventListener(ev, fn, opts);
+  const qs  = (s, el=document) => el.querySelector(s);
+  const qsa = (s, el=document) => [...el.querySelectorAll(s)];
+  const byId = id => document.getElementById(id);
 
-  const STORE_KEY = "the-grid-theme";
-  const LOG = (...a) => console && console.log && console.log("[GRID]", ...a);
-
-  // Prevent double init across hot reloads
-  if (document.documentElement.__gridInitDone) return;
-  document.documentElement.__gridInitDone = true;
-
-  // ----------------------------
-  // Customize drawer
-  // ----------------------------
-  function getPanel() { return $("#customize"); }
-
-  function openPanel() {
-    const panel = getPanel();
-    if (!panel) return;
-    panel.removeAttribute("hidden");
-    panel.setAttribute("aria-hidden", "false");
-    panel.classList.add("open");
-    try { panel.scrollIntoView({ behavior: "smooth", block: "start" }); } catch {}
-    // keep hash in sync (helps on mobile refresh)
-    if (location.hash !== "#customize") {
-      try { history.replaceState(null, "", "#customize"); } catch { location.hash = "#customize"; }
-    }
-  }
-
-  function closePanel() {
-    const panel = getPanel();
-    if (!panel) return;
-    panel.classList.remove("open");
-    panel.setAttribute("aria-hidden", "true");
-    // We keep the element in DOM; hidden attr helps CSS-only fallback
-    panel.setAttribute("hidden", "");
-    if (location.hash === "#customize") {
-      try { history.replaceState(null, "", " "); } catch { location.hash = ""; }
-    }
-  }
-
-  function bindCustomizeControls() {
-    // explicit buttons if present
-    on($("#open-customize"),  "click", (e) => { e.preventDefault(); openPanel(); });
-    on($("#close-customize"), "click", (e) => { e.preventDefault(); closePanel(); });
-
-    // Any link or button that contains the word "Customize" (case-insensitive)
-    $$("a,button").forEach((el) => {
-      if (el.__gridCustomizeBound) return;
-      const text = (el.textContent || "").toLowerCase();
-      if (!text) return;
-      if (text.includes("customize")) {
-        on(el, "click", (e) => {
-          // If it's an anchor pointing to #customize, don't navigate; open smoothly
-          const href = (el.getAttribute("href") || "").trim();
-          if (href.includes("#customize")) e.preventDefault();
-          openPanel();
-        });
-        el.__gridCustomizeBound = true;
-      }
-    });
-
-    // If page loads with #customize in URL, open automatically
-    if (location.hash === "#customize") openPanel();
-  }
-
-  // ----------------------------
-  // Theme save / load / live apply
-  // ----------------------------
-  const fields = {
-    title:   "#cfg-title",
-    tagline: "#cfg-tagline",
-    accent:  "#cfg-accent",
-    bg:      "#cfg-bg",
-    panel:   "#cfg-panel",
-    text:    "#cfg-text",
-    radius:  "#cfg-radius",
+  // -------- Smooth scroll helper
+  const smoothScrollTo = (target) => {
+    const el = typeof target === 'string' ? qs(target) : target;
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
-  function readTheme() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); }
-    catch { return {}; }
-  }
+  // -------- Contact form helpers
+  const contact = {
+    form: null,
+    name: null,
+    email: null,
+    subject: null,
+    message: null,
+    setSubject(txt) {
+      if (this.subject) this.subject.value = txt || '';
+      // Focus subject if user was sent here via a button
+      if (this.subject) this.subject.focus({ preventScroll: true });
+    },
+    init() {
+      this.form    = qs('#contact-form') || qs('form[action="#contact"]') || qs('form');
+      this.name    = qs('#contact-name')    || qs('input[name="name"], input[placeholder*="Name"]');
+      this.email   = qs('#contact-email')   || qs('input[type="email"]');
+      this.subject = qs('#contact-subject') || qs('input[name="subject"]');
+      this.message = qs('#contact-message') || qs('textarea');
 
-  function writeTheme(s) {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
-    catch {}
-  }
+      if (!this.form) return;
 
-  function applyTheme(s) {
-    const root = document.documentElement.style;
-    if (s.accent) root.setProperty("--accent", s.accent);
-    if (s.bg)     root.setProperty("--bg",     s.bg);
-    if (s.panel)  root.setProperty("--panel",  s.panel);
-    if (s.text)   root.setProperty("--text",   s.text);
-    if (s.radius !== undefined) root.setProperty("--radius", (s.radius|0) + "px");
+      // If a subject was passed in the URL (?subject=xxx), apply it.
+      const urlParams = new URLSearchParams(location.search);
+      const presetSubject = urlParams.get('subject');
+      if (presetSubject) this.setSubject(presetSubject);
 
-    if (s.title)   $("#site-title")?.textContent = s.title;
-    if (s.tagline) $("#tagline")?.textContent    = s.tagline;
-  }
-
-  function currentThemeFromInputs() {
-    const pick = (sel) => $(sel)?.value;
-    return {
-      title:   pick(fields.title),
-      tagline: pick(fields.tagline),
-      accent:  pick(fields.accent),
-      bg:      pick(fields.bg),
-      panel:   pick(fields.panel),
-      text:    pick(fields.text),
-      radius:  Number(pick(fields.radius) || 20),
-    };
-  }
-
-  function fillInputsFromTheme(s) {
-    const set = (sel, v) => { const el = $(sel); if (el && v !== undefined) el.value = v; };
-    set(fields.title,   s.title);
-    set(fields.tagline, s.tagline);
-    set(fields.accent,  s.accent);
-    set(fields.bg,      s.bg);
-    set(fields.panel,   s.panel);
-    set(fields.text,    s.text);
-    set(fields.radius,  s.radius ?? 20);
-  }
-
-  function bindThemeControls() {
-    // Live updates on input
-    $$("#customize input").forEach((el) => {
-      on(el, "input", () => {
-        const s = currentThemeFromInputs();
-        applyTheme(s);
-      });
-    });
-
-    // Save
-    on($("#cfg-save"), "click", (e) => {
-      e.preventDefault();
-      const s = currentThemeFromInputs();
-      writeTheme(s);
-      applyTheme(s);
-    });
-
-    // Reset (clears store + resets UI to defaults)
-    on($("#cfg-reset"), "click", (e) => {
-      e.preventDefault();
-      try { localStorage.removeItem(STORE_KEY); } catch {}
-      const defaults = {
-        accent:  "#10b9e3",
-        bg:      "#0b1216",
-        panel:   "#0f1b20",
-        text:    "#e6f5ff",
-        radius:  20,
-        title:   "THE GRID",
-        tagline: "Cinematic AI visuals & TikTok creator hub"
-      };
-      fillInputsFromTheme(defaults);
-      applyTheme(defaults);
-    });
-
-    // Export
-    on($("#cfg-export"), "click", (e) => {
-      e.preventDefault();
-      const s = currentThemeFromInputs();
-      const blob = new Blob([JSON.stringify(s, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = "the-grid-theme.json";
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    });
-
-    // Load stored theme at start
-    const saved = readTheme();
-    if (Object.keys(saved).length) {
-      fillInputsFromTheme(saved);
-      applyTheme(saved);
-    } else {
-      // If no saved theme, prefill current DOM values if present
-      const initial = currentThemeFromInputs();
-      applyTheme(initial);
-    }
-  }
-
-  // ----------------------------
-  // Gallery filters (robust)
-  // ----------------------------
-  function bindGalleryFilters() {
-    const container = document.querySelector(".gallery") || document;
-    const buttons = $$(".gallery-filters [data-filter], .gallery-filters button, .gallery-filters a", container);
-    const tiles   = $$(".gallery [data-cat], .gallery .tile", container);
-
-    if (!buttons.length || !tiles.length) return;
-
-    // Infer category from data-cat OR text fallback on tile (class names last resort)
-    const getCats = (el) => {
-      const raw = el.getAttribute?.("data-cat");
-      if (raw) return raw.split(",").map(s => s.trim().toLowerCase());
-      const t = (el.getAttribute?.("data-title") || el.title || el.alt || el.textContent || "").toLowerCase();
-      const cats = [];
-      if (t.includes("tiktok")) cats.push("tiktok");
-      if (t.includes("character")) cats.push("characters");
-      if (t.includes("vfx")) cats.push("vfx");
-      return cats.length ? cats : ["misc"];
-    };
-
-    tiles.forEach(el => { el.__cats = getCats(el); });
-
-    function activate(filter) {
-      const f = (filter || "all").toLowerCase();
-      tiles.forEach(el => {
-        const show = f === "all" ? true : (el.__cats || []).includes(f);
-        el.style.display = show ? "" : "none";
-      });
-      buttons.forEach(b => b.classList.toggle("active",
-        (b.dataset.filter || b.textContent || "").trim().toLowerCase() === f || (f === "all" && (b.dataset.filter || b.textContent || "").trim().toLowerCase() === "all")
-      ));
-    }
-
-    buttons.forEach(btn => {
-      if (btn.__gridFilterBound) return;
-      btn.__gridFilterBound = true;
-      on(btn, "click", (e) => {
+      this.form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const value = (btn.dataset.filter || btn.textContent || "all").trim().toLowerCase();
-        activate(value);
+        const to = 'gridcoresystems@gmail.com'; // change if you ever need to
+        const subj = encodeURIComponent(this.subject?.value?.trim() || 'Website enquiry');
+        const lines = [];
+        if (this.name?.value)  lines.push(`Name: ${this.name.value}`);
+        if (this.email?.value) lines.push(`Email: ${this.email.value}`);
+        if (this.message?.value) {
+          lines.push('');
+          lines.push(this.message.value);
+        }
+        const body = encodeURIComponent(lines.join('\n'));
+        // Open mail client
+        window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
+      });
+    }
+  };
+
+  // -------- CTA wiring
+  const wireCTAs = () => {
+    const map = [
+      // [selector, targetSection, optionalSubject]
+      ['a[href="#library"], button[data-action="open-library"]', '#library', ''],
+      ['a[href="#pricing"], button[data-action="see-pricing"]', '#pricing', ''],
+      ['a[href="#contact"], button[data-action="contact"]', '#contact', ''],
+
+      ['button[data-plan="BASIC"]',   '#contact', 'Plan: BASIC'],
+      ['button[data-plan="SILVER"]',  '#contact', 'Plan: SILVER'],
+      ['button[data-plan="GOLD"]',    '#contact', 'Plan: GOLD'],
+      ['button[data-plan="DIAMOND"]', '#contact', 'Plan: DIAMOND'],
+
+      ['button[data-action="start-setup"]', '#contact', 'Service: Setup'],
+      ['button[data-action="order-reels"]', '#contact', 'Service: Reels'],
+      ['button[data-action="get-templates"]', '#contact', 'Service: Templates'],
+    ];
+
+    // Turn plain anchor CTAs (Open Library / See Pricing) into smooth scroll
+    qsa('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (!id || id === '#') return;
+        const tgt = qs(id);
+        if (!tgt) return;
+        e.preventDefault();
+        smoothScrollTo(tgt);
       });
     });
 
-    // Start with "all"
-    activate("all");
-  }
+    // Buttons with data attributes
+    map.forEach(([selector, target, subject]) => {
+      qsa(selector).forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tgt = qs(target);
+          if (subject) contact.setSubject(subject);
+          if (tgt) smoothScrollTo(tgt);
+        });
+      });
+    });
+  };
 
-  // ----------------------------
-  // Start
-  // ----------------------------
-  function init() {
-    LOG("main.js v15b init");
-    bindCustomizeControls();
-    bindThemeControls();
-    bindGalleryFilters();
-  }
+  // -------- Library builder (optional, from assets/manifest.json)
+  // It looks for headings with the text "Featured Reels" and "Hero Alternates"
+  // and inserts a flex grid of tiles below them.
+  const buildLibrary = async () => {
+    // where to mount
+    const ensureMountAfterHeading = (headingText, mountId) => {
+      let mount = byId(mountId);
+      if (mount) return mount;
+      const h2 = qsa('h2, h3').find(h => h.textContent.trim().toLowerCase() === headingText.toLowerCase());
+      if (!h2) return null;
+      mount = document.createElement('div');
+      mount.id = mountId;
+      mount.className = 'tile-grid';
+      h2.insertAdjacentElement('afterend', mount);
+      return mount;
+    };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
+    const featuredMount = ensureMountAfterHeading('Featured Reels', 'featured-reels');
+    const heroAltMount  = ensureMountAfterHeading('Hero Alternates', 'hero-alternates');
+    if (!featuredMount && !heroAltMount) return;
+
+    let manifest = null;
+    try {
+      const res = await fetch('assets/manifest.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('manifest fetch failed');
+      manifest = await res.json();
+    } catch (_) {
+      // Graceful fallback: show simple placeholders if manifest not found
+      if (featuredMount) featuredMount.innerHTML = `<p class="muted">Add items via <code>assets/manifest.json</code> to populate the Library.</p>`;
+      return;
+    }
+
+    // Expect manifest like:
+    // { images: [{src:"assets/images/hero_1.jpg", tags:["hero"] }], videos: [{src:"assets/videos/hero_1.mp4", poster:"...", tags:["9x16","hero"]}] }
+    const items = [
+      ...(Array.isArray(manifest.videos) ? manifest.videos : []),
+      ...(Array.isArray(manifest.images) ? manifest.images : []),
+    ];
+
+    const makeTile = (item) => {
+      const btn = document.createElement('button');
+      btn.className = 'tile';
+      btn.type = 'button';
+      btn.setAttribute('data-tags', (item.tags || []).join(','));
+      // Image tiles
+      if (/\.(png|jpg|jpeg|webp|gif)$/i.test(item.src)) {
+        btn.innerHTML = `<img loading="lazy" src="${item.src}" alt="${item.alt || 'Image'}">`;
+      } else if (/\.(mp4|webm|mov)$/i.test(item.src)) {
+        // Video tiles (use poster if provided)
+        const poster = item.poster ? ` poster="${item.poster}"` : '';
+        btn.innerHTML = `<video${poster} preload="none" muted playsinline></video>`;
+        // lazy set src on interaction to avoid auto-download
+        btn.addEventListener('pointerenter', () => {
+          const v = qs('video', btn);
+          if (v && !v.src) v.src = item.src;
+        }, { once: true });
+      } else {
+        btn.textContent = item.title || item.src.split('/').pop();
+      }
+      btn.addEventListener('click', () => setHero(item));
+      return btn;
+    };
+
+    const setHero = (item) => {
+      // A minimal “Hero”: if you add <figure id="hero"> in HTML, we will populate it.
+      let hero = byId('hero');
+      if (!hero) {
+        // Create a hero block at top of Library if missing
+        const libHeading = byId('library') || qsa('h2, h1').find(h => h.textContent.trim().toLowerCase() === 'library');
+        hero = document.createElement('figure');
+        hero.id = 'hero';
+        hero.className = 'hero';
+        if (libHeading) libHeading.insertAdjacentElement('afterend', hero);
+        else document.body.prepend(hero);
+      }
+      hero.innerHTML = '';
+      if (/\.(png|jpg|jpeg|webp|gif)$/i.test(item.src)) {
+        hero.innerHTML = `<img src="${item.src}" alt="${item.alt || 'Selected image'}">`;
+      } else {
+        const poster = item.poster ? ` poster="${item.poster}"` : '';
+        hero.innerHTML = `<video${poster} src="${item.src}" controls playsinline></video>`;
+      }
+      smoothScrollTo(hero);
+    };
+
+    // Simple split: anything tagged 'hero' goes to hero alternates, otherwise featured
+    const heroAlt = items.filter(it => (it.tags || []).map(t => t.toLowerCase()).includes('hero'));
+    const featured = items.filter(it => !heroAlt.includes(it));
+
+    if (featuredMount) {
+      featuredMount.innerHTML = '';
+      featured.slice(0, 8).forEach(it => featuredMount.appendChild(makeTile(it)));
+    }
+    if (heroAltMount) {
+      heroAltMount.innerHTML = '';
+      heroAlt.slice(0, 8).forEach(it => heroAltMount.appendChild(makeTile(it)));
+    }
+  };
+
+  // -------- Kickoff
+  document.addEventListener('DOMContentLoaded', () => {
+    contact.init();
+    wireCTAs();
+    buildLibrary();
+  });
 })();
