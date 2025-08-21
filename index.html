@@ -2,363 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE GRID — White & Gold</title>
-  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>THE GRID — Cinematic AI visuals & TikTok creator hub</title>
 
-  <!-- Core styles (next step you'll paste the new styles.css) -->
-  <link rel="stylesheet" href="styles.css" />
+  <!-- ✅ Correct, working path to your stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 
-  <!-- Helpful preloads (safe if missing) -->
-  <link rel="preload" href="assets/videos/hero_1.mp4" as="video">
-  <link rel="preload" href="assets/images/hero_1.jpg" as="image">
-  <link rel="preload" href="assets/videos/gc_spin.mp4" as="video">
+  <!-- Favicons (optional; safe to keep or remove) -->
+  <link rel="icon" href="assets/images/gc_logo.png" type="image/png" />
+  <meta name="theme-color" content="#000000" />
 </head>
 
-<body class="theme-white-gold">
+<body>
+  <header class="site-head">
+    <a class="brand" href="./">THE GRID</a>
+    <nav class="topnav">
+      <a href="#library">Library</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
 
-  <!-- Background FX layers (styled by CSS) -->
-  <div class="fx-wrap" aria-hidden="true">
-    <canvas id="bgGrad"></canvas>
-    <canvas id="bgParticles"></canvas>
-  </div>
-
-  <!-- ===== Header / Top Bar ===== -->
-  <header class="site-header">
-    <div class="wrap bar">
-      <a class="brand" href="#top" aria-label="Home">
-        <span class="logo">
-          <!-- If mp4 exists it plays, else the img fallback is used by main.js -->
-          <video id="logoVideo" muted playsinline loop></video>
-          <img id="logoFallback" alt="THE GRID" />
-        </span>
-        <span class="brand-text">
-          <strong id="greeting">Welcome — THE GRID</strong>
-          <small class="tagline">White &amp; Gold</small>
-        </span>
-      </a>
-
-      <nav class="nav">
-        <a href="#library" class="nav-link">Library</a>
-        <a href="#plans" class="nav-link">Pricing</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </nav>
-
-      <div class="actions">
-        <button id="btnCustomize" class="btn">Customize</button>
-        <button id="btnJoin" class="btn primary">Join Now</button>
-      </div>
+    <div class="cta-row">
+      <button id="openCustomize" class="btn ghost">Customize</button>
+      <a class="btn" href="#pricing">Join Now</a>
     </div>
   </header>
 
-  <main id="top" class="wrap">
-
-    <!-- ===== HERO ===== -->
-    <section class="card hero-card" aria-labelledby="heroTitle">
-      <div class="hero-head">
-        <h1 id="heroTitle" class="h1">Launch visuals that sell.</h1>
-        <p class="lede">
-          Premium white &amp; gold UI, fast library swaps, ethical monetisation. No code edits — ever.
-        </p>
-      </div>
-
-      <!-- Media frame (video or image injected by main.js) -->
-      <div id="heroFrame" class="hero-frame" role="region" aria-label="Hero media">
-        <!-- main.js will inject <video> or <img> here based on current selection -->
-        <div class="hero-overlay" aria-hidden="true"></div>
-      </div>
-
-      <div class="cta-row">
-        <a href="#library" class="btn">Open Library</a>
-        <a href="#plans" class="btn primary">See Pricing</a>
-      </div>
-    </section>
-
-    <!-- ===== LIBRARY (manifest-aware) ===== -->
-    <section id="library" class="card" aria-labelledby="libTitle">
-      <h2 id="libTitle" class="h2">Library</h2>
-      <p class="lede">
-        Tap any tile to set the Hero or add to showcases. Drop content into
-        <b>assets/videos</b> &amp; <b>assets/images</b>. Optional: extend with
-        <b>assets/manifest.json</b>.
-      </p>
-
-      <!-- Category tabs (Hero, Reels 9:16, Reels 16:9, Backgrounds, Logos, Images, Extras) -->
-      <div id="libTabs" class="tabs" role="tablist" aria-label="Library categories"></div>
-
-      <!-- Quick tag filters (auto-generated from filenames) -->
-      <div id="libTags" class="tabs tags"></div>
-
-      <!-- Grid of items (video/image cards) -->
-      <div id="libGrid" class="grid library-grid" aria-live="polite"></div>
-
-      <!-- Showcase rows (small carousels the user can fill from the library) -->
-      <div class="showcases">
-        <div class="showcase">
-          <div class="showcase-head">
-            <h3 class="h3">Featured Reels</h3>
-            <button class="btn ghost" data-target="showcase-reels" data-action="clear-showcase">Clear</button>
-          </div>
-          <div id="showcase-reels" class="showcase-strip" aria-label="Featured reels"></div>
-        </div>
-
-        <div class="showcase">
-          <div class="showcase-head">
-            <h3 class="h3">Hero Alternates</h3>
-            <button class="btn ghost" data-target="showcase-hero" data-action="clear-showcase">Clear</button>
-          </div>
-          <div id="showcase-hero" class="showcase-strip" aria-label="Alternate hero media"></div>
-        </div>
-      </div>
-
-      <p class="meta">
-        Tip: Filenames become tags automatically (e.g. <i>reel_9x16_hype.mp4</i> gives tags <i>reel</i>, <i>9x16</i>, <i>hype</i>).
+  <main>
+    <!-- Hero -->
+    <section class="wrap hero">
+      <h1>Launch visuals that sell.</h1>
+      <p>Premium white & gold UI, fast library swaps, ethical monetisation. No code edits — ever.</p>
+      <p class="links">
+        <a class="btn link" href="#library">Open Library</a>
+        <a class="btn link" href="#pricing">See Pricing</a>
       </p>
     </section>
 
-    <!-- ===== PRICING ===== -->
-    <section id="plans" class="card" aria-labelledby="plansTitle">
-      <h2 id="plansTitle" class="h2">Plans</h2>
-      <p class="lede">Fair pricing. Clear value. 7-day refund.</p>
+    <!-- Library -->
+    <section id="library" class="wrap">
+      <h2>Library</h2>
+      <p class="muted">Tap any tile to set the Hero or add to showcases. Drop content into
+        <code>assets/videos</code> &amp; <code>assets/images</code>. Optional: extend with
+        <code>assets/manifest.json</code>.
+      </p>
 
-      <div class="grid plans">
+      <h3>Featured Reels</h3>
+      <div class="grid" id="featuredReels"></div>
+
+      <h3>Hero Alternates</h3>
+      <div class="grid" id="heroAlternates"></div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="wrap">
+      <h2>Plans</h2>
+      <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
+
+      <div class="plans">
         <article class="plan" data-tier="basic">
-          <div class="plan-head">
-            <span class="badge">BASIC</span>
-            <span class="price">£9<span class="unit">/mo</span></span>
-          </div>
-          <ul class="plan-list">
+          <h3>BASIC <span class="muted">£9/mo</span></h3>
+          <ul>
             <li>Starter templates, polished UI</li>
             <li>Library access (videos, images, logos)</li>
             <li>Email support (48h)</li>
           </ul>
-          <div class="plan-actions">
-            <button class="btn primary choose">Choose</button>
-            <button class="btn ghost details">Details</button>
+          <div class="row">
+            <button class="btn primary choose" data-plan="Basic">Choose</button>
+            <button class="btn ghost details" data-plan="Basic">Details</button>
           </div>
         </article>
 
         <article class="plan" data-tier="silver">
-          <div class="plan-head">
-            <span class="badge">SILVER</span>
-            <span class="price">£29<span class="unit">/mo</span></span>
-          </div>
-          <ul class="plan-list">
+          <h3>SILVER <span class="muted">£29/mo</span></h3>
+          <ul>
             <li>Everything in Basic</li>
-            <li>Advanced effects & presets</li>
+            <li>Advanced effects &amp; presets</li>
             <li>Priority email (24h)</li>
           </ul>
-          <div class="plan-actions">
-            <button class="btn primary choose">Choose</button>
-            <button class="btn ghost details">Details</button>
+          <div class="row">
+            <button class="btn primary choose" data-plan="Silver">Choose</button>
+            <button class="btn ghost details" data-plan="Silver">Details</button>
           </div>
         </article>
 
-        <article class="plan highlight" data-tier="gold">
-          <div class="plan-head">
-            <span class="badge">GOLD</span>
-            <span class="price">£49<span class="unit">/mo</span></span>
-          </div>
-          <ul class="plan-list">
+        <article class="plan" data-tier="gold">
+          <h3>GOLD <span class="muted">£49/mo</span></h3>
+          <ul>
             <li>Full custom session</li>
-            <li>Admin toolkit & automations</li>
+            <li>Admin toolkit &amp; automations</li>
             <li>1:1 onboarding (45 min)</li>
           </ul>
-          <div class="plan-actions">
-            <button class="btn primary choose">Choose</button>
-            <button class="btn ghost details">Details</button>
+          <div class="row">
+            <button class="btn primary choose" data-plan="Gold">Choose</button>
+            <button class="btn ghost details" data-plan="Gold">Details</button>
           </div>
         </article>
 
-        <article class="plan premium" data-tier="diamond">
-          <div class="plan-head">
-            <span class="badge">DIAMOND</span>
-            <span class="price">£99<span class="unit">/mo</span></span>
-          </div>
-          <ul class="plan-list">
-            <li>Custom pipelines & integrations</li>
+        <article class="plan" data-tier="diamond">
+          <h3>DIAMOND <span class="muted">£99/mo</span></h3>
+          <ul>
+            <li>Custom pipelines &amp; integrations</li>
             <li>Hands-on help building your stack</li>
-            <li>Priority roadmap & turnaround</li>
+            <li>Priority roadmap &amp; turnaround</li>
           </ul>
-          <div class="plan-actions">
-            <button class="btn primary choose">Choose</button>
-            <button class="btn ghost details">Details</button>
+          <div class="row">
+            <button class="btn primary choose" data-plan="Diamond">Choose</button>
+            <button class="btn ghost details" data-plan="Diamond">Details</button>
           </div>
         </article>
       </div>
 
-      <p class="meta">All plans billed monthly. Cancel anytime. Edit prices in Customize.</p>
+      <h2>À-la-carte Services</h2>
+      <article class="plan">
+        <h3>SETUP <span class="muted">£39</span></h3>
+        <ul>
+          <li>Deploy &amp; connect Pages</li>
+          <li>Analytics hookup</li>
+          <li>Best-practice sweep</li>
+        </ul>
+        <button class="btn ghost" id="startSetup">Start Setup</button>
+      </article>
+
+      <article class="plan">
+        <h3>REELS <span class="muted">£59</span></h3>
+        <ul>
+          <li>3 niche reels</li>
+          <li>Captions &amp; cuts</li>
+          <li>IG/TikTok ready</li>
+        </ul>
+        <button class="btn ghost" id="orderReels">Order Pack</button>
+      </article>
+
+      <article class="plan">
+        <h3>TEMPLATES <span class="muted">£29</span></h3>
+        <ul>
+          <li>5 premium blocks</li>
+          <li>Copy-paste ready</li>
+          <li>Lifetime updates</li>
+        </ul>
+        <button class="btn ghost" id="getTemplates">Get Pack</button>
+      </article>
     </section>
 
-    <!-- ===== À-la-carte Services ===== -->
-    <section class="card" aria-labelledby="servicesTitle">
-      <h2 id="servicesTitle" class="h2">À-la-carte Services</h2>
-      <div class="grid services">
-        <article class="service">
-          <div class="service-head">
-            <span class="badge">SETUP</span>
-            <span class="price">£39</span>
-          </div>
-          <ul>
-            <li>Deploy & connect Pages</li>
-            <li>Analytics hookup</li>
-            <li>Best-practice sweep</li>
-          </ul>
-          <button class="btn primary">Start Setup</button>
-        </article>
-        <article class="service">
-          <div class="service-head">
-            <span class="badge">REELS</span>
-            <span class="price">£59</span>
-          </div>
-          <ul>
-            <li>3 niche reels</li>
-            <li>Captions & cuts</li>
-            <li>IG/TikTok ready</li>
-          </ul>
-          <button class="btn primary">Order Pack</button>
-        </article>
-        <article class="service">
-          <div class="service-head">
-            <span class="badge">TEMPLATES</span>
-            <span class="price">£29</span>
-          </div>
-          <ul>
-            <li>5 premium blocks</li>
-            <li>Copy-paste ready</li>
-            <li>Lifetime updates</li>
-          </ul>
-          <button class="btn primary">Get Pack</button>
-        </article>
-      </div>
-    </section>
-
-    <!-- ===== CONTACT ===== -->
-    <section id="contact" class="card" aria-labelledby="contactTitle">
-      <h2 id="contactTitle" class="h2">Contact</h2>
-      <form id="contactForm" class="contact-form" novalidate>
-        <div class="grid two">
-          <label>
-            <span class="label">Your name</span>
-            <input name="name" placeholder="Jane Doe" required />
-          </label>
-          <label>
-            <span class="label">Email</span>
-            <input name="email" type="email" placeholder="you@example.com" required />
-          </label>
+    <!-- Contact -->
+    <section id="contact" class="wrap contact card">
+      <h2>Contact</h2>
+      <form id="contactForm" onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com'); this.reset();">
+        <div class="grid" style="grid-template-columns:1fr 1fr;">
+          <label>Your name<br><input type="text" name="name" placeholder="Jane Doe" required></label>
+          <label>Email<br><input type="email" name="email" placeholder="you@example.com" required></label>
+          <label style="grid-column:1/-1;">Subject<br><input type="text" name="subject" placeholder="How can we help?" required></label>
+          <label style="grid-column:1/-1;">Message<br><textarea name="message" placeholder="Write your message..." rows="4" required></textarea></label>
         </div>
-        <label>
-          <span class="label">Subject</span>
-          <input name="subject" placeholder="How can we help?" />
-        </label>
-        <label>
-          <span class="label">Message</span>
-          <textarea name="message" placeholder="Write your message…"></textarea>
-        </label>
         <button class="btn primary" type="submit">Send</button>
-        <p class="meta">Replies from <b>gridcoresystems@gmail.com</b>. No spam, no sharing.</p>
       </form>
+      <p class="muted" style="margin-top:1rem;">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
     </section>
-
   </main>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="wrap">
-      <small>© <span id="year"></span> THE GRID. All rights reserved.</small>
-    </div>
+  <footer class="wrap">
+    <p>© 2025 THE GRID. All rights reserved.</p>
   </footer>
 
-  <!-- ===== Modals ===== -->
-  <dialog id="planModal" class="modal">
-    <div class="modal-head">
-      <strong id="modalTitle">Plan details</strong>
-      <button class="btn x" data-close-modal>Close</button>
+  <!-- Modal for plan details -->
+  <dialog id="planModal">
+    <div class="modalHead">
+      <strong id="mTitle">Plan details</strong>
+      <button class="btn x" onclick="planModal.close()">Close</button>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modalBody" id="mBody"></div>
   </dialog>
 
-  <!-- Customize Panel -->
-  <dialog id="customizePanel" class="modal">
-    <div class="modal-head">
-      <strong>Design & Settings</strong>
-      <button class="btn x" data-close-modal>Close</button>
-    </div>
-    <div class="modal-body">
-      <form class="grid two" id="customizeForm">
-        <!-- Colors -->
-        <label>Accent
-          <input type="color" name="accent" value="#F4C84A">
-        </label>
-        <label>Secondary
-          <input type="color" name="accent2" value="#B5C7FF">
-        </label>
-        <label>Text
-          <input type="color" name="ink" value="#F5F7FA">
-        </label>
-        <label>Soft Text
-          <input type="color" name="soft" value="#C8CFD8">
-        </label>
+  <!-- Confetti canvas (optional) -->
+  <canvas id="fx" style="position:fixed; inset:0; pointer-events:none;"></canvas>
 
-        <!-- Surfaces -->
-        <label>Card Surface
-          <input type="color" name="card" value="#121418">
-        </label>
-        <label>Panel Surface
-          <input type="color" name="panel" value="#0E1013">
-        </label>
-        <label>BG A
-          <input type="color" name="bgA" value="#0A0B0D">
-        </label>
-        <label>BG B
-          <input type="color" name="bgB" value="#1A1200">
-        </label>
-
-        <!-- Scale / FX -->
-        <label>Radius
-          <input type="range" name="radius" min="6" max="28" value="16">
-        </label>
-        <label>Glow (0–100)
-          <input type="range" name="ring" min="0" max="100" value="30">
-        </label>
-        <label>Font Scale
-          <input type="range" name="font" min="0.9" max="1.2" step=".01" value="1.0">
-        </label>
-        <label>Spacing
-          <input type="range" name="space" min="0.9" max="1.2" step=".01" value="1.0">
-        </label>
-        <label>Vignette
-          <select name="vignette">
-            <option value="1" selected>On</option>
-            <option value="0">Off</option>
-          </select>
-        </label>
-
-        <!-- Hero Source -->
-        <label>Hero Source
-          <select name="hero" id="heroSelect"></select>
-        </label>
-      </form>
-
-      <div class="cta-row">
-        <button id="saveSettings" class="btn">Save to this device</button>
-        <button id="resetSettings" class="btn x">Reset</button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- Confetti canvas (tasteful left/right bursts) -->
-  <canvas id="confetti" aria-hidden="true"></canvas>
-
-  <!-- App script (works with this HTML + the new CSS) -->
-  <script src="main.js" defer></script>
-
-  <!-- Minimal inline boot (safe even if JS is cached) -->
-  <script>
-    // Year in footer
-    document.addEventListener('DOMContentLoaded', () => {
-      var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
-    });
-  </script>
+  <!-- ✅ Script order & paths -->
+  <script src="assets/js/confetti.js"></script>
+  <script src="assets/js/hotfix.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
