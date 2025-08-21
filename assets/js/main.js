@@ -1,73 +1,79 @@
-/* THE GRID – main.js (safe minimal v13.2)
-   - Guaranteed not to error if elements are missing
-   - Fixes Customize panel open/close
-   - Adds tiny UI polish (nav link active state, smooth scroll)
-*/
+// THE GRID main.js v15 – robust Customize panel controls
 
 (function () {
-  const $  = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+  console.log("THE GRID main.js v15 loaded");
 
-  function onReady(fn){ 
-    if (document.readyState === 'loading') { 
-      document.addEventListener('DOMContentLoaded', fn, { once:true });
-    } else { fn(); }
+  // Helpers
+  const $  = (sel, r = document) => r.querySelector(sel);
+  const $$ = (sel, r = document) => [...r.querySelectorAll(sel)];
+
+  function openPanel() {
+    const panel = $("#customize");
+    if (!panel) return;
+    // unhide if HTML had hidden or CSS display:none
+    panel.hidden = false;
+    try { panel.style.display = ""; } catch (e) {}
+    // smooth scroll into view; fallback to hash
+    try {
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {
+      window.location.hash = "#customize";
+    }
   }
 
-  onReady(() => {
-    // ---- Customize panel (robust selectors) ----
-    const panel = $('#customize');
-    const openBtn  = $('#open-customize') || $$('a,button').find(el => /customize/i.test(el.textContent.trim()));
-    const closeBtn = $('#close-customize') || (panel ? panel.querySelector('button, .btn') : null);
+  function closePanel() {
+    const panel = $("#customize");
+    if (!panel) return;
+    panel.hidden = true;
+  }
 
-    if (panel) panel.hidden = true; // start hidden; avoid flicker
+  function bindCustomize() {
+    // Avoid double-binding
+    if (document.documentElement._gridCustomizeBound) return;
+    document.documentElement._gridCustomizeBound = true;
 
-    if (openBtn && panel) {
-      openBtn.addEventListener('click', (e) => {
+    const openBtn  = $("#open-customize");
+    const closeBtn = $("#close-customize");
+
+    if (openBtn) {
+      openBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        panel.hidden = false;
-        // focus first input if present
-        const firstInput = panel.querySelector('input,select,button,textarea');
-        if (firstInput) firstInput.focus({ preventScroll:true });
+        openPanel();
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        closePanel();
       });
     }
 
-    if (closeBtn && panel) {
-      closeBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        panel.hidden = true;
-      });
-    }
+    // Also make any link/button with text “Customize” open the panel
+    $$("a,button").forEach((el) => {
+      if (el._gridCustomizeWire) return;
+      const text = (el.textContent || "").trim().toLowerCase();
 
-    // ---- Smooth scroll for in-page links (About, Showcase, etc.) ----
-    $$('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const id = a.getAttribute('href');
-        const target = id && $(id);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // set active state
-          try {
-            $$('.nav a').forEach(x => x.classList.remove('active'));
-            a.classList.add('active');
-          } catch(_) {}
-        }
-      });
+      // If it’s a hash link to #customize, intercept for smooth UX
+      const href = (el.getAttribute("href") || "").trim();
+      const isHashCustomize = href === "#customize";
+
+      if (isHashCustomize || text.includes("customize")) {
+        el.addEventListener("click", (e) => {
+          // Only prevent default for anchors (avoid breaking real buttons)
+          if (el.tagName === "A") e.preventDefault();
+          openPanel();
+        });
+        el._gridCustomizeWire = true;
+      }
     });
 
-    // ---- Safe video autostyle (if present) ----
-    const hero = $('.hero-video');
-    if (hero) {
-      hero.setAttribute('playsinline', '');
-      hero.setAttribute('muted', '');
-      hero.setAttribute('autoplay', '');
-      hero.addEventListener('error', () => {
-        // If demo.mp4 missing, keep the frame but avoid console spam
-        console.warn('hero video not available (demo.mp4).');
-      }, { once:true });
-    }
+    // If URL already has #customize, auto-open on load
+    if (location.hash === "#customize") openPanel();
+  }
 
-    console.log('THE GRID main.js v13.2 loaded');
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bindCustomize);
+  } else {
+    bindCustomize();
+  }
 })();
