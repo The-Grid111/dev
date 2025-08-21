@@ -1,9 +1,13 @@
-/* v2 sanity */
-:root { --accent:#4dd0e1; }
-html,body{margin:0;padding:0;background:#0b0f14;color:#eaf2f7;font:16px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Arial,sans-serif}
+/* v3 base UI */
+:root { --accent:#4dd0e1; --bg:#0b0f14; --fg:#eaf2f7 }
+*{box-sizing:border-box}
+html,body{margin:0;background:linear-gradient(180deg,#0b0f14 0%,#0e141c 100%);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Arial,sans-serif}
+header,main,footer{max-width:980px;margin:0 auto;padding:20px}
 h1,h2{margin:1.2rem 0 .6rem;font-weight:800}
 h1{font-size:clamp(28px,6vw,44px)}
 h2{font-size:clamp(18px,3.5vw,28px);color:var(--accent)}
-main,header,footer,section{max-width:980px;margin:0 auto;padding:16px}
-video{width:100%;max-width:480px;border-radius:12px;outline:2px solid rgba(77,208,225,.35);display:block;margin:20px 0}
+p{margin:.25rem 0 1rem}
 a{color:var(--accent)}
+.btn{display:inline-block;background:var(--accent);color:#082229;text-decoration:none;padding:.6rem 1rem;border-radius:10px;font-weight:700}
+.btn:hover{filter:brightness(1.06)}
+video{width:100%;max-width:680px;border-radius:16px;outline:2px solid rgba(77,208,225,.35);display:block;margin:20px 0}
