@@ -1,213 +1,178 @@
-/* assets/js/main.js — full redo
-   - Smooth scrolling for CTAs & nav
-   - “Choose / Details / Start Setup / Order Pack / Get Pack” → scroll & prefill contact form
-   - Builds simple Library tiles from assets/manifest.json (optional)
-   - Contact form uses mailto: with prefilled subject/body (no backend needed)
+# file: dev/assets/js/main.js
+/* THE GRID – baseline UX hooks (no HTML changes required)
+   - Wires up action buttons by visible text
+   - Adds a lightweight "Customize" panel shell
+   - Safe to re-run; all listeners are idempotent
 */
 
-(() => {
-  const qs  = (s, el=document) => el.querySelector(s);
-  const qsa = (s, el=document) => [...el.querySelectorAll(s)];
-  const byId = id => document.getElementById(id);
+(function () {
+  const ready = (fn) =>
+    document.readyState !== "loading"
+      ? fn()
+      : document.addEventListener("DOMContentLoaded", fn, { once: true });
 
-  // -------- Smooth scroll helper
-  const smoothScrollTo = (target) => {
-    const el = typeof target === 'string' ? qs(target) : target;
-    if (!el) return;
-    const y = el.getBoundingClientRect().top + window.pageYOffset - 12;
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  };
+  ready(() => {
+    // ---------- helpers
+    const byText = (tag, texts) => {
+      const tset = new Set(texts.map((s) => s.toLowerCase()));
+      return [...document.querySelectorAll(tag)].filter((el) =>
+        tset.has(el.textContent.trim().toLowerCase())
+      );
+    };
+    const scrollToId = (id) => {
+      const el = document.getElementById(id) || document.querySelector(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    const openContact = () => scrollToId("contact") || scrollToId("#contact");
 
-  // -------- Contact form helpers
-  const contact = {
-    form: null,
-    name: null,
-    email: null,
-    subject: null,
-    message: null,
-    setSubject(txt) {
-      if (this.subject) this.subject.value = txt || '';
-      // Focus subject if user was sent here via a button
-      if (this.subject) this.subject.focus({ preventScroll: true });
-    },
-    init() {
-      this.form    = qs('#contact-form') || qs('form[action="#contact"]') || qs('form');
-      this.name    = qs('#contact-name')    || qs('input[name="name"], input[placeholder*="Name"]');
-      this.email   = qs('#contact-email')   || qs('input[type="email"]');
-      this.subject = qs('#contact-subject') || qs('input[name="subject"]');
-      this.message = qs('#contact-message') || qs('textarea');
-
-      if (!this.form) return;
-
-      // If a subject was passed in the URL (?subject=xxx), apply it.
-      const urlParams = new URLSearchParams(location.search);
-      const presetSubject = urlParams.get('subject');
-      if (presetSubject) this.setSubject(presetSubject);
-
-      this.form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const to = 'gridcoresystems@gmail.com'; // change if you ever need to
-        const subj = encodeURIComponent(this.subject?.value?.trim() || 'Website enquiry');
-        const lines = [];
-        if (this.name?.value)  lines.push(`Name: ${this.name.value}`);
-        if (this.email?.value) lines.push(`Email: ${this.email.value}`);
-        if (this.message?.value) {
-          lines.push('');
-          lines.push(this.message.value);
-        }
-        const body = encodeURIComponent(lines.join('\n'));
-        // Open mail client
-        window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
-      });
-    }
-  };
-
-  // -------- CTA wiring
-  const wireCTAs = () => {
-    const map = [
-      // [selector, targetSection, optionalSubject]
-      ['a[href="#library"], button[data-action="open-library"]', '#library', ''],
-      ['a[href="#pricing"], button[data-action="see-pricing"]', '#pricing', ''],
-      ['a[href="#contact"], button[data-action="contact"]', '#contact', ''],
-
-      ['button[data-plan="BASIC"]',   '#contact', 'Plan: BASIC'],
-      ['button[data-plan="SILVER"]',  '#contact', 'Plan: SILVER'],
-      ['button[data-plan="GOLD"]',    '#contact', 'Plan: GOLD'],
-      ['button[data-plan="DIAMOND"]', '#contact', 'Plan: DIAMOND'],
-
-      ['button[data-action="start-setup"]', '#contact', 'Service: Setup'],
-      ['button[data-action="order-reels"]', '#contact', 'Service: Reels'],
-      ['button[data-action="get-templates"]', '#contact', 'Service: Templates'],
-    ];
-
-    // Turn plain anchor CTAs (Open Library / See Pricing) into smooth scroll
-    qsa('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const id = a.getAttribute('href');
-        if (!id || id === '#') return;
-        const tgt = qs(id);
-        if (!tgt) return;
-        e.preventDefault();
-        smoothScrollTo(tgt);
-      });
-    });
-
-    // Buttons with data attributes
-    map.forEach(([selector, target, subject]) => {
-      qsa(selector).forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    // ---------- buttons → actions (text-based so it works with current HTML)
+    // Choose → scroll to Contact (lead capture)
+    byText("button, a", ["Choose"]).forEach((btn) => {
+      btn.dataset.bound = "1";
+      btn.addEventListener(
+        "click",
+        (e) => {
           e.preventDefault();
-          const tgt = qs(target);
-          if (subject) contact.setSubject(subject);
-          if (tgt) smoothScrollTo(tgt);
-        });
-      });
+          openContact();
+        },
+        { once: false }
+      );
     });
-  };
 
-  // -------- Library builder (optional, from assets/manifest.json)
-  // It looks for headings with the text "Featured Reels" and "Hero Alternates"
-  // and inserts a flex grid of tiles below them.
-  const buildLibrary = async () => {
-    // where to mount
-    const ensureMountAfterHeading = (headingText, mountId) => {
-      let mount = byId(mountId);
-      if (mount) return mount;
-      const h2 = qsa('h2, h3').find(h => h.textContent.trim().toLowerCase() === headingText.toLowerCase());
-      if (!h2) return null;
-      mount = document.createElement('div');
-      mount.id = mountId;
-      mount.className = 'tile-grid';
-      h2.insertAdjacentElement('afterend', mount);
-      return mount;
-    };
+    // Details → scroll to Pricing (if we find a heading with 'Plans')
+    byText("button, a", ["Details"]).forEach((btn) => {
+      btn.dataset.bound = "1";
+      btn.addEventListener(
+        "click",
+        (e) => {
+          e.preventDefault();
+          // Look for a Plans heading or pricing section
+          const heading =
+            [...document.querySelectorAll("h2,h3")]
+              .find((h) => /plans/i.test(h.textContent)) || null;
+          if (heading) heading.scrollIntoView({ behavior: "smooth" });
+        },
+        { once: false }
+      );
+    });
 
-    const featuredMount = ensureMountAfterHeading('Featured Reels', 'featured-reels');
-    const heroAltMount  = ensureMountAfterHeading('Hero Alternates', 'hero-alternates');
-    if (!featuredMount && !heroAltMount) return;
+    // Start Setup / Order Pack / Get Pack → contact
+    byText("button, a", ["Start Setup", "Order Pack", "Get Pack"]).forEach((btn) => {
+      btn.dataset.bound = "1";
+      btn.addEventListener(
+        "click",
+        (e) => {
+          e.preventDefault();
+          openContact();
+        },
+        { once: false }
+      );
+    });
 
-    let manifest = null;
-    try {
-      const res = await fetch('assets/manifest.json', { cache: 'no-store' });
-      if (!res.ok) throw new Error('manifest fetch failed');
-      manifest = await res.json();
-    } catch (_) {
-      // Graceful fallback: show simple placeholders if manifest not found
-      if (featuredMount) featuredMount.innerHTML = `<p class="muted">Add items via <code>assets/manifest.json</code> to populate the Library.</p>`;
-      return;
+    // ---------- Lightweight Customize panel (UI shell)
+    // Skip if already injected
+    if (!document.getElementById("tg-customize-toggle")) {
+      const toggle = document.createElement("button");
+      toggle.id = "tg-customize-toggle";
+      toggle.type = "button";
+      toggle.textContent = "Customize";
+      Object.assign(toggle.style, {
+        position: "fixed",
+        right: "16px",
+        bottom: "16px",
+        zIndex: 9999,
+        padding: "10px 14px",
+        borderRadius: "999px",
+        border: "1px solid rgba(255,255,255,.15)",
+        background: "rgba(255,255,255,.06)",
+        color: "var(--ink, #e7f5ff)",
+        backdropFilter: "blur(6px)",
+        cursor: "pointer",
+      });
+
+      const panel = document.createElement("div");
+      panel.id = "tg-customize-panel";
+      Object.assign(panel.style, {
+        position: "fixed",
+        top: 0,
+        right: 0,
+        width: "min(420px, 100%)",
+        height: "100%",
+        background: "var(--panel, rgba(17,25,29,.95))",
+        color: "var(--ink, #e7f5ff)",
+        borderLeft: "1px solid rgba(255,255,255,.08)",
+        transform: "translateX(100%)",
+        transition: "transform .24s ease",
+        zIndex: 9998,
+        padding: "20px 20px 28px",
+        overflow: "auto",
+      });
+      panel.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;">
+          <h3 style="margin:0;font-size:18px;font-weight:700;">Customize</h3>
+          <button id="tg-customize-close" type="button"
+            style="border:1px solid rgba(255,255,255,.15);background:transparent;color:inherit;border-radius:8px;padding:6px 10px;cursor:pointer">
+            Close
+          </button>
+        </div>
+        <p style="opacity:.8;margin:.75rem 0 1rem">
+          This is the baseline panel. We’ll add real controls (theme, logos, library categories)
+          and have changes persist via <code>assets/manifest.json</code>.
+        </p>
+        <div style="display:grid;gap:10px">
+          <label style="display:grid;gap:6px">
+            <span>Theme</span>
+            <select id="tg-theme" style="padding:10px;border-radius:10px;background:#0b1416;color:#e7f5ff;border:1px solid rgba(255,255,255,.12)">
+              <option value="dark" selected>Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </label>
+          <label style="display:grid;gap:6px">
+            <span>Accent</span>
+            <select id="tg-accent" style="padding:10px;border-radius:10px;background:#0b1416;color:#e7f5ff;border:1px solid rgba(255,255,255,.12)">
+              <option value="#7dd3fc" selected>Sky</option>
+              <option value="#facc15">Gold</option>
+              <option value="#a78bfa">Violet</option>
+            </select>
+          </label>
+          <button id="tg-apply" type="button"
+            style="margin-top:6px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(125,211,252,.1);color:inherit;cursor:pointer">
+            Apply
+          </button>
+        </div>
+      `;
+
+      const mount = document.body;
+      mount.appendChild(toggle);
+      mount.appendChild(panel);
+
+      const setOpen = (open) => {
+        panel.style.transform = open ? "translateX(0%)" : "translateX(100%)";
+      };
+
+      toggle.addEventListener("click", () => setOpen(true));
+      panel.querySelector("#tg-customize-close").addEventListener("click", () => setOpen(false));
+
+      // Simple theme application (baseline)
+      const apply = () => {
+        const theme = panel.querySelector("#tg-theme").value;
+        const accent = panel.querySelector("#tg-accent").value;
+        const root = document.documentElement.style;
+        if (theme === "light") {
+          root.setProperty("--bg", "#f8fafc");
+          root.setProperty("--ink", "#0b1416");
+          root.setProperty("--muted", "#3b454b");
+          root.setProperty("--card", "#ffffff");
+        } else {
+          root.setProperty("--bg", "#0b1416");
+          root.setProperty("--ink", "#e7f5ff");
+          root.setProperty("--muted", "#9fb0b7");
+          root.setProperty("--card", "rgba(255,255,255,.04)");
+        }
+        root.setProperty("--accent", accent);
+      };
+      panel.querySelector("#tg-apply").addEventListener("click", apply);
     }
-
-    // Expect manifest like:
-    // { images: [{src:"assets/images/hero_1.jpg", tags:["hero"] }], videos: [{src:"assets/videos/hero_1.mp4", poster:"...", tags:["9x16","hero"]}] }
-    const items = [
-      ...(Array.isArray(manifest.videos) ? manifest.videos : []),
-      ...(Array.isArray(manifest.images) ? manifest.images : []),
-    ];
-
-    const makeTile = (item) => {
-      const btn = document.createElement('button');
-      btn.className = 'tile';
-      btn.type = 'button';
-      btn.setAttribute('data-tags', (item.tags || []).join(','));
-      // Image tiles
-      if (/\.(png|jpg|jpeg|webp|gif)$/i.test(item.src)) {
-        btn.innerHTML = `<img loading="lazy" src="${item.src}" alt="${item.alt || 'Image'}">`;
-      } else if (/\.(mp4|webm|mov)$/i.test(item.src)) {
-        // Video tiles (use poster if provided)
-        const poster = item.poster ? ` poster="${item.poster}"` : '';
-        btn.innerHTML = `<video${poster} preload="none" muted playsinline></video>`;
-        // lazy set src on interaction to avoid auto-download
-        btn.addEventListener('pointerenter', () => {
-          const v = qs('video', btn);
-          if (v && !v.src) v.src = item.src;
-        }, { once: true });
-      } else {
-        btn.textContent = item.title || item.src.split('/').pop();
-      }
-      btn.addEventListener('click', () => setHero(item));
-      return btn;
-    };
-
-    const setHero = (item) => {
-      // A minimal “Hero”: if you add <figure id="hero"> in HTML, we will populate it.
-      let hero = byId('hero');
-      if (!hero) {
-        // Create a hero block at top of Library if missing
-        const libHeading = byId('library') || qsa('h2, h1').find(h => h.textContent.trim().toLowerCase() === 'library');
-        hero = document.createElement('figure');
-        hero.id = 'hero';
-        hero.className = 'hero';
-        if (libHeading) libHeading.insertAdjacentElement('afterend', hero);
-        else document.body.prepend(hero);
-      }
-      hero.innerHTML = '';
-      if (/\.(png|jpg|jpeg|webp|gif)$/i.test(item.src)) {
-        hero.innerHTML = `<img src="${item.src}" alt="${item.alt || 'Selected image'}">`;
-      } else {
-        const poster = item.poster ? ` poster="${item.poster}"` : '';
-        hero.innerHTML = `<video${poster} src="${item.src}" controls playsinline></video>`;
-      }
-      smoothScrollTo(hero);
-    };
-
-    // Simple split: anything tagged 'hero' goes to hero alternates, otherwise featured
-    const heroAlt = items.filter(it => (it.tags || []).map(t => t.toLowerCase()).includes('hero'));
-    const featured = items.filter(it => !heroAlt.includes(it));
-
-    if (featuredMount) {
-      featuredMount.innerHTML = '';
-      featured.slice(0, 8).forEach(it => featuredMount.appendChild(makeTile(it)));
-    }
-    if (heroAltMount) {
-      heroAltMount.innerHTML = '';
-      heroAlt.slice(0, 8).forEach(it => heroAltMount.appendChild(makeTile(it)));
-    }
-  };
-
-  // -------- Kickoff
-  document.addEventListener('DOMContentLoaded', () => {
-    contact.init();
-    wireCTAs();
-    buildLibrary();
   });
 })();
