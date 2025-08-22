@@ -1,22 +1,66 @@
-/* THE GRID – modal.css (new) */
+/* ===== THE GRID – Modal System ===== */
 
-.tg-modal{position:fixed;inset:0;display:none;z-index:9999}
-.tg-modal[aria-hidden="false"]{display:block}
-.tg-modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:saturate(120%) blur(2px)}
+.tg-modal{
+  position:fixed; inset:0; z-index:60;
+  display:none;
+}
+.tg-modal[aria-hidden="false"]{ display:block; }
+
+.tg-modal__backdrop{
+  position:absolute; inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:saturate(1.1) blur(4px);
+}
+
 .tg-modal__dialog{
-  position:relative;max-width:680px;margin:12vh auto;z-index:1;
-  background:rgba(20,22,25,.96);color:#e7ebf0;border-radius:16px;
-  box-shadow:0 10px 35px rgba(0,0,0,.5), 0 0 40px rgba(0,255,200,.15) inset;
-  padding:24px 22px 20px; border:1px solid rgba(255,255,255,.06)
+  position:relative;
+  margin:6vh auto 0;
+  width:min(720px, 92vw);
+  background:#0f1219; color:#e9ecf3;
+  border-radius:16px;
+  box-shadow: 0 20px 70px rgba(0,0,0,.55), 0 0 0 1px #1d2331 inset;
+  padding:22px;
+  animation: modalIn .18s ease-out;
 }
+
+@keyframes modalIn{
+  from{ transform:translateY(8px); opacity:.6 }
+  to{ transform:none; opacity:1 }
+}
+
 .tg-modal__close{
-  position:absolute;top:10px;right:10px; width:36px;height:36px;border-radius:12px;
-  border:1px solid rgba(255,255,255,.08); background:#0f1215;color:#e7ebf0;
-  font-size:22px;line-height:32px;cursor:pointer
+  position:absolute; top:10px; right:12px;
+  appearance:none; border:0; background:#141926; color:#e9ecf3;
+  width:36px; height:36px; border-radius:10px; cursor:pointer;
+  box-shadow:0 0 0 1px #20263a inset;
 }
-.tg-modal__close:hover{box-shadow:0 0 16px rgba(0,255,200,.35)}
-.tg-modal h3{font-size:1.4rem;margin:0 0 .4rem}
-.tg-modal p{margin:.2rem 0 .8rem;color:#b6c0cc}
-.tg-modal ul{margin:.4rem 0 .6rem 1.2rem}
-.tg-modal li{margin:.18rem 0}
-.tg-kicker{display:block;font-size:.8rem;letter-spacing:.12em;color:#9bb3c8;text-transform:uppercase;margin-bottom:.35rem}
+.tg-modal__close:hover{ filter:brightness(1.1) }
+
+.tg-kicker{
+  display:inline-block; font:700 12px/1 ui-sans-serif;
+  letter-spacing:.7px; color:#0c1017;
+  background: color-mix(in srgb, #F4C84A, #fff 20%);
+  padding:6px 10px; border-radius:999px; box-shadow:0 0 0 1px #2b2110 inset;
+  margin-bottom:8px;
+}
+
+.tg-modal h3{ margin:6px 0 6px; font:800 22px/1.2 ui-sans-serif }
+.tg-modal p{ margin:0 0 10px; color:#c5ccda }
+.tg-modal ul{ margin:10px 0 0 18px; color:#cdd3e2 }
+.tg-modal li{ margin:6px 0 }
+
+.actions{ display:flex; gap:10px; flex-wrap:wrap }
+.btn{
+  appearance:none; border:0; border-radius:12px; padding:12px 16px;
+  font:600 16px/1 ui-sans-serif; cursor:pointer;
+}
+.btn-primary{
+  background:linear-gradient(180deg, color-mix(in srgb, #F4C84A, #fff 12%), #F4C84A);
+  color:#1a1300; box-shadow:0 8px 28px rgba(244,200,74,.25), 0 0 0 1px color-mix(in srgb, #F4C84A, #000 45%) inset;
+}
+.btn-ghost{
+  background:#161a24; color:#e9ecf3; box-shadow:0 0 0 1px #232838 inset;
+}
+
+/* Small bits */
+.mt-m{ margin-top:14px }
