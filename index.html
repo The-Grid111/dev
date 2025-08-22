@@ -2,211 +2,239 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>THE GRID — White & Gold</title>
-  <meta name="color-scheme" content="light dark" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="dev/assets/css/styles.css?v=3">
-</head>
-<body>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Header -->
-  <header class="site-head">
-    <nav class="container nav">
-      <a class="brand" href="#">THE GRID</a>
-      <div class="nav-links">
-        <a href="#library">Library</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <div class="nav-cta">
-        <a class="btn btn-ghost" href="#customize">Customize</a>
-        <a class="btn" href="#contact">Join Now</a>
-      </div>
+  <title>THE GRID — Launch visuals that sell.</title>
+  <meta name="description" content="Premium white & gold UI, fast library swaps, ethical monetisation. No code edits — ever." />
+  <link rel="icon" href="assets/images/gc_logo.png" />
+
+  <!-- PWA / Manifest -->
+  <link rel="manifest" href="assets/manifest.json" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/effects.css" />
+
+  <!-- Safety guard so a missing CSS never blanks the page -->
+  <style>
+    /* Minimal fallbacks only; main look comes from assets/css/*.css */
+    :root { color-scheme: dark; }
+    body{margin:0;background:#07090c;color:#e8e8ef;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header a{color:#9dd3ff;text-decoration:none;margin-right:18px}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border-radius:.8rem;border:1px solid #244250;background:#0f1a24;color:#cfe9ff;cursor:pointer}
+    .btn.secondary{background:#0c0f14;color:#cdd7e1;border-color:#2b2f37}
+    section{margin:40px 0}
+    .grid{display:grid;gap:18px}
+    .plans{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:#0d1116;border:1px solid #232833;border-radius:16px;padding:22px}
+    .card h3{margin:0 0 8px 0}
+    .card ul{margin:0 0 18px 0;padding-left:20px}
+    .muted{opacity:.8}
+    /* Modal (for Details) */
+    .modal-backdrop{position:fixed;inset:0;background:#0007;display:none}
+    .modal{position:fixed;inset:auto 0 0 0;margin:auto;max-width:720px;background:#0d1116;border:1px solid #2a3240;border-radius:16px;padding:20px;display:none}
+    .modal.open,.modal-backdrop.open{display:block}
+    .modal h4{margin:0 0 8px 0}
+    .modal .close{position:absolute;top:10px;right:14px;background:transparent;border:0;color:#aeb7c2;font-size:22px;cursor:pointer}
+    /* Contact */
+    form input, form textarea{width:100%;background:#0b0f14;border:1px solid #24303c;border-radius:10px;color:#e6ecf3;padding:.8rem}
+    form textarea{min-height:120px;resize:vertical}
+    footer{opacity:.8;margin:30px 0}
+  </style>
+</head>
+
+<body>
+  <header class="container">
+    <nav>
+      <a href="#" aria-label="Home"><strong>THE GRID</strong></a>
+      <a href="#library">Library</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+      <span style="float:right;display:inline-flex;gap:.5rem">
+        <a class="btn secondary" href="#customize">Customize</a>
+        <a class="btn" href="#join">Join Now</a>
+      </span>
     </nav>
   </header>
 
-  <!-- Hero -->
-  <section class="hero section">
-    <div class="container">
-      <h1 class="hero-title">Launch visuals that sell.</h1>
-      <p class="muted">
-        Premium white & gold UI, fast library swaps, ethical monetisation.
-        No code edits — ever.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-large" href="#library">Open Library</a>
-        <a class="btn btn-large btn-ghost" href="#pricing">See Pricing</a>
+  <main class="container">
+    <!-- Hero -->
+    <section id="hero">
+      <h1>Launch visuals that sell.</h1>
+      <p class="muted">Premium white &amp; gold UI, fast library swaps, ethical monetisation. No code edits — ever.</p>
+      <div style="display:flex;gap:12px;margin-top:14px">
+        <a class="btn" href="#library">Open Library</a>
+        <a class="btn secondary" href="#pricing">See Pricing</a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Library -->
-  <section id="library" class="section">
-    <div class="container">
+    <!-- Library -->
+    <section id="library">
       <h2>Library</h2>
       <p class="muted">
-        Tap any tile to set the Hero or add to showcases. Drop content into
-        <code>assets/videos</code> & <code>assets/images</code>.
-        Optional: extend with <code>assets/manifest.json</code>.
+        Tap any tile to set the Hero or add to showcases. Drop content into <code>assets/videos</code> &amp; <code>assets/images</code>.
+        Optional: extend with <code>assets/images/manifest.json</code> &amp; <code>assets/videos/manifest.json</code>.
       </p>
+      <p class="muted"><em>Featured Reels · Hero Alternates</em></p>
+      <!-- (Tiles are populated by JS; keeping section minimal) -->
+    </section>
 
-      <div class="pill-row">
-        <span class="pill">Featured Reels</span>
-        <span class="pill">Hero Alternates</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Plans -->
-  <section id="pricing" class="section">
-    <div class="container">
+    <!-- Pricing / Plans -->
+    <section id="pricing">
       <h2>Plans</h2>
       <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
 
       <div class="grid plans">
-
-        <article class="card">
-          <h3 class="card-title">BASIC £9/mo</h3>
-          <ul class="card-list">
+        <!-- BASIC -->
+        <article class="card" data-plan="basic">
+          <h3>BASIC £9/mo</h3>
+          <ul>
             <li>Starter templates, polished UI</li>
             <li>Library access (videos, images, logos)</li>
             <li>Email support (48h)</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Choose</button>
-            <button class="btn btn-ghost details" data-plan="basic">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Choose</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
 
-        <article class="card">
-          <h3 class="card-title">SILVER £29/mo</h3>
-          <ul class="card-list">
+        <!-- SILVER -->
+        <article class="card" data-plan="silver">
+          <h3>SILVER £29/mo</h3>
+          <ul>
             <li>Everything in Basic</li>
-            <li>Advanced effects & presets</li>
+            <li>Advanced effects &amp; presets</li>
             <li>Priority email (24h)</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Choose</button>
-            <button class="btn btn-ghost details" data-plan="silver">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Choose</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
 
-        <article class="card">
-          <h3 class="card-title">GOLD £49/mo</h3>
-          <ul class="card-list">
+        <!-- GOLD -->
+        <article class="card" data-plan="gold">
+          <h3>GOLD £49/mo</h3>
+          <ul>
             <li>Full custom session</li>
-            <li>Admin toolkit & automations</li>
+            <li>Admin toolkit &amp; automations</li>
             <li>1:1 onboarding (45 min)</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Choose</button>
-            <button class="btn btn-ghost details" data-plan="gold">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Choose</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
 
-        <article class="card">
-          <h3 class="card-title">DIAMOND £99/mo</h3>
-          <ul class="card-list">
-            <li>Custom pipelines & integrations</li>
+        <!-- DIAMOND -->
+        <article class="card" data-plan="diamond">
+          <h3>DIAMOND £99/mo</h3>
+          <ul>
+            <li>Custom pipelines &amp; integrations</li>
             <li>Hands-on help building your stack</li>
-            <li>Priority roadmap & turnaround</li>
+            <li>Priority roadmap &amp; turnaround</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Choose</button>
-            <button class="btn btn-ghost details" data-plan="diamond">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Choose</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
       </div>
 
-      <h3 class="mt-lg">À-la-carte Services</h3>
+      <h3 style="margin-top:34px">À-la-carte Services</h3>
       <div class="grid plans">
-        <article class="card">
-          <h4 class="card-title">SETUP £39</h4>
-          <ul class="card-list">
-            <li>Deploy & connect Pages</li>
+        <article class="card" data-plan="setup">
+          <h3>SETUP £39</h3>
+          <ul>
+            <li>Deploy &amp; connect Pages</li>
             <li>Analytics hookup</li>
             <li>Best-practice sweep</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Start Setup</button>
-            <button class="btn btn-ghost details" data-plan="setup">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Start Setup</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
 
-        <article class="card">
-          <h4 class="card-title">REELS £59</h4>
-          <ul class="card-list">
+        <article class="card" data-plan="reels">
+          <h3>REELS £59</h3>
+          <ul>
             <li>3 niche reels</li>
-            <li>Captions & cuts</li>
+            <li>Captions &amp; cuts</li>
             <li>IG/TikTok ready</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Order Pack</button>
-            <button class="btn btn-ghost details" data-plan="reels">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Order Pack</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
 
-        <article class="card">
-          <h4 class="card-title">TEMPLATES £29</h4>
-          <ul class="card-list">
+        <article class="card" data-plan="templates">
+          <h3>TEMPLATES £29</h3>
+          <ul>
             <li>5 premium blocks</li>
             <li>Copy-paste ready</li>
             <li>Lifetime updates</li>
           </ul>
-          <div class="card-actions">
-            <button class="btn choose">Get Pack</button>
-            <button class="btn btn-ghost details" data-plan="templates">Details</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn">Get Pack</button>
+            <button class="btn secondary">Details</button>
           </div>
         </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="container">
+    <!-- Contact -->
+    <section id="contact">
       <h2>Contact</h2>
-      <form class="form">
-        <div class="grid two">
-          <label> Your name
-            <input type="text" placeholder="Jane Doe" required>
-          </label>
-          <label> Email
-            <input type="email" placeholder="you@example.com" required>
-          </label>
+      <form>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div>
+            <label>Your name</label>
+            <input type="text" name="name" placeholder="Jane Doe" />
+          </div>
+          <div>
+            <label>Email</label>
+            <input type="email" name="email" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label>Subject</label>
+            <input type="text" name="subject" id="subject" placeholder="How can we help?" />
+          </div>
         </div>
-        <label> Subject
-          <input id="subject" name="subject" type="text" placeholder="How can we help?">
-        </label>
-        <label> Message
-          <textarea placeholder="Write your message..."></textarea>
-        </label>
-        <button class="btn" type="submit">Send</button>
+        <div style="margin-top:12px">
+          <label>Message</label>
+          <textarea name="message" placeholder="Write your message..."></textarea>
+        </div>
+        <div style="margin-top:14px">
+          <button type="submit" class="btn">Send</button>
+        </div>
+        <p class="muted" style="margin-top:10px">
+          Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
+        </p>
       </form>
-      <p class="muted small mt-sm">
-        Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>.
-        No spam, no sharing.
-      </p>
-    </div>
-  </section>
+    </section>
 
-  <footer class="site-foot">
-    <div class="container small muted">© 2025 THE GRID. All rights reserved.</div>
-  </footer>
+    <footer class="container">
+      <p>© 2025 THE GRID. All rights reserved.</p>
+    </footer>
+  </main>
 
-  <!-- Details Modal (single instance) -->
-  <div id="detail-backdrop" aria-hidden="true" style="display:none"></div>
-  <div id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title" style="display:none">
-    <div class="detail-modal__card">
-      <button type="button" class="detail-modal__close" aria-label="Close">×</button>
-      <h3 id="detail-title"></h3>
-      <div id="detail-body"></div>
-    </div>
+  <!-- Details Modal -->
+  <div id="modal-backdrop" class="modal-backdrop" aria-hidden="true"></div>
+  <div id="details-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="close" aria-label="Close">&times;</button>
+    <h4 id="modal-title">Plan details</h4>
+    <div id="modal-body" class="muted">Loading…</div>
   </div>
 
-  <script src="dev/assets/js/main.js?v=3"></script>
+  <!-- Scripts (order matters: hotfix → effects → main → commerce) -->
+  <script src="assets/js/hotfix.js"></script>
+  <script src="assets/js/effects.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/commerce.js"></script>
 </body>
 </html>
