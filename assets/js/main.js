@@ -1,178 +1,157 @@
-# file: dev/assets/js/main.js
-/* THE GRID – baseline UX hooks (no HTML changes required)
-   - Wires up action buttons by visible text
-   - Adds a lightweight "Customize" panel shell
-   - Safe to re-run; all listeners are idempotent
+*** Begin Patch
+*** Update File: dev/assets/js/main.js
+/* THE GRID — main.js (baseline)
+   Goal: minimal, robust behaviour with zero errors even if elements are missing.
+   - Smooth scroll for internal links & buttons
+   - Buttons: Choose / Details / Start Setup / Order Pack / Get Pack wired
+   - Header chips: Library / Pricing / Contact wired
+   - Safe no-ops if targets don’t exist
 */
 
 (function () {
-  const ready = (fn) =>
-    document.readyState !== "loading"
-      ? fn()
-      : document.addEventListener("DOMContentLoaded", fn, { once: true });
+  "use strict";
 
-  ready(() => {
-    // ---------- helpers
-    const byText = (tag, texts) => {
-      const tset = new Set(texts.map((s) => s.toLowerCase()));
-      return [...document.querySelectorAll(tag)].filter((el) =>
-        tset.has(el.textContent.trim().toLowerCase())
-      );
-    };
-    const scrollToId = (id) => {
-      const el = document.getElementById(id) || document.querySelector(id);
-      if (!el) return;
+  // ========== Helpers ==========
+  const $  = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const smoothScrollTo = (targetSelector) => {
+    const el = typeof targetSelector === "string" ? $(targetSelector) : targetSelector;
+    if (!el) return false;
+    try {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-    const openContact = () => scrollToId("contact") || scrollToId("#contact");
+      return true;
+    } catch { return false; }
+  };
 
-    // ---------- buttons → actions (text-based so it works with current HTML)
-    // Choose → scroll to Contact (lead capture)
-    byText("button, a", ["Choose"]).forEach((btn) => {
-      btn.dataset.bound = "1";
-      btn.addEventListener(
-        "click",
-        (e) => {
-          e.preventDefault();
-          openContact();
-        },
-        { once: false }
-      );
-    });
-
-    // Details → scroll to Pricing (if we find a heading with 'Plans')
-    byText("button, a", ["Details"]).forEach((btn) => {
-      btn.dataset.bound = "1";
-      btn.addEventListener(
-        "click",
-        (e) => {
-          e.preventDefault();
-          // Look for a Plans heading or pricing section
-          const heading =
-            [...document.querySelectorAll("h2,h3")]
-              .find((h) => /plans/i.test(h.textContent)) || null;
-          if (heading) heading.scrollIntoView({ behavior: "smooth" });
-        },
-        { once: false }
-      );
-    });
-
-    // Start Setup / Order Pack / Get Pack → contact
-    byText("button, a", ["Start Setup", "Order Pack", "Get Pack"]).forEach((btn) => {
-      btn.dataset.bound = "1";
-      btn.addEventListener(
-        "click",
-        (e) => {
-          e.preventDefault();
-          openContact();
-        },
-        { once: false }
-      );
-    });
-
-    // ---------- Lightweight Customize panel (UI shell)
-    // Skip if already injected
-    if (!document.getElementById("tg-customize-toggle")) {
-      const toggle = document.createElement("button");
-      toggle.id = "tg-customize-toggle";
-      toggle.type = "button";
-      toggle.textContent = "Customize";
-      Object.assign(toggle.style, {
-        position: "fixed",
-        right: "16px",
-        bottom: "16px",
-        zIndex: 9999,
-        padding: "10px 14px",
-        borderRadius: "999px",
-        border: "1px solid rgba(255,255,255,.15)",
-        background: "rgba(255,255,255,.06)",
-        color: "var(--ink, #e7f5ff)",
-        backdropFilter: "blur(6px)",
-        cursor: "pointer",
-      });
-
-      const panel = document.createElement("div");
-      panel.id = "tg-customize-panel";
-      Object.assign(panel.style, {
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: "min(420px, 100%)",
-        height: "100%",
-        background: "var(--panel, rgba(17,25,29,.95))",
-        color: "var(--ink, #e7f5ff)",
-        borderLeft: "1px solid rgba(255,255,255,.08)",
-        transform: "translateX(100%)",
-        transition: "transform .24s ease",
-        zIndex: 9998,
-        padding: "20px 20px 28px",
-        overflow: "auto",
-      });
-      panel.innerHTML = `
-        <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;">
-          <h3 style="margin:0;font-size:18px;font-weight:700;">Customize</h3>
-          <button id="tg-customize-close" type="button"
-            style="border:1px solid rgba(255,255,255,.15);background:transparent;color:inherit;border-radius:8px;padding:6px 10px;cursor:pointer">
-            Close
-          </button>
-        </div>
-        <p style="opacity:.8;margin:.75rem 0 1rem">
-          This is the baseline panel. We’ll add real controls (theme, logos, library categories)
-          and have changes persist via <code>assets/manifest.json</code>.
-        </p>
-        <div style="display:grid;gap:10px">
-          <label style="display:grid;gap:6px">
-            <span>Theme</span>
-            <select id="tg-theme" style="padding:10px;border-radius:10px;background:#0b1416;color:#e7f5ff;border:1px solid rgba(255,255,255,.12)">
-              <option value="dark" selected>Dark</option>
-              <option value="light">Light</option>
-            </select>
-          </label>
-          <label style="display:grid;gap:6px">
-            <span>Accent</span>
-            <select id="tg-accent" style="padding:10px;border-radius:10px;background:#0b1416;color:#e7f5ff;border:1px solid rgba(255,255,255,.12)">
-              <option value="#7dd3fc" selected>Sky</option>
-              <option value="#facc15">Gold</option>
-              <option value="#a78bfa">Violet</option>
-            </select>
-          </label>
-          <button id="tg-apply" type="button"
-            style="margin-top:6px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(125,211,252,.1);color:inherit;cursor:pointer">
-            Apply
-          </button>
-        </div>
-      `;
-
-      const mount = document.body;
-      mount.appendChild(toggle);
-      mount.appendChild(panel);
-
-      const setOpen = (open) => {
-        panel.style.transform = open ? "translateX(0%)" : "translateX(100%)";
-      };
-
-      toggle.addEventListener("click", () => setOpen(true));
-      panel.querySelector("#tg-customize-close").addEventListener("click", () => setOpen(false));
-
-      // Simple theme application (baseline)
-      const apply = () => {
-        const theme = panel.querySelector("#tg-theme").value;
-        const accent = panel.querySelector("#tg-accent").value;
-        const root = document.documentElement.style;
-        if (theme === "light") {
-          root.setProperty("--bg", "#f8fafc");
-          root.setProperty("--ink", "#0b1416");
-          root.setProperty("--muted", "#3b454b");
-          root.setProperty("--card", "#ffffff");
-        } else {
-          root.setProperty("--bg", "#0b1416");
-          root.setProperty("--ink", "#e7f5ff");
-          root.setProperty("--muted", "#9fb0b7");
-          root.setProperty("--card", "rgba(255,255,255,.04)");
-        }
-        root.setProperty("--accent", accent);
-      };
-      panel.querySelector("#tg-apply").addEventListener("click", apply);
+  // Best effort anchor resolution: id, name, or section heading with the text
+  const resolveTarget = (prefList) => {
+    for (const t of prefList) {
+      if (typeof t === "string" && t.startsWith("#") && $(t)) return t;
+      if (typeof t === "string" && !t.startsWith("#")) {
+        const byId = $("#" + t);
+        if (byId) return "#" + t;
+        const byName = $(`[name="${t}"]`);
+        if (byName) return `[name="${t}"]`;
+        // Try section headings that contain the label text
+        const heading = $$("h1,h2,h3,h4,h5").find(h =>
+          (h.textContent || "").trim().toLowerCase().includes(t.toLowerCase())
+        );
+        if (heading) return heading;
+      }
     }
-  });
+    return null;
+  };
+
+  // ========== Global nav chips ==========
+  const wireNav = () => {
+    const navMap = [
+      { text: "Library",  prefs: ["#library", "library"] },
+      { text: "Pricing",  prefs: ["#pricing", "plans", "pricing"] },
+      { text: "Contact",  prefs: ["#contact", "contact"] },
+      { text: "Customize",prefs: ["#library", "library"] }, // acts as “open library”
+      { text: "Join Now", prefs: ["#pricing", "plans", "pricing"] },
+      { text: "Open Library", prefs: ["#library", "library"] },
+      { text: "See Pricing", prefs: ["#pricing", "plans", "pricing"] },
+    ];
+
+    // Links or buttons that *visibly* match the labels above
+    const candidates = $$('a,button');
+    candidates.forEach((el) => {
+      const label = (el.textContent || "").trim();
+      const match = navMap.find(x => label.toLowerCase() === x.text.toLowerCase());
+      if (!match) return;
+      el.addEventListener("click", (e) => {
+        // If it’s a real link to an external page, let it work
+        const href = el.getAttribute("href");
+        if (href && /^https?:\/\//i.test(href)) return;
+        e.preventDefault();
+        const tgt = resolveTarget(match.prefs);
+        if (tgt) smoothScrollTo(tgt);
+      }, { passive: false });
+    });
+
+    // Also auto-wire any anchors with hash hrefs for smooth scroll
+    $$('a[href^="#"]').forEach(a => {
+      a.addEventListener("click", (e) => {
+        const href = a.getAttribute("href");
+        if (!href || href === "#") return;
+        if ($(href)) { e.preventDefault(); smoothScrollTo(href); }
+      }, { passive: false });
+    });
+  };
+
+  // ========== Plans CTA buttons ==========
+  const wirePlans = () => {
+    // Buttons typically read: Choose / Details
+    const btns = $$("button, a");
+    btns.forEach((el) => {
+      const label = (el.textContent || "").trim().toLowerCase();
+
+      // “Choose” → take the user to Contact (default) or Pricing if Contact not found
+      if (label === "choose") {
+        el.addEventListener("click", (e) => {
+          const tgt = resolveTarget(["#contact", "contact", "#pricing", "plans"]);
+          if (!tgt) return; // nothing to do
+          e.preventDefault();
+          smoothScrollTo(tgt);
+        }, { passive: false });
+      }
+
+      // “Details” → take the user to Pricing details section
+      if (label === "details") {
+        el.addEventListener("click", (e) => {
+          const tgt = resolveTarget(["#pricing", "plans", "pricing"]);
+          if (!tgt) return;
+          e.preventDefault();
+          smoothScrollTo(tgt);
+        }, { passive: false });
+      }
+
+      // Services CTAs
+      if (label === "start setup" || label === "order pack" || label === "get pack") {
+        el.addEventListener("click", (e) => {
+          const tgt = resolveTarget(["#contact", "contact"]);
+          if (!tgt) return;
+          e.preventDefault();
+          smoothScrollTo(tgt);
+        }, { passive: false });
+      }
+    });
+  };
+
+  // ========== Contact form (optional graceful handling) ==========
+  const wireContactForm = () => {
+    const form  = $("form");
+    if (!form) return;
+    form.addEventListener("submit", (e) => {
+      // If no action configured, just keep the page steady and show a tiny toast
+      const hasAction = !!form.getAttribute("action");
+      if (!hasAction) {
+        e.preventDefault();
+        try {
+          // minimal UX confirmation
+          const btn = $('button[type="submit"], button', form) || form;
+          btn?.classList.add("pressed");
+          setTimeout(() => btn?.classList.remove("pressed"), 250);
+          alert("Thanks! We’ll reply from gridcoresystems@gmail.com.");
+        } catch {}
+      }
+    });
+  };
+
+  // ========== Init ==========
+  const init = () => {
+    wireNav();
+    wirePlans();
+    wireContactForm();
+    // Future: gallery filters, manifest-driven content, etc.
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();
+*** End Patch
