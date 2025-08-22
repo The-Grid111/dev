@@ -1,401 +1,54 @@
-/* ==========================================================================
-   THE GRID — Base styles (v1 clean baseline)
-   File: /assets/css/styles.css
-   --------------------------------------------------------------------------
-   Design notes:
-   - Driven by CSS variables (theme-able)
-   - Minimal, fast, mobile-first
-   - Works with: plans, gallery + filters, dialogs, customize panel, forms
-   ========================================================================== */
-
-/* -----------------------------
-   Theme variables (defaults)
-   ----------------------------- */
-:root {
-  --accent:  #10b9e3;   /* ui accent */
-  --accent2: #b5c7ff;   /* secondary accent */
-  --ink:     #f5f7fa;   /* primary text on dark */
-  --soft:    #c8cfd8;   /* soft text */
-  --card:    #11141b;   /* card surface */
-  --panel:   #0f1b20;   /* panels / headers */
-  --bg:      #0b1216;   /* page background */
-  --text:    #e6f5ff;   /* legacy var used by some JS */
-
-  --radius:  20px;      /* corner radius */
-  --gap:     16px;      /* base gap */
-  --pad:     16px;      /* base padding */
-  --shadow:  0 6px 24px rgba(0,0,0,.35);
-  --ring:    0 0 0 2px color-mix(in oklab, var(--accent) 60%, transparent);
-  --maxw:    1100px;
-  --font:    ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  --mono:    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
-
-/* Respect system light mode if you ever flip variables in JS */
-@media (prefers-color-scheme: light) {
-  :root {
-    /* Keep dark aesthetic by default; override in JS if needed */
-  }
-}
-
-/* -----------------------------
-   Reset / base
-   ----------------------------- */
-*,
-*::before,
-*::after { box-sizing: border-box; }
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-}
-
-body {
-  margin: 0;
-  color: var(--ink);
-  font: 400 16px/1.55 var(--font);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-img, video, canvas, svg { display: block; max-width: 100%; }
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-a:hover { text-decoration: underline; }
-
-h1, h2, h3 {
-  margin: 0 0 .5em;
-  line-height: 1.2;
-}
-h1 { font-size: clamp(22px, 3.8vw, 40px); }
-h2 { font-size: clamp(18px, 2.6vw, 28px); }
-h3 { font-size: clamp(16px, 2.0vw, 22px); }
-
-.muted { color: var(--soft); }
-
-/* -----------------------------
-   Layout wrappers
-   ----------------------------- */
-.wrap {
-  width: min(100% - 24px, var(--maxw));
-  margin-inline: auto;
-}
-
-header.site {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap);
-  padding: 18px 0 8px;
-}
-
-.brand {
-  display: flex; gap: 10px; align-items: baseline;
-}
-.brand a { color: var(--ink); text-decoration: none; }
-.brand small { color: var(--soft); font-size: .9rem; }
-
-main { display: grid; gap: calc(var(--gap) * 2); padding: 10px 0 60px; }
-
-/* -----------------------------
-   Badges & Pills
-   ----------------------------- */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: .4em;
-  padding: .25em .6em;
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--accent) 18%, transparent);
-  color: var(--ink);
-  font-size: .78rem;
-  letter-spacing: .02em;
-  border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
-}
-
-/* -----------------------------
-   Buttons
-   ----------------------------- */
-.btn {
-  --bg: color-mix(in oklab, var(--accent) 16%, var(--panel));
-  --fg: var(--ink);
-  --bd: color-mix(in oklab, var(--accent) 40%, transparent);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .55em;
-  padding: .65em 1.0em;
-  border-radius: calc(var(--radius) - 8px);
-  border: 1px solid var(--bd);
-  color: var(--fg);
-  background: var(--bg);
-  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 10px 20px rgba(0,0,0,.25);
-  transition: transform .12s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 600;
-}
-.btn:hover { transform: translateY(-1px); box-shadow: 0 2px 0 rgba(255,255,255,.06) inset, var(--shadow); }
-.btn:active { transform: translateY(0); }
-
-.btn.primary {
-  --bg: linear-gradient(180deg,
-           color-mix(in oklab, var(--accent) 70%, #ffffff 0%) 0%,
-           color-mix(in oklab, var(--accent) 55%, #000000 0%) 100%);
-  --bd: color-mix(in oklab, var(--accent) 80%, transparent);
-}
-
-.btn.ghost {
-  --bg: transparent;
-  --fg: var(--ink);
-  --bd: color-mix(in oklab, var(--ink) 25%, transparent);
-  box-shadow: none;
-}
-
-/* Utility width for clustered buttons */
-.row { display: flex; flex-wrap: wrap; gap: var(--gap); }
-
-/* -----------------------------
-   Cards / generic sections
-   ----------------------------- */
-.card {
-  background: var(--card);
-  border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: clamp(16px, 3.2vw, 28px);
-}
-
-/* -----------------------------
-   Plans
-   ----------------------------- */
-.plans { display: grid; gap: var(--gap); }
-
-.plans .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--gap);
-}
-@media (min-width: 720px) {
-  .plans .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-.plan {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
-  overflow: clip;
-  display: grid;
-  gap: var(--gap);
-  padding: clamp(16px, 3.2vw, 28px);
-}
-
-.plan .head {
-  display: grid;
-  gap: 8px;
-}
-
-.price {
-  font-size: clamp(22px, 3.4vw, 34px);
-  font-weight: 800;
-}
-.price .muted { font-size: .6em; margin-left: .2em; }
-
-.plan ul {
-  margin: 0;
-  padding-left: 18px;
-  display: grid;
-  gap: .4em;
-  color: var(--soft);
-}
-
-.plan.diamond { border-color: color-mix(in oklab, var(--accent) 50%, transparent); }
-.plan.gold    { border-color: color-mix(in oklab, var(--accent2) 45%, transparent); }
-
-/* -----------------------------
-   Gallery & Filters
-   ----------------------------- */
-#gallery { display: grid; gap: var(--gap); }
-
-.filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.filters button,
-.filters .btn {
-  padding: .45em .75em;
-  font-size: .9rem;
-  border-radius: 999px;
-}
-.filters .active {
-  background: color-mix(in oklab, var(--accent) 45%, transparent);
-  border-color: color-mix(in oklab, var(--accent) 70%, transparent);
-}
-
-.gallery .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--gap);
-}
-@media (min-width: 720px) {
-  .gallery .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (min-width: 1040px) {
-  .gallery .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-
-.item {
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(180deg, #171b22 0%, #0f1318 100%);
-  border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
-  border-radius: calc(var(--radius) - 6px);
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-}
-.item img, .item video {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-.item .ph {
-  color: var(--soft);
-  font-weight: 600;
-  text-align: center;
-  padding: 0 8px;
-}
-
-/* Hide elements when filtered out (toggled by JS) */
-.item[hidden] { display: none !important; }
-
-/* -----------------------------
-   Contact form
-   ----------------------------- */
-form .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--gap);
-}
-@media (min-width: 720px) {
-  form .grid { grid-template-columns: 1fr 1fr; }
-  form .grid .span-2 { grid-column: 1 / -1; }
-}
-
-label { display: block; font-weight: 600; margin-bottom: .35rem; }
-
-input[type="text"],
-input[type="email"],
-input[type="color"],
-input[type="range"],
-textarea {
-  width: 100%;
-  color: var(--ink);
-  background: #0e141a;
-  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
-  border-radius: calc(var(--radius) - 10px);
-  padding: .6em .75em;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
-  outline: none;
-}
-textarea { min-height: 110px; resize: vertical; }
-
-input:focus,
-textarea:focus { box-shadow: var(--ring); border-color: color-mix(in oklab, var(--accent) 70%, transparent); }
-
-/* -----------------------------
-   Dialog / Modal (plan details, customize)
-   ----------------------------- */
-dialog {
-  border: none;
-  padding: 0;
-  background: transparent;
-}
-dialog::backdrop {
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(4px);
-}
-
-.modal,
-#customize,
-dialog > .card {
-  width: min(100% - 24px, 780px);
-  margin: 12vh auto;
-  background: var(--card);
-  border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: clamp(16px, 3.2vw, 28px);
-}
-
-.modalHead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap);
-  margin-bottom: var(--gap);
-}
-.modalBody { display: grid; gap: var(--gap); }
-
-.btn.x {
-  padding: .4em .6em;
-  border-radius: 10px;
-}
-
-/* “Customize” dialog grid for controls */
-#customize .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--gap);
-}
-#customize .actions {
-  display: flex;
-  gap: var(--gap);
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-@media (max-width: 560px) {
-  #customize .grid { grid-template-columns: 1fr; }
-}
-
-/* Hide helper (for JS toggle) */
-[hidden] { display: none !important; }
-
-/* -----------------------------
-   Footer
-   ----------------------------- */
-footer {
-  color: var(--soft);
-  padding: 40px 0 80px;
-  font-size: .9rem;
-}
-
-/* -----------------------------
-   Canvas effects (confetti)
-   ----------------------------- */
-#fx {
+/* --- TG Modal --- */
+.tg-modal-overlay {
   position: fixed;
   inset: 0;
-  pointer-events: none;
+  background: rgba(0,0,0,0.6);
+  display: none;           /* hidden by default (prevents the black box) */
+  opacity: 0;
+  transition: opacity .12s ease-out;
+  z-index: 9999;
+}
+.tg-modal-overlay.is-open { opacity: 1; }
+
+.tg-modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 680px;
+  width: calc(100% - 2rem);
+  background: #0f1a1f;          /* matches dark theme */
+  color: #e6f0f3;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+  padding: 20px 20px 16px;
 }
 
-/* -----------------------------
-   Accessibility helpers
-   ----------------------------- */
-.sr-only {
-  position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
+.tg-modal-title {
+  margin: 0 2rem 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-/* -----------------------------
-   Print (simple)
-   ----------------------------- */
-@media print {
-  body { background: #fff; color: #111; }
-  .btn, .filters, #fx, dialog::backdrop { display: none !important; }
-  .card, .plan { border-color: #ddd; box-shadow: none; }
+.tg-modal-body {
+  line-height: 1.6;
 }
+.tg-modal-body ul { margin: 0.25rem 0 0; padding-left: 1.25rem; }
+.tg-modal-body li { margin: 0.25rem 0; }
+
+.tg-modal-close {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 34px;
+  height: 34px;
+  line-height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: #e6f0f3;
+  font-size: 20px;
+  cursor: pointer;
+}
+.tg-modal-close:hover { background: rgba(255,255,255,0.12); }
