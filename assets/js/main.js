@@ -1,156 +1,159 @@
 // dev/assets/js/main.js
-// Plans: wire up Choose/Details, lock scroll on modal, start page at top
+// Stable wiring for Choose + Details, with scroll/top fixes & plan copy
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Always start at the top (GitHub Pages/iOS sometimes restores scroll)
+  // Always start at the top (GitHub Pages/iOS sometimes restore scroll)
   try {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
   } catch {}
-  window.scrollTo(0, 0);
 
-  // ---------- helpers ----------
-  const smooth = (el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  const q = (sel, root = document) => root.querySelector(sel);
-
-  // Areas we might need
-  const contactSection = q('#contact') || q('form')?.closest('section') || q('form');
-  const subjectInput   = q('input[name="subject"]') || q('#subject');
-
-  // ---------- Details copy per plan ----------
-  // Keys should match the visible heading text (case-insensitive, trimmed)
-  const DETAILS = {
-    'basic': `
-      <ul>
-        <li>Starter templates with a polished white & gold UI</li>
-        <li>Access to library (videos, images, logos)</li>
-        <li>Email support within 48 hours</li>
+  // Plan copy
+  const PLAN_COPY = {
+    basic: {
+      title: 'BASIC — What you get',
+      body: `<ul>
+        <li>Starter templates with polished white & gold UI</li>
+        <li>Library access (videos, images, logos)</li>
+        <li>Email support (48h)</li>
         <li>7-day refund window</li>
-      </ul>`,
-    'silver': `
-      <ul>
+      </ul>`
+    },
+    silver: {
+      title: 'SILVER — What you get',
+      body: `<ul>
         <li>Everything in Basic</li>
-        <li>Advanced effects & ready-to-use presets</li>
-        <li>Priority email support (24h)</li>
-        <li>7-day refund window</li>
-      </ul>`,
-    'gold': `
-      <ul>
-        <li>Full custom session to tailor the library to your brand</li>
-        <li>Admin toolkit & light automations</li>
-        <li>1:1 onboarding (45 minutes)</li>
-        <li>7-day refund window</li>
-      </ul>`,
-    'diamond': `
-      <ul>
+        <li>Advanced effects & reusable presets</li>
+        <li>Priority email (24h)</li>
+      </ul>`
+    },
+    gold: {
+      title: 'GOLD — What you get',
+      body: `<ul>
+        <li>Full custom session</li>
+        <li>Admin toolkit & automations</li>
+        <li>1:1 onboarding (45 min)</li>
+      </ul>`
+    },
+    diamond: {
+      title: 'DIAMOND — What you get',
+      body: `<ul>
         <li>Custom pipelines & integrations</li>
         <li>Hands-on help building your stack</li>
-        <li>Priority roadmap & fast turnaround</li>
-        <li>7-day refund window</li>
-      </ul>`,
-    'setup': `
-      <ul>
-        <li>Deploy & connect GitHub Pages</li>
+        <li>Priority roadmap & turnaround</li>
+      </ul>`
+    },
+    setup: {
+      title: 'SETUP — What you get',
+      body: `<ul>
+        <li>Deploy & connect Pages</li>
         <li>Analytics hookup</li>
-        <li>Best-practice sweep of your repo</li>
-      </ul>`,
-    'reels': `
-      <ul>
-        <li>3 niche reels crafted for your audience</li>
-        <li>Captions & cuts included</li>
-        <li>IG/TikTok ready exports</li>
-      </ul>`,
-    'templates': `
-      <ul>
-        <li>5 premium, copy-paste blocks</li>
-        <li>Clean, documented markup</li>
+        <li>Best-practice sweep</li>
+      </ul>`
+    },
+    reels: {
+      title: 'REELS — What you get',
+      body: `<ul>
+        <li>3 niche reels</li>
+        <li>Captions & cuts</li>
+        <li>IG/TikTok-ready exports</li>
+      </ul>`
+    },
+    templates: {
+      title: 'TEMPLATES — What you get',
+      body: `<ul>
+        <li>5 premium blocks</li>
+        <li>Copy-paste ready</li>
         <li>Lifetime updates</li>
       </ul>`
+    }
   };
 
-  // ---------- Modal (created once, reused) ----------
-  const overlay = document.createElement('div');
-  overlay.className = 'tg-modal-overlay';
-  overlay.style.display = 'none';
+  // Modal elements
+  const bodyEl = document.body;
+  const backdrop = document.getElementById('detail-backdrop');
+  const modal = document.getElementById('detail-modal');
+  const titleEl = document.getElementById('detail-title');
+  const bodyBox = document.getElementById('detail-body');
+  const closeBtn = modal?.querySelector('.detail-modal__close');
 
-  overlay.innerHTML = `
-    <div class="tg-modal" role="dialog" aria-modal="true" aria-labelledby="tg-modal-title">
-      <button class="tg-modal-close" aria-label="Close">×</button>
-      <h3 id="tg-modal-title" class="tg-modal-title"></h3>
-      <div class="tg-modal-body"></div>
-    </div>
-  `;
-
-  document.body.appendChild(overlay);
-  const modal      = q('.tg-modal', overlay);
-  const modalTitle = q('.tg-modal-title', overlay);
-  const modalBody  = q('.tg-modal-body', overlay);
-  const closeBtn   = q('.tg-modal-close', overlay);
-
-  const openModal = (title, html) => {
-    modalTitle.textContent = title;
-    modalBody.innerHTML = html;
-    // show & lock page scroll
-    overlay.style.display = 'block';
-    requestAnimationFrame(() => overlay.classList.add('is-open'));
-    document.body.dataset.scrollLock = '1';
-    document.body.style.overflow = 'hidden';
+  const openModal = (titleHTML, bodyHTML) => {
+    if (!modal || !backdrop) return;
+    titleEl.innerHTML = titleHTML || '';
+    bodyBox.innerHTML = bodyHTML || '';
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+    bodyEl.classList.add('no-scroll');
+    setTimeout(() => closeBtn?.focus(), 0);
   };
 
   const closeModal = () => {
-    overlay.classList.remove('is-open');
-    // small timeout to allow fade-out CSS
-    setTimeout(() => { overlay.style.display = 'none'; }, 120);
-    document.body.style.overflow = '';
-    delete document.body.dataset.scrollLock;
+    if (!modal || !backdrop) return;
+    modal.style.display = 'none';
+    backdrop.style.display = 'none';
+    bodyEl.classList.remove('no-scroll');
   };
 
-  closeBtn.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
-  overlay.addEventListener('click', (e) => {
-    // only close if clicking the dark backdrop, not the dialog
-    if (e.target === overlay) closeModal();
-  });
+  backdrop?.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); closeModal(); });
+  closeBtn?.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); closeModal(); });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay.style.display === 'block') closeModal();
-  });
+    if (e.key === 'Escape' && modal?.style.display === 'block') closeModal();
+  }, { passive: true });
 
-  // ---------- Button wiring ----------
-  // Avoid double-binding if this script re-runs
+  // Targets
+  const contactSection =
+    document.querySelector('#contact') ||
+    document.querySelector('form')?.closest('section') ||
+    document.querySelector('form');
+
+  const subjectInput =
+    document.querySelector('input[name="subject"]') ||
+    document.querySelector('#subject');
+
+  const smooth = (el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Wire buttons
   document.querySelectorAll('button, a').forEach((el) => {
-    if (el.dataset.tgBound) return;
-    el.dataset.tgBound = '1';
-
     const label = (el.textContent || '').trim().toLowerCase();
 
-    // CHOOSE -> scroll to contact & prefill subject (no page change)
-    if (label === 'choose') {
+    // CHOOSE-like actions -> jump contact + prefill subject
+    if (['choose','start setup','order pack','get pack','join now'].includes(label)) {
       el.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
+
         const card = el.closest('section, article, div') || document.body;
-        const titleEl =
+        const titleNode =
           card.querySelector('h1, h2, h3, h4, .card-title') ||
           document.querySelector('h1, h2, h3');
+        const planTitle = (titleNode?.textContent || 'Plan').trim();
 
-        const planTitle = (titleEl?.textContent || 'Plan').trim();
         if (subjectInput) subjectInput.value = `Join ${planTitle}`;
         smooth(contactSection || document.body);
+        return false;
       });
     }
 
-    // DETAILS -> open modal (no scroll, no navigation)
+    // DETAILS -> open modal (no page movement)
     if (label === 'details') {
       el.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
 
-        const card = el.closest('section, article, div') || document.body;
-        const titleEl =
-          card.querySelector('h1, h2, h3, h4, .card-title') ||
-          document.querySelector('h1, h2, h3');
+        const key = el.getAttribute('data-plan')?.toLowerCase().trim();
+        const copy = key && PLAN_COPY[key];
 
-        const planTitle = (titleEl?.textContent || 'Details').trim();
-        const key = planTitle.toLowerCase().replace(/£.*$/,'').trim(); // strip trailing price if present
-
-        const html = DETAILS[key] || `<p>Full details coming soon for <strong>${planTitle}</strong>.</p>`;
-        openModal(planTitle, html);
+        if (copy) {
+          openModal(copy.title, copy.body);
+        } else {
+          const card = el.closest('section, article, div') || document.body;
+          const titleNode =
+            card.querySelector('h1, h2, h3, h4, .card-title') ||
+            document.querySelector('h1, h2, h3');
+          const planTitle = (titleNode?.textContent || 'this plan').trim();
+          openModal(planTitle, `<p>Full details coming soon for <strong>${planTitle}</strong>.</p>`);
+        }
+        return false;
       });
     }
   });
