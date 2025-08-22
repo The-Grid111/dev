@@ -1,203 +1,209 @@
 *** Begin Patch
 *** Update File: dev/assets/js/main.js
 // dev/assets/js/main.js
-// Wire plan buttons + force top-of-page on load + Details modal
+// Stable controls + visible build badge to verify deploys
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Always start at the top (fixes “load at bottom” on iOS/GitHub Pages)
+  /* -------------------- Build badge (verifies deploy) -------------------- */
+  const buildTime = new Date().toLocaleString();
+  const mark = document.createElement('div');
+  mark.textContent = `THEGRID • Build ${buildTime}`;
+  mark.style.cssText = `
+    position:fixed; right:10px; bottom:10px; z-index:9999;
+    font:600 12px/1.2 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    background:rgba(0,0,0,.6); color:#f5f7fa; padding:8px 10px; border-radius:10px;
+    border:1px solid rgba(255,255,255,.12); backdrop-filter:saturate(1.1) blur(6px);
+    box-shadow:0 8px 22px rgba(0,0,0,.35)
+  `;
+  document.body.appendChild(mark);
+  console.log('[THEGRID] main.js loaded @', buildTime);
+
+  /* -------------------- Always start at top -------------------- */
   try {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
   } catch {}
 
-  // --- Small helper
+  /* -------------------- Helpers -------------------- */
   const smooth = (el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  // --- Targets we can find even without hardcoded IDs
   const contactSection =
-    document.querySelector('#contact') ||
-    document.querySelector('form')?.closest('section') ||
-    document.querySelector('form');
+    $('#contact') ||
+    $('form')?.closest('section') ||
+    $('form');
 
   const subjectInput =
-    document.querySelector('input[name="subject"]') ||
-    document.querySelector('#subject');
+    $('input[name="subject"]') ||
+    $('#subject') ||
+    null;
 
-  // ======================================================
-  // Details Modal (self-contained: injects its own styles)
-  // ======================================================
-  const MODAL_ID = 'tg-details-modal';
-
-  // Inject minimal styles once
-  (function ensureModalStyles() {
-    if (document.getElementById(`${MODAL_ID}-styles`)) return;
-    const css = `
-      .tg-modal-backdrop{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999}
-      .tg-modal{width:min(720px,90vw);max-height:85vh;overflow:auto;background:#0f172a;color:#e5e7eb;border:1px solid #334155;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-      .tg-modal header{padding:20px 24px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;align-items:center}
-      .tg-modal h3{margin:0;font-size:20px;font-weight:700}
-      .tg-modal .tg-close{appearance:none;border:0;background:#0b1220;color:#e5e7eb;border:1px solid #334155;border-radius:10px;padding:8px 12px;cursor:pointer}
-      .tg-modal .tg-close:focus{outline:2px solid #22d3ee;outline-offset:2px}
-      .tg-modal .body{padding:20px 24px;line-height:1.55}
-      .tg-modal .body ul{margin:0 0 12px 18px}
-      .tg-modal .body li{margin:6px 0}
-      .tg-modal footer{padding:18px 24px;border-top:1px solid #334155;display:flex;gap:12px;justify-content:flex-end}
-      .tg-modal .tg-cta{appearance:none;border:0;background:#075985;color:#e5e7eb;border-radius:12px;padding:10px 16px;cursor:pointer}
-      .tg-modal .tg-cta:focus{outline:2px solid #22d3ee;outline-offset:2px}
+  /* -------------------- Modal (no CSS dependencies) -------------------- */
+  let modal, box;
+  const ensureModal = () => {
+    if (modal) return;
+    modal = document.createElement('div');
+    modal.style.cssText = `
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.6); z-index:9998; padding:16px;
     `;
-    const style = document.createElement('style');
-    style.id = `${MODAL_ID}-styles`;
-    style.textContent = css;
-    document.head.appendChild(style);
-  })();
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-  // Copy used by Details modal
-  const detailsCopy = {
-    'BASIC': {
-      title: 'BASIC — What you get',
-      bullets: [
-        'Starter templates with polished white & gold UI',
-        'Access to the Library (videos, images, logos)',
-        'Email support within 48 hours',
-        'Perfect for getting launched fast'
-      ]
-    },
-    'SILVER': {
-      title: 'SILVER — What you get',
-      bullets: [
-        'Everything in Basic',
-        'Advanced effects & creative presets',
-        'Priority email support (24h)',
-        'Best for upgrading your visuals regularly'
-      ]
-    },
-    'GOLD': {
-      title: 'GOLD — What you get',
-      bullets: [
-        'Full custom session tailored to your niche',
-        'Admin toolkit & automations',
-        '1:1 onboarding call (45 min)',
-        'Great for serious creators ready to scale'
-      ]
-    },
-    'DIAMOND': {
-      title: 'DIAMOND — What you get',
-      bullets: [
-        'Custom pipelines & third-party integrations',
-        'Hands-on help building your stack',
-        'Priority roadmap placement & turnaround',
-        'For teams that need premium support'
-      ]
-    },
-    'SETUP': {
-      title: 'SETUP — What’s included',
-      bullets: [
-        'Deploy & connect GitHub Pages',
-        'Analytics hookup (e.g., GA)',
-        'Best-practice sweep & launch checklist'
-      ]
-    },
-    'REELS': {
-      title: 'REELS — What’s included',
-      bullets: [
-        '3 niche reels crafted for your audience',
-        'Captions & cut-downs included',
-        'IG/TikTok-ready export presets'
-      ]
-    },
-    'TEMPLATES': {
-      title: 'TEMPLATES — What’s included',
-      bullets: [
-        '5 premium page/section blocks',
-        'Copy-paste ready into your site',
-        'Lifetime updates to this pack'
-      ]
-    }
+    box = document.createElement('div');
+    box.style.cssText = `
+      max-width:720px; width:100%; background:#0f172a; color:#e5e7eb;
+      border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:20px;
+      box-shadow:0 18px 40px rgba(0,0,0,.45);
+      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    `;
+    const header = document.createElement('div');
+    header.style.cssText = 'display:flex; justify-content:flex-end; margin-bottom:8px;';
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Close';
+    closeBtn.style.cssText = `
+      background:#f4c84a; color:#1a1300; border:none; padding:8px 12px;
+      border-radius:10px; font-weight:700; cursor:pointer;
+    `;
+    closeBtn.addEventListener('click', closeModal);
+    header.appendChild(closeBtn);
+    box.appendChild(header);
+    modal.appendChild(box);
+    document.body.appendChild(modal);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  };
+  const openModal = (html) => {
+    ensureModal();
+    while (box.childNodes.length > 1) box.removeChild(box.lastChild);
+    const d = document.createElement('div');
+    d.innerHTML = html;
+    box.appendChild(d);
+    modal.style.display = 'flex';
+  };
+  const closeModal = () => { if (modal) modal.style.display = 'none'; };
+
+  /* -------------------- Plan/Service descriptions -------------------- */
+  const desc = {
+    BASIC: `
+      <h2 style="margin:0 0 6px; font-size:22px;">BASIC £9/mo</h2>
+      <p style="opacity:.9">Good for trying things out.</p>
+      <ul>
+        <li>Starter templates, polished UI</li>
+        <li>Library access (videos, images, logos)</li>
+        <li>Email support (48h)</li>
+      </ul>
+    `,
+    SILVER: `
+      <h2 style="margin:0 0 6px; font-size:22px;">SILVER £29/mo</h2>
+      <p style="opacity:.9">Step up with advanced effects & presets.</p>
+      <ul>
+        <li>Everything in Basic</li>
+        <li>Advanced effects & presets</li>
+        <li>Priority email (24h)</li>
+      </ul>
+    `,
+    GOLD: `
+      <h2 style="margin:0 0 6px; font-size:22px;">GOLD £49/mo</h2>
+      <p style="opacity:.9">For creators who want hands-on help.</p>
+      <ul>
+        <li>Full customization session</li>
+        <li>Admin toolkit & automations</li>
+        <li>1:1 onboarding (45 min)</li>
+      </ul>
+    `,
+    DIAMOND: `
+      <h2 style="margin:0 0 6px; font-size:22px;">DIAMOND £99/mo</h2>
+      <p style="opacity:.9">White-glove integrations & priority turnarounds.</p>
+      <ul>
+        <li>Custom pipelines & integrations</li>
+        <li>Hands-on help building your stack</li>
+        <li>Priority roadmap & turnaround</li>
+      </ul>
+    `,
+    SETUP: `
+      <h2 style="margin:0 0 6px; font-size:22px;">SETUP £39</h2>
+      <ul>
+        <li>Deploy & connect Pages</li>
+        <li>Analytics hookup</li>
+        <li>Best-practice sweep</li>
+      </ul>
+    `,
+    REELS: `
+      <h2 style="margin:0 0 6px; font-size:22px;">REELS £59</h2>
+      <ul>
+        <li>3 niche reels</li>
+        <li>Captions & cuts</li>
+        <li>IG/TikTok ready</li>
+      </ul>
+    `,
+    TEMPLATES: `
+      <h2 style="margin:0 0 6px; font-size:22px;">TEMPLATES £29</h2>
+      <ul>
+        <li>5 premium blocks</li>
+        <li>Copy-paste ready</li>
+        <li>Lifetime updates</li>
+      </ul>
+    `,
+    DEFAULT: `
+      <h2 style="margin:0 0 6px; font-size:22px;">Plan Details</h2>
+      <p>Here’s what’s included.</p>
+    `
   };
 
-  function openDetailsModal(labelFromUI, sourceEl) {
-    // Figure out the “plan key” from the nearest heading or card title
-    const card = sourceEl.closest('section, article, div') || document.body;
-    const titleEl =
-      card.querySelector('h1, h2, h3, h4, .card-title') ||
-      document.querySelector('h1, h2, h3');
-    const raw = (titleEl?.textContent || labelFromUI || '').trim();
-    // Normalize (BASIC/SILVER/GOLD/DIAMOND/SETUP/REELS/TEMPLATES)
-    const key = raw.toUpperCase().split(' ')[0].replace(/[^\w]/g, '');
-    const copy = detailsCopy[key] || {
-      title: `${raw} — Details`,
-      bullets: ['Full details coming soon.']
-    };
+  // Try to detect the plan/service name near a clicked button
+  const findPlanKey = (el) => {
+    const card = el.closest('[data-tier], article, section, .plan, .card') || document.body;
+    const tierAttr = card.getAttribute('data-tier');
+    if (tierAttr) {
+      const t = tierAttr.toUpperCase();
+      if (desc[t]) return t;
+    }
+    const txt = (card.querySelector('.badge, .price, h3, h2, h1')?.textContent || '').toUpperCase();
+    if (txt.includes('BASIC')) return 'BASIC';
+    if (txt.includes('SILVER')) return 'SILVER';
+    if (txt.includes('GOLD')) return 'GOLD';
+    if (txt.includes('DIAMOND')) return 'DIAMOND';
+    if (txt.includes('SETUP')) return 'SETUP';
+    if (txt.includes('REELS')) return 'REELS';
+    if (txt.includes('TEMPLATES')) return 'TEMPLATES';
+    return 'DEFAULT';
+  };
 
-    // Build modal
-    const backdrop = document.createElement('div');
-    backdrop.className = 'tg-modal-backdrop';
-    backdrop.role = 'dialog';
-    backdrop.ariaModal = 'true';
-
-    const modal = document.createElement('div');
-    modal.className = 'tg-modal';
-    modal.innerHTML = `
-      <header>
-        <h3>${copy.title}</h3>
-        <button class="tg-close" type="button" aria-label="Close">Close</button>
-      </header>
-      <div class="body">
-        <ul>${copy.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
-        <p>If you’ve got questions, use the Contact form below and we’ll reply from <strong>gridcoresystems@gmail.com</strong>.</p>
-      </div>
-      <footer>
-        <button class="tg-cta" type="button" data-action="choose">Choose this</button>
-        <button class="tg-close" type="button">Done</button>
-      </footer>
-    `;
-    backdrop.appendChild(modal);
-    document.body.appendChild(backdrop);
-
-    // Close helpers
-    const remove = () => backdrop.remove();
-    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) remove(); });
-    modal.querySelectorAll('.tg-close').forEach(btn => btn.addEventListener('click', remove));
-    document.addEventListener('keydown', function esc(e){
-      if (e.key === 'Escape') { remove(); document.removeEventListener('keydown', esc); }
-    });
-
-    // CTA -> behave like CHOOSE for this card
-    modal.querySelector('[data-action="choose"]').addEventListener('click', () => {
-      try {
-        if (subjectInput) subjectInput.value = `Join ${raw}`;
-      } catch {}
-      remove();
-      smooth(contactSection || document.body);
-    });
+  /* -------------------- Wire up actions robustly -------------------- */
+  // Customize panel
+  const panel = $('#panel');
+  const customizeBtn = $('#btnCustomize');
+  if (customizeBtn && panel && typeof panel.showModal === 'function') {
+    customizeBtn.addEventListener('click', (e) => { e.preventDefault(); panel.showModal(); });
   }
 
-  // ======================================================
-  // Button wiring: CHOOSE + DETAILS
-  // ======================================================
-  document.querySelectorAll('button, a').forEach((el) => {
-    const label = (el.textContent || '').trim().toLowerCase();
+  // Join Now -> plans
+  const joinBtn = $('#btnJoin');
+  const plans = $('#plans') || $('[id*=plan]');
+  if (joinBtn && plans) {
+    joinBtn.addEventListener('click', (e) => { e.preventDefault(); smooth(plans); });
+  }
 
-    // CHOOSE -> jump to Contact and prefill Subject
-    if (label === 'choose' || el.dataset.action === 'choose') {
+  // Buttons: we accept class names OR label text to avoid regressions
+  $$('button, a').forEach((el) => {
+    const label = (el.textContent || '').trim().toLowerCase();
+    const isChoose = el.classList.contains('choose') || label === 'choose';
+    const isDetails = el.classList.contains('details') || label === 'details';
+
+    if (isChoose) {
       el.addEventListener('click', (e) => {
         e.preventDefault();
-        const card = el.closest('section, article, div') || document.body;
-        const titleEl =
-          card.querySelector('h1, h2, h3, h4, .card-title') ||
-          document.querySelector('h1, h2, h3');
-
-        const planTitle = (titleEl?.textContent || 'Plan').trim();
-        if (subjectInput) subjectInput.value = `Join ${planTitle}`;
+        const key = findPlanKey(el);
+        if (subjectInput) subjectInput.value = `Join ${key.charAt(0)}${key.slice(1).toLowerCase()}`;
         smooth(contactSection || document.body);
       });
     }
 
-    // DETAILS -> open modal (no page jump)
-    if (label === 'details' || el.dataset.action === 'details') {
+    if (isDetails) {
       el.addEventListener('click', (e) => {
         e.preventDefault();
-        openDetailsModal(el.textContent || 'Details', el);
+        const key = findPlanKey(el);
+        openModal(desc[key] || desc.DEFAULT);
       });
     }
   });
