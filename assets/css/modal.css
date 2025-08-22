@@ -1,0 +1,22 @@
+/* THE GRID – modal.css (new) */
+
+.tg-modal{position:fixed;inset:0;display:none;z-index:9999}
+.tg-modal[aria-hidden="false"]{display:block}
+.tg-modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:saturate(120%) blur(2px)}
+.tg-modal__dialog{
+  position:relative;max-width:680px;margin:12vh auto;z-index:1;
+  background:rgba(20,22,25,.96);color:#e7ebf0;border-radius:16px;
+  box-shadow:0 10px 35px rgba(0,0,0,.5), 0 0 40px rgba(0,255,200,.15) inset;
+  padding:24px 22px 20px; border:1px solid rgba(255,255,255,.06)
+}
+.tg-modal__close{
+  position:absolute;top:10px;right:10px; width:36px;height:36px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.08); background:#0f1215;color:#e7ebf0;
+  font-size:22px;line-height:32px;cursor:pointer
+}
+.tg-modal__close:hover{box-shadow:0 0 16px rgba(0,255,200,.35)}
+.tg-modal h3{font-size:1.4rem;margin:0 0 .4rem}
+.tg-modal p{margin:.2rem 0 .8rem;color:#b6c0cc}
+.tg-modal ul{margin:.4rem 0 .6rem 1.2rem}
+.tg-modal li{margin:.18rem 0}
+.tg-kicker{display:block;font-size:.8rem;letter-spacing:.12em;color:#9bb3c8;text-transform:uppercase;margin-bottom:.35rem}
