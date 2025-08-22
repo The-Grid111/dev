@@ -1,211 +1,284 @@
-*** Begin Patch
-*** Update File: dev/assets/js/main.js
-// dev/assets/js/main.js
-// Stable controls + visible build badge to verify deploys
+/* dev/assets/js/main.js
+   Stable baseline — buttons wired + plan Details modal
+   - Always load page at top (fixes GH Pages/iOS “start at bottom”)
+   - Smooth scroll helpers
+   - Choose → scroll to Contact and prefill Subject with plan name
+   - Details → open modal with per-plan description (Basic/Silver/Gold/Diamond/Setup/Reels/Templates)
+   - Works for both <button> and <a>, and for “Start Setup / Order Pack / Get Pack” buttons
+*/
 
-document.addEventListener('DOMContentLoaded', () => {
-  /* -------------------- Build badge (verifies deploy) -------------------- */
-  const buildTime = new Date().toLocaleString();
-  const mark = document.createElement('div');
-  mark.textContent = `THEGRID • Build ${buildTime}`;
-  mark.style.cssText = `
-    position:fixed; right:10px; bottom:10px; z-index:9999;
-    font:600 12px/1.2 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-    background:rgba(0,0,0,.6); color:#f5f7fa; padding:8px 10px; border-radius:10px;
-    border:1px solid rgba(255,255,255,.12); backdrop-filter:saturate(1.1) blur(6px);
-    box-shadow:0 8px 22px rgba(0,0,0,.35)
-  `;
-  document.body.appendChild(mark);
-  console.log('[THEGRID] main.js loaded @', buildTime);
-
-  /* -------------------- Always start at top -------------------- */
+(function () {
+  // --- Always start at top (prevents "load at bottom" on GH Pages / iOS) ---
   try {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
-  } catch {}
+  } catch (e) {}
 
-  /* -------------------- Helpers -------------------- */
-  const smooth = (el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  // --- Small utils ---
+  const smoothScroll = (el) => {
+    if (!el) return;
+    try {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch {
+      // Fallback
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 8;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
 
+  const closestCard = (el) => el.closest('section, article, .card, .plan, div');
+
+  // Pull a readable plan title from the nearest card heading
+  const getPlanTitle = (originEl) => {
+    const card = closestCard(originEl) || document.body;
+
+    // Prefer explicit title element if present
+    let titleEl =
+      card.querySelector('.card-title, .plan-title, h1, h2, h3, h4') ||
+      document.querySelector('h1, h2, h3');
+
+    if (!titleEl) return 'Plan';
+
+    // Clean: drop prices like “£29/mo”
+    let t = (titleEl.textContent || '').trim();
+    t = t.replace(/\s*£[\d,.]+(?:\s*\/\s*mo)?/i, '').trim();
+    // Title-case common outputs (BASIC->Basic, etc)
+    t = t.replace(/\s+/g, ' ');
+    return t;
+  };
+
+  // --- Contact targets (very forgiving selectors) ---
   const contactSection =
-    $('#contact') ||
-    $('form')?.closest('section') ||
-    $('form');
+    document.querySelector('#contact') ||
+    document.querySelector('form')?.closest('section') ||
+    document.querySelector('form') ||
+    document.body;
 
   const subjectInput =
-    $('input[name="subject"]') ||
-    $('#subject') ||
-    null;
+    document.querySelector('input[name="subject"]') ||
+    document.querySelector('#subject');
 
-  /* -------------------- Modal (no CSS dependencies) -------------------- */
-  let modal, box;
+  // --- Modal (auto-created; no CSS dependency) ---
   const ensureModal = () => {
-    if (modal) return;
-    modal = document.createElement('div');
-    modal.style.cssText = `
-      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-      background:rgba(0,0,0,.6); z-index:9998; padding:16px;
-    `;
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    let overlay = document.getElementById('plan-modal');
+    if (overlay) return overlay;
 
-    box = document.createElement('div');
-    box.style.cssText = `
-      max-width:720px; width:100%; background:#0f172a; color:#e5e7eb;
-      border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:20px;
-      box-shadow:0 18px 40px rgba(0,0,0,.45);
-      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-    `;
-    const header = document.createElement('div');
-    header.style.cssText = 'display:flex; justify-content:flex-end; margin-bottom:8px;';
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = 'Close';
-    closeBtn.style.cssText = `
-      background:#f4c84a; color:#1a1300; border:none; padding:8px 12px;
-      border-radius:10px; font-weight:700; cursor:pointer;
-    `;
-    closeBtn.addEventListener('click', closeModal);
-    header.appendChild(closeBtn);
-    box.appendChild(header);
-    modal.appendChild(box);
-    document.body.appendChild(modal);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-  };
-  const openModal = (html) => {
-    ensureModal();
-    while (box.childNodes.length > 1) box.removeChild(box.lastChild);
-    const d = document.createElement('div');
-    d.innerHTML = html;
-    box.appendChild(d);
-    modal.style.display = 'flex';
-  };
-  const closeModal = () => { if (modal) modal.style.display = 'none'; };
+    overlay = document.createElement('div');
+    overlay.id = 'plan-modal';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.style.cssText = [
+      'position:fixed',
+      'inset:0',
+      'background:rgba(0,0,0,.55)',
+      'display:none',
+      'align-items:center',
+      'justify-content:center',
+      'z-index:9999',
+      'padding:24px'
+    ].join(';');
 
-  /* -------------------- Plan/Service descriptions -------------------- */
-  const desc = {
-    BASIC: `
-      <h2 style="margin:0 0 6px; font-size:22px;">BASIC £9/mo</h2>
-      <p style="opacity:.9">Good for trying things out.</p>
+    const dialog = document.createElement('div');
+    dialog.id = 'plan-modal-dialog';
+    dialog.style.cssText = [
+      'max-width:720px',
+      'width:100%',
+      'background:#101418',
+      'color:#eaeff3',
+      'border:1px solid rgba(255,255,255,.12)',
+      'border-radius:14px',
+      'box-shadow:0 10px 30px rgba(0,0,0,.35)',
+      'padding:20px 20px 16px',
+      'font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif'
+    ].join(';');
+
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Close');
+    close.style.cssText = [
+      'float:right',
+      'border:1px solid rgba(255,255,255,.18)',
+      'background:transparent',
+      'color:#eaeff3',
+      'border-radius:10px',
+      'padding:6px 10px',
+      'cursor:pointer'
+    ].join(';');
+    close.textContent = 'Close';
+
+    const title = document.createElement('h3');
+    title.id = 'plan-modal-title';
+    title.style.cssText = [
+      'margin:0 0 10px',
+      'font-size:20px',
+      'letter-spacing:.2px'
+    ].join(';');
+
+    const body = document.createElement('div');
+    body.id = 'plan-modal-body';
+    body.style.cssText = [
+      'font-size:15px',
+      'line-height:1.6',
+      'opacity:.95'
+    ].join(';');
+
+    dialog.appendChild(close);
+    dialog.appendChild(title);
+    dialog.appendChild(body);
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+
+    const hide = () => {
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden', 'true');
+      // Restore scroll
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+
+    close.addEventListener('click', hide);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) hide();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (overlay.style.display === 'flex' && e.key === 'Escape') hide();
+    });
+
+    overlay._show = (titleText, html) => {
+      title.textContent = titleText;
+      body.innerHTML = html;
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden', 'false');
+      // Lock scroll while open
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    };
+
+    return overlay;
+  };
+
+  // Per-plan details (edit freely; shown inside modal)
+  const PLAN_DETAILS = {
+    Basic: `
       <ul>
-        <li>Starter templates, polished UI</li>
-        <li>Library access (videos, images, logos)</li>
-        <li>Email support (48h)</li>
+        <li>Starter templates with a polished, white &amp; gold UI.</li>
+        <li>Library access (videos, images, logos).</li>
+        <li>Email support within 48 hours.</li>
+        <li>7-day refund policy.</li>
       </ul>
     `,
-    SILVER: `
-      <h2 style="margin:0 0 6px; font-size:22px;">SILVER £29/mo</h2>
-      <p style="opacity:.9">Step up with advanced effects & presets.</p>
+    Silver: `
       <ul>
-        <li>Everything in Basic</li>
-        <li>Advanced effects & presets</li>
-        <li>Priority email (24h)</li>
+        <li>Everything in Basic.</li>
+        <li>Advanced effects &amp; preset library.</li>
+        <li>Priority email support (24h).</li>
+        <li>Best-practice guidance for faster publishing.</li>
       </ul>
     `,
-    GOLD: `
-      <h2 style="margin:0 0 6px; font-size:22px;">GOLD £49/mo</h2>
-      <p style="opacity:.9">For creators who want hands-on help.</p>
+    Gold: `
       <ul>
-        <li>Full customization session</li>
-        <li>Admin toolkit & automations</li>
-        <li>1:1 onboarding (45 min)</li>
+        <li>Full custom session tailored to your brand.</li>
+        <li>Admin toolkit &amp; automations included.</li>
+        <li>1:1 onboarding call (45 min).</li>
+        <li>Roadmap planning for your visual pipeline.</li>
       </ul>
     `,
-    DIAMOND: `
-      <h2 style="margin:0 0 6px; font-size:22px;">DIAMOND £99/mo</h2>
-      <p style="opacity:.9">White-glove integrations & priority turnarounds.</p>
+    Diamond: `
       <ul>
-        <li>Custom pipelines & integrations</li>
-        <li>Hands-on help building your stack</li>
-        <li>Priority roadmap & turnaround</li>
+        <li>Custom pipelines &amp; integrations (end-to-end).</li>
+        <li>Hands-on help building your stack.</li>
+        <li>Priority roadmap &amp; fast turnaround.</li>
+        <li>Direct access for iterations &amp; upgrades.</li>
       </ul>
     `,
-    SETUP: `
-      <h2 style="margin:0 0 6px; font-size:22px;">SETUP £39</h2>
+    Setup: `
       <ul>
-        <li>Deploy & connect Pages</li>
-        <li>Analytics hookup</li>
-        <li>Best-practice sweep</li>
+        <li>Deploy &amp; connect GitHub Pages.</li>
+        <li>Analytics hookup.</li>
+        <li>Best-practice sweep to keep everything fast &amp; stable.</li>
       </ul>
     `,
-    REELS: `
-      <h2 style="margin:0 0 6px; font-size:22px;">REELS £59</h2>
+    Reels: `
       <ul>
-        <li>3 niche reels</li>
-        <li>Captions & cuts</li>
-        <li>IG/TikTok ready</li>
+        <li>3 niche reels cut for your audience.</li>
+        <li>Captions &amp; platform-ready exports.</li>
+        <li>IG/TikTok-ready formats and pacing.</li>
       </ul>
     `,
-    TEMPLATES: `
-      <h2 style="margin:0 0 6px; font-size:22px;">TEMPLATES £29</h2>
+    Templates: `
       <ul>
-        <li>5 premium blocks</li>
-        <li>Copy-paste ready</li>
-        <li>Lifetime updates</li>
+        <li>5 premium, copy-paste blocks.</li>
+        <li>Clean, modern styles with zero code edits.</li>
+        <li>Lifetime updates.</li>
       </ul>
-    `,
-    DEFAULT: `
-      <h2 style="margin:0 0 6px; font-size:22px;">Plan Details</h2>
-      <p>Here’s what’s included.</p>
     `
   };
 
-  // Try to detect the plan/service name near a clicked button
-  const findPlanKey = (el) => {
-    const card = el.closest('[data-tier], article, section, .plan, .card') || document.body;
-    const tierAttr = card.getAttribute('data-tier');
-    if (tierAttr) {
-      const t = tierAttr.toUpperCase();
-      if (desc[t]) return t;
-    }
-    const txt = (card.querySelector('.badge, .price, h3, h2, h1')?.textContent || '').toUpperCase();
-    if (txt.includes('BASIC')) return 'BASIC';
-    if (txt.includes('SILVER')) return 'SILVER';
-    if (txt.includes('GOLD')) return 'GOLD';
-    if (txt.includes('DIAMOND')) return 'DIAMOND';
-    if (txt.includes('SETUP')) return 'SETUP';
-    if (txt.includes('REELS')) return 'REELS';
-    if (txt.includes('TEMPLATES')) return 'TEMPLATES';
-    return 'DEFAULT';
+  // Map any text found in card titles to our details keys
+  const normalizePlanKey = (name) => {
+    const n = (name || '').toLowerCase();
+    if (n.includes('basic')) return 'Basic';
+    if (n.includes('silver')) return 'Silver';
+    if (n.includes('gold')) return 'Gold';
+    if (n.includes('diamond')) return 'Diamond';
+    if (n.includes('setup')) return 'Setup';
+    if (n.includes('reels')) return 'Reels';
+    if (n.includes('template')) return 'Templates';
+    return 'Basic'; // fallback
   };
 
-  /* -------------------- Wire up actions robustly -------------------- */
-  // Customize panel
-  const panel = $('#panel');
-  const customizeBtn = $('#btnCustomize');
-  if (customizeBtn && panel && typeof panel.showModal === 'function') {
-    customizeBtn.addEventListener('click', (e) => { e.preventDefault(); panel.showModal(); });
-  }
+  // Use label text to decide action
+  const getActionFromLabel = (text) => {
+    const t = (text || '').trim().toLowerCase();
+    if (t === 'choose') return 'choose';
+    if (t === 'details') return 'details';
+    if (t.includes('start setup') || t.includes('order pack') || t.includes('get pack'))
+      return 'choose';
+    return null;
+  };
 
-  // Join Now -> plans
-  const joinBtn = $('#btnJoin');
-  const plans = $('#plans') || $('[id*=plan]');
-  if (joinBtn && plans) {
-    joinBtn.addEventListener('click', (e) => { e.preventDefault(); smooth(plans); });
-  }
+  // --- Wire up all buttons/links (idempotent) ---
+  const wireInteractions = () => {
+    document.querySelectorAll('button, a').forEach((el) => {
+      if (el.dataset._bound === '1') return;
 
-  // Buttons: we accept class names OR label text to avoid regressions
-  $$('button, a').forEach((el) => {
-    const label = (el.textContent || '').trim().toLowerCase();
-    const isChoose = el.classList.contains('choose') || label === 'choose';
-    const isDetails = el.classList.contains('details') || label === 'details';
+      const action = getActionFromLabel(el.textContent);
+      if (!action) return;
 
-    if (isChoose) {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        const key = findPlanKey(el);
-        if (subjectInput) subjectInput.value = `Join ${key.charAt(0)}${key.slice(1).toLowerCase()}`;
-        smooth(contactSection || document.body);
-      });
-    }
+      if (action === 'choose') {
+        el.addEventListener('click', (e) => {
+          // Keep native anchors working for top nav etc unless they point nowhere
+          const href = el.getAttribute('href');
+          const isTrivial = !href || href === '#' || href === '' || href.startsWith('javascript:');
+          if (isTrivial) e.preventDefault();
 
-    if (isDetails) {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        const key = findPlanKey(el);
-        openModal(desc[key] || desc.DEFAULT);
-      });
-    }
-  });
-});
-*** End Patch
+          const planTitle = getPlanTitle(el);
+          if (subjectInput) {
+            subjectInput.value = `Join ${planTitle}`;
+          }
+          smoothScroll(contactSection || document.body);
+        });
+      }
+
+      if (action === 'details') {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          const planTitle = getPlanTitle(el);
+          const key = normalizePlanKey(planTitle);
+          const overlay = ensureModal();
+          const html = PLAN_DETAILS[key] || `<p>No details available yet for ${planTitle}.</p>`;
+          overlay._show(`${planTitle} — What you get`, html);
+        });
+      }
+
+      el.dataset._bound = '1';
+    });
+  };
+
+  // Initial bind + late binds in case content changes later
+  document.addEventListener('DOMContentLoaded', wireInteractions);
+  // Safety: also run once now in case this script loads after DOMContentLoaded
+  try { wireInteractions(); } catch {}
+
+})();
