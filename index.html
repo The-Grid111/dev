@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="gold">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -9,20 +9,25 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <!-- Page overlay (modals/sheets) -->
+  <div id="ui-overlay" class="overlay hidden" aria-hidden="true"></div>
+
   <!-- Header -->
-  <header class="site-head head--glass" id="siteHead">
+  <header class="site-head head-glass">
     <div class="wrap head-inner">
       <a class="brand" href="#">
-        <img src="assets/images/gc_logo.png" alt="GC" class="brand-spin" />
+        <img src="assets/images/gc_logo.png" alt="" class="brand-mark" />
         <span>THE GRID</span>
       </a>
+
       <nav class="nav">
         <a href="#library">Library</a>
         <a href="#plans">Pricing</a>
         <a href="#contact">Contact</a>
       </nav>
+
       <div class="head-cta">
-        <a href="#" class="btn ghost" data-action="customize">Customize</a>
+        <a id="customizeBtn" href="#" class="btn ghost" data-action="customize">Customize</a>
         <a href="#" class="btn" data-action="join">Join Now</a>
       </div>
     </div>
@@ -31,14 +36,20 @@
   <!-- Hero -->
   <section class="hero">
     <div class="wrap">
-      <h1>Launch visuals that sell.</h1>
-      <p class="lede">Premium white &amp; gold UI, fast library swaps, ethical monetisation. No code edits — ever.</p>
-      <div class="cta-row">
-        <a href="#library" class="btn strong">Open Library</a>
-        <a href="#plans" class="btn ghost">See Pricing</a>
+      <div class="hero-copy">
+        <h1>Launch visuals that sell.</h1>
+        <p class="lede">Premium black &amp; gold UI, fast library swaps, ethical monetisation. No code edits—ever.</p>
+        <div class="cta-row">
+          <a href="#library" class="btn strong">Open Library</a>
+          <a href="#plans" class="btn ghost">See Pricing</a>
+        </div>
       </div>
 
       <div class="hero-media">
+        <video id="heroVideo" class="hero-video" autoplay muted playsinline loop poster="assets/images/hero_1.jpg">
+          <source src="assets/videos/hero_1.mp4" type="video/mp4">
+        </video>
+        <img id="heroFallback" class="hero-fallback hidden" src="assets/images/gc_logo.png" alt="">
         <button class="play" aria-label="Preview reel">▶</button>
       </div>
     </div>
@@ -50,8 +61,7 @@
       <h2>Library</h2>
       <p class="muted">
         Tap any tile to set the Hero or add to showcases. Drop content into
-        <code>assets/videos</code> &amp; <code>assets/images</code>. Optional: extend with
-        <code>assets/images/manifest.json</code> &amp; <code>assets/videos/manifest.json</code>.
+        <code>assets/videos/</code> &amp; <code>assets/images/</code>.
       </p>
 
       <h3 class="subhead">Featured Reels</h3>
@@ -78,7 +88,6 @@
       <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
 
       <div class="stack">
-        <!-- BASIC -->
         <article class="card plan" data-plan="BASIC">
           <h3>BASIC £9/mo</h3>
           <ul>
@@ -87,12 +96,11 @@
             <li>Email support (48h)</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="BASIC">Choose</button>
+            <button class="btn" data-checkout="BASIC">Choose</button>
             <button class="btn ghost" data-details='{"title":"BASIC","points":["Starter templates for hero & sections","Access to Library (videos, images, logos)","Email support in 48h window","Cancel/upgrade anytime"]}'>Details</button>
           </div>
         </article>
 
-        <!-- SILVER -->
         <article class="card plan" data-plan="SILVER">
           <h3>SILVER £29/mo</h3>
           <ul>
@@ -101,12 +109,11 @@
             <li>Priority email (24h)</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="SILVER">Choose</button>
+            <button class="btn" data-checkout="SILVER">Choose</button>
             <button class="btn ghost" data-details='{"title":"SILVER","points":["Everything in Basic","Advanced video/image effects presets","Priority email in 24h","Quarterly design tune-ups included"]}'>Details</button>
           </div>
         </article>
 
-        <!-- GOLD -->
         <article class="card plan" data-plan="GOLD">
           <h3>GOLD £49/mo</h3>
           <ul>
@@ -115,12 +122,11 @@
             <li>1:1 onboarding (45 min)</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="GOLD">Choose</button>
+            <button class="btn" data-checkout="GOLD">Choose</button>
             <button class="btn ghost" data-details='{"title":"GOLD","points":["One collaborative design session monthly","Admin toolkit + lightweight automations","1:1 onboarding (45 min)","Priority bug hotfix channel"]}'>Details</button>
           </div>
         </article>
 
-        <!-- DIAMOND -->
         <article class="card plan" data-plan="DIAMOND">
           <h3>DIAMOND £99/mo</h3>
           <ul>
@@ -129,7 +135,7 @@
             <li>Priority roadmap &amp; turnaround</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="DIAMOND">Choose</button>
+            <button class="btn" data-checkout="DIAMOND">Choose</button>
             <button class="btn ghost" data-details='{"title":"DIAMOND","points":["Custom pipelines (Notion, Airtable, Zapier, etc.)","Hands-on stack build support","Priority roadmap & fast turnaround","Quarterly strategy review"]}'>Details</button>
           </div>
         </article>
@@ -138,7 +144,6 @@
       <h3 class="section-split">À-la-carte Services</h3>
 
       <div class="stack">
-        <!-- SETUP -->
         <article class="card plan" data-plan="SETUP">
           <h3>SETUP £39</h3>
           <ul>
@@ -147,12 +152,11 @@
             <li>Best-practice sweep</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="SETUP">Start Setup</button>
-            <button class="btn ghost" data-details='{"title":"SETUP","points":["Deploy site to GitHub Pages","Connect domains & basic SEO","Add analytics (GA/PL)", "Best-practice sweep for performance & a11y"]}'>Details</button>
+            <button class="btn" data-checkout="SETUP">Start Setup</button>
+            <button class="btn ghost" data-details='{"title":"SETUP","points":["Deploy site to GitHub Pages","Connect domains & basic SEO","Add analytics (GA/PL)","Performance & accessibility sweep"]}'>Details</button>
           </div>
         </article>
 
-        <!-- REELS -->
         <article class="card plan" data-plan="REELS">
           <h3>REELS £59</h3>
           <ul>
@@ -161,12 +165,11 @@
             <li>IG/TikTok ready</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="REELS">Order Pack</button>
+            <button class="btn" data-checkout="REELS">Order Pack</button>
             <button class="btn ghost" data-details='{"title":"REELS","points":["Three 9–15s reels tailored to your niche","Captions, jump cuts, hook & CTA","Delivered in IG/TikTok formats","Two revision rounds included"]}'>Details</button>
           </div>
         </article>
 
-        <!-- TEMPLATES -->
         <article class="card plan" data-plan="TEMPLATES">
           <h3>TEMPLATES £29</h3>
           <ul>
@@ -175,7 +178,7 @@
             <li>Lifetime updates</li>
           </ul>
           <div class="actions">
-            <button class="btn" data-choose="TEMPLATES">Get Pack</button>
+            <button class="btn" data-checkout="TEMPLATES">Get Pack</button>
             <button class="btn ghost" data-details='{"title":"TEMPLATES","points":["Five hand-crafted sections (hero, features, pricing, CTA, footer)","Responsive & accessible","Plug-in text + assets only","Lifetime updates to this pack"]}'>Details</button>
           </div>
         </article>
@@ -187,7 +190,7 @@
   <section id="contact" class="section">
     <div class="wrap">
       <h2>Contact</h2>
-      <form class="card contact">
+      <form class="card contact" onsubmit="return false;">
         <div class="grid form">
           <label> Your name <input type="text" placeholder="Jane Doe"></label>
           <label> Email <input type="email" placeholder="you@example.com"></label>
@@ -208,52 +211,40 @@
     <div class="wrap">© 2025 THE GRID. All rights reserved.</div>
   </footer>
 
-  <!-- Overlay -->
-  <div id="ui-overlay" class="overlay hidden" aria-hidden="true"></div>
-
-  <!-- Customize Panel (owner mode shows extra) -->
+  <!-- Customize Panel (admin only) -->
   <aside id="design-panel" class="sheet hidden" aria-hidden="true" role="dialog" aria-label="Design Controls">
     <header class="sheet-head">
       <h3>Design Controls</h3>
       <button class="icon-close" data-close aria-label="Close">×</button>
     </header>
-
     <div class="sheet-body">
       <div class="ctrl">
         <span>Theme preset</span>
-        <div class="preset-row">
-          <button class="chip" data-preset="gold">Gold</button>
-          <button class="chip" data-preset="midnight">Midnight</button>
-          <button class="chip" data-preset="emerald">Emerald</button>
-          <button class="chip" data-preset="silver">Silver</button>
+        <div class="chip-row">
+          <button class="chip" data-theme="gold">Gold</button>
+          <button class="chip" data-theme="midnight">Midnight</button>
+          <button class="chip" data-theme="emerald">Emerald</button>
+          <button class="chip" data-theme="silver">Silver</button>
         </div>
       </div>
 
       <label class="ctrl"><span>Accent color</span><input id="ctrl-accent" type="color" value="#f3c545"></label>
       <label class="ctrl"><span>Surface glow</span><input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
-
       <label class="ctrl"><span>Card radius</span><input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
-      <label class="ctrl owner-only"><span>Depth (shadow)</span><input id="ctrl-depth" type="range" min="0" max="1" step="0.05" value="0.28"></label>
-      <label class="ctrl owner-only"><span>Base font size</span><input id="ctrl-font" type="range" min="14" max="19" value="16"></label>
-      <label class="ctrl owner-only"><span>Max content width</span><input id="ctrl-wrap" type="range" min="880" max="1240" value="1100"></label>
-      <label class="ctrl"><span>Background pattern</span><input id="ctrl-pattern" type="range" min="0" max="1" step="0.05" value="0.15"></label>
+      <label class="ctrl"><span>Background pattern</span><input id="ctrl-pattern" type="range" min="0" max="1" step="0.05" value="0.35"></label>
 
       <div class="ctrl">
         <span>Header style</span>
-        <div class="preset-row">
+        <div class="chip-row">
           <button class="chip" data-head="glass">Glass</button>
           <button class="chip" data-head="solid">Solid</button>
           <button class="chip" data-head="floating">Floating</button>
         </div>
       </div>
-
-      <small class="muted owner-only" id="owner-hint" style="display:none">
-        Owner mode is ON. Toggle with <code>?owner=1</code> or set <code>localStorage.isOwner='1'</code>.
-      </small>
+      <button id="adminOff" class="btn ghost">Disable admin on this device</button>
     </div>
-
     <footer class="sheet-foot">
-      <button class="btn ghost" id="ctrl-reset">Reset</button>
+      <button class="btn ghost" id="resetDesign">Reset</button>
       <button class="btn" data-close>Done</button>
     </footer>
   </aside>
@@ -297,6 +288,5 @@
   </div>
 
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/commerce.js"></script>
 </body>
 </html>
