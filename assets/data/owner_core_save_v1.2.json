@@ -1,47 +1,25 @@
 {
-  "owner": {
-    "site_title": "THE GRID",
-    "tagline": "Cinematic AI visuals & TikTok creator hub",
-    "email": "hello@example.com",
-    "tiktok": "https://www.tiktok.com/@YOUR_HANDLE"
+  "theme": {
+    "css": {
+      "--accent": "#f3c545",
+      "--card": "#121821",
+      "--pattern": 0.15,
+      "--card-radius": "18px",
+      "--glow": 0.35,
+      "--depth": 0.28,
+      "--base-font": "16px",
+      "--wrap-max": "1100px"
+    },
+    "header": "glass"
   },
-  "pricing": [
-    {
-      "id": "starter",
-      "name": "Starter",
-      "currency": "£",
-      "price": 49,
-      "features": ["1 short", "Basic upscale", "Standard export"],
-      "cta": "Enquire"
-    },
-    {
-      "id": "creator",
-      "name": "Creator",
-      "currency": "£",
-      "price": 149,
-      "features": ["4 shorts", "HDR + faces", "TikTok-ready"],
-      "cta": "Enquire"
-    },
-    {
-      "id": "studio",
-      "name": "Studio",
-      "currency": "£",
-      "price": 399,
-      "features": ["12 shorts", "Full pipeline", "Priority"],
-      "cta": "Enquire"
-    }
-  ],
-  "gallery": [
-    "assets/images/p1.jpg",
-    "assets/images/p2.jpg",
-    "assets/images/p3.jpg",
-    "assets/images/p4.jpg",
-    "assets/images/p5.jpg",
-    "assets/images/p6.jpg"
-  ],
-  "updated": "2025-01-01T00:00:00Z",
-  "_meta": {
-    "version": "1.2",
-    "schema": "owner_core_save"
+  "library": {
+    "hero": "assets/videos/hero_1.mp4",
+    "fallbackImage": "assets/images/hero_1.jpg"
+  },
+  "contact": {
+    "email": "gridcoresystems@gmail.com"
+  },
+  "owner": {
+    "isOwner": true
   }
 }
