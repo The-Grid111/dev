@@ -1,61 +1,43 @@
-/* THE GRID — Commerce v3 (static-safe) */
-const GRID_PLANS = {
-  BASIC:      { code:'BASIC',      price_gbp: 9,  interval:'mo',
-    points:['Starter hero & sections','Access Library','Email support 48h','Cancel/upgrade anytime'] },
-  SILVER:     { code:'SILVER',     price_gbp: 29, interval:'mo',
-    points:['Everything in Basic','Advanced effects','Priority 24h','Quarterly tune-ups'] },
-  GOLD:       { code:'GOLD',       price_gbp: 49, interval:'mo',
-    points:['Monthly collab session','Admin toolkit','1:1 onboarding','Priority hotfix'] },
-  DIAMOND:    { code:'DIAMOND',    price_gbp: 99, interval:'mo',
-    points:['Pipelines & integrations','Hands-on stack','Priority roadmap','Quarterly strategy'] }
-};
+/* THE GRID — commerce.js
+   Stripe hand-off. Safe to include before keys exist.
+   HOW TO WIRE:
+   1) Set your publishable key below (STRIPE_PUB_KEY).
+   2) Put your real Price IDs in data-price-id on each .plan.
+*/
 
-(function wirePlans(){
-  // Details
-  document.querySelectorAll('[data-details]').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      e.preventDefault();
-      const holder = btn.closest('.plan');
-      const code = holder?.dataset?.plan || '';
-      const info = GRID_PLANS[code];
-      const payload = info ? {title: code, points: info.points} :
-        ( ()=>{ try{ return JSON.parse(btn.getAttribute('data-details')); }catch{ return {title:'Plan', points:[]} } } )();
+(function(){
+  const STRIPE_PUB_KEY = ''; // TODO: paste your pk_live_... or pk_test_...
+  const stripe = (typeof Stripe === 'function' && STRIPE_PUB_KEY) ? Stripe(STRIPE_PUB_KEY) : null;
 
-      const evt = new CustomEvent('grid:plan:details', { detail:{ payload, code }});
-      window.dispatchEvent(evt);
-    }, {passive:false});
-  });
+  const chooseButtons = document.querySelectorAll('.choose-plan');
 
-  // Choose
-  document.querySelectorAll('[data-choose]').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      e.preventDefault();
-      const holder = btn.closest('.plan');
-      const code = holder?.dataset?.plan || btn.dataset.choose || 'BASIC';
-      const plan = GRID_PLANS[code] || { code, price_gbp:null, interval:'mo' };
-      const payload = { plan: plan.code, amount_gbp: plan.price_gbp, interval: plan.interval, currency:'GBP', source:'site-v3', ts:Date.now() };
-      console.info('[checkout:init]', payload);
-      alert(`Checkout: ${plan.code}`);
-    }, {passive:false});
-  });
+  chooseButtons.forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const card = btn.closest('.plan');
+      const priceId = card?.dataset?.priceId;
 
-  // Hook for details modal controlled by main.js
-  window.addEventListener('grid:plan:details', (e)=>{
-    const {payload, code} = e.detail || {};
-    const modal = document.getElementById('details-modal');
-    const title = document.getElementById('details-title');
-    const list  = document.getElementById('details-list');
-    const choose= document.getElementById('details-choose');
-    if(!modal || !title || !list || !choose) return;
+      // Fallback: if Stripe not configured, open email compose
+      if (!stripe || !priceId) {
+        const plan = card?.dataset?.plan || 'basic';
+        const subject = encodeURIComponent(`Join THE GRID — ${plan.toUpperCase()} plan`);
+        const body = encodeURIComponent('Hi, I’d like to join this plan. Please send me the checkout link.');
+        window.location.href = `mailto:gridcoresystems@gmail.com?subject=${subject}&body=${body}`;
+        return;
+      }
 
-    title.textContent = payload?.title || code || 'Plan';
-    list.innerHTML = '';
-    (payload?.points||[]).forEach(p=>{
-      const li=document.createElement('li'); li.textContent=p; list.appendChild(li);
+      try{
+        // One-time redirect to Checkout (no backend yet). For subscriptions,
+        // you’ll typically create a Checkout Session server-side.
+        const { error } = await stripe.redirectToCheckout({
+          lineItems: [{ price: priceId, quantity: 1 }],
+          mode: 'subscription',
+          successUrl: window.location.origin + '/dev/#pricing?success=true',
+          cancelUrl: window.location.origin + '/dev/#pricing?canceled=true'
+        });
+        if (error) alert(error.message || 'Stripe error. Please try again.');
+      }catch(err){
+        alert('Checkout failed. Please try email instead.');
+      }
     });
-    choose.onclick = ()=> alert(`Choose: ${code || payload?.title || 'Plan'}`);
-    // open via main.js openLayer if present, else fallback
-    const openLayer = window.__grid_openLayer || ((el)=>{el?.classList.remove('hidden'); el?.classList.add('show');});
-    openLayer(modal);
   });
 })();
