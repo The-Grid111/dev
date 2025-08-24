@@ -3,23 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>THE GRID — Launch visuals that sell.</title>
+  <title>THE GRID — Adaptive, Quantified, No-Regression</title>
 
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="preload" href="assets/images/gc_logo.png" as="image">
+  <link rel="preload" href="assets/images/hero_1.jpg" as="image">
   <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- SEO (structured data) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"THE GRID",
+    "url":"https://the-grid111.github.io/dev/",
+    "logo":"https://the-grid111.github.io/dev/assets/images/gc_logo.png",
+    "sameAs":[]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
+
   <!-- Header -->
-  <header class="site-head">
+  <header class="site-head" data-mode="glass">
     <div class="wrap head-inner">
-      <a class="brand" href="#">
-        <img src="assets/images/gc_logo.png" alt="GC" class="brand-spin" />
+      <a class="brand" href="#top" aria-label="THE GRID">
+        <img src="assets/images/gc_logo.png" alt="" class="brand-spin" />
         <span>THE GRID</span>
       </a>
-      <nav class="nav">
-        <a href="#library">Library</a>
-        <a href="#plans">Pricing</a>
-        <a href="#contact">Contact</a>
+      <nav class="nav" aria-label="Primary">
+        <a data-nav href="#library">Library</a>
+        <a data-nav href="#resources">Resources</a>
+        <a data-nav href="#community">Community</a>
+        <a data-nav href="#plans">Pricing</a>
+        <a data-nav href="#contact">Contact</a>
       </nav>
       <div class="head-cta">
         <a href="#" class="btn ghost" data-action="customize">Customize</a>
@@ -28,182 +47,160 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <h1>Launch visuals that sell.</h1>
-        <p class="lede">Premium black &amp; gold UI, fast library swaps, ethical monetisation. No code edits — ever.</p>
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <h1>Launch experiences that learn — and never regress.</h1>
+        <p class="lede">Self-improving, ethical, quantifiable. Paste a Save → the system adapts.</p>
         <div class="cta-row">
-          <a href="#library" class="btn strong">Open Library</a>
-          <a href="#plans" class="btn ghost">See Pricing</a>
+          <a data-cta href="#library" class="btn strong">Open Library</a>
+          <a data-cta href="#plans" class="btn ghost">See Pricing</a>
+        </div>
+
+        <div class="hero-media" id="hero-media" aria-label="Hero media">
+          <img src="assets/images/hero_1.jpg" alt="Hero visual" />
+          <!-- To use video, swap the img above for:
+          <video src="assets/videos/hero_1.mp4" autoplay muted playsinline loop></video>
+          -->
         </div>
       </div>
+    </section>
 
-      <figure class="hero-media" aria-label="GC spin">
-        <!-- Will load whichever path exists -->
-        <video id="heroVideo" playsinline muted loop autoplay poster="assets/images/gc_logo.png">
-          <source src="assets/videos/gc_spin.mp4" type="video/mp4">
-          <source src="assets/video/gc_spin.mp4"  type="video/mp4">
-          <source src="assets/gc_spin.mp4"       type="video/mp4">
-        </video>
-        <img id="heroPoster" src="assets/images/gc_logo.png" alt="" />
-      </figure>
-    </div>
-  </section>
-
-  <!-- Library -->
-  <section id="library" class="section">
-    <div class="wrap">
-      <h2>Library</h2>
-      <p class="muted">
-        Tap any tile to set the Hero or add to showcases. Drop content into
-        <code>assets/videos</code> &amp; <code>assets/images</code>. Optional: extend with
-        <code>assets/images/manifest.json</code> &amp; <code>assets/videos/manifest.json</code>.
-      </p>
-
-      <h3 class="subhead">Featured Reels</h3>
-      <div class="grid tiles">
-        <button class="tile" data-title="Hero Reel 1">Hero Reel 1</button>
-        <button class="tile" data-title="Interaction">Interaction</button>
-        <button class="tile" data-title="Pour">Pour</button>
-        <button class="tile" data-title="Spread">Spread</button>
-      </div>
-
-      <h3 class="subhead">Hero Alternates</h3>
-      <div class="grid tiles dark">
-        <button class="tile">HERO PLACEHOLDER • Replace with your top niche video frame</button>
-        <button class="tile">HERO PLACEHOLDER • Hypnotic Object Interaction</button>
-        <button class="tile">HERO PLACEHOLDER • Cinematic Pour &amp; Flow</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Plans -->
-  <section id="plans" class="section">
-    <div class="wrap">
-      <h2>Plans</h2>
-      <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
-
-      <div class="stack">
-        <article class="card plan" data-plan="BASIC">
-          <h3>BASIC £9/mo</h3>
-          <ul>
-            <li>Starter templates, polished UI</li>
-            <li>Library access (videos, images, logos)</li>
-            <li>Email support (48h)</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="BASIC">Choose</button>
-            <button class="btn ghost" data-details='{"title":"BASIC","points":["Starter templates for hero & sections","Access to Library (videos, images, logos)","Email support in 48h window","Cancel/upgrade anytime"]}'>Details</button>
-          </div>
-        </article>
-
-        <article class="card plan" data-plan="SILVER">
-          <h3>SILVER £29/mo</h3>
-          <ul>
-            <li>Everything in Basic</li>
-            <li>Advanced effects &amp; presets</li>
-            <li>Priority email (24h)</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="SILVER">Choose</button>
-            <button class="btn ghost" data-details='{"title":"SILVER","points":["Everything in Basic","Advanced video/image effects presets","Priority email in 24h","Quarterly design tune-ups included"]}'>Details</button>
-          </div>
-        </article>
-
-        <article class="card plan" data-plan="GOLD">
-          <h3>GOLD £49/mo</h3>
-          <ul>
-            <li>Full custom session</li>
-            <li>Admin toolkit &amp; automations</li>
-            <li>1:1 onboarding (45 min)</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="GOLD">Choose</button>
-            <button class="btn ghost" data-details='{"title":"GOLD","points":["One collaborative design session monthly","Admin toolkit + lightweight automations","1:1 onboarding (45 min)","Priority bug hotfix channel"]}'>Details</button>
-          </div>
-        </article>
-
-        <article class="card plan" data-plan="DIAMOND">
-          <h3>DIAMOND £99/mo</h3>
-          <ul>
-            <li>Custom pipelines &amp; integrations</li>
-            <li>Hands-on help building your stack</li>
-            <li>Priority roadmap &amp; turnaround</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="DIAMOND">Choose</button>
-            <button class="btn ghost" data-details='{"title":"DIAMOND","points":["Custom pipelines (Notion, Airtable, Zapier, etc.)","Hands-on stack build support","Priority roadmap & fast turnaround","Quarterly strategy review"]}'>Details</button>
-          </div>
-        </article>
-      </div>
-
-      <h3 class="section-split">À-la-carte Services</h3>
-
-      <div class="stack">
-        <article class="card plan" data-plan="SETUP">
-          <h3>SETUP £39</h3>
-          <ul>
-            <li>Deploy &amp; connect Pages</li>
-            <li>Analytics hookup</li>
-            <li>Best-practice sweep</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="SETUP">Start Setup</button>
-            <button class="btn ghost" data-details='{"title":"SETUP","points":["Deploy site to GitHub Pages","Connect domains & basic SEO","Add analytics (GA/PL)", "Best-practice sweep for performance & a11y"]}'>Details</button>
-          </div>
-        </article>
-
-        <article class="card plan" data-plan="REELS">
-          <h3>REELS £59</h3>
-          <ul>
-            <li>3 niche reels</li>
-            <li>Captions &amp; cuts</li>
-            <li>IG/TikTok ready</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="REELS">Order Pack</button>
-            <button class="btn ghost" data-details='{"title":"REELS","points":["Three 9–15s reels tailored to your niche","Captions, jump cuts, hook & CTA","Delivered in IG/TikTok formats","Two revision rounds included"]}'>Details</button>
-          </div>
-        </article>
-
-        <article class="card plan" data-plan="TEMPLATES">
-          <h3>TEMPLATES £29</h3>
-          <ul>
-            <li>5 premium blocks</li>
-            <li>Copy-paste ready</li>
-            <li>Lifetime updates</li>
-          </ul>
-          <div class="actions">
-            <button class="btn" data-choose="TEMPLATES">Get Pack</button>
-            <button class="btn ghost" data-details='{"title":"TEMPLATES","points":["Five hand-crafted sections (hero, features, pricing, CTA, footer)","Responsive & accessible","Plug-in text + assets only","Lifetime updates to this pack"]}'>Details</button>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="wrap">
-      <h2>Contact</h2>
-      <form class="card contact">
-        <div class="grid form">
-          <label> Your name <input type="text" placeholder="Jane Doe"></label>
-          <label> Email <input type="email" placeholder="you@example.com"></label>
-          <label class="span-2"> Subject <input id="subject" type="text" placeholder="How can we help?"></label>
-          <label class="span-2"> Message <textarea rows="4" placeholder="Write your message..."></textarea></label>
-        </div>
-        <div class="actions">
-          <button class="btn">Send</button>
-        </div>
-        <p class="muted small">
-          Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
+    <!-- Library -->
+    <section id="library" class="section">
+      <div class="wrap">
+        <h2>Library</h2>
+        <p class="muted">
+          Tap a tile to set the Hero or add to showcases. Drop content into
+          <code>assets/videos</code> and <code>assets/images</code>. Optional manifests:
+          <code>assets/images/manifest.json</code> & <code>assets/videos/manifest.json</code>.
         </p>
-      </form>
-    </div>
-  </section>
+        <div class="grid tiles">
+          <button class="tile" data-title="Hero Reel 1" data-track="tile">Hero Reel 1</button>
+          <button class="tile" data-title="Interaction" data-track="tile">Interaction</button>
+          <button class="tile" data-title="Pour" data-track="tile">Pour</button>
+          <button class="tile" data-title="Spread" data-track="tile">Spread</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources (multi-industry) -->
+    <section id="resources" class="section">
+      <div class="wrap">
+        <h2>Resources</h2>
+        <p class="muted">Choose a lane — the system adapts to each profession.</p>
+        <div class="grid tiles">
+          <button class="tile" data-title="Creators" data-track="resource">Creators • reels, thumbnails, hooks</button>
+          <button class="tile" data-title="E-commerce" data-track="resource">E-commerce • product visuals, PDP boosts</button>
+          <button class="tile" data-title="Local Business" data-track="resource">Local Business • service landing pack</button>
+          <button class="tile" data-title="Education" data-track="resource">Education • course promos, lesson visuals</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community (teaser + gated) -->
+    <section id="community" class="section">
+      <div class="wrap">
+        <h2>Community Methods</h2>
+        <p class="muted">Preview how others build. Details unlock by plan.</p>
+        <div class="stack">
+          <article class="card method-card" data-required="SILVER">
+            <h3>Gold Pulse Logo</h3>
+            <p class="muted small">CapCut + grain + spectral pulse</p>
+            <div class="method-body locked">How-to steps are locked. Upgrade to view.</div>
+          </article>
+          <article class="card method-card" data-required="GOLD">
+            <h3>Liquid Pour Cinematic</h3>
+            <p class="muted small">Reference fusion + glide cut timing</p>
+            <div class="method-body locked">Detailed timeline locked. Upgrade to view.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Plans -->
+    <section id="plans" class="section">
+      <div class="wrap">
+        <h2>Plans</h2>
+        <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
+        <div class="stack">
+          <article class="card plan" data-plan="BASIC">
+            <h3>BASIC £9/mo</h3>
+            <ul>
+              <li>Starter templates, polished UI</li>
+              <li>Library access (videos, images, logos)</li>
+              <li>Email support (48h)</li>
+            </ul>
+            <div class="actions">
+              <button class="btn" data-choose="BASIC">Choose</button>
+              <button class="btn ghost" data-details='{"title":"BASIC","points":["Starter hero & sections","Access Library","Email support 48h","Cancel/upgrade anytime"]}'>Details</button>
+            </div>
+          </article>
+
+          <article class="card plan" data-plan="SILVER">
+            <h3>SILVER £29/mo</h3>
+            <ul>
+              <li>Everything in Basic</li>
+              <li>Advanced effects & presets</li>
+              <li>Priority email (24h)</li>
+            </ul>
+            <div class="actions">
+              <button class="btn" data-choose="SILVER">Choose</button>
+              <button class="btn ghost" data-details='{"title":"SILVER","points":["Everything in Basic","Advanced effects","Priority 24h","Quarterly tune-ups"]}'>Details</button>
+            </div>
+          </article>
+
+          <article class="card plan" data-plan="GOLD">
+            <h3>GOLD £49/mo</h3>
+            <ul>
+              <li>Full custom session</li>
+              <li>Admin toolkit & automations</li>
+              <li>1:1 onboarding (45 min)</li>
+            </ul>
+            <div class="actions">
+              <button class="btn" data-choose="GOLD">Choose</button>
+              <button class="btn ghost" data-details='{"title":"GOLD","points":["Monthly collab session","Admin toolkit","1:1 onboarding","Priority hotfix"]}'>Details</button>
+            </div>
+          </article>
+
+          <article class="card plan" data-plan="DIAMOND">
+            <h3>DIAMOND £99/mo</h3>
+            <ul>
+              <li>Custom pipelines & integrations</li>
+              <li>Hands-on stack build</li>
+              <li>Priority roadmap</li>
+            </ul>
+            <div class="actions">
+              <button class="btn" data-choose="DIAMOND">Choose</button>
+              <button class="btn ghost" data-details='{"title":"DIAMOND","points":["Pipelines (Notion/Airtable/Zapier)","Hands-on stack","Priority roadmap","Quarterly strategy"]}'>Details</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="wrap">
+        <h2>Contact</h2>
+        <form class="card contact" novalidate>
+          <div class="grid form">
+            <label> Your name <input type="text" placeholder="Jane Doe"></label>
+            <label> Email <input type="email" placeholder="you@example.com"></label>
+            <label class="span-2"> Subject <input id="subject" type="text" placeholder="How can we help?"></label>
+            <label class="span-2"> Message <textarea rows="4" placeholder="Write your message..."></textarea></label>
+          </div>
+          <div class="actions">
+            <button class="btn" data-cta>Send</button>
+          </div>
+          <p class="muted small">
+            Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
 
   <footer class="site-foot">
     <div class="wrap">© 2025 THE GRID. All rights reserved.</div>
@@ -220,8 +217,20 @@
     </header>
     <div class="sheet-body">
       <label class="ctrl"><span>Accent color</span><input id="ctrl-accent" type="color" value="#f3c545"></label>
-      <label class="ctrl"><span>Card radius</span><input id="ctrl-radius" type="range" min="8" max="28" value="18"></label>
+      <label class="ctrl"><span>Card radius</span><input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
       <label class="ctrl"><span>Glow intensity</span><input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
+      <label class="ctrl"><span>Font scale</span><input id="ctrl-font" type="range" min="0.85" max="1.25" step="0.01" value="1.00"></label>
+      <label class="ctrl"><span>Container width (px)</span><input id="ctrl-container" type="range" min="960" max="1280" step="10" value="1100"></label>
+      <label class="ctrl"><span>Header mode</span>
+        <select id="ctrl-header">
+          <option value="glass">Glass</option>
+          <option value="solid">Solid</option>
+        </select>
+      </label>
+      <label class="ctrl"><span>Hero height (vh)</span><input id="ctrl-hero-h" type="range" min="40" max="80" step="1" value="54"></label>
+      <label class="ctrl"><span>Border weight</span><input id="ctrl-border" type="range" min="0" max="2" step="0.1" value="1"></label>
+      <label class="ctrl"><span>Shadow depth</span><input id="ctrl-shadow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
+      <label class="ctrl switch"><input id="ctrl-pattern" type="checkbox" checked><span>Background pattern</span></label>
     </div>
     <footer class="sheet-foot">
       <button class="btn" data-close>Done</button>
@@ -266,6 +275,10 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/save-merge.js"></script>
+  <script src="assets/js/metrics.js"></script>
+  <script src="assets/js/commerce.js"></script>
 </body>
 </html>
