@@ -4,18 +4,18 @@
       "save_version": "v1.9",
       "owner": "Jake",
       "ui_prefs": {
-        "theme": "gold",
-        "header_mode": "glass",
-        "container_px": 1100,
-        "font_scale": 1.0,
-        "hero_height_vh": 54,
-        "tile_corners": "round",
-        "border_px": 1,
-        "shadow": 0.35,
-        "pattern": 1,
+        "accent_hex": "#f3c545",
         "card_radius": 18,
-        "glow": 0.35
+        "glow": 0.35,
+        "font_scale": 1.0,
+        "container_px": 1100,
+        "hero_height_vh": 42,
+        "border_px": 1,
+        "shadow_depth_px": 40,
+        "header_mode": "glass",
+        "pattern": 0
       }
     }
-  ]
+  ],
+  "notes": "Unified plan names (CORE/PRO/STUDIO/ENTERPRISE). Static-safe commerce wiring."
 }
