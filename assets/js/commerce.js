@@ -1,79 +1,145 @@
-// COMMERCE: Stripe Payment Links + Plan copy
-// Fill in your real Stripe Payment Links and (optionally) Customer Portal link.
-// After that, the Choose buttons will go straight to Stripe.
+/* commerce.js — Payment Links + device-level one-time trial guard (no backend required) */
 
-window.Commerce = (function(){
-  // 1) Paste your Stripe payment links here
-  const PAYMENT_LINKS = {
-    BASIC:   "https://buy.stripe.com/REPLACE_BASIC",
-    SILVER:  "https://buy.stripe.com/REPLACE_SILVER",
-    GOLD:    "https://buy.stripe.com/REPLACE_GOLD",
-    DIAMOND: "https://buy.stripe.com/REPLACE_DIAMOND",
-  };
+const Commerce = (() => {
+  let cfg = null;
 
-  // 2) (Optional) Enable the Stripe Customer Portal and paste its link
-  const CUSTOMER_PORTAL_URL = "https://billing.stripe.com/p/login/REPLACE_PORTAL";
+  async function loadConfig() {
+    if (cfg) return cfg;
+    try {
+      const res = await fetch('assets/config/stripe.json', { cache: 'no-store' });
+      cfg = await res.json();
+    } catch (e) {
+      console.error('Failed to load assets/config/stripe.json', e);
+      cfg = { mode: 'links' };
+    }
+    return cfg;
+  }
 
-  function open(plan){
-    const url = PAYMENT_LINKS[plan];
-    if (!url || url.includes("REPLACE_")){
-      alert(`Payment link for ${plan} isn’t configured yet.`);
+  function toast(msg, type = 'info') {
+    let t = document.querySelector('.toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.dataset.type = type;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  function planKey(raw) {
+    const s = (raw || '').toLowerCase();
+    if (s.startsWith('basic')) return 'basic';
+    if (s.startsWith('silver')) return 'silver';
+    if (s.startsWith('gold')) return 'gold';
+    if (s.startsWith('diamond')) return 'diamond';
+    if (s.startsWith('trial')) return 'trial';
+    return s;
+  }
+
+  async function gotoCheckout(plan) {
+    const conf = await loadConfig();
+    if (conf.mode !== 'links') {
+      toast('Checkout not ready.', 'error');
       return;
     }
+    const url = conf[plan];
+    if (!url) {
+      toast('Checkout link not configured yet.', 'error');
+      return;
+    }
+
+    // front-end guard for one-time trial (device level)
+    if (plan === 'trial' && localStorage.getItem('gc_trial_used') === '1') {
+      toast('Trial already used on this device.', 'error');
+      return;
+    }
+
     window.location.href = url;
   }
 
-  function describe(tier){
-    const copy = {
-      BASIC:{
-        title:"BASIC",
-        subtitle:"Starter hero & sections. Access to Library + manifest system. Email support within 48h.",
-        points:[
-          "Starter templates & effects",
-          "Theme presets + Save import",
-          "Samples in Library",
-          "Email support within 48h",
-          "Cancel/upgrade anytime"
-        ]
-      },
-      SILVER:{
-        title:"SILVER",
-        subtitle:"Everything in Basic + advanced effects & presets. Priority email and quarterly tune-ups.",
-        points:[
-          "Advanced effects & metallic styles",
-          "Pro 'Stacks & Setups' guides",
-          "Priority email (24h)",
-          "Quarterly tune-ups",
-          "Cancel/upgrade anytime"
-        ]
-      },
-      GOLD:{
-        title:"GOLD",
-        subtitle:"Full custom session, admin toolkit & automations. 1:1 onboarding and priority hotfix.",
-        points:[
-          "All Silver features",
-          "Admin toolkit + automation recipes",
-          "1:1 onboarding (45 min)",
-          "Priority hotfix",
-          "Pro Library (full access)"
-        ]
-      },
-      DIAMOND:{
-        title:"DIAMOND",
-        subtitle:"Top-tier support and access. Custom pipelines, hands-on stack build, and roadmap priority.",
-        points:[
-          "All Gold features",
-          "Custom pipelines (Notion/Airtable/Zapier)",
-          "Hands-on stack build",
-          "Priority roadmap & fast turnaround",
-          "Private Library drops"
-        ]
-      }
-    };
-    return copy[tier] || {title:tier, subtitle:"", points:[]};
+  function wirePlanButtons() {
+    // Plan card buttons (data-plan) and old data-choose pattern
+    document.querySelectorAll('[data-plan], .plan .btn[data-choose]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const plan = planKey(btn.dataset.plan || btn.getAttribute('data-choose') || btn.getAttribute('data-tier'));
+        if (!plan) return;
+        gotoCheckout(plan);
+      }, { passive: false });
+    });
+
+    // Shared details panel choose (if present)
+    const panelChoose = document.getElementById('panelChoose');
+    if (panelChoose) {
+      panelChoose.addEventListener('click', (e) => {
+        e.preventDefault();
+        const plan = planKey(panelChoose.dataset.plan);
+        if (!plan) { toast('Select a plan first.', 'error'); return; }
+        gotoCheckout(plan);
+      }, { passive: false });
+    }
   }
 
-  function portalUrl(){ return CUSTOMER_PORTAL_URL.includes("REPLACE_") ? "" : CUSTOMER_PORTAL_URL; }
+  async function handleTrialBanner() {
+    const conf = await loadConfig();
+    const banner     = document.getElementById('trial-banner');
+    const bannerCta  = document.getElementById('trial-cta');
+    const bannerHide = document.getElementById('trial-hide');
 
-  return { open, describe, portalUrl };
+    if (!banner || !bannerCta || !bannerHide) return;
+
+    const trialConfigured = !!(conf.trial && conf.trial.startsWith('https://'));
+    const trialUsed       = localStorage.getItem('gc_trial_used') === '1';
+
+    if (!trialConfigured || trialUsed) {
+      banner.hidden = true;
+      return;
+    }
+
+    banner.hidden = false;
+
+    bannerCta.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = conf.trial;
+    }, { passive: false });
+
+    bannerHide.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.setItem('gc_trial_used', '1');
+      banner.hidden = true;
+      toast('Trial hidden on this device.', 'info');
+    }, { passive: false });
+  }
+
+  function handleReturnParams() {
+    const params = new URLSearchParams(location.search);
+    const status = params.get('status');
+    const plan   = planKey(params.get('plan'));
+
+    if (status === 'success') {
+      toast('Payment successful. Thank you!', 'success');
+      if (plan === 'trial') {
+        localStorage.setItem('gc_trial_used', '1');
+        const banner = document.getElementById('trial-banner');
+        if (banner) banner.hidden = true;
+      }
+    } else if (status === 'cancelled') {
+      toast('Checkout cancelled.', 'info');
+    }
+  }
+
+  async function init() {
+    await loadConfig();
+    wirePlanButtons();
+    await handleTrialBanner();
+    handleReturnParams();
+  }
+
+  return { init };
 })();
+
+document.addEventListener('DOMContentLoaded', () => {
+  Commerce.init();
+});
