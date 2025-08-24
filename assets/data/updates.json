@@ -1,14 +1,21 @@
 {
-  "version": "2025-08-15a",
-  "notes": [
-    "Stabilised confetti engine with tier-aware colours and smoother performance.",
-    "Header compact mode and micro-interactions added.",
-    "Non-blocking owner signature shim to prevent white-screen on missing meta.",
-    "JSON-driven plans/services to restore monetisation sections cleanly."
-  ],
-  "features": {
-    "library": "manifest-aware, tabs + tags",
-    "customize": "color, spacing, radius, vignette, hero source, confetti",
-    "payments": "plans + services pulled from JSON (UI only for now)"
-  }
+  "imports": [
+    {
+      "save_version": "v1.9",
+      "owner": "Jake",
+      "ui_prefs": {
+        "theme": "gold",
+        "header_mode": "glass",
+        "container_px": 1100,
+        "font_scale": 1.0,
+        "hero_height_vh": 54,
+        "tile_corners": "round",
+        "border_px": 1,
+        "shadow": 0.35,
+        "pattern": 1,
+        "card_radius": 18,
+        "glow": 0.35
+      }
+    }
+  ]
 }
