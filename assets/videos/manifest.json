@@ -1,16 +1,16 @@
-[
-  {
-    "id": "hero_1",
-    "title": "Hero 1",
-    "src": "./assets/videos/hero_1.mp4",
-    "thumb": "./assets/images/hero_1.jpg",
-    "tags": ["hero"]
-  },
-  {
-    "id": "pour_1",
-    "title": "Pour 1",
-    "src": "./assets/videos/pour_1.mp4",
-    "thumb": "./assets/images/grid_pour_1.jpg",
-    "tags": ["effect"]
-  }
-]
+{
+  "version": 2,
+  "updated": "2025-08-24",
+  "videos": [
+    /* Example to add later:
+    {
+      "id": "reel_gold_pulse_v1",
+      "title": "Gold Pulse Logo",
+      "file": "reel_gold_pulse_v1.mp4",
+      "section": "featured",
+      "category": "logo",
+      "tags": ["pulse","capcut","grain"]
+    }
+    */
+  ]
+}
