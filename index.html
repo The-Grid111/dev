@@ -1,235 +1,297 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>THE GRID — Adaptive. Self-Improving. No Regression.</title>
-  <meta name="description" content="THE GRID: Adaptive system with ethical monetisation, self-improving design, and no regression." />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>THE GRID — adaptive experiences that never regress</title>
+  <meta name="description" content="Self-improving, ethical, quantifiable. Paste a Save → the system adapts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css"/>
 </head>
 <body>
-  <!-- Overlay -->
-  <div id="ui-overlay" class="overlay hidden"></div>
+  <!-- animated top grid -->
+  <div class="top-grid" aria-hidden="true"></div>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="wrap">
+  <!-- HEADER -->
+  <header class="header" data-header>
+    <div class="container">
       <a class="brand" href="#">
-        <span class="brand-mark"></span>
-        <span class="brand-text">THE GRID</span>
+        <span class="mark" aria-hidden="true"></span>
+        <span class="name">THE<br>GRID</span>
       </a>
-      <nav class="nav">
+
+      <nav class="nav" aria-label="Primary">
         <a href="#library">Library</a>
         <a href="#resources">Resources</a>
         <a href="#community">Community</a>
-        <a href="#plans">Plans</a>
+        <a href="#why">Why</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </nav>
-      <div class="header-cta">
-        <a href="#" class="btn ghost" data-action="customize">Customize</a>
-        <a href="#" class="btn solid" data-action="join">Join Now</a>
+
+      <div class="actions">
+        <button class="btn ghost" data-open-controls>Customize</button>
+        <a class="btn solid" href="#pricing">Join Now</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="wrap">
-      <h1>Launch experiences that never regress.</h1>
-      <p class="lede">Adaptive, ethical, quantifiable. One save → instant learning.</p>
-      <div class="cta-row">
-        <a href="#library" class="btn solid">Open Library</a>
-        <a href="#plans" class="btn ghost">See Pricing</a>
+  <!-- HERO -->
+  <section class="section hero" id="hero">
+    <div class="container">
+      <h1 class="headline"><span data-welcome>Launch experiences that never regress.</span></h1>
+      <p class="subhead">
+        Adaptive, ethical, quantifiable. One Save → instant learning. The Grid turns your feedback, files, and results into a system that improves itself.
+      </p>
+      <div class="cta">
+        <a class="btn solid" href="#library">Open Library</a>
+        <a class="btn ghost" href="#pricing">See Pricing</a>
       </div>
-      <div class="hero-media card">
-        <div class="hero-placeholder">Hero Placeholder • Replace with your top niche video</div>
+
+      <!-- Hero media -->
+      <div class="frame hero-frame" role="region" aria-label="Hero video">
+        <div class="frame-inner">
+          <p class="empty">Hero Placeholder • Replace with your top niche video</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Library -->
-  <section id="library" class="section" data-section="featured" data-kind="videos">
-    <div class="wrap">
-      <h2>Library</h2>
-      <p class="subhead">Tap any tile to preview. Drop content into <code>assets/videos</code> and extend via <code>manifest.json</code>.</p>
-      <div class="grid tiles"></div>
-    </div>
-  </section>
-
-  <!-- Resources -->
-  <section id="resources" class="section">
-    <div class="wrap">
-      <h2>Resources</h2>
-      <p class="subhead">Curated per role — system adapts each lane.</p>
-      <div class="lane">
-        <h3>Creators</h3>
-        <section class="lane-section" data-section="resources/creators" data-kind="videos">
-          <div class="grid tiles"></div>
-        </section>
-      </div>
-      <div class="lane">
-        <h3>E-commerce</h3>
-        <section class="lane-section" data-section="resources/ecom" data-kind="videos">
-          <div class="grid tiles"></div>
-        </section>
-      </div>
-      <div class="lane">
-        <h3>Local Business</h3>
-        <section class="lane-section" data-section="resources/local" data-kind="videos">
-          <div class="grid tiles"></div>
-        </section>
+  <!-- LIBRARY -->
+  <section class="section" id="library">
+    <div class="container">
+      <h2 class="title">Library</h2>
+      <p class="kicker">Tap any tile to preview. Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.</p>
+      <div class="frame" data-library>
+        <div class="frame-inner"><p class="empty">No videos yet</p></div>
       </div>
     </div>
   </section>
 
-  <!-- Community -->
-  <section id="community" class="section">
-    <div class="wrap">
-      <h2>Community Methods</h2>
-      <p class="subhead">Preview how others build. Details unlock by plan.</p>
-      <div class="grid cards">
-        <article class="card method">
-          <h4>Gold Pulse Logo</h4>
-          <p class="muted">CapCut + spectral pulse</p>
-          <div class="lock">Locked • Request access</div>
+  <!-- RESOURCES -->
+  <section class="section" id="resources">
+    <div class="container">
+      <h2 class="title">Resources</h2>
+      <p class="kicker">Choose a lane — the system adapts to each profession.</p>
+      <div class="cards">
+        <article class="card"><header>Creators</header><p>reels, thumbnails, hooks</p></article>
+        <article class="card"><header>E-commerce</header><p>product visuals, PDP boosts</p></article>
+        <article class="card"><header>Local Business</header><p>service landing pack</p></article>
+        <article class="card"><header>Education</header><p>course promos, lesson visuals</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="section" id="community">
+    <div class="container">
+      <h2 class="title">Community Methods</h2>
+      <p class="kicker">Preview how others build. Details unlock by plan.</p>
+      <div class="cards">
+        <article class="card locked"><header>Gold Pulse Logo</header><p>CapCut + spectral pulse</p><div class="lock">Locked • Request access</div></article>
+        <article class="card locked"><header>Liquid Pour Cinematic</header><p>Reference fusion + glide timing</p><div class="lock">Locked • Request access</div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY GRID -->
+  <section class="section" id="why">
+    <div class="container">
+      <h2 class="title">Why The Grid</h2>
+      <p class="kicker">Built to improve itself — and never lose progress.</p>
+      <div class="features">
+        <article class="feature">
+          <h3>Anti-Regression Core</h3>
+          <p>Every change is tracked, scored, and either promoted or rolled back. Saves persist; the system only moves forward.</p>
         </article>
-        <article class="card method">
-          <h4>Liquid Pour Cinematic</h4>
-          <p class="muted">Reference fusion + glide timing</p>
-          <div class="lock">Locked • Request access</div>
+        <article class="feature">
+          <h3>Quantifiable UX</h3>
+          <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable “modes” across projects.</p>
+        </article>
+        <article class="feature">
+          <h3>Ethical & Private</h3>
+          <p>Local-first controls and granular Save files. Personal data is never required; we store only what helps the system improve.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Plans -->
-  <section id="plans" class="section">
-    <div class="wrap">
-      <h2>Plans</h2>
-      <p class="subhead">Fair pricing. Clear value. 7-day refund.</p>
-      <div class="grid cards plans">
-        <article class="card plan" data-plan="BASIC">
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <h2 class="title">How it works</h2>
+      <div class="steps">
+        <article class="step"><span class="num">1</span><h3>Save</h3><p>Export a tiny JSON containing settings, notes, and outcomes.</p></article>
+        <article class="step"><span class="num">2</span><h3>Adapt</h3><p>Paste a Save → UI and copy update instantly. No rebuilds.</p></article>
+        <article class="step"><span class="num">3</span><h3>Compound</h3><p>Wins are promoted to presets. Your system compounds over time.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <h2 class="title">Plans</h2>
+      <p class="kicker">Fair pricing. Clear value. 7-day refund.</p>
+
+      <div class="plans">
+        <article class="plan">
           <h3>BASIC £9/mo</h3>
-          <ul class="bullets">
+          <ul>
             <li>Starter templates</li>
             <li>Library access</li>
             <li>Email support (48h)</li>
           </ul>
-          <div class="row">
-            <a href="#" class="btn solid" data-choose="BASIC">Choose</a>
-            <a href="#" class="btn ghost" data-details='{"title":"BASIC","points":["Starter templates","Library access","Email 48h","Cancel anytime"]}'>Details</a>
+          <div class="plan-cta">
+            <button class="btn solid" data-choose data-plan="BASIC">Choose</button>
+            <button class="btn ghost" data-details data-plan="BASIC">Details</button>
           </div>
         </article>
-        <article class="card plan" data-plan="SILVER">
+
+        <article class="plan">
           <h3>SILVER £29/mo</h3>
-          <ul class="bullets">
+          <ul>
             <li>Everything in Basic</li>
             <li>Advanced effects</li>
             <li>Priority email (24h)</li>
           </ul>
-          <div class="row">
-            <a href="#" class="btn solid" data-choose="SILVER">Choose</a>
-            <a href="#" class="btn ghost" data-details='{"title":"SILVER","points":["Everything in Basic","Advanced effects","Priority email 24h"]}'>Details</a>
+          <div class="plan-cta">
+            <button class="btn solid" data-choose data-plan="SILVER">Choose</button>
+            <button class="btn ghost" data-details data-plan="SILVER">Details</button>
           </div>
         </article>
-        <article class="card plan" data-plan="GOLD">
+
+        <article class="plan">
           <h3>GOLD £49/mo</h3>
-          <ul class="bullets">
+          <ul>
             <li>Full custom session</li>
             <li>Admin toolkit</li>
             <li>1:1 onboarding</li>
           </ul>
-          <div class="row">
-            <a href="#" class="btn solid" data-choose="GOLD">Choose</a>
-            <a href="#" class="btn ghost" data-details='{"title":"GOLD","points":["Monthly collab","Admin toolkit","1:1 onboarding"]}'>Details</a>
+          <div class="plan-cta">
+            <button class="btn solid" data-choose data-plan="GOLD">Choose</button>
+            <button class="btn ghost" data-details data-plan="GOLD">Details</button>
           </div>
         </article>
-        <article class="card plan" data-plan="DIAMOND">
+
+        <article class="plan">
           <h3>DIAMOND £99/mo</h3>
-          <ul class="bullets">
+          <ul>
             <li>Custom pipelines</li>
             <li>Hands-on stack build</li>
             <li>Priority roadmap</li>
           </ul>
-          <div class="row">
-            <a href="#" class="btn solid" data-choose="DIAMOND">Choose</a>
-            <a href="#" class="btn ghost" data-details='{"title":"DIAMOND","points":["Custom pipelines","Hands-on stack","Priority roadmap"]}'>Details</a>
+          <div class="plan-cta">
+            <button class="btn solid" data-choose data-plan="DIAMOND">Choose</button>
+            <button class="btn ghost" data-details data-plan="DIAMOND">Details</button>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="wrap">
-      <h2>Contact</h2>
-      <form class="card form" onsubmit="event.preventDefault(); alert('Thanks — we’ll reply soon');">
-        <label>Name <input type="text" placeholder="Jane Doe"></label>
-        <label>Email <input type="email" placeholder="you@example.com"></label>
-        <label class="full">Message <textarea rows="4"></textarea></label>
-        <div class="row">
-          <button class="btn solid">Send</button>
-        </div>
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <h2 class="title">FAQ</h2>
+      <div class="faq">
+        <details open>
+          <summary>What does “anti-regression” mean here?</summary>
+          <p>The Grid stores change sets and results. Only improvements are promoted; anything that harms outcomes is sandboxed or rolled back.</p>
+        </details>
+        <details>
+          <summary>How do Saves work?</summary>
+          <p>A Save is a tiny JSON containing settings and notes. Paste it into the site to sync visuals, copy, and presets instantly.</p>
+        </details>
+        <details>
+          <summary>Can I use it beyond AI visuals?</summary>
+          <p>Yes. The system is domain-agnostic: marketing sites, ecommerce, education, internal dashboards—anything that benefits from iterative improvement.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="title">Contact</h2>
+      <form class="card form" data-contact>
+        <label><span>Name</span><input name="name" placeholder="Jane Doe"></label>
+        <label><span>Email</span><input type="email" name="email" placeholder="you@example.com"></label>
+        <label class="full"><span>Message</span><textarea name="message" rows="5" placeholder="Write your message..."></textarea></label>
+        <div class="actions"><button class="btn solid" type="submit">Send</button></div>
+        <p class="fine">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
       </form>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="site-foot">
-    <div class="wrap">© 2025 THE GRID. All rights reserved.</div>
-  </footer>
+  <footer class="footer"><div class="container"><p>© 2025 THE GRID. All rights reserved.</p></div></footer>
 
-  <!-- Customize panel -->
-  <aside id="design-panel" class="sheet hidden" aria-hidden="true">
-    <header class="sheet-head">
-      <h3>Design Controls</h3>
-      <button class="icon-close" data-close>×</button>
-    </header>
-    <div class="sheet-body">
-      <label class="ctrl">Accent Color <input id="ctrl-accent" type="color" value="#f3c545"></label>
-      <label class="ctrl">Card Radius <input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
-      <label class="ctrl">Glow Intensity <input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
+  <!-- Controls -->
+  <aside class="controls hidden" data-controls aria-labelledby="controls-title" role="dialog" aria-modal="true">
+    <div class="controls-header">
+      <h3 id="controls-title">Design Controls</h3>
+      <button class="icon-btn" data-close-controls aria-label="Close">×</button>
     </div>
-    <footer class="sheet-foot">
-      <button class="btn solid" data-close>Done</button>
-    </footer>
+    <div class="controls-body">
+      <details open><summary>Theme</summary>
+        <label class="row"><span>Accent Color</span><input type="color" data-var="--accent" value="#f2c230"></label>
+        <label class="row"><span>Font Family</span>
+          <select data-setting="fontFamily">
+            <option value="space">Space Grotesk + Inter</option>
+            <option value="inter">Inter Only</option>
+            <option value="mono">UI Mono</option>
+          </select>
+        </label>
+        <label class="row"><span>Font Scale</span><input type="range" min="0.9" max="1.15" step="0.01" data-var="--font-scale" value="1"></label>
+      </details>
+
+      <details open><summary>Layout</summary>
+        <label class="row"><span>Card Radius</span><input type="range" min="6" max="22" step="1" data-var="--radius" value="16"></label>
+        <label class="row"><span>Container Width (px)</span><input type="range" min="960" max="1280" step="10" data-var="--container" value="1120"></label>
+        <label class="row"><span>Hero Height (vh)</span><input type="range" min="40" max="75" step="1" data-var="--hero-vh" value="52"></label>
+        <label class="row"><span>Header Mode</span>
+          <select data-setting="headerMode"><option value="glass">Glass</option><option value="solid">Solid</option><option value="float">Floating</option></select>
+        </label>
+      </details>
+
+      <details><summary>Components</summary>
+        <label class="row"><span>Glow Intensity</span><input type="range" min="0" max="1" step="0.05" data-var="--glow" value="0.25"></label>
+        <label class="row"><span>Border Weight</span><input type="range" min="1" max="3" step="0.5" data-var="--border-w" value="1.25"></label>
+        <label class="row"><span>Shadow Depth</span><input type="range" min="0" max="1" step="0.05" data-var="--shadow" value="0.25"></label>
+      </details>
+
+      <details><summary>Advanced</summary>
+        <label class="row"><span>Top Grid Opacity</span><input type="range" min="0" max="1" step="0.05" data-var="--grid-opacity" value="0.25"></label>
+        <label class="row"><span>Top Grid Density</span><input type="range" min="10" max="36" step="1" data-setting="gridDensity" value="24"></label>
+        <label class="row"><span>Your Name (welcome)</span><input type="text" placeholder="Optional" data-setting="userName"></label>
+      </details>
+
+      <div class="save-row">
+        <button class="btn ghost" data-reset>Reset</button>
+        <button class="btn solid" data-save>Save</button>
+      </div>
+    </div>
   </aside>
 
-  <!-- Join modal -->
-  <div id="join-modal" class="modal hidden" aria-hidden="true">
+  <!-- Plan Modal -->
+  <div class="modal hidden" data-modal aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-card">
-      <header class="modal-head">
-        <h3>Membership</h3>
-        <button class="icon-close" data-close>×</button>
-      </header>
-      <div class="modal-body">
-        <p>Upgrade/downgrade anytime. Email support via <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>.</p>
+      <div class="modal-head">
+        <h3 data-modal-title>Plan</h3>
+        <button class="icon-btn" data-close-modal aria-label="Close">×</button>
       </div>
-      <footer class="modal-foot">
-        <a href="#plans" class="btn solid">See Plans</a>
-        <button class="btn ghost" data-close>Close</button>
-      </footer>
+      <div class="modal-body" data-modal-body></div>
+      <div class="modal-actions">
+        <button class="btn ghost" data-close-modal>Close</button>
+        <button class="btn solid" data-modal-choose>Choose</button>
+      </div>
     </div>
   </div>
 
-  <!-- Details modal -->
-  <div id="details-modal" class="modal hidden" aria-hidden="true">
-    <div class="modal-card">
-      <header class="modal-head">
-        <h3 id="details-title">Plan Details</h3>
-        <button class="icon-close" data-close>×</button>
-      </header>
-      <div class="modal-body">
-        <ul id="details-list" class="bullets"></ul>
-      </div>
-      <footer class="modal-foot">
-        <button class="btn ghost" data-close>Close</button>
-        <button id="details-choose" class="btn solid">Choose</button>
-      </footer>
-    </div>
-  </div>
-
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
