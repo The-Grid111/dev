@@ -1,32 +1,40 @@
-[
-  {
-    "code": "setup",
-    "label": "Setup",
-    "price": 39,
-    "bullets": [
-      "Deploy & connect Pages",
-      "Analytics hookup",
-      "Best-practice sweep"
-    ]
-  },
-  {
-    "code": "reels",
-    "label": "Reels",
-    "price": 59,
-    "bullets": [
-      "3 niche reels",
-      "Captions & cuts",
-      "IG/TikTok ready"
-    ]
-  },
-  {
-    "code": "templates",
-    "label": "Templates",
-    "price": 29,
-    "bullets": [
-      "5 premium blocks",
-      "Copy-paste ready",
-      "Lifetime updates"
-    ]
-  }
-]
+{
+  "categories": [
+    {
+      "title": "Creators",
+      "tagline": "reels, thumbnails, hooks",
+      "packs": [
+        "Hook frameworks",
+        "Caption presets",
+        "Cut timing templates"
+      ]
+    },
+    {
+      "title": "E-commerce",
+      "tagline": "product visuals, PDP boosts",
+      "packs": [
+        "Hero banner layouts",
+        "UGC product reels",
+        "Shoppable gallery block"
+      ]
+    },
+    {
+      "title": "Local Business",
+      "tagline": "service landing pack",
+      "packs": [
+        "Service cards",
+        "Testimonial reels",
+        "Booking call-to-action"
+      ]
+    },
+    {
+      "title": "Education",
+      "tagline": "course promos, lesson visuals",
+      "packs": [
+        "Lesson intro templates",
+        "Module cover designs",
+        "Promo reel patterns"
+      ]
+    }
+  ]
+}
