@@ -1,293 +1,271 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-preset="gold">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Grid — Launch experiences that never regress</title>
-  <meta name="description" content="Self-serve, adaptive, quantifiable. Paste a Save → instant learning. Roles & plans unlock features; no 1:1 required. Diamond unlocks watermark‑free, commercial‑safe exports." />
-
-  <!-- Base fonts & icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --bg: #0b0d10; --bg-elev:#101317; --card:#12161b; --text:#e9edf2; --muted:#a7b0bb; --gold1:#c6a768; --gold2:#e7d18a; --accent:#9ec6ff; --ring: rgba(255,255,255,.12); --border:rgba(255,255,255,.08);
-      --radius: 16px;
-    }
-    [data-theme="light"]{--bg:#f7f8fa; --bg-elev:#fff; --card:#fff; --text:#0d1117; --muted:#4b5563; --ring: rgba(0,0,0,.1); --border:rgba(0,0,0,.08)}
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,Helvetica,sans-serif;background:radial-gradient(1200px 800px at 10% -10%, rgba(255,220,130,.08), transparent 60%), radial-gradient(800px 600px at 120% 10%, rgba(128,170,255,.06), transparent 40%), var(--bg); color:var(--text);}
-    .wrap{max-width:1040px;margin:0 auto;padding:24px}
-    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg, rgba(10,12,15,.9), rgba(10,12,15,.6) 60%, rgba(10,12,15,0));backdrop-filter:saturate(140%) blur(8px);}
-    [data-theme="light"] header{background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.6) 60%, rgba(255,255,255,0));}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px; border-bottom:1px solid var(--border)}
-    .brand{display:flex;gap:10px;align-items:center}
-    .coin{width:32px;height:32px;border-radius:50%;background: radial-gradient(120% 120% at 20% 20%, #fff6, #0000), conic-gradient(from 10deg, #d6bd7a, #b9964d, #f6e3a4, #a9812e, #d6bd7a); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), 0 1px 10px rgba(0,0,0,.25)}
-    .brand b{letter-spacing:.6px}
-    .btn{appearance:none;border:1px solid var(--ring);background:var(--bg-elev);color:var(--text);border-radius:12px;padding:.6rem .9rem;font-weight:600;cursor:pointer}
-    .btn-gold{background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#111;border:none;box-shadow:0 8px 20px rgba(198,167,104,.25)}
-    .btn-ghost{background:transparent}
-    .btn-sm{padding:.45rem .7rem;border-radius:10px}
-    .pill{padding:.25rem .55rem;border:1px dashed var(--border);border-radius:999px;font-size:.75rem;color:var(--muted)}
-    .hero{padding:42px 24px 8px}
-    h1{font-size:44px;line-height:1.05;margin:0 0 14px}
-    p.lead{color:var(--muted);font-size:18px;margin:0 0 22px}
-    .actions{display:flex;gap:14px;flex-wrap:wrap}
-
-    .section{padding:36px 24px}
-    .bar{height:2px;background:linear-gradient(90deg,var(--gold1),transparent);border-radius:2px;margin:6px 0 18px}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-    .card{grid-column:span 12;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-    @media(min-width:860px){.card.span6{grid-column:span 6}}
-    .muted{color:var(--muted)}
-
-    /* Library tiles */
-    .tile{height:160px;border-radius:16px;border:1px solid var(--border);background:repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 12px, rgba(255,255,255,.04) 12px 24px), linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.06));display:flex;align-items:center;justify-content:center;color:#b8c2cf}
-    .tile-row{display:grid;grid-template-columns:1fr;gap:14px}
-    @media(min-width:860px){.tile-row{grid-template-columns:repeat(2,1fr)}}
-    .tile-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;color:var(--muted)}
-
-    /* Pricing */
-    .plans{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:860px){.plans{grid-template-columns:repeat(2,1fr)}}
-    .plan{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-    .plan h3{margin:0 0 6px}
-    .price{font-weight:800;font-size:24px;margin:6px 0 12px}
-    .bullets{list-style:disc;margin:0 0 14px 18px;color:var(--muted)}
-    .plan .row{display:flex;gap:10px;flex-wrap:wrap}
-
-    /* Modals */
-    dialog{border:none;border-radius:18px;max-width:680px;width:92vw;padding:0;background:var(--bg-elev);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.45)}
-    dialog::backdrop{background:rgba(0,0,0,.6)}
-    .modal-head{padding:18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-    .modal-body{padding:18px}
-    .modal-foot{padding:14px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between}
-
-    /* Footer */
-    footer{padding:40px 24px;color:var(--muted)}
-
-    /* Toggle */
-    .switch{display:inline-flex;align-items:center;gap:8px}
-    .switch input{display:none}
-    .switch .knob{width:44px;height:26px;border-radius:999px;border:1px solid var(--ring);background:var(--bg-elev);position:relative}
-    .switch .knob:after{content:"";position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#fff,#dcdcdc);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
-    [data-theme="light"] .switch .knob:after{transform:translateX(18px)}
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>THE GRID — Launch experiences that never regress</title>
+  <meta name="description" content="Self-serve, adaptive, quantifiable. Paste a Save → instant learning. Plans unlock features; no 1:1 required. Diamond unlocks watermark-free, commercial-safe exports." />
+  <link rel="icon" href="assets/images/gc_logo.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
-<body>
-  <header>
-    <div class="wrap nav">
-      <div class="brand"><div class="coin"></div><b>THE GRID</b></div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <label class="switch" title="Toggle theme">
-          <span class="muted">Light</span>
-          <input id="themeToggle" type="checkbox" />
-          <span class="knob"></span>
-          <span class="muted">Dark</span>
-        </label>
-        <button class="btn btn-ghost" data-open="#customize">Customize</button>
-        <button class="btn btn-gold" data-open="#join">Join Now</button>
+<body class="body-grid">
+
+  <!-- Header -->
+  <header class="site-head">
+    <div class="wrap head-inner">
+      <a class="brand" href="#top" aria-label="THE GRID home">
+        <img src="assets/images/gc_logo.png" alt="" class="brand-spin" />
+        <span>THE GRID</span>
+      </a>
+      <nav class="nav">
+        <a href="#library">Library</a>
+        <a href="#stacks">Stacks</a>
+        <a href="#community">Community</a>
+        <a href="#plans">Pricing</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="head-cta">
+        <button class="btn ghost" data-open="#customize">Customize</button>
+        <a class="btn" href="#plans">Join Now</a>
       </div>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="wrap">
       <h1>Launch experiences that never regress.</h1>
-      <p class="lead">Self‑serve, adaptive, quantifiable. Paste a Save → instant learning. Roles & plans unlock features; no 1:1 required. <b>Diamond</b> unlocks watermark‑free, commercial‑safe exports.</p>
-      <div class="actions">
-        <a class="btn btn-gold" href="#library">Open Library</a>
-        <a class="btn" href="#plans">See Pricing</a>
+      <p class="lede">
+        Self-serve, adaptive, quantifiable. Paste a Save → instant learning.
+        Plans unlock features; no 1:1 required. <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
+      </p>
+      <div class="cta-row">
+        <a href="#library" class="btn strong">Open Library</a>
+        <a href="#plans" class="btn ghost">See Pricing</a>
       </div>
-      <div class="card" style="margin-top:18px;height:220px;display:flex;align-items:center;justify-content:center;color:#94a3b8">Hero Placeholder • Replace with your top niche video</div>
-    </section>
 
-    <section id="library" class="section">
+      <div class="hero-media">
+        <div class="media-placeholder">Hero Placeholder • Replace with your top niche video</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Library -->
+  <section id="library" class="section">
+    <div class="wrap">
       <h2>Library</h2>
-      <div class="bar"></div>
-      <p class="muted">Drop videos in <span class="pill">assets/videos/</span> and list them in <span class="pill">assets/videos/manifest.json</span>. Lower tiers see a subtle GRID watermark on exports. <b>Diamond exports are watermark‑free.</b></p>
+      <p class="muted">
+        Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.
+        Lower tiers export with a subtle GRID watermark. <strong>Diamond exports are watermark-free.</strong>
+      </p>
 
-      <div class="grid" style="margin-top:12px">
-        <div class="card span6">
+      <div class="grid tiles">
+        <article class="card">
           <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Basic</span><span>Samples & getting started</span></div>
-        </div>
-        <div class="card span6">
+          <div class="tile-footer"><span class="pill">Basic</span><span class="muted">Samples & getting started</span></div>
+        </article>
+        <article class="card">
           <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Silver</span><span>Guides & improvements</span></div>
-        </div>
-        <div class="card span6">
+          <div class="tile-footer"><span class="pill">Silver</span><span class="muted">Guides & improvements</span></div>
+        </article>
+        <article class="card">
           <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Gold</span><span>Full pro library</span></div>
-        </div>
-        <div class="card span6">
+          <div class="tile-footer"><span class="pill">Gold</span><span class="muted">Full pro library</span></div>
+        </article>
+        <article class="card">
           <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Diamond</span><span>Private packs & early drops</span></div>
-        </div>
+          <div class="tile-footer"><span class="pill">Diamond</span><span class="muted">Private packs & early drops</span></div>
+        </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <h2>Stacks & Setups</h2>
-      <div class="bar"></div>
-      <div class="grid">
-        <div class="card span6">
+  <!-- Stacks & Setups -->
+  <section id="stacks" class="section">
+    <div class="wrap">
+      <h2>Stacks &amp; Setups</h2>
+      <p class="muted">Start free, scale when ready.</p>
+
+      <div class="stack">
+        <article class="card pad">
           <h3>Creator Starter</h3>
-          <p class="muted">CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export with watermark unless Diamond.</p>
-        </div>
-        <div class="card span6">
+          <p>CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export watermarked unless Diamond.</p>
+        </article>
+        <article class="card pad">
           <h3>Commerce Visuals</h3>
-          <p class="muted">Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p>
-        </div>
+          <p>Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p>
+        </article>
+        <article class="card pad">
+          <h3>Educator Essentials</h3>
+          <p>Canva slides + Descript edits + Loom screen. Clip library grows from your Saves.</p>
+        </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="plans" class="section">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-        <h2>Plans</h2>
-        <button class="btn btn-ghost btn-sm" data-open="#compare">Compare plans</button>
+  <!-- Community -->
+  <section id="community" class="section">
+    <div class="wrap">
+      <h2>Community</h2>
+      <p class="muted">High-signal showcases and reusable methods. Admin curated so it never gets noisy.</p>
+
+      <div class="stack">
+        <article class="card pad method">
+          <h3>Liquid Pour Cinematic</h3>
+          <p>Reference fusion + glide timing. Export watermark applies unless Diamond.</p>
+        </article>
+        <article class="card pad method">
+          <h3>Gold Pulse Logo</h3>
+          <p>CapCut spectral pulse + metallic accent. Private pack on Diamond.</p>
+        </article>
       </div>
-      <div class="bar"></div>
-      <p class="muted">Fair pricing. Clear value. 7‑day refund. <b>No 1:1 calls included in any plan.</b></p>
-      <div class="plans" style="margin-top:12px">
-        <article class="plan" data-plan="basic">
+    </div>
+  </section>
+
+  <!-- Why / How -->
+  <section class="section">
+    <div class="wrap">
+      <h2>Why The Grid</h2>
+      <p class="muted">Built to improve itself — and never lose progress.</p>
+      <div class="stack">
+        <article class="card pad">
+          <h3>Anti-Regression Core</h3>
+          <p>Changes are tracked & scored. Wins are promoted; misses are rolled back. Saves persist.</p>
+        </article>
+        <article class="card pad">
+          <h3>Quantifiable UX</h3>
+          <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable modes.</p>
+        </article>
+        <article class="card pad">
+          <h3>Self-Serve</h3>
+          <p>Clear plans, no calls required. Learn by doing with guides and templates. Upgrade when you need more.</p>
+        </article>
+      </div>
+
+      <h2 class="section-split">How it works</h2>
+      <ol class="steps">
+        <li><div class="step card pad"><h4>1 • Save</h4><p>Export a tiny JSON with settings, notes, outcomes.</p></div></li>
+        <li><div class="step card pad"><h4>2 • Adapt</h4><p>Paste a Save → UI, defaults, and copy update instantly.</p></div></li>
+        <li><div class="step card pad"><h4>3 • Compound</h4><p>Wins become presets. Your system compounds over time.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="plans" class="section">
+    <div class="wrap">
+      <div class="row between align-center">
+        <h2>Pricing</h2>
+        <button class="btn ghost btn-sm js-compare-plans">Compare plans</button>
+      </div>
+      <p class="muted">Fair pricing. Clear value. 7-day refund. <strong>No 1:1 calls included in any plan.</strong></p>
+
+      <div class="stack plans">
+        <article class="card pad plan" data-plan="basic">
           <h3>BASIC £9/mo</h3>
-          <div class="price">£9<span class="muted">/mo</span></div>
-          <ul class="bullets">
-            <li>Starter templates & effects</li>
-            <li>Library samples</li>
+          <ul>
+            <li>Starter templates &amp; effects</li>
+            <li>Theme presets &amp; Save imports</li>
+            <li>Sample Library (watermarked)</li>
             <li>Email support (48h)</li>
-            <li><b>Exports include subtle watermark</b></li>
           </ul>
-          <div class="row">
-            <a class="btn btn-gold js-choose" href="#">Choose</a>
-            <a class="btn btn-ghost" data-open="#basicModal">Details</a>
+          <div class="actions">
+            <a href="#" class="btn js-choose" data-plan="basic">Choose</a>
+            <a href="#" class="btn ghost js-plan-details" data-plan="basic">Details</a>
           </div>
         </article>
 
-        <article class="plan" data-plan="silver">
+        <article class="card pad plan" data-plan="silver">
           <h3>SILVER £29/mo</h3>
-          <div class="price">£29<span class="muted">/mo</span></div>
-          <ul class="bullets">
+          <ul>
             <li>Everything in Basic</li>
-            <li>Advanced effects & metallic presets</li>
+            <li>Advanced effects &amp; metallic presets</li>
             <li>Priority email (24h)</li>
-            <li>Quarterly tune‑ups</li>
-            <li><b>Exports include subtle watermark</b></li>
+            <li>Quarterly tune-ups</li>
           </ul>
-          <div class="row">
-            <a class="btn btn-gold js-choose" href="#">Choose</a>
-            <a class="btn btn-ghost" data-open="#silverModal">Details</a>
+          <div class="actions">
+            <a href="#" class="btn js-choose" data-plan="silver">Choose</a>
+            <a href="#" class="btn ghost js-plan-details" data-plan="silver">Details</a>
           </div>
         </article>
 
-        <article class="plan" data-plan="gold">
+        <article class="card pad plan" data-plan="gold">
           <h3>GOLD £49/mo</h3>
-          <div class="price">£49<span class="muted">/mo</span></div>
-          <ul class="bullets">
+          <ul>
             <li>Everything in Silver</li>
-            <li>Admin toolkit & automations</li>
-            <li>Pro Library & recipes</li>
+            <li>Admin toolkit &amp; automations</li>
+            <li>Pro Library &amp; recipes</li>
             <li>Priority hotfix</li>
-            <li><b>Exports include subtle watermark</b></li>
           </ul>
-          <div class="row">
-            <a class="btn btn-gold js-choose" href="#">Choose</a>
-            <a class="btn btn-ghost" data-open="#goldModal">Details</a>
+          <div class="actions">
+            <a href="#" class="btn js-choose" data-plan="gold">Choose</a>
+            <a href="#" class="btn ghost js-plan-details" data-plan="gold">Details</a>
           </div>
         </article>
 
-        <article class="plan" data-plan="diamond">
+        <article class="card pad plan" data-plan="diamond">
           <h3>DIAMOND £99/mo</h3>
-          <div class="price">£99<span class="muted">/mo</span></div>
-          <ul class="bullets">
-            <li>Everything in Gold</li>
-            <li>Private packs & early drops</li>
-            <li>Custom pipelines & roadmap priority</li>
-            <li><b>Watermark‑free exports + commercial rights</b></li>
+          <ul>
+            <li>Private Library drops, custom pipelines</li>
+            <li>Roadmap priority, fast turnaround</li>
+            <li><strong>Watermark-free exports + commercial rights</strong></li>
           </ul>
-          <div class="row">
-            <a class="btn btn-gold js-choose" href="#">Choose</a>
-            <a class="btn btn-ghost" data-open="#diamondModal">Details</a>
+          <div class="actions">
+            <a href="#" class="btn js-choose" data-plan="diamond">Choose</a>
+            <a href="#" class="btn ghost js-plan-details" data-plan="diamond">Details</a>
           </div>
         </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <h2>FAQ</h2>
-      <div class="bar"></div>
-      <div class="grid">
-        <div class="card span6"><details><summary>Do plans include 1:1 sessions?</summary><p class="muted">No. The Grid is designed to be fully self‑serve. We may offer 1:1 add‑ons later.</p></details></div>
-        <div class="card span6"><details><summary>How do Saves work?</summary><p class="muted">Saves are tiny JSON files that apply settings, notes, and outcomes to the site. Paste one → the UI and copy update instantly.</p></details></div>
-        <div class="card span6"><details><summary>What does “anti‑regression” mean?</summary><p class="muted">Every change is tracked and scored. Wins are promoted; regressions are rolled back.</p></details></div>
-      </div>
-    </section>
-  </main>
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <form class="card contact" action="mailto:gridcoresystems@gmail.com" method="post">
+        <div class="grid form">
+          <label> Your name <input type="text" placeholder="Jane Doe" required></label>
+          <label> Email <input type="email" placeholder="you@example.com" required></label>
+          <label class="span-2"> Subject <input id="subject" type="text" placeholder="How can we help?"></label>
+          <label class="span-2"> Message <textarea rows="4" placeholder="Write your message..."></textarea></label>
+        </div>
+        <div class="actions">
+          <button class="btn">Send</button>
+        </div>
+        <p class="muted small">
+          Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
+        </p>
+      </form>
+    </div>
+  </section>
 
-  <footer class="wrap">
-    <div class="bar" style="opacity:.4"></div>
-    <p>© 2025 THE GRID. All rights reserved.</p>
+  <footer class="site-foot">
+    <div class="wrap">© 2025 THE GRID. All rights reserved.</div>
   </footer>
 
-  <!-- PLAN DETAIL MODALS -->
-  <dialog id="basicModal"><div class="modal-head"><b>BASIC</b><button class="btn btn-ghost btn-sm" data-close>✕</button></div><div class="modal-body"><p>Starter hero & sections. Access to Library + manifest system. Email support within 48h.</p><ul class="bullets"><li>Starter templates & effects</li><li>Theme presets + Save import</li><li>Samples in Library</li><li>Email support within 48h</li><li>Cancel/upgrade anytime</li></ul></div><div class="modal-foot"><button class="btn btn-gold js-choose">Continue to Checkout</button><button class="btn" data-close>Close</button></div></dialog>
-
-  <dialog id="silverModal"><div class="modal-head"><b>SILVER</b><button class="btn btn-ghost btn-sm" data-close>✕</button></div><div class="modal-body"><p>Everything in Basic + advanced effects & presets. Priority email and quarterly tune‑ups.</p><ul class="bullets"><li>Advanced effects & metallic styles</li><li>Pro ‘Stacks & Setups’ guides</li><li>Priority email (24h)</li><li>Quarterly tune‑ups</li><li>Cancel/upgrade anytime</li></ul></div><div class="modal-foot"><button class="btn btn-gold js-choose">Continue to Checkout</button><button class="btn" data-close>Close</button></div></dialog>
-
-  <dialog id="goldModal"><div class="modal-head"><b>GOLD</b><button class="btn btn-ghost btn-sm" data-close>✕</button></div><div class="modal-body"><p>Full custom session feel without 1:1 calls. Admin toolkit, automation recipes, and Pro Library.</p><ul class="bullets"><li>All Silver features</li><li>Admin toolkit + automation recipes</li><li>Priority hotfix</li><li>Pro Library (full access)</li></ul></div><div class="modal-foot"><button class="btn btn-gold js-choose">Continue to Checkout</button><button class="btn" data-close>Close</button></div></dialog>
-
-  <dialog id="diamondModal"><div class="modal-head"><b>DIAMOND</b><button class="btn btn-ghost btn-sm" data-close>✕</button></div><div class="modal-body"><p>Top‑tier access. Private Library drops, custom pipelines, and roadmap priority with watermark‑free, commercial‑safe exports.</p><ul class="bullets"><li>All Gold features</li><li>Custom pipelines (Notion/Airtable/Zapier)</li><li>Private drops & early access</li><li>Watermark‑free exports + commercial rights</li></ul></div><div class="modal-foot"><button class="btn btn-gold js-choose">Continue to Checkout</button><button class="btn" data-close>Close</button></div></dialog>
-
-  <!-- COMPARE & CUSTOMIZE -->
-  <dialog id="compare"><div class="modal-head"><b>Compare Plans</b><button class="btn btn-ghost btn-sm" data-close>✕</button></div><div class="modal-body"><div style="overflow:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:10px;border-bottom:1px solid var(--border)">What’s included</th><th style="padding:10px;border-bottom:1px solid var(--border)">Basic</th><th style="padding:10px;border-bottom:1px solid var(--border)">Silver</th><th style="padding:10px;border-bottom:1px solid var(--border)">Gold</th><th style="padding:10px;border-bottom:1px solid var(--border)">Diamond</th></tr></thead><tbody>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Site + Customize</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Effects & metallic presets</td><td style="text-align:center">Starter</td><td style="text-align:center"><b>Advanced</b></td><td style="text-align:center"><b>All</b></td><td style="text-align:center"><b>All</b></td></tr>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Stacks & Setups</td><td style="text-align:center">Starter</td><td style="text-align:center">Pro</td><td style="text-align:center">Pro+</td><td style="text-align:center">All</td></tr>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Library access</td><td style="text-align:center">Samples</td><td style="text-align:center">Guides</td><td style="text-align:center">Full (Pro)</td><td style="text-align:center">All + Private</td></tr>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Automation recipes</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center"><b>Included</b></td><td style="text-align:center"><b>Included</b></td></tr>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Support</td><td style="text-align:center">48h</td><td style="text-align:center">24h</td><td style="text-align:center">Hotfix</td><td style="text-align:center">Roadmap</td></tr>
-  <tr><td style="padding:10px;border-bottom:1px solid var(--border)">Watermark‑free exports</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center"><b>Yes</b></td></tr>
-</tbody></table></div></div><div class="modal-foot"><button class="btn" data-close>Close</button></div></dialog>
-
-  <dialog id="customize"><div class="modal-head"><b>Customize</b><button class="btn btn-ghost btn-sm" data-close>✕</button></div><div class="modal-body"><div style="display:grid;gap:12px">
-    <div>
-      <label class="muted" for="accent">Accent hue</label>
-      <input id="accent" type="range" min="0" max="360" value="210" style="width:100%" />
+  <!-- Customize (modal) -->
+  <dialog id="customize" class="modal">
+    <div class="modal-card">
+      <header class="modal-head">
+        <h3>Design Controls</h3>
+        <button class="icon-close" data-close aria-label="Close">×</button>
+      </header>
+      <div class="modal-body">
+        <label class="ctrl"><span>Accent color</span><input id="ctrl-accent" type="color" value="#f3c545"></label>
+        <label class="ctrl"><span>Card radius</span><input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
+        <label class="ctrl"><span>Glow intensity</span><input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
+      </div>
+      <footer class="modal-foot">
+        <button class="btn" data-close>Done</button>
+      </footer>
     </div>
-    <div>
-      <label class="muted" for="radius">Corner radius</label>
-      <input id="radius" type="range" min="8" max="24" value="16" style="width:100%" />
-    </div>
-  </div></div><div class="modal-foot"><button class="btn" data-close>Close</button></div></dialog>
+  </dialog>
 
-  <!-- Trial banner loads links + wires .js-choose buttons via stripe.json -->
-  <script src="/assets/js/trial-banner.js"></script>
-
-  <script>
-    // Theme toggle
-    const root = document.documentElement; const toggle = document.querySelector('#themeToggle');
-    const saved = localStorage.getItem('gc_theme');
-    if(saved){root.setAttribute('data-theme', saved); toggle.checked = saved !== 'light';}
-    toggle?.addEventListener('change', ()=>{const v = toggle.checked ? 'dark' : 'light'; root.setAttribute('data-theme', v); localStorage.setItem('gc_theme', v);});
-
-    // Open/close any dialog with [data-open] / [data-close]
-    document.addEventListener('click', (e)=>{
-      const open = e.target.closest('[data-open]');
-      if(open){ e.preventDefault(); const sel = open.getAttribute('data-open'); const dlg = document.querySelector(sel); dlg?.showModal(); }
-      if(e.target.closest('[data-close]')){ e.preventDefault(); e.target.closest('dialog')?.close(); }
-    });
-
-    // Customize controls → CSS variables
-    const acc = document.getElementById('accent');
-    const rad = document.getElementById('radius');
-    const setAccent = (deg)=>{ const c = `hsl(${deg} 65% 75%)`; document.body.style.setProperty('--accent', c); };
-    const setRadius = (r)=>{ document.body.style.setProperty('--radius', r+'px'); document.querySelectorAll('.plan,.card').forEach(el=> el.style.borderRadius = r+'px'); };
-    acc?.addEventListener('input', e=> setAccent(e.target.value));
-    rad?.addEventListener('input', e=> setRadius(e.target.value));
-  </script>
+  <!-- Scripts (order matters) -->
+  <script src="assets/js/trial-banner.js"></script>
+  <script src="assets/js/plans.js"></script>
+  <script src="assets/js/commerce.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
