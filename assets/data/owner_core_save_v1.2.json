@@ -1,25 +1,53 @@
 {
-  "theme": {
-    "css": {
-      "--accent": "#f3c545",
-      "--card": "#121821",
-      "--pattern": 0.15,
-      "--card-radius": "18px",
-      "--glow": 0.35,
-      "--depth": 0.28,
-      "--base-font": "16px",
-      "--wrap-max": "1100px"
-    },
-    "header": "glass"
+  "save_version": "v1.9",
+  "owner": "Jake",
+  "core_principles": {
+    "no_regression": true,
+    "always_invent_if_needed": true,
+    "auto_feedback_learning": true,
+    "ethical_monetisation": true,
+    "tiered_access": {
+      "owner": "full",
+      "admin": "sandbox",
+      "user": "scoped"
+    }
   },
-  "library": {
-    "hero": "assets/videos/hero_1.mp4",
-    "fallbackImage": "assets/images/hero_1.jpg"
+  "security": {
+    "adaptive_loop": true,
+    "sandbox_default": true,
+    "canary_pct": 5,
+    "auto_revert": true,
+    "schema_validation": "strict",
+    "origin_policy": "first_party_only",
+    "privacy": "abstract_cues_only",
+    "incident_playbook": "freeze→rollback→patch→canary→promote"
   },
-  "contact": {
-    "email": "gridcoresystems@gmail.com"
+  "learning_engine": {
+    "universal_save_merge": true,
+    "media_translation": true,
+    "inventive_mode": true,
+    "feedback_loops": [
+      "user_feedback",
+      "owner_feedback",
+      "market_signals"
+    ],
+    "auto_prune": true
   },
-  "owner": {
-    "isOwner": true
+  "innovation_log": [
+    "Universal Save & Merge across AI tools",
+    "Inventive Mode — new methods when none exist",
+    "Media-to-knowledge translation",
+    "Adaptive Security Loop with sandbox/canary/autorevert"
+  ],
+  "branding": {
+    "theme": "black_gold",
+    "ui": "elegant_intricate",
+    "celebration": "membership-based confetti",
+    "emotional_resonance": true
+  },
+  "meta": {
+    "created_in": "3 weeks",
+    "conditions": "health struggle, no startup experience",
+    "note": "Proof of grit, originality, and breakthrough potential"
   }
 }
