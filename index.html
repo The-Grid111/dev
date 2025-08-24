@@ -1,413 +1,354 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-preset="gold">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID — Launch experiences that never regress</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
+  <meta name="description" content="Adaptive, ethical, quantifiable. Paste a Save → instant learning. The Grid turns your feedback, files, and results into a system that improves itself." />
   <link rel="stylesheet" href="assets/css/styles.css" />
   <link rel="stylesheet" href="assets/css/modal.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23f4d57b'/%3E%3Cstop stop-color='%23b58b28' offset='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='28' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <script defer src="assets/js/commerce.js"></script>
+  <script defer src="assets/js/main.js"></script>
 </head>
-<body class="theme-dark">
-  <!-- Background layers -->
-  <div class="bg-grid"></div>
-  <div class="bg-noise"></div>
-  <div class="bg-gradient"></div>
+<body class="body-grid">
 
-  <!-- Site wrapper -->
+  <!-- Top update/news bar (dismissible) -->
+  <div id="newsBar" class="news" role="region" aria-label="Site update">
+    <div class="container row">
+      <span>Update: Light & Dark mode, custom palettes, metallic gold, and a smarter Library are live.</span>
+      <button class="news__close" aria-label="Dismiss">×</button>
+    </div>
+  </div>
+
+  <!-- Header -->
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="THE GRID home">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-text">THE<br/>GRID</span>
-    </a>
-
-    <nav class="nav">
-      <button id="themeToggle" class="btn btn-ghost" aria-label="Toggle light/dark mode">
-        <span class="icon">☾</span>
-      </button>
-      <button id="customizeOpen" class="btn btn-ghost">Customize</button>
-      <a class="btn btn-gold" href="#plans">Join Now</a>
-    </nav>
+    <div class="container row header-row">
+      <a class="brand" href="#top" aria-label="THE GRID home">
+        <span class="brand__coin" aria-hidden="true"></span>
+        <span class="brand__word">THE<br/>GRID</span>
+      </a>
+      <nav class="site-nav">
+        <a href="#library">Library</a>
+        <a href="#build">Resources</a>
+        <a href="#why">Why</a>
+        <a href="#plans">Pricing</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-cta">
+        <button id="customizeBtn" class="btn btn-ghost">Customize</button>
+        <a class="btn btn-gold" href="#plans">Join Now</a>
+      </div>
+    </div>
   </header>
 
-  <!-- News ribbon -->
-  <aside id="newsRibbon" class="news-ribbon" role="status" aria-live="polite">
-    <div class="news-inner">
-      <span class="dot" aria-hidden="true"></span>
-      <span class="news-text">
-        Update: Light Mode, metallic gold, smarter Library, and a working Customize panel are live.
-      </span>
-      <button id="newsDismiss" class="news-dismiss" aria-label="Dismiss">✕</button>
+  <!-- Hero -->
+  <section class="hero container" id="top">
+    <h1>Welcome. Welcome. Launch experiences that never regress.</h1>
+    <p class="lead">
+      Adaptive, ethical, quantifiable. Paste a Save → instant learning.
+      The Grid turns your feedback, files, and results into a system that improves itself.
+    </p>
+    <div class="row gap">
+      <a class="btn btn-gold" href="#library">Open Library</a>
+      <a class="btn btn-outline" href="#plans">See Pricing</a>
     </div>
-  </aside>
 
-  <main id="top" class="site-main">
+    <div class="hero-media card">
+      <div class="media-placeholder">Hero Placeholder • Replace with your top niche video</div>
+    </div>
+  </section>
 
-    <!-- Hero -->
-    <section class="section hero">
-      <div class="container">
-        <h1 class="hero-title">
-          Welcome. Welcome. Launch experiences that never regress.
-        </h1>
-        <p class="lead">
-          Adaptive, ethical, quantifiable. Paste a <span class="chip">Save</span> → instant learning.
-          The Grid turns your feedback, files, and results into a system that improves itself.
-        </p>
-        <div class="cta-row">
-          <a class="btn btn-gold" href="#library">Open Library</a>
-          <a class="btn btn-outline" href="#plans">See Pricing</a>
-        </div>
-
-        <div class="hero-media card">
-          <div class="card-body">
-            <p class="muted">Hero Placeholder • Replace with your top niche video</p>
-          </div>
+  <!-- Library -->
+  <section class="container section" id="library">
+    <h2 class="eyeline">Library</h2>
+    <p class="muted">
+      Tap any tile to preview. Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.
+    </p>
+    <div class="library-grid">
+      <div class="lib-tile card locked">
+        <div class="lib-thumb">No videos yet</div>
+        <div class="lib-meta">
+          <span class="tag tier-basic">Basic</span>
+          <span class="muted">Samples & getting started</span>
         </div>
       </div>
-    </section>
-
-    <!-- Library -->
-    <section id="library" class="section">
-      <div class="container">
-        <h2 class="eyeline">Library</h2>
-        <p class="muted">
-          Tap any tile to preview. Drop videos in <code>assets/videos/</code> and list them in
-          <code>assets/videos/manifest.json</code>.
-        </p>
-
-        <div class="library-grid">
-          <div class="card empty">
-            <div class="card-body center">
-              <span class="muted">No videos yet</span>
-            </div>
-          </div>
+      <div class="lib-tile card locked">
+        <div class="lib-thumb">No videos yet</div>
+        <div class="lib-meta">
+          <span class="tag tier-silver">Silver</span>
+          <span class="muted">Guides & improvements</span>
         </div>
       </div>
-    </section>
-
-    <!-- What you can build -->
-    <section id="what" class="section">
-      <div class="container">
-        <h2 class="eyeline">What you can build with The Grid</h2>
-        <p class="muted">Plain-English examples so anyone can grasp it immediately.</p>
-
-        <div class="stack">
-          <article class="card">
-            <div class="card-header">Creators</div>
-            <div class="card-body">
-              Auto-improving reels, thumbnails, hooks. Paste a Save with your wins → your next draft starts smarter.
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-header">E-commerce</div>
-            <div class="card-body">
-              Product visuals that A/B their way forward. The Grid promotes what converts and rolls back what doesn’t.
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-header">Local & Services</div>
-            <div class="card-body">
-              Self-optimizing landing packs: offers, FAQs, and visuals tuned from real inquiries and outcomes.
-            </div>
-          </article>
+      <div class="lib-tile card locked">
+        <div class="lib-thumb">No videos yet</div>
+        <div class="lib-meta">
+          <span class="tag tier-gold">Gold</span>
+          <span class="muted">Full pro library</span>
         </div>
       </div>
-    </section>
-
-    <!-- Resources lanes -->
-    <section id="resources" class="section">
-      <div class="container">
-        <h2 class="eyeline">Resources</h2>
-        <p class="muted">Choose a lane — the system adapts to each profession.</p>
-
-        <div class="stack two">
-          <a class="card link-card" href="#library">
-            <div class="card-header">Creators</div>
-            <div class="card-body">reels, thumbnails, hooks</div>
-          </a>
-
-          <a class="card link-card" href="#library">
-            <div class="card-header">E-commerce</div>
-            <div class="card-body">product visuals, PDP boosts</div>
-          </a>
-
-          <a class="card link-card" href="#library">
-            <div class="card-header">Local Business</div>
-            <div class="card-body">service landing pack</div>
-          </a>
-
-          <a class="card link-card" href="#library">
-            <div class="card-header">Education</div>
-            <div class="card-body">course promos, lesson visuals</div>
-          </a>
+      <div class="lib-tile card locked">
+        <div class="lib-thumb">No videos yet</div>
+        <div class="lib-meta">
+          <span class="tag tier-diamond">Diamond</span>
+          <span class="muted">Private packs & early drops</span>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Community Methods -->
-    <section id="community" class="section">
-      <div class="container">
-        <h2 class="eyeline">Community Methods</h2>
-        <p class="muted">Preview how others build. Details unlock by plan.</p>
+  <!-- What you can build -->
+  <section class="container section" id="build">
+    <h2 class="eyeline">What you can build with The Grid</h2>
+    <p class="muted">Plain-English examples so anyone can grasp it immediately.</p>
 
-        <div class="stack">
-          <article class="card">
-            <div class="card-header">Gold Pulse Logo</div>
-            <div class="card-body">
-              CapCut + spectral pulse<br/>
-              <span class="badge">Locked • Request access</span>
-            </div>
-          </article>
+    <div class="feature-grid">
+      <article class="card pad">
+        <h3 class="card-header">Creators</h3>
+        <p>Auto-improving reels, thumbnails, and hooks. Paste a Save with your wins → your next draft starts smarter.</p>
+      </article>
+      <article class="card pad">
+        <h3 class="card-header">E-commerce</h3>
+        <p>Product visuals that A/B their way forward. The Grid promotes what converts and rolls back what doesn’t.</p>
+      </article>
+      <article class="card pad">
+        <h3 class="card-header">Local & Services</h3>
+        <p>Self-optimizing landing packs: offers, FAQs, and visuals tuned from real inquiries and outcomes.</p>
+      </article>
+    </div>
 
-          <article class="card">
-            <div class="card-header">Liquid Pour Cinematic</div>
-            <div class="card-body">
-              Reference fusion + glide timing<br/>
-              <span class="badge">Locked • Request access</span>
-            </div>
-          </article>
+    <h3 class="eyeline" style="margin-top:28px">Resources</h3>
+    <p class="muted">Choose a lane — the system adapts to each profession.</p>
+    <div class="resource-list">
+      <a class="resource card" href="#library">
+        <strong>Creators</strong><span class="muted">reels, thumbnails, hooks</span>
+      </a>
+      <a class="resource card" href="#library">
+        <strong>E-commerce</strong><span class="muted">product visuals, PDP boosts</span>
+      </a>
+      <a class="resource card" href="#library">
+        <strong>Local Business</strong><span class="muted">service landing pack</span>
+      </a>
+      <a class="resource card" href="#library">
+        <strong>Education</strong><span class="muted">course promos, lesson visuals</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Community methods -->
+  <section class="container section">
+    <h2 class="eyeline">Community Methods</h2>
+    <p class="muted">Preview how others build. Details unlock by plan.</p>
+
+    <div class="feature-grid">
+      <article class="card method pad">
+        <h3 class="card-header">Gold Pulse Logo</h3>
+        <p>CapCut + spectral pulse.</p>
+        <div class="lock-ribbon">Locked • Request access</div>
+      </article>
+      <article class="card method pad">
+        <h3 class="card-header">Liquid Pour Cinematic</h3>
+        <p>Reference fusion + glide timing.</p>
+        <div class="lock-ribbon">Locked • Request access</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="container section" id="why">
+    <h2 class="eyeline">Why The Grid</h2>
+    <p class="muted">Built to improve itself — and never lose progress.</p>
+
+    <div class="feature-grid">
+      <article class="card pad">
+        <h3 class="card-header">Anti-Regression Core</h3>
+        <p>Every change is tracked, scored, and either promoted or rolled back. Saves persist; the system only moves forward.</p>
+      </article>
+      <article class="card pad">
+        <h3 class="card-header">Quantifiable UX</h3>
+        <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable “modes.”</p>
+      </article>
+      <article class="card pad">
+        <h3 class="card-header">Ethical & Private</h3>
+        <p>Local-first controls and granular Save files. We store only what helps the system improve — not personal data.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="container section">
+    <h2 class="eyeline">How it works</h2>
+    <ol class="steps">
+      <li>
+        <div class="step card pad">
+          <h4>1 • Save</h4>
+          <p>Export a tiny JSON containing settings, notes, and outcomes.</p>
         </div>
-      </div>
-    </section>
-
-    <!-- Why -->
-    <section id="why" class="section">
-      <div class="container">
-        <h2 class="eyeline">Why The Grid</h2>
-        <p class="muted">Built to improve itself — and never lose progress.</p>
-
-        <div class="stack">
-          <article class="card">
-            <div class="card-header">Anti-Regression Core</div>
-            <div class="card-body">
-              Every change is tracked, scored, and either promoted or rolled back. Saves persist; the system only moves forward.
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-header">Quantifiable UX</div>
-            <div class="card-body">
-              Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable “modes.”
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-header">Ethical & Private</div>
-            <div class="card-body">
-              Local-first controls and granular Save files. We store only what helps the system improve — not personal data.
-            </div>
-          </article>
+      </li>
+      <li>
+        <div class="step card pad">
+          <h4>2 • Adapt</h4>
+          <p>Paste a Save → UI and copy update instantly. No rebuilds.</p>
         </div>
-      </div>
-    </section>
-
-    <!-- How it works -->
-    <section id="how" class="section">
-      <div class="container">
-        <h2 class="eyeline">How it works</h2>
-        <ol class="how">
-          <li class="card">
-            <div class="badge-step">1</div>
-            <div class="card-header">Save</div>
-            <div class="card-body">Export a tiny JSON containing settings, notes, and outcomes.</div>
-          </li>
-          <li class="card">
-            <div class="badge-step">2</div>
-            <div class="card-header">Adapt</div>
-            <div class="card-body">Paste a Save → UI and copy update instantly. No rebuilds.</div>
-          </li>
-          <li class="card">
-            <div class="badge-step">3</div>
-            <div class="card-header">Compound</div>
-            <div class="card-body">Wins are promoted to presets. Your system compounds over time.</div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- Plans -->
-    <section id="plans" class="section">
-      <div class="container">
-        <h2 class="eyeline">Plans</h2>
-        <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
-
-        <div class="stack">
-          <article class="card plan" data-plan="basic">
-            <div class="card-header">BASIC £9/mo</div>
-            <ul class="card-list">
-              <li>Starter templates</li>
-              <li>Library access</li>
-              <li>Email support (48h)</li>
-            </ul>
-            <div class="plan-actions">
-              <button class="btn btn-gold choose-btn" data-plan="basic">Choose</button>
-              <button class="btn btn-outline details-btn" data-plan="basic">Details</button>
-            </div>
-          </article>
-
-          <article class="card plan" data-plan="silver">
-            <div class="card-header">SILVER £29/mo</div>
-            <ul class="card-list">
-              <li>Everything in Basic</li>
-              <li>Advanced effects & presets</li>
-              <li>Priority email (24h)</li>
-              <li>Quarterly tune-ups</li>
-            </ul>
-            <div class="plan-actions">
-              <button class="btn btn-gold choose-btn" data-plan="silver">Choose</button>
-              <button class="btn btn-outline details-btn" data-plan="silver">Details</button>
-            </div>
-          </article>
-
-          <article class="card plan" data-plan="gold">
-            <div class="card-header">GOLD £49/mo</div>
-            <ul class="card-list">
-              <li>Full custom session</li>
-              <li>Admin toolkit & automations</li>
-              <li>1:1 onboarding (45 min)</li>
-              <li>Priority hotfix</li>
-            </ul>
-            <div class="plan-actions">
-              <button class="btn btn-gold choose-btn" data-plan="gold">Choose</button>
-              <button class="btn btn-outline details-btn" data-plan="gold">Details</button>
-            </div>
-          </article>
-
-          <article class="card plan" data-plan="diamond">
-            <div class="card-header">DIAMOND £99/mo</div>
-            <ul class="card-list">
-              <li>Custom pipelines (Notion/Airtable/Zapier)</li>
-              <li>Hands-on stack build</li>
-              <li>Priority roadmap & fast turnaround</li>
-              <li>Quarterly strategy review</li>
-            </ul>
-            <div class="plan-actions">
-              <button class="btn btn-gold choose-btn" data-plan="diamond">Choose</button>
-              <button class="btn btn-outline details-btn" data-plan="diamond">Details</button>
-            </div>
-          </article>
+      </li>
+      <li>
+        <div class="step card pad">
+          <h4>3 • Compound</h4>
+          <p>Wins are promoted to presets. Your system compounds over time.</p>
         </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Plans -->
+  <section class="container section" id="plans">
+    <div class="row between align-center">
+      <h2 class="eyeline">Plans</h2>
+      <button class="btn btn-outline sm only-desktop" id="compareBtn">Compare plans</button>
+    </div>
+    <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
+
+    <div class="plans">
+      <article class="plan card pad">
+        <h3>BASIC £9/mo</h3>
+        <ul>
+          <li>Starter templates</li>
+          <li>Library access</li>
+          <li>Email support (48h)</li>
+        </ul>
+        <div class="row gap">
+          <button class="btn btn-gold" data-plan="BASIC">Choose</button>
+          <button class="btn btn-outline details-btn" data-tier="BASIC">Details</button>
+        </div>
+      </article>
+
+      <article class="plan card pad">
+        <h3>SILVER £29/mo</h3>
+        <ul>
+          <li>Everything in Basic</li>
+          <li>Advanced effects & presets</li>
+          <li>Priority email (24h)</li>
+          <li>Quarterly tune-ups</li>
+        </ul>
+        <div class="row gap">
+          <button class="btn btn-gold" data-plan="SILVER">Choose</button>
+          <button class="btn btn-outline details-btn" data-tier="SILVER">Details</button>
+        </div>
+      </article>
+
+      <article class="plan card pad">
+        <h3>GOLD £49/mo</h3>
+        <ul>
+          <li>Full custom session</li>
+          <li>Admin toolkit & automations</li>
+          <li>1:1 onboarding (45 min)</li>
+          <li>Priority hotfix</li>
+        </ul>
+        <div class="row gap">
+          <button class="btn btn-gold" data-plan="GOLD">Choose</button>
+          <button class="btn btn-outline details-btn" data-tier="GOLD">Details</button>
+        </div>
+      </article>
+
+      <article class="plan card pad">
+        <h3>DIAMOND £99/mo</h3>
+        <ul>
+          <li>Custom pipelines</li>
+          <li>Hands-on stack build</li>
+          <li>Priority roadmap</li>
+          <li>Quarterly strategy review</li>
+        </ul>
+        <div class="row gap">
+          <button class="btn btn-gold" data-plan="DIAMOND">Choose</button>
+          <button class="btn btn-outline details-btn" data-tier="DIAMOND">Details</button>
+        </div>
+      </article>
+    </div>
+
+    <!-- Stripe Customer Portal (appears automatically when configured) -->
+    <div id="manageWrap" class="container" style="display:none;margin:22px auto 0">
+      <a id="manageSub" class="btn btn-ghost" href="#" target="_blank" rel="noopener">Manage subscription</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="container section">
+    <h2 class="eyeline">FAQ</h2>
+    <details class="card pad">
+      <summary>What does “anti-regression” mean here?</summary>
+      <p>The Grid stores change sets and results. Only improvements are promoted; anything that harms outcomes is sandboxed or rolled back.</p>
+    </details>
+    <details class="card pad">
+      <summary>How do Saves work?</summary>
+      <p>They’re tiny JSON files you can paste into the site to apply settings, notes, and outcomes.</p>
+    </details>
+    <details class="card pad">
+      <summary>Can I use it beyond AI visuals?</summary>
+      <p>Yes — creators, e-commerce, local services, education, and more. The system adapts to each lane.</p>
+    </details>
+  </section>
+
+  <!-- Contact -->
+  <section class="container section" id="contact">
+    <h2 class="eyeline">Contact</h2>
+    <form class="card pad form" action="mailto:gridcoresystems@gmail.com" method="post">
+      <div class="row gap form-row">
+        <label class="field">
+          <span>Name</span>
+          <input type="text" placeholder="Jane Doe" required />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" placeholder="you@example.com" required />
+        </label>
       </div>
-    </section>
+      <label class="field">
+        <span>Message</span>
+        <textarea placeholder="Write your message..." rows="5"></textarea>
+      </label>
+      <button class="btn btn-gold" type="submit">Send</button>
+      <p class="muted tiny">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
+    </form>
+  </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="section">
-      <div class="container">
-        <h2 class="eyeline">FAQ</h2>
-
-        <details class="faq">
-          <summary>What does “anti-regression” mean here?</summary>
-          <p>The Grid stores change sets and results. Only improvements are promoted; anything that harms outcomes is sandboxed or rolled back.</p>
-        </details>
-
-        <details class="faq">
-          <summary>How do Saves work?</summary>
-          <p>They’re tiny JSON files you can paste into the site to apply settings, notes, and outcomes.</p>
-        </details>
-
-        <details class="faq">
-          <summary>Can I use it beyond AI visuals?</summary>
-          <p>Yes — creators, e-commerce, local services, education, and more. The system adapts to each lane.</p>
-        </details>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="section">
-      <div class="container">
-        <h2 class="eyeline">Contact</h2>
-
-        <form class="card contact-form" action="mailto:gridcoresystems@gmail.com" method="post" enctype="text/plain">
-          <div class="form-row">
-            <label>Name
-              <input type="text" name="name" placeholder="Jane Doe" required />
-            </label>
-            <label>Email
-              <input type="email" name="email" placeholder="you@example.com" required />
-            </label>
-          </div>
-          <label>Message
-            <textarea name="message" rows="4" placeholder="Write your message..."></textarea>
-          </label>
-          <div class="form-actions">
-            <button class="btn btn-gold" type="submit">Send</button>
-            <span class="muted small">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</span>
-          </div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    © 2025 THE GRID. All rights reserved.
+  <!-- Footer -->
+  <footer class="footer container">
+    <p>© 2025 THE GRID. All rights reserved.</p>
   </footer>
 
-  <!-- Customize Panel -->
-  <div id="customizePanel" class="customize">
-    <div class="customize-header">
-      <h3>Design Controls</h3>
-      <button id="customizeClose" class="btn btn-ghost" aria-label="Close">✕</button>
-    </div>
-
-    <div class="customize-body">
-      <section>
-        <h4>Theme</h4>
-        <div class="row">
-          <label class="switch"><input type="checkbox" id="toggleLight" /> <span>Light Mode</span></label>
-        </div>
-        <div class="row">
-          <label>Accent Color <input type="color" id="accentPicker" value="#F2C94C"></label>
-        </div>
-        <div class="row">
-          <label>Font Family
-            <select id="fontFamily">
-              <option value="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">Inter</option>
-              <option value="'Space Grotesk', Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" selected>Space Grotesk + Inter</option>
-            </select>
-          </label>
-        </div>
-      </section>
-
-      <section>
-        <h4>Layout</h4>
-        <div class="row">
-          <label>Card Radius <input type="range" id="radius" min="8" max="28" step="1" value="18" /></label>
-        </div>
-        <div class="row">
-          <label>Border Weight <input type="range" id="border" min="0" max="2" step="0.25" value="1" /></label>
-        </div>
-        <div class="row">
-          <label>Shadow Depth <input type="range" id="shadow" min="0" max="1" step="0.05" value="0.35" /></label>
-        </div>
-      </section>
-
-      <section>
-        <h4>Background</h4>
-        <div class="row">
-          <label>Grid Opacity <input type="range" id="gridOpacity" min="0" max="1" step="0.05" value="0.22" /></label>
-        </div>
-        <div class="row">
-          <label>Grid Density <input type="range" id="gridDensity" min="12" max="64" step="1" value="28" /></label>
-        </div>
-      </section>
-
-      <div class="customize-actions">
-        <button id="customizeReset" class="btn btn-outline">Reset</button>
-        <button id="customizeSave" class="btn btn-gold">Save</button>
+  <!-- PLAN PANEL (details + compare) -->
+  <div id="planPanel" class="panel" aria-hidden="true" role="dialog" aria-labelledby="panelTitle">
+    <div class="panel__backdrop" data-close></div>
+    <div class="panel__sheet card">
+      <div class="panel__head row between align-center">
+        <h3 id="panelTitle">Plan</h3>
+        <button class="btn btn-ghost sm" data-close>×</button>
+      </div>
+      <div id="panelBody" class="panel__body"></div>
+      <div class="panel__foot row gap">
+        <button id="panelChoose" class="btn btn-gold">Choose this plan</button>
+        <button class="btn btn-outline" data-close>Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="assets/js/commerce.js"></script>
-  <script src="assets/js/main.js"></script>
+  <!-- CUSTOMIZE PANEL -->
+  <div id="customizePanel" class="panel" aria-hidden="true" role="dialog" aria-label="Design Controls">
+    <div class="panel__backdrop" data-close></div>
+    <div class="panel__sheet card">
+      <div class="panel__head row between align-center">
+        <h3>Design Controls</h3>
+        <button class="btn btn-ghost sm" data-close>×</button>
+      </div>
+      <div id="customizeBody" class="panel__body">
+        <!-- Theme & palette controls are injected by JS -->
+        <!-- Keep your existing sliders/controls below if you have them -->
+      </div>
+      <div class="panel__foot row gap">
+        <button class="btn btn-outline" data-close>Done</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
