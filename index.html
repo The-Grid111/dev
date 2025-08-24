@@ -1,400 +1,237 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE GRID — Launch experiences that never regress</title>
-
-  <!-- Base CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="stylesheet" href="assets/css/modal.css" />
-
-  <!-- Fonts (Space Grotesk + Inter) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>THE GRID — Launch experiences that never regress.</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Stripe (optional, safe if it doesn’t load) -->
-  <script src="https://js.stripe.com/v3/" defer></script>
-
-  <!-- App scripts -->
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/effects.js" defer></script>
-  <script src="assets/js/commerce.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
-<body class="theme-light grid-bg">
-  <!-- Top Update/News bar -->
-  <div id="newsbar" class="newsbar" data-ls-key="grid_news_v1">
+<body>
+  <!-- Top update bar -->
+  <div class="newsbar" id="newsbar">
     <div class="newsbar__inner">
-      <span class="newsbar__badge gold-shimmer">Update</span>
-      <span class="newsbar__text">
-        The Grid now supports <b>Light Mode</b>, custom borders, metallic gold accents, and a smarter Library.
-      </span>
-      <button class="newsbar__close" aria-label="Dismiss update">×</button>
+      <span class="news-dot"></span>
+      <span class="news-text"><strong>Update:</strong> Light mode, custom borders, smarter Library, and Stripe Checkout.</span>
+      <button class="news-dismiss" aria-label="Dismiss" id="newsDismiss">✕</button>
     </div>
   </div>
 
   <!-- Header -->
   <header class="site-header glass">
-    <div class="container header__row">
-      <div class="brand">
-        <div class="brand__mark orb-gold" aria-hidden="true"></div>
-        <div class="brand__name">
-          <span class="brand__top">THE</span>
-          <span class="brand__bottom">GRID</span>
-        </div>
-      </div>
-
-      <nav class="nav">
-        <a href="#library">Library</a>
-        <a href="#resources">Resources</a>
-        <a href="#why">Why</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-      </nav>
-
-      <div class="cta-row">
-        <button id="open-customize" class="btn btn-ghost">Customize</button>
-        <a class="btn btn-gold" href="#pricing">Join Now</a>
-      </div>
+    <div class="brand">
+      <span class="orb"></span>
+      <span class="brand-text">THE<br>GRID</span>
+    </div>
+    <nav class="nav">
+      <a href="#library">Library</a>
+      <a href="#resources">Resources</a>
+      <a href="#why">Why</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-cta">
+      <button id="customizeBtn" class="btn btn-ghost">Customize</button>
+      <a href="#pricing" class="btn btn-gold">Join Now</a>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="hero container">
-    <h1 class="hero__title">
-      <span class="muted">Welcome.</span>
-      Launch experiences that <span class="nowrap">never regress.</span>
-    </h1>
-    <p class="hero__lead">
-      Adaptive, ethical, quantifiable. Paste a Save → instant learning.
-      The Grid turns your feedback, files, and results into a system that improves itself.
-    </p>
-    <div class="hero__cta">
-      <a class="btn btn-gold" href="#library">Open Library</a>
-      <a class="btn btn-outline" href="#pricing">See Pricing</a>
-    </div>
-
-    <div class="hero__media card card--elevated">
-      <div class="media-placeholder">Hero Placeholder • Replace with your top niche video</div>
-    </div>
-  </section>
-
-  <!-- Library -->
-  <section id="library" class="section container">
-    <div class="section__head">
-      <h2 class="section__title">Library</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-    <p class="muted">
-      Tap any tile to preview. Drop videos in <code>assets/videos/</code> and list them in
-      <code>assets/videos/manifest.json</code>.
-    </p>
-
-    <div id="library-grid" class="grid grid--library">
-      <div class="card card--hollow">
-        <div class="media-placeholder">No videos yet</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- What you can build -->
-  <section id="resources" class="section container">
-    <div class="section__head">
-      <h2 class="section__title">What you can build with The Grid</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-    <p class="muted">Plain-English examples so anyone can grasp it immediately.</p>
-
-    <div class="grid grid--resources">
-      <a class="card" href="#resources">
-        <h3>Creators</h3>
-        <p>Auto-improving reels, thumbnails, hooks. Paste a Save with your wins → your next draft starts smarter.</p>
-      </a>
-      <a class="card" href="#resources">
-        <h3>E-commerce</h3>
-        <p>Product visuals that A/B their way forward. The Grid promotes what converts and rolls back what doesn’t.</p>
-      </a>
-      <a class="card" href="#resources">
-        <h3>Local & Services</h3>
-        <p>Self-optimizing landing packs: offers, FAQs, and visuals tuned from real inquiries and outcomes.</p>
-      </a>
-      <a class="card" href="#resources">
-        <h3>Education</h3>
-        <p>Course promos and lesson visuals that adapt to student feedback and completion data.</p>
-      </a>
-    </div>
-  </section>
-
-  <!-- Community Methods (locked previews) -->
-  <section class="section container">
-    <div class="section__head">
-      <h2 class="section__title">Community Methods</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-    <p class="muted">Preview how others build. Details unlock by plan.</p>
-
-    <div class="grid grid--methods">
-      <div class="card method">
-        <h3>Gold Pulse Logo</h3>
-        <p class="muted">CapCut + spectral pulse</p>
-        <div class="method__lock">Locked • Request access</div>
-      </div>
-      <div class="card method">
-        <h3>Liquid Pour Cinematic</h3>
-        <p class="muted">Reference fusion + glide timing</p>
-        <div class="method__lock">Locked • Request access</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why The Grid -->
-  <section id="why" class="section container">
-    <div class="section__head">
-      <h2 class="section__title">Why The Grid</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-
-    <div class="grid grid--why">
-      <div class="card">
-        <h3>Anti-Regression Core</h3>
-        <p>Every change is tracked, scored, and either promoted or rolled back. Saves persist; the system only moves forward.</p>
-      </div>
-      <div class="card">
-        <h3>Quantifiable UX</h3>
-        <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable “modes.”</p>
-      </div>
-      <div class="card">
-        <h3>Ethical & Private</h3>
-        <p>Local-first controls and granular Save files. We store only what helps the system improve — not personal data.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section class="section container">
-    <div class="section__head">
-      <h2 class="section__title">How it works</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-
-    <ol class="how grid">
-      <li class="card">
-        <div class="step-badge gold-shimmer">1</div>
-        <h3>Save</h3>
-        <p>Export a tiny JSON containing settings, notes, and outcomes.</p>
-      </li>
-      <li class="card">
-        <div class="step-badge gold-shimmer">2</div>
-        <h3>Adapt</h3>
-        <p>Paste a Save → UI and copy update instantly. No rebuilds.</p>
-      </li>
-      <li class="card">
-        <div class="step-badge gold-shimmer">3</div>
-        <h3>Compound</h3>
-        <p>Wins are promoted to presets. Your system compounds over time.</p>
-      </li>
-    </ol>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="section container">
-    <div class="section__head">
-      <h2 class="section__title">Plans</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-    <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
-
-    <div class="grid grid--pricing">
-      <div class="card plan" data-plan="basic" data-price-id="price_BASIC">
-        <h3>BASIC £9/mo</h3>
-        <ul>
-          <li>Starter templates</li>
-          <li>Library access</li>
-          <li>Email support (48h)</li>
-        </ul>
-        <div class="plan__cta">
-          <button class="btn btn-gold choose-plan">Choose</button>
-          <button class="btn btn-outline plan-details" data-plan="basic">Details</button>
-        </div>
+  <main class="container">
+    <section class="hero with-grid">
+      <h1><span class="fade">Welcome. Welcome.</span> Launch experiences that never regress.</h1>
+      <p class="lead">Adaptive, ethical, quantifiable. Paste a Save → instant learning. The Grid turns your feedback, files, and results into a system that improves itself.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#library">Open Library</a>
+        <a class="btn btn-ghost" href="#pricing">See Pricing</a>
       </div>
 
-      <div class="card plan" data-plan="silver" data-price-id="price_SILVER">
-        <h3>SILVER £29/mo</h3>
-        <ul>
-          <li>Everything in Basic</li>
-          <li>Advanced effects & presets</li>
-          <li>Priority email (24h)</li>
-        </ul>
-        <div class="plan__cta">
-          <button class="btn btn-gold choose-plan">Choose</button>
-          <button class="btn btn-outline plan-details" data-plan="silver">Details</button>
-        </div>
+      <div class="hero-card">
+        <div class="hero-placeholder">Hero Placeholder • Replace with your top niche video</div>
       </div>
+    </section>
 
-      <div class="card plan" data-plan="gold" data-price-id="price_GOLD">
-        <h3>GOLD £49/mo</h3>
-        <ul>
-          <li>Full custom session</li>
-          <li>Admin toolkit</li>
-          <li>1:1 onboarding</li>
-        </ul>
-        <div class="plan__cta">
-          <button class="btn btn-gold choose-plan">Choose</button>
-          <button class="btn btn-outline plan-details" data-plan="gold">Details</button>
-        </div>
+    <!-- Library -->
+    <section id="library" class="section">
+      <h2 class="section-title">Library</h2>
+      <p class="section-sub">Tap any tile to preview. Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.</p>
+      <div class="media-grid empty">No videos yet</div>
+    </section>
+
+    <!-- What you can build -->
+    <section id="what" class="section">
+      <h2 class="section-title">What you can build with The Grid</h2>
+      <p class="section-sub">Plain-English examples so anyone can grasp it immediately.</p>
+
+      <div class="card-list">
+        <article class="card">
+          <h3>Creators</h3>
+          <p>Auto-improving reels, thumbnails, hooks. Paste a Save with your wins → your next draft starts smarter.</p>
+        </article>
+        <article class="card">
+          <h3>E-commerce</h3>
+          <p>Product visuals that A/B their way forward. The Grid promotes what converts and rolls back what doesn’t.</p>
+        </article>
+        <article class="card">
+          <h3>Local &amp; Services</h3>
+          <p>Self-optimizing landing packs: offers, FAQs, and visuals tuned from real inquiries and outcomes.</p>
+        </article>
       </div>
+    </section>
 
-      <div class="card plan" data-plan="diamond" data-price-id="price_DIAMOND">
-        <h3>DIAMOND £99/mo</h3>
-        <ul>
-          <li>Custom pipelines</li>
-          <li>Hands-on stack build</li>
-          <li>Priority roadmap</li>
-        </ul>
-        <div class="plan__cta">
-          <button class="btn btn-gold choose-plan">Choose</button>
-          <button class="btn btn-outline plan-details" data-plan="diamond">Details</button>
-        </div>
+    <!-- Resources -->
+    <section id="resources" class="section">
+      <h2 class="section-title">Resources</h2>
+      <p class="section-sub">Choose a lane — the system adapts to each profession.</p>
+
+      <div class="tile-grid">
+        <button class="tile">Creators <span>reels, thumbnails, hooks</span></button>
+        <button class="tile">E-commerce <span>product visuals, PDP boosts</span></button>
+        <button class="tile">Local Business <span>service landing pack</span></button>
+        <button class="tile">Education <span>course promos, lesson visuals</span></button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FAQ -->
-  <section class="section container">
-    <div class="section__head">
-      <h2 class="section__title">FAQ</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-    <details class="card"><summary>What does “anti-regression” mean here?</summary>
-      <p>The Grid stores change sets and results. Only improvements are promoted; anything that harms outcomes is sandboxed or rolled back.</p>
-    </details>
-    <details class="card"><summary>How do Saves work?</summary>
-      <p>They’re tiny JSON files you can paste into the site to apply settings, notes, and outcomes.</p>
-    </details>
-    <details class="card"><summary>Can I use it beyond AI visuals?</summary>
-      <p>Yes — creators, e-commerce, local services, education, and more. The system adapts to each lane.</p>
-    </details>
-  </section>
+    <!-- Community preview -->
+    <section id="community" class="section">
+      <h2 class="section-title">Community Methods</h2>
+      <p class="section-sub">Preview how others build. Details unlock by plan.</p>
 
-  <!-- Contact -->
-  <section id="contact" class="section container">
-    <div class="section__head">
-      <h2 class="section__title">Contact</h2>
-      <div class="section__rule gold-line"></div>
-    </div>
-
-    <form class="card contact">
-      <div class="field">
-        <label>Name</label>
-        <input type="text" placeholder="Jane Doe" />
+      <div class="card-list">
+        <article class="card">
+          <h3>Gold Pulse Logo</h3>
+          <p>CapCut + spectral pulse</p>
+          <div class="locked">Locked • Request access</div>
+        </article>
+        <article class="card">
+          <h3>Liquid Pour Cinematic</h3>
+          <p>Reference fusion + glide timing</p>
+          <div class="locked">Locked • Request access</div>
+        </article>
       </div>
-      <div class="field">
-        <label>Email</label>
-        <input type="email" placeholder="you@example.com" />
-      </div>
-      <div class="field field--full">
-        <label>Message</label>
-        <textarea placeholder="Write your message..."></textarea>
-      </div>
-      <button type="submit" class="btn btn-gold">Send</button>
-      <p class="muted small">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
-    </form>
-  </section>
+    </section>
 
-  <!-- Customize drawer -->
-  <aside id="customize" class="drawer" aria-hidden="true">
-    <div class="drawer__head">
-      <h3>Design Controls</h3>
-      <button id="close-customize" class="icon-btn" aria-label="Close">×</button>
-    </div>
+    <!-- Why -->
+    <section id="why" class="section">
+      <h2 class="section-title">Why The Grid</h2>
+      <p class="section-sub">Built to improve itself — and never lose progress.</p>
 
-    <div class="drawer__body">
-      <details open>
-        <summary>Theme</summary>
+      <div class="card-list">
+        <article class="card">
+          <h3>Anti-Regression Core</h3>
+          <p>Every change is tracked, scored, and either promoted or rolled back. Saves persist; the system only moves forward.</p>
+        </article>
+        <article class="card">
+          <h3>Quantifiable UX</h3>
+          <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable “modes.”</p>
+        </article>
+        <article class="card">
+          <h3>Ethical &amp; Private</h3>
+          <p>Local-first controls and granular Save files. We store only what helps the system improve — not personal data.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="section steps">
+      <h2 class="section-title">How it works</h2>
+      <ol class="step-list">
+        <li><span>1</span><h3>Save</h3><p>Export a tiny JSON containing settings, notes, and outcomes.</p></li>
+        <li><span>2</span><h3>Adapt</h3><p>Paste a Save → UI and copy update instantly. No rebuilds.</p></li>
+        <li><span>3</span><h3>Compound</h3><p>Wins are promoted to presets. Your system compounds over time.</p></li>
+      </ol>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+      <h2 class="section-title">Plans</h2>
+      <p class="section-sub">Fair pricing. Clear value. 7-day refund.</p>
+
+      <div class="plans">
+        <article class="plan card">
+          <h3>BASIC £9/mo</h3>
+          <ul>
+            <li>Starter templates</li>
+            <li>Library access</li>
+            <li>Email support (48h)</li>
+          </ul>
+          <div class="plan-actions">
+            <button class="btn btn-gold checkout" data-plan="basic">Choose</button>
+            <button class="btn btn-ghost plan-details" data-plan="basic">Details</button>
+          </div>
+        </article>
+
+        <article class="plan card">
+          <h3>SILVER £29/mo</h3>
+          <ul>
+            <li>Everything in Basic</li>
+            <li>Advanced effects &amp; presets</li>
+            <li>Priority email (24h)</li>
+            <li>Quarterly tune-ups</li>
+          </ul>
+          <div class="plan-actions">
+            <button class="btn btn-gold checkout" data-plan="silver">Choose</button>
+            <button class="btn btn-ghost plan-details" data-plan="silver">Details</button>
+          </div>
+        </article>
+
+        <article class="plan card">
+          <h3>GOLD £49/mo</h3>
+          <ul>
+            <li>Full custom session</li>
+            <li>Admin toolkit &amp; automations</li>
+            <li>1:1 onboarding (45 min)</li>
+            <li>Priority hotfix</li>
+          </ul>
+          <div class="plan-actions">
+            <button class="btn btn-gold checkout" data-plan="gold">Choose</button>
+            <button class="btn btn-ghost plan-details" data-plan="gold">Details</button>
+          </div>
+        </article>
+
+        <article class="plan card">
+          <h3>DIAMOND £99/mo</h3>
+          <ul>
+            <li>Custom pipelines</li>
+            <li>Hands-on stack build</li>
+            <li>Priority roadmap</li>
+            <li>Quarterly strategy review</li>
+          </ul>
+          <div class="plan-actions">
+            <button class="btn btn-gold checkout" data-plan="diamond">Choose</button>
+            <button class="btn btn-ghost plan-details" data-plan="diamond">Details</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <h2 class="section-title">FAQ</h2>
+      <details class="faq"><summary>What does “anti-regression” mean here?</summary><p>The Grid stores change sets and results. Only improvements are promoted; anything that harms outcomes is sandboxed or rolled back.</p></details>
+      <details class="faq"><summary>How do Saves work?</summary><p>They’re tiny JSON files you can paste into the site to apply settings, notes, and outcomes.</p></details>
+      <details class="faq"><summary>Can I use it beyond AI visuals?</summary><p>Yes — creators, e-commerce, local services, education, and more. The system adapts to each lane.</p></details>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <h2 class="section-title">Contact</h2>
+      <form class="contact card" action="mailto:gridcoresystems@gmail.com" method="post" enctype="text/plain">
         <div class="row">
-          <label>Accent Color</label>
-          <input id="ctl-accent" type="color" value="#e5c158" />
+          <label>Name<input type="text" name="name" placeholder="Jane Doe" required></label>
+          <label>Email<input type="email" name="email" placeholder="you@example.com" required></label>
         </div>
-        <div class="row">
-          <label>Font Family</label>
-          <select id="ctl-font">
-            <option value="Space Grotesk, Inter">Space Grotesk + Inter</option>
-            <option value="Inter, Arial">Inter</option>
-            <option value="system-ui, Inter">System UI</option>
-          </select>
-        </div>
-        <div class="row">
-          <label>Mode</label>
-          <select id="ctl-mode">
-            <option value="theme-light">Light</option>
-            <option value="theme-dark">Dark</option>
-          </select>
-        </div>
-      </details>
+        <label>Message<textarea name="message" placeholder="Write your message..." rows="5"></textarea></label>
+        <button class="btn btn-gold" type="submit">Send</button>
+        <p class="muted">Replies from <a class="link" href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
+      </form>
+    </section>
+  </main>
 
-      <details open>
-        <summary>Layout</summary>
-        <div class="row">
-          <label>Card Radius</label>
-          <input id="ctl-radius" type="range" min="4" max="28" value="16" />
-        </div>
-        <div class="row">
-          <label>Container Width (px)</label>
-          <input id="ctl-container" type="range" min="960" max="1280" value="1120" />
-        </div>
-        <div class="row">
-          <label>Header Mode</label>
-          <select id="ctl-header">
-            <option value="glass">Glass</option>
-            <option value="solid">Solid</option>
-          </select>
-        </div>
-      </details>
+  <footer class="site-footer">© 2025 THE GRID. All rights reserved.</footer>
 
-      <details>
-        <summary>Components</summary>
-        <div class="row">
-          <label>Glow Intensity</label>
-          <input id="ctl-glow" type="range" min="0" max="1" step="0.05" value="0.35" />
-        </div>
-        <div class="row">
-          <label>Border Weight</label>
-          <input id="ctl-border" type="range" min="0" max="2" step="0.1" value="1" />
-        </div>
-        <div class="row">
-          <label>Shadow Depth</label>
-          <input id="ctl-shadow" type="range" min="0" max="1" step="0.05" value="0.4" />
-        </div>
-      </details>
-
-      <details>
-        <summary>Advanced</summary>
-        <div class="row">
-          <label>Top Grid Opacity</label>
-          <input id="ctl-grid-opacity" type="range" min="0" max="1" step="0.05" value="0.25" />
-        </div>
-        <div class="row">
-          <label>Top Grid Density</label>
-          <input id="ctl-grid-density" type="range" min="8" max="32" step="1" value="16" />
-        </div>
-        <div class="row">
-          <label>Your Name (welcome)</label>
-          <input id="ctl-welcome" type="text" placeholder="Welcome" />
-        </div>
-      </details>
-    </div>
-
-    <div class="drawer__foot">
-      <button id="ctl-reset" class="btn btn-outline">Reset</button>
-      <button id="ctl-save" class="btn btn-gold">Save</button>
-    </div>
-  </aside>
-
-  <footer class="site-footer">
-    <div class="container">
-      © 2025 THE GRID. All rights reserved.
-    </div>
-  </footer>
+  <script src="assets/js/commerce.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
