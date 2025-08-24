@@ -1,6 +1,6 @@
 /* ===========================
-   THE GRID — Core Styles
-   Drop-in replacement (v2)
+   THE GRID — Core Styles (v2.1)
+   Full drop-in replacement
    =========================== */
 
 /* Design tokens (live-updated by JS controls) */
@@ -28,7 +28,7 @@
   --shadow-depth:40px;           /* live via slider */
   --font-scale:1;                /* live via slider 0.9–1.15 */
 
-  /* header modes: glass | solid | floating (JS toggles a data-attr) */
+  /* header modes: glass | solid | floating (JS sets [data-head]) */
   --head-blur:10px;              /* used in glass mode */
 }
 
@@ -109,6 +109,7 @@ body.no-scroll{overflow:hidden}
 .nav{display:flex; gap:20px; align-items:center; flex-wrap:wrap}
 .nav a{color:var(--muted)}
 .nav a:hover{color:var(--text)}
+.nav a.active{color:#fff; text-decoration:underline; text-underline-offset:6px}
 .head-cta{display:flex; gap:10px; align-items:center}
 
 /* Buttons */
@@ -218,6 +219,15 @@ h2{font-size:28px; margin:0 0 8px}
 }
 .site-foot{border-top:var(--border-w) solid var(--line); padding:18px 0; color:var(--muted)}
 
+/* Locked cards */
+.locked{position:relative; overflow:hidden}
+.lockmask{
+  position:absolute; inset:auto 14px 14px 14px; height:44px;
+  display:grid; place-items:center; border-radius:12px;
+  background:repeating-linear-gradient(-60deg, rgba(255,255,255,.06) 0 14px, rgba(255,255,255,.02) 14px 28px);
+  color:#fff; font-weight:700; border:1px solid var(--line);
+}
+
 /* ===========================
    Overlay + Panels/Modals
    =========================== */
@@ -229,7 +239,7 @@ h2{font-size:28px; margin:0 0 8px}
 .overlay.show{opacity:1; pointer-events:auto}
 
 .sheet{
-  position:fixed; top:0; right:0; height:100%; width:min(420px, 100%);
+  position:fixed; top:0; right:0; height:100dvh; width:min(420px, 100%);
   background:var(--panel); color:var(--text); z-index:90;
   box-shadow:-16px 0 60px rgba(0,0,0,.45);
   transform:translateX(100%); transition:transform .25s ease;
@@ -239,7 +249,10 @@ h2{font-size:28px; margin:0 0 8px}
 .sheet.show{transform:translateX(0)}
 .sheet-head,.sheet-foot{padding:16px 20px; border-bottom:var(--border-w) solid var(--line)}
 .sheet-foot{border-top:var(--border-w) solid var(--line); border-bottom:0; display:flex; gap:10px; justify-content:flex-end}
-.sheet-body{padding:16px 20px; display:grid; gap:16px}
+.sheet-body{
+  padding:16px 20px; display:grid; gap:16px;
+  overflow:auto; -webkit-overflow-scrolling:touch; max-height:calc(100dvh - 140px);
+}
 .ctrl{display:grid; gap:8px}
 .ctrl.inline{grid-template-columns:1fr auto; align-items:center}
 .ctrl .row{display:flex; gap:8px; flex-wrap:wrap}
@@ -253,7 +266,7 @@ h2{font-size:28px; margin:0 0 8px}
   width:min(560px, 92vw); background:var(--panel); color:var(--text);
   border:var(--border-w) solid var(--line); border-radius:16px; overflow:hidden;
   box-shadow:0 26px 80px rgba(0,0,0,.55);
-  display:grid; grid-template-rows:auto 1fr auto;
+  display:grid; grid-template-rows:auto 1fr auto; max-height:90dvh;
 }
 .modal-head,.modal-foot{padding:16px 20px; border-bottom:var(--border-w) solid var(--line)}
 .modal-foot{border-top:var(--border-w) solid var(--line); border-bottom:0; display:flex; gap:12px; justify-content:flex-end}
@@ -264,6 +277,36 @@ h2{font-size:28px; margin:0 0 8px}
 }
 .icon-close:hover{color:#fff}
 .bullets{margin:0; padding-left:18px; display:grid; gap:8px}
+
+/* ===========================
+   Connectivity banner + Toast
+   =========================== */
+#net-status{
+  position:fixed; left:50%; bottom:12px; transform:translateX(-50%);
+  background:#221a1a; color:#ffdede; border:1px solid #6f3a3a;
+  padding:8px 12px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,.4);
+  opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:120; font-weight:600; font-size:14px;
+}
+#net-status.show{opacity:1}
+.toast{
+  position:fixed; right:12px; bottom:12px; z-index:121; background:var(--panel); border:1px solid var(--line);
+  padding:10px 14px; border-radius:12px; opacity:0; animation:toast 2.2s ease forwards;
+}
+@keyframes toast{
+  0%{opacity:0; transform:translateY(6px)}
+ 10%{opacity:1; transform:translateY(0)}
+ 90%{opacity:1}
+100%{opacity:0; transform:translateY(6px)}
+}
+
+/* ===========================
+   Panel collapse helper
+   =========================== */
+.sheet-collapse{
+  margin-left:auto; background:transparent; color:var(--muted); border:var(--border-w) solid var(--line);
+  padding:6px 10px; border-radius:10px; cursor:pointer;
+}
+.sheet.collapsed{width:min(320px,100%)}
 
 /* ===========================
    Responsive
