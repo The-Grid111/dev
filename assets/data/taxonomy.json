@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "sections": [
+    { "code": "featured",          "label": "Featured Reels" },
+    { "code": "alternates",        "label": "Hero Alternates" },
+    { "code": "resources/creators","label": "Creators" },
+    { "code": "resources/ecom",    "label": "E-commerce" },
+    { "code": "resources/local",   "label": "Local Business" },
+    { "code": "resources/edu",     "label": "Education" }
+  ]
+}
