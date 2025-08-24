@@ -1,143 +1,150 @@
-/* MAIN: theming, customize panel, UI behaviors */
-
-(function () {
+// MAIN UI INTERACTIONS FOR THE GRID
+(function(){
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
   const root = document.documentElement;
-  const body = document.body;
 
-  /* ---------- State helpers ---------- */
-  const store = {
-    get(k, def) { try { return JSON.parse(localStorage.getItem(k)) ?? def; } catch { return def; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
-    del(k) { try { localStorage.removeItem(k); } catch {} }
-  };
+  // ----- News bar memory -----
+  (function news(){
+    const BAR_KEY = "thegrid.news.dismissed.v1";
+    const bar = $("#newsBar");
+    if (!bar) return;
+    if (localStorage.getItem(BAR_KEY) === "1"){ bar.style.display = "none"; return; }
+    const close = bar.querySelector(".news__close");
+    if (close){
+      close.addEventListener("click", ()=>{ bar.style.display = "none"; localStorage.setItem(BAR_KEY, "1"); });
+    }
+  })();
 
-  const cfg = store.get('grid:ui', {
-    theme: 'dark',
-    accent: '#F2C94C',
-    font: "'Space Grotesk', Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
-    radius: 18,
-    border: 1,
-    shadow: 0.35,
-    gridOpacity: 0.22,
-    gridSize: 28
-  });
+  // ----- Theme & palette controls -----
+  (function themeControls(){
+    document.body.classList.add('body-grid'); // enable animated texture
+    const savedTheme  = localStorage.getItem('thegrid.theme')  || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const savedPreset = localStorage.getItem('thegrid.preset') || 'gold';
+    root.setAttribute('data-theme', savedTheme);
+    root.setAttribute('data-preset', savedPreset);
 
-  /* ---------- Apply config ---------- */
-  function applyConfig() {
-    body.classList.toggle('theme-light', cfg.theme === 'light');
-    root.style.setProperty('--accent', cfg.accent);
-    root.style.setProperty('--radius', `${cfg.radius}px`);
-    root.style.setProperty('--border', `rgba(255,255,255,${cfg.theme === 'light' ? 0.14 : 0.16})`);
-    root.style.setProperty('--shadow', cfg.shadow);
-    root.style.setProperty('--grid-opacity', cfg.gridOpacity);
-    root.style.setProperty('--grid-size', `${cfg.gridSize}px`);
-    root.style.setProperty('--font', cfg.font);
-  }
-  applyConfig();
+    const host = $("#customizeBody");
+    if (!host || $("#uxThemeRow")) return;
+    const row = document.createElement('div');
+    row.id = "uxThemeRow";
+    row.innerHTML = `
+      <div class="control">
+        <h4 class="eyeline">Theme & Palette</h4>
+        <div class="row" style="margin:8px 0 4px">
+          <button class="btn btn-outline" data-theme="light">Light</button>
+          <button class="btn btn-outline" data-theme="dark">Dark</button>
+          <span class="muted" style="margin-left:10px">Palette:</span>
+          <button class="btn btn-ghost" data-preset="gold">Gold</button>
+          <button class="btn btn-ghost" data-preset="arctic">Arctic</button>
+          <button class="btn btn-ghost" data-preset="rose">Rose</button>
+          <button class="btn btn-ghost" data-preset="emerald">Emerald</button>
+        </div>
+      </div>`;
+    host.prepend(row);
 
-  /* ---------- News ribbon ---------- */
-  const ribbon = document.getElementById('newsRibbon');
-  const dismissed = store.get('grid:newsDismissed', false);
-  if (!dismissed && ribbon) {
-    ribbon.classList.add('show');
-    document.getElementById('newsDismiss').addEventListener('click', () => {
-      ribbon.classList.remove('show');
-      store.set('grid:newsDismissed', true);
-    });
-  }
-
-  /* ---------- Header controls ---------- */
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      cfg.theme = (cfg.theme === 'light' ? 'dark' : 'light');
-      applyConfig(); store.set('grid:ui', cfg);
-      // sync panel checkbox if open
-      const togg = document.getElementById('toggleLight');
-      if (togg) togg.checked = (cfg.theme === 'light');
-    });
-  }
-
-  /* ---------- Customize panel ---------- */
-  const panel = document.getElementById('customizePanel');
-  const openBtn = document.getElementById('customizeOpen');
-  const closeBtn = document.getElementById('customizeClose');
-
-  function openPanel(){ panel?.classList.add('open'); }
-  function closePanel(){ panel?.classList.remove('open'); }
-
-  openBtn?.addEventListener('click', openPanel);
-  closeBtn?.addEventListener('click', closePanel);
-
-  // Init panel controls with current cfg
-  function initPanel() {
-    const q = (id) => document.getElementById(id);
-    q('toggleLight').checked = (cfg.theme === 'light');
-    q('accentPicker').value = cfg.accent;
-    q('fontFamily').value = cfg.font;
-    q('radius').value = cfg.radius;
-    q('border').value = cfg.border; // reserved if you add per-side borders later
-    q('shadow').value = cfg.shadow;
-    q('gridOpacity').value = cfg.gridOpacity;
-    q('gridDensity').value = cfg.gridSize;
-
-    q('toggleLight').addEventListener('change', (e) => {
-      cfg.theme = e.target.checked ? 'light' : 'dark';
-      applyConfig();
-    });
-    q('accentPicker').addEventListener('input', (e) => {
-      cfg.accent = e.target.value; applyConfig();
-    });
-    q('fontFamily').addEventListener('change', (e) => {
-      cfg.font = e.target.value; applyConfig();
-    });
-    q('radius').addEventListener('input', (e) => {
-      cfg.radius = +e.target.value; applyConfig();
-    });
-    q('shadow').addEventListener('input', (e) => {
-      cfg.shadow = +e.target.value; applyConfig();
-    });
-    q('gridOpacity').addEventListener('input', (e) => {
-      cfg.gridOpacity = +e.target.value; applyConfig();
-    });
-    q('gridDensity').addEventListener('input', (e) => {
-      cfg.gridSize = +e.target.value; applyConfig();
-    });
-
-    document.getElementById('customizeReset').addEventListener('click', () => {
-      store.del('grid:ui');
-      location.reload();
-    });
-
-    document.getElementById('customizeSave').addEventListener('click', () => {
-      store.set('grid:ui', cfg);
-      closePanel();
-    });
-  }
-  initPanel();
-
-  /* ---------- Plans: Choose & Details ---------- */
-  function bindPlans() {
-    document.querySelectorAll('.choose-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const plan = e.currentTarget.getAttribute('data-plan');
-        window.Commerce.open(plan);
+    row.querySelectorAll('[data-theme]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const v = e.currentTarget.getAttribute('data-theme');
+        root.setAttribute('data-theme', v);
+        localStorage.setItem('thegrid.theme', v);
       });
     });
-
-    document.querySelectorAll('.details-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const plan = e.currentTarget.getAttribute('data-plan');
-        const copy = window.Commerce.describe(plan);
-        alert(copy);
+    row.querySelectorAll('[data-preset]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const v = e.currentTarget.getAttribute('data-preset');
+        root.setAttribute('data-preset', v);
+        localStorage.setItem('thegrid.preset', v);
       });
     });
-  }
-  bindPlans();
+  })();
 
-  /* ---------- Accessibility niceties ---------- */
-  // Close customize panel with Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closePanel();
+  // ----- Customize panel open/close -----
+  (function customizePanel(){
+    const btn = $("#customizeBtn");
+    const panel = $("#customizePanel");
+    if (!btn || !panel) return;
+    btn.onclick = () => panel.classList.add("show");
+    panel.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", ()=> panel.classList.remove("show")));
+  })();
+
+  // ----- Plan panel helpers -----
+  const planPanel = $("#planPanel");
+  const planTitle = $("#panelTitle");
+  const planBody  = $("#panelBody");
+  const planChoose= $("#panelChoose");
+
+  function openPanel(){ planPanel.classList.add("show"); }
+  function closePanel(){ planPanel.classList.remove("show"); }
+  planPanel?.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closePanel));
+
+  // Details buttons → show plan description
+  $$(".details-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const tier = btn.getAttribute("data-tier");
+      const desc = window.Commerce.describe(tier);
+      planTitle.textContent = desc.title;
+      planBody.innerHTML = `
+        <div class="eyeline"><h4>${desc.title}</h4></div>
+        <p class="muted" style="margin-top:2px">${desc.subtitle}</p>
+        <ul style="margin-top:8px">${desc.points.map(p=>`<li>${p}</li>`).join("")}</ul>
+      `;
+      planChoose.onclick = ()=> window.Commerce.open(tier);
+      planChoose.style.display = "";
+      openPanel();
+    });
   });
+
+  // Compare plans → table view
+  (function comparePlans(){
+    const compareBtn = $("#compareBtn");
+    if (!compareBtn) return;
+    compareBtn.addEventListener("click", ()=>{
+      planTitle.textContent = "Compare Plans";
+      planBody.innerHTML = `
+        <div class="eyeline"><h4>What’s included</h4></div>
+        <div style="overflow:auto;max-height:70vh">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="plan">Basic</th>
+              <th class="plan">Silver</th>
+              <th class="plan">Gold</th>
+              <th class="plan">Diamond</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Site + Customize</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td>Effects & metallic presets</td><td>Starter</td><td class="yes">Advanced</td><td class="yes">All</td><td class="yes">All</td></tr>
+            <tr><td>Stacks & Setups (CapCut, Runway, ElevenLabs…)</td><td>Starter</td><td>Pro</td><td>Pro+</td><td>All</td></tr>
+            <tr><td>Library access</td><td>Samples</td><td>Guides</td><td>Full (Pro)</td><td>All + Private</td></tr>
+            <tr><td>Automation recipes</td><td>—</td><td>—</td><td class="yes">Included</td><td class="yes">Included</td></tr>
+            <tr><td>Priority support</td><td>48h</td><td>24h</td><td>Hotfix</td><td>Roadmap</td></tr>
+            <tr><td>Studio Pack</td><td class="soon">—</td><td class="soon">—</td><td class="soon">—</td><td class="yes">Included</td></tr>
+            <tr><td>Automation Pack</td><td class="soon">—</td><td class="soon">—</td><td class="soon">—</td><td class="yes">Included</td></tr>
+          </tbody>
+        </table>
+        </div>`;
+      planChoose.style.display = "none";
+      openPanel();
+    });
+  })();
+
+  // Choose buttons → Stripe
+  $$('[data-plan]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const plan = btn.getAttribute('data-plan');
+      window.Commerce.open(plan);
+    });
+  });
+
+  // Show "Manage subscription" when a Stripe Customer Portal link is configured
+  (function showManageIfConfigured(){
+    const url = (window.Commerce && window.Commerce.portalUrl && window.Commerce.portalUrl()) || "";
+    if (!url) return;
+    const wrap = document.getElementById('manageWrap');
+    const a = document.getElementById('manageSub');
+    if (wrap && a){ a.href = url; wrap.style.display = "block"; }
+  })();
 })();
