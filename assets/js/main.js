@@ -1,126 +1,215 @@
-(() => {
-  const $ = (sel, root=document) => root.querySelector(sel);
-  const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
-  const store = {
-    get() { try { return JSON.parse(localStorage.getItem("grid:settings")||"{}"); } catch { return {}; } },
-    set(v){ localStorage.setItem("grid:settings", JSON.stringify(v)); },
-    merge(patch){ const v = {...store.get(), ...patch}; store.set(v); return v; }
-  };
+(function () {
+  const $ = (sel, ctx=document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
-  // --- apply settings to DOM/CSS vars
-  function applySettings(s){
-    if (!s) s = store.get();
-    const r = document.documentElement;
-    if (s.css){
-      for (const [k,v] of Object.entries(s.css)) r.style.setProperty(k, v);
-    }
-    if (s.headerMode){
-      const hdr = $('[data-header]');
-      hdr.dataset.mode = s.headerMode;
-      hdr.style.background = s.headerMode==="solid" ? "#0b0f12" : "";
-      hdr.style.boxShadow = s.headerMode==="float" ? "0 14px 28px rgba(0,0,0,.35)" : "";
-    }
-    if (s.fontFamily){
-      document.body.style.fontFamily = s.fontFamily==="inter"
-        ? 'Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial'
-        : s.fontFamily==="mono"
-        ? 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
-        : 'Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial';
-      $$('.name,h1,h2,h3').forEach(el=>{
-        el.style.fontFamily = s.fontFamily==="space"
-          ? '"Space Grotesk", Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial'
-          : document.body.style.fontFamily;
-      });
-    }
-    if (s.gridDensity){ $('.top-grid').style.setProperty('--density', s.gridDensity+'px'); }
-    if (s.userName){ $('[data-welcome]').textContent = `Welcome, ${s.userName}. Launch experiences that never regress.`; }
-  }
+  // Year
+  $('#year').textContent = new Date().getFullYear();
 
-  // --- controls wiring
-  function initControls(){
-    const panel = $('[data-controls]');
-    $('[data-open-controls]')?.addEventListener('click', ()=> panel.classList.remove('hidden'));
-    $('[data-close-controls]')?.addEventListener('click', ()=> panel.classList.add('hidden'));
-
-    // inputs mapping
-    $$('[data-var]').forEach(input=>{
-      input.addEventListener('input', e=>{
-        const key = input.dataset.var, val = input.value + (key.includes('px')?'px':'');
-        const css = {...(store.get().css||{}), [key]: input.type==="range" ? String(input.value) + (key.includes('px')?'px':'') : input.value };
-        document.documentElement.style.setProperty(key, input.type==="range" ? css[key] : input.value);
-        store.merge({css});
-      });
-    });
-
-    $$('[data-setting]').forEach(input=>{
-      input.addEventListener('input', ()=>{
-        const s = store.merge({ [input.dataset.setting]: input.type==="range" ? Number(input.value) : input.value });
-        applySettings(s);
-      });
-    });
-
-    $('[data-save]')?.addEventListener('click', ()=>{
-      alert("Saved! Settings persist on this device. Export coming next.");
-    });
-    $('[data-reset]')?.addEventListener('click', ()=>{
-      localStorage.removeItem('grid:settings'); location.reload();
-    });
-  }
-
-  // --- pricing modal + choose fallback
-  const PLAN_DETAILS = {
-    BASIC: [
-      "Starter hero & sections",
-      "Access to Library + manifest system",
-      "Email support within 48h",
-      "Cancel/upgrade anytime"
-    ],
-    SILVER: [
-      "Everything in Basic",
-      "Advanced effects & presets",
-      "Priority email (24h)",
-      "Quarterly tune-ups"
-    ],
-    GOLD: [
-      "Monthly collab session",
-      "Admin toolkit & automations",
-      "1:1 onboarding (45 min)",
-      "Priority hotfix"
-    ],
-    DIAMOND: [
-      "Custom pipelines (Notion/Airtable/Zapier)",
-      "Hands-on stack build",
-      "Priority roadmap & fast turnaround",
-      "Quarterly strategy review"
-    ]
-  };
-
-  function openDetails(plan){
-    const m = $('[data-modal]'); m.classList.remove('hidden');
-    $('[data-modal-title]').textContent = plan;
-    const body = $('[data-modal-body]');
-    body.innerHTML = `<ul>${PLAN_DETAILS[plan].map(li=>`<li>${li}</li>`).join('')}</ul>`;
-    $('[data-modal-choose]').onclick = ()=> choosePlan(plan);
-  }
-  function choosePlan(plan){
-    const subject = encodeURIComponent(`[GRID] Subscribe: ${plan}`);
-    const body = encodeURIComponent(`Plan: ${plan}\nName:\nEmail:\nNotes:\n\n(We’ll send a Stripe link.)`);
-    window.location.href = `mailto:gridcoresystems@gmail.com?subject=${subject}&body=${body}`;
-  }
-  $$('[data-details]').forEach(btn => btn.addEventListener('click', ()=> openDetails(btn.dataset.plan)));
-  $$('[data-choose]').forEach(btn => btn.addEventListener('click', ()=> choosePlan(btn.dataset.plan)));
-  $$('[data-close-modal]').forEach(b=> b.addEventListener('click', ()=> $('[data-modal]').classList.add('hidden')));
-
-  // --- contact (no backend yet)
-  $('[data-contact]')?.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const subject = encodeURIComponent(`[GRID] Contact from ${fd.get('name')||'Visitor'}`);
-    const body = encodeURIComponent(`${fd.get('message')||''}\n\nFrom: ${fd.get('name')||''} <${fd.get('email')||''}>`);
-    window.location.href = `mailto:gridcoresystems@gmail.com?subject=${subject}&body=${body}`;
+  // Announcement
+  $('#dismissAnnounce').addEventListener('click', () => {
+    $('#announceBar').style.display = 'none';
   });
 
-  // --- init
-  applySettings();
-  initControls();
+  // Welcome name from control
+  const welcome = localStorage.getItem('grid:welcome') || 'Welcome';
+  $('#welcomeName').textContent = welcome;
+
+  // Library (reads manifest if present)
+  const libEl = $('#libraryGrid');
+  fetch('assets/videos/manifest.json')
+    .then(r => r.ok ? r.json() : { items: [] })
+    .then(({items=[]}) => {
+      if (!items.length) return;
+      libEl.innerHTML = '';
+      const grid = document.createElement('div');
+      grid.className = 'cards two';
+      items.forEach(v => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `<h3>${v.title || 'Untitled'}</h3><p class="muted">${v.caption||''}</p>`;
+        grid.appendChild(card);
+      });
+      libEl.appendChild(grid);
+    })
+    .catch(()=>{});
+
+  // Plans modal
+  const modal = $('#planModal');
+  const planTitle = $('#planTitle');
+  const planList = $('#planList');
+  $$('.open-plan').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const plan = e.currentTarget.closest('.plan').dataset.plan;
+      planTitle.textContent = plan;
+      planList.innerHTML = '';
+      const bullets = {
+        BASIC: ['Starter hero & sections','Access Library + manifest system','Email support within 48h','Cancel/upgrade anytime'],
+        SILVER: ['Everything in Basic','Advanced effects & presets','Priority email (24h)','Quarterly tune-ups'],
+        GOLD: ['Monthly collab session','Admin toolkit & automations','1:1 onboarding (45 min)','Priority hotfix'],
+        DIAMOND: ['Custom pipelines (Notion/Airtable/Zapier)','Hands-on stack build','Priority roadmap & fast turnaround','Quarterly strategy review']
+      }[plan];
+      bullets.forEach(b=>{
+        const li = document.createElement('li'); li.textContent = b; planList.appendChild(li);
+      });
+      modal.showModal();
+    });
+  });
+  $('#closePlan').onclick = ()=>modal.close();
+  $('#closePlan2').onclick = ()=>modal.close();
+  $('#choosePlan').onclick = ()=>{
+    // Stripe hook placeholder:
+    alert('This would open Stripe Checkout for: ' + planTitle.textContent);
+  };
+
+  // Header mode
+  const header = $('.site-header');
+  function setHeaderMode(mode){
+    header.classList.remove('solid','minimal','glass');
+    if (mode === 'solid') header.classList.add('solid');
+    if (mode === 'minimal') header.classList.add('minimal');
+    if (mode === 'glass') header.classList.add('glass');
+  }
+
+  // Controls
+  const dlg = $('#controls');
+  $('#openControls').onclick = ()=>dlg.showModal();
+
+  // Palette swatches
+  const palettes = [
+    {name:'Gold Dark', bg:'#101214', surface:'#171a1d', text:'#eaeef2', accent:'#f2c94c'},
+    {name:'Slate Light', bg:'#f6f7f9', surface:'#fff', text:'#1b1f24', accent:'#0ea5e9'},
+    {name:'Emerald', bg:'#0e1412', surface:'#111a17', text:'#e6f5ee', accent:'#34d399'},
+    {name:'Royal', bg:'#0f1324', surface:'#131937', text:'#e8edff', accent:'#8b5cf6'}
+  ];
+  const swatches = $('#paletteSwatches');
+  palettes.forEach(p=>{
+    const b = document.createElement('button');
+    b.title = p.name;
+    b.style.background = p.accent;
+    b.addEventListener('click', ()=>{
+      setVar('--bg', p.bg);
+      setVar('--surface', p.surface);
+      setVar('--text', p.text);
+      setVar('--accent', p.accent);
+      persist();
+    });
+    swatches.appendChild(b);
+  });
+
+  // Wire inputs -> CSS vars
+  const map = {
+    accentPicker: v => setVar('--accent', v),
+    fontFamily: v => {
+      if (v.includes('Space')) {
+        document.documentElement.style.setProperty('--font-display', '"Space Grotesk", var(--font-body)');
+        document.documentElement.style.setProperty('--font-body', '"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif');
+      } else if (v.includes('Inter')) {
+        document.documentElement.style.setProperty('--font-display', '"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif');
+        document.documentElement.style.setProperty('--font-body', '"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif');
+      } else {
+        document.documentElement.style.setProperty('--font-display', 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif');
+        document.documentElement.style.setProperty('--font-body', 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif');
+      }
+    },
+    fontScale: v => setVar('--scale', v),
+    radius: v => setVar('--radius', `${v}px`),
+    containerW: v => setVar('--container', `${v}px`),
+    heroH: v => $('.hero').style.minHeight = `${v}vh`,
+    headerMode: v => setHeaderMode(v),
+    glow: v => setVar('--glow', v),
+    shadow: v => setVar('--shadow', v),
+    borderW: v => setVar('--border-w', `${v}px`),
+    borderStyle: v => {
+      const style = v === 'none' ? 'var(--border-none)' :
+                    v === 'hard' ? 'var(--border-hard)' :
+                    v === 'glow' ? `0 0 0 1px color-mix(in oklab, var(--accent) 50%, transparent) inset, 0 0 24px color-mix(in oklab, var(--accent) 25%, transparent)` :
+                    'var(--border-soft)';
+      setVar('--border-style', style);
+    },
+    gridOpacity: v => setVar('--grid-opacity', v),
+    gridDensity: v => setVar('--grid-size', `${v}px`),
+    bgColor: v => setVar('--bg', v),
+    cardColor: v => setVar('--surface', v),
+    textColor: v => setVar('--text', v),
+    yourName: v => {
+      localStorage.setItem('grid:welcome', v || 'Welcome');
+      $('#welcomeName').textContent = v || 'Welcome';
+    },
+    lightMode: v => document.body.toggleAttribute('data-theme','light', v)
+  };
+
+  // Helper: set CSS var
+  function setVar(name, value){
+    document.documentElement.style.setProperty(name, value);
+  }
+
+  // Patch toggleAttribute with optional value param
+  Element.prototype.toggleAttribute = function(name, value){
+    if (value === undefined) value = !this.hasAttribute(name);
+    if (value) this.setAttribute(name,''); else this.removeAttribute(name);
+  };
+
+  // Init controls with current values
+  [
+    'accentPicker','fontFamily','fontScale','radius','containerW','heroH','headerMode',
+    'glow','shadow','borderW','borderStyle','gridOpacity','gridDensity',
+    'bgColor','cardColor','textColor','yourName','lightMode'
+  ].forEach(id=>{
+    const el = document.getElementById(id);
+    if (!el) return;
+    const apply = () => {
+      const v = (el.type === 'checkbox') ? el.checked : el.value;
+      map[id](v);
+    };
+    el.addEventListener('input', apply);
+  });
+
+  // Save / Reset (JSON Save like before)
+  const saveBtn = $('#save');
+  const resetBtn = $('#reset');
+  saveBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const save = {
+      vars: {
+        bg: getVar('--bg'), surface: getVar('--surface'), text: getVar('--text'),
+        accent: getVar('--accent'), radius: getVar('--radius'), container: getVar('--container'),
+        shadow: getVar('--shadow'), glow: getVar('--glow'), borderStyle: getVar('--border-style'),
+        gridOpacity: getVar('--grid-opacity'), gridSize: getVar('--grid-size'),
+        theme: document.body.getAttribute('data-theme') || 'dark',
+      },
+      welcome: localStorage.getItem('grid:welcome') || 'Welcome',
+      ts: Date.now()
+    };
+    navigator.clipboard.writeText(JSON.stringify(save, null, 2));
+    alert('Save copied to clipboard.');
+  });
+
+  resetBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    location.reload();
+  });
+
+  function getVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+
+  // Expose paste-to-apply (optional)
+  window.applySave = function(saveJSON){
+    try{
+      const s = typeof saveJSON === 'string' ? JSON.parse(saveJSON) : saveJSON;
+      Object.entries(s.vars||{}).forEach(([k,v])=>{
+        if (k === 'theme') {
+          document.body.toggleAttribute('data-theme','light', v === 'light');
+        } else {
+          setVar(`--${k}`, v);
+        }
+      });
+      if (s.welcome) {
+        localStorage.setItem('grid:welcome', s.welcome);
+        $('#welcomeName').textContent = s.welcome;
+      }
+    }catch(e){ console.warn('Invalid Save', e); }
+  };
+
+  // Contact alignment safety
+  // (No JS needed; CSS centers it. This guard re-measures on resize if someone changes container width drastically.)
+  new ResizeObserver(()=>{}).observe(document.body);
 })();
