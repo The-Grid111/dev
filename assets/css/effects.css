@@ -1,4 +1,0 @@
-/* Minimal extras separated to keep styles clean */
-body{transition:background-position .3s ease}
-.btn--glow{transition:box-shadow .25s ease, transform .08s ease}
-.btn--glow:active{transform:translateY(1px)}
