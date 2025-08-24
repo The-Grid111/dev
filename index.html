@@ -1,80 +1,99 @@
 <!doctype html>
-<html lang="en" data-theme="dark" data-preset="gold">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>THE GRID — Launch experiences that never regress</title>
   <meta name="description" content="Self-serve, adaptive, quantifiable. Paste a Save → instant learning. Plans unlock features; no 1:1 required. Diamond unlocks watermark-free, commercial-safe exports." />
-  <link rel="icon" href="assets/images/gc_logo.png" />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" href="assets/images/favicon.png" />
+  <!-- keep your existing stylesheet(s) -->
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body class="body-grid">
 
-  <!-- Header -->
-  <header class="site-head">
-    <div class="wrap head-inner">
-      <a class="brand" href="#top" aria-label="THE GRID home">
-        <img src="assets/images/gc_logo.png" alt="" class="brand-spin" />
-        <span>THE GRID</span>
-      </a>
+<body>
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="container row between center">
+      <div class="brand row center">
+        <img src="assets/images/logo-gold.png" alt="THE GRID" class="logo" />
+        <span class="brand-name">THE GRID</span>
+      </div>
+
       <nav class="nav">
         <a href="#library">Library</a>
         <a href="#stacks">Stacks</a>
         <a href="#community">Community</a>
-        <a href="#plans">Pricing</a>
+        <a href="#pricing">Pricing</a>
         <a href="#contact">Contact</a>
       </nav>
-      <div class="head-cta">
-        <button class="btn ghost" data-open="#customize">Customize</button>
-        <a class="btn" href="#plans">Join Now</a>
+
+      <div class="cta row">
+        <a class="btn ghost" href="#customize">Customize</a>
+        <a class="btn primary" href="#pricing">Join Now</a>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="hero" id="top">
-    <div class="wrap">
+  <section class="hero">
+    <div class="container">
       <h1>Launch experiences that never regress.</h1>
-      <p class="lede">
-        Self-serve, adaptive, quantifiable. Paste a Save → instant learning.
-        Plans unlock features; no 1:1 required. <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
+      <p class="lead">
+        Self-serve, adaptive, quantifiable. Paste a Save → instant learning. Plans unlock features; no 1:1 required.
+        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
       </p>
-      <div class="cta-row">
-        <a href="#library" class="btn strong">Open Library</a>
-        <a href="#plans" class="btn ghost">See Pricing</a>
+
+      <div class="row">
+        <a class="btn primary" href="#library">Open Library</a>
+        <a class="btn" href="#pricing">See Pricing</a>
       </div>
 
-      <div class="hero-media">
-        <div class="media-placeholder">Hero Placeholder • Replace with your top niche video</div>
+      <div class="hero-video-placeholder">
+        Hero Placeholder • Replace with your top niche video
       </div>
     </div>
   </section>
 
   <!-- Library -->
   <section id="library" class="section">
-    <div class="wrap">
+    <div class="container">
       <h2>Library</h2>
       <p class="muted">
         Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.
         Lower tiers export with a subtle GRID watermark. <strong>Diamond exports are watermark-free.</strong>
       </p>
 
-      <div class="grid tiles">
-        <article class="card">
-          <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Basic</span><span class="muted">Samples & getting started</span></div>
+      <div class="library-grid">
+        <article class="tile">
+          <div class="tile-body">No videos yet</div>
+          <footer class="tile-footer">
+            <span class="badge">Basic</span>
+            <span>Samples &amp; getting started</span>
+          </footer>
         </article>
-        <article class="card">
-          <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Silver</span><span class="muted">Guides & improvements</span></div>
+
+        <article class="tile">
+          <div class="tile-body">No videos yet</div>
+          <footer class="tile-footer">
+            <span class="badge">Silver</span>
+            <span>Guides &amp; improvements</span>
+          </footer>
         </article>
-        <article class="card">
-          <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Gold</span><span class="muted">Full pro library</span></div>
+
+        <article class="tile">
+          <div class="tile-body">No videos yet</div>
+          <footer class="tile-footer">
+            <span class="badge">Gold</span>
+            <span>Full pro library</span>
+          </footer>
         </article>
-        <article class="card">
-          <div class="tile">No videos yet</div>
-          <div class="tile-footer"><span class="pill">Diamond</span><span class="muted">Private packs & early drops</span></div>
+
+        <article class="tile">
+          <div class="tile-body">No videos yet</div>
+          <footer class="tile-footer">
+            <span class="badge">Diamond</span>
+            <span>Private packs &amp; early drops</span>
+          </footer>
         </article>
       </div>
     </div>
@@ -82,20 +101,22 @@
 
   <!-- Stacks & Setups -->
   <section id="stacks" class="section">
-    <div class="wrap">
+    <div class="container">
       <h2>Stacks &amp; Setups</h2>
-      <p class="muted">Start free, scale when ready.</p>
+      <p class="muted">Battle-tested combos. Start free, scale when ready.</p>
 
-      <div class="stack">
-        <article class="card pad">
+      <div class="cards">
+        <article class="card">
           <h3>Creator Starter</h3>
           <p>CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export watermarked unless Diamond.</p>
         </article>
-        <article class="card pad">
+
+        <article class="card">
           <h3>Commerce Visuals</h3>
           <p>Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p>
         </article>
-        <article class="card pad">
+
+        <article class="card">
           <h3>Educator Essentials</h3>
           <p>Canva slides + Descript edits + Loom screen. Clip library grows from your Saves.</p>
         </article>
@@ -105,16 +126,17 @@
 
   <!-- Community -->
   <section id="community" class="section">
-    <div class="wrap">
+    <div class="container">
       <h2>Community</h2>
       <p class="muted">High-signal showcases and reusable methods. Admin curated so it never gets noisy.</p>
 
-      <div class="stack">
-        <article class="card pad method">
+      <div class="cards">
+        <article class="card">
           <h3>Liquid Pour Cinematic</h3>
           <p>Reference fusion + glide timing. Export watermark applies unless Diamond.</p>
         </article>
-        <article class="card pad method">
+
+        <article class="card">
           <h3>Gold Pulse Logo</h3>
           <p>CapCut spectral pulse + metallic accent. Private pack on Diamond.</p>
         </article>
@@ -122,150 +144,203 @@
     </div>
   </section>
 
-  <!-- Why / How -->
+  <!-- Why -->
   <section class="section">
-    <div class="wrap">
+    <div class="container">
       <h2>Why The Grid</h2>
-      <p class="muted">Built to improve itself — and never lose progress.</p>
-      <div class="stack">
-        <article class="card pad">
+
+      <div class="cards">
+        <article class="card">
           <h3>Anti-Regression Core</h3>
-          <p>Changes are tracked & scored. Wins are promoted; misses are rolled back. Saves persist.</p>
+          <p>Changes are tracked &amp; scored. Wins are promoted; misses are rolled back. Saves persist.</p>
         </article>
-        <article class="card pad">
+
+        <article class="card">
           <h3>Quantifiable UX</h3>
           <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable modes.</p>
         </article>
-        <article class="card pad">
+
+        <article class="card">
           <h3>Self-Serve</h3>
           <p>Clear plans, no calls required. Learn by doing with guides and templates. Upgrade when you need more.</p>
         </article>
       </div>
+    </div>
+  </section>
 
-      <h2 class="section-split">How it works</h2>
-      <ol class="steps">
-        <li><div class="step card pad"><h4>1 • Save</h4><p>Export a tiny JSON with settings, notes, outcomes.</p></div></li>
-        <li><div class="step card pad"><h4>2 • Adapt</h4><p>Paste a Save → UI, defaults, and copy update instantly.</p></div></li>
-        <li><div class="step card pad"><h4>3 • Compound</h4><p>Wins become presets. Your system compounds over time.</p></div></li>
-      </ol>
+  <!-- How it works -->
+  <section class="section">
+    <div class="container">
+      <h2>How it works</h2>
+
+      <div class="cards">
+        <article class="card">
+          <h3>1 • Save</h3>
+          <p>Export a tiny JSON with settings, notes, outcomes.</p>
+        </article>
+        <article class="card">
+          <h3>2 • Adapt</h3>
+          <p>Paste a Save → UI, defaults, and copy update instantly. No rebuilds.</p>
+        </article>
+        <article class="card">
+          <h3>3 • Compound</h3>
+          <p>Wins are promoted to presets. Your system compounds over time.</p>
+        </article>
+      </div>
     </div>
   </section>
 
   <!-- Pricing -->
-  <section id="plans" class="section">
-    <div class="wrap">
-      <div class="row between align-center">
+  <section id="pricing" class="section">
+    <div class="container">
+      <div class="row between center">
         <h2>Pricing</h2>
-        <button class="btn ghost btn-sm js-compare-plans">Compare plans</button>
+        <a class="btn ghost" href="#compare">Compare plans</a>
       </div>
       <p class="muted">Fair pricing. Clear value. 7-day refund. <strong>No 1:1 calls included in any plan.</strong></p>
 
-      <div class="stack plans">
-        <article class="card pad plan" data-plan="basic">
-          <h3>BASIC £9/mo</h3>
+      <div class="plans">
+
+        <!-- BASIC -->
+        <article class="plan">
+          <header>
+            <h3>BASIC £9/mo</h3>
+          </header>
           <ul>
             <li>Starter templates &amp; effects</li>
             <li>Theme presets &amp; Save imports</li>
             <li>Sample Library (watermarked)</li>
             <li>Email support (48h)</li>
           </ul>
-          <div class="actions">
-            <a href="#" class="btn js-choose" data-plan="basic">Choose</a>
-            <a href="#" class="btn ghost js-plan-details" data-plan="basic">Details</a>
+          <div class="row">
+            <a class="btn primary" data-plan="basic" data-role="choose">Choose</a>
+            <button class="btn" data-plan="basic" data-role="details">Details</button>
           </div>
         </article>
 
-        <article class="card pad plan" data-plan="silver">
-          <h3>SILVER £29/mo</h3>
+        <!-- SILVER -->
+        <article class="plan">
+          <header>
+            <h3>SILVER £29/mo</h3>
+          </header>
           <ul>
             <li>Everything in Basic</li>
             <li>Advanced effects &amp; metallic presets</li>
             <li>Priority email (24h)</li>
             <li>Quarterly tune-ups</li>
           </ul>
-          <div class="actions">
-            <a href="#" class="btn js-choose" data-plan="silver">Choose</a>
-            <a href="#" class="btn ghost js-plan-details" data-plan="silver">Details</a>
+          <div class="row">
+            <a class="btn primary" data-plan="silver" data-role="choose">Choose</a>
+            <button class="btn" data-plan="silver" data-role="details">Details</button>
           </div>
         </article>
 
-        <article class="card pad plan" data-plan="gold">
-          <h3>GOLD £49/mo</h3>
+        <!-- GOLD -->
+        <article class="plan">
+          <header>
+            <h3>GOLD £49/mo</h3>
+          </header>
           <ul>
             <li>Everything in Silver</li>
             <li>Admin toolkit &amp; automations</li>
             <li>Pro Library &amp; recipes</li>
             <li>Priority hotfix</li>
           </ul>
-          <div class="actions">
-            <a href="#" class="btn js-choose" data-plan="gold">Choose</a>
-            <a href="#" class="btn ghost js-plan-details" data-plan="gold">Details</a>
+          <div class="row">
+            <a class="btn primary" data-plan="gold" data-role="choose">Choose</a>
+            <button class="btn" data-plan="gold" data-role="details">Details</button>
           </div>
         </article>
 
-        <article class="card pad plan" data-plan="diamond">
-          <h3>DIAMOND £99/mo</h3>
+        <!-- DIAMOND -->
+        <article class="plan">
+          <header>
+            <h3>DIAMOND £99/mo</h3>
+          </header>
           <ul>
             <li>Private Library drops, custom pipelines</li>
             <li>Roadmap priority, fast turnaround</li>
             <li><strong>Watermark-free exports + commercial rights</strong></li>
           </ul>
-          <div class="actions">
-            <a href="#" class="btn js-choose" data-plan="diamond">Choose</a>
-            <a href="#" class="btn ghost js-plan-details" data-plan="diamond">Details</a>
+          <div class="row">
+            <a class="btn primary" data-plan="diamond" data-role="choose">Choose</a>
+            <button class="btn" data-plan="diamond" data-role="details">Details</button>
           </div>
         </article>
+
       </div>
+    </div>
+  </section>
+
+  <!-- Compare (lightweight table) -->
+  <section id="compare" class="section">
+    <div class="container">
+      <h2>Compare Plans</h2>
+      <div class="table-scroll">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th>What’s included</th>
+              <th>Basic</th><th>Silver</th><th>Gold</th><th>Diamond</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Site + Customize</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+            <tr><td>Effects &amp; metallic presets</td><td>Starter</td><td><strong>Advanced</strong></td><td>All</td><td>All</td></tr>
+            <tr><td>Stacks &amp; Setups</td><td>Starter</td><td>Pro</td><td>Pro+</td><td>All</td></tr>
+            <tr><td>Library access</td><td>Samples</td><td>Guides</td><td>Full (Pro)</td><td>All + Private</td></tr>
+            <tr><td>Automation recipes</td><td>—</td><td>—</td><td><strong>Included</strong></td><td><strong>Included</strong></td></tr>
+            <tr><td>Priority support</td><td>48h</td><td>24h</td><td>Hotfix</td><td>Roadmap</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Do plans include 1:1 sessions?</summary>
+        <p>No. All plans are self-serve. 1:1 options may be added later as a separate service.</p>
+      </details>
+      <details>
+        <summary>How do Saves work?</summary>
+        <p>Export a tiny JSON from your run; paste it back to update defaults, copy, and presets instantly.</p>
+      </details>
+      <details>
+        <summary>Can I use it beyond AI visuals?</summary>
+        <p>Yes. Stacks cover creators, commerce, education, and more — with automation recipes on higher tiers.</p>
+      </details>
     </div>
   </section>
 
   <!-- Contact -->
   <section id="contact" class="section">
-    <div class="wrap">
+    <div class="container">
       <h2>Contact</h2>
-      <form class="card contact" action="mailto:gridcoresystems@gmail.com" method="post">
-        <div class="grid form">
-          <label> Your name <input type="text" placeholder="Jane Doe" required></label>
-          <label> Email <input type="email" placeholder="you@example.com" required></label>
-          <label class="span-2"> Subject <input id="subject" type="text" placeholder="How can we help?"></label>
-          <label class="span-2"> Message <textarea rows="4" placeholder="Write your message..."></textarea></label>
-        </div>
-        <div class="actions">
-          <button class="btn">Send</button>
-        </div>
-        <p class="muted small">
-          Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
-        </p>
+      <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+        <label>Your name<input name="name" placeholder="Jane Doe" required></label>
+        <label>Email<input name="email" type="email" placeholder="you@example.com" required></label>
+        <label>Subject<input name="subject" placeholder="How can we help?" required></label>
+        <label>Message<textarea name="message" placeholder="Write your message..." rows="5" required></textarea></label>
+        <button class="btn primary" type="submit">Send</button>
       </form>
+      <p class="muted">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
     </div>
   </section>
 
-  <footer class="site-foot">
-    <div class="wrap">© 2025 THE GRID. All rights reserved.</div>
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 THE GRID. All rights reserved.</p>
+      <p><a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a></p>
+    </div>
   </footer>
 
-  <!-- Customize (modal) -->
-  <dialog id="customize" class="modal">
-    <div class="modal-card">
-      <header class="modal-head">
-        <h3>Design Controls</h3>
-        <button class="icon-close" data-close aria-label="Close">×</button>
-      </header>
-      <div class="modal-body">
-        <label class="ctrl"><span>Accent color</span><input id="ctrl-accent" type="color" value="#f3c545"></label>
-        <label class="ctrl"><span>Card radius</span><input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
-        <label class="ctrl"><span>Glow intensity</span><input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
-      </div>
-      <footer class="modal-foot">
-        <button class="btn" data-close>Done</button>
-      </footer>
-    </div>
-  </dialog>
-
-  <!-- Scripts (order matters) -->
-  <script src="assets/js/trial-banner.js"></script>
-  <script src="assets/js/plans.js"></script>
-  <script src="assets/js/commerce.js"></script>
-  <script src="assets/js/main.js"></script>
+  <!-- Your site scripts first (if any) -->
+  <script src="assets/js/main.js" defer></script>
+  <!-- Stripe + Details wiring (must be last) -->
+  <script src="assets/js/stripe-links.js" defer></script>
 </body>
 </html>
