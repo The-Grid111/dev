@@ -1,43 +1,58 @@
-/* THE GRID — commerce.js
-   Stripe hand-off. Safe to include before keys exist.
-   HOW TO WIRE:
-   1) Set your publishable key below (STRIPE_PUB_KEY).
-   2) Put your real Price IDs in data-price-id on each .plan.
+/* COMMERCE: Stripe Payment Links (client-only, GH Pages friendly)
+   HOW TO USE:
+   1) In Stripe, create a Payment Link for each plan (recurring monthly).
+   2) Paste the Payment Link URLs below in PAYMENT_LINKS.
+   3) That's it — the "Choose" buttons will go straight to Stripe Checkout.
 */
 
-(function(){
-  const STRIPE_PUB_KEY = ''; // TODO: paste your pk_live_... or pk_test_...
-  const stripe = (typeof Stripe === 'function' && STRIPE_PUB_KEY) ? Stripe(STRIPE_PUB_KEY) : null;
+window.Commerce = (function () {
+  // ↓ Replace these with your real Stripe Payment Link URLs
+  const PAYMENT_LINKS = {
+    basic:   "https://buy.stripe.com/REPLACE_BASIC",
+    silver:  "https://buy.stripe.com/REPLACE_SILVER",
+    gold:    "https://buy.stripe.com/REPLACE_GOLD",
+    diamond: "https://buy.stripe.com/REPLACE_DIAMOND"
+  };
 
-  const chooseButtons = document.querySelectorAll('.choose-plan');
+  // Human-readable details used by the Details buttons
+  const DETAILS = {
+    basic: `BASIC
+• Starter hero & sections
+• Access to Library + manifest system
+• Email support within 48h
+• Cancel/upgrade anytime`,
 
-  chooseButtons.forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      const card = btn.closest('.plan');
-      const priceId = card?.dataset?.priceId;
+    silver: `SILVER
+• Everything in Basic
+• Advanced effects & presets
+• Priority email (24h)
+• Quarterly tune-ups`,
 
-      // Fallback: if Stripe not configured, open email compose
-      if (!stripe || !priceId) {
-        const plan = card?.dataset?.plan || 'basic';
-        const subject = encodeURIComponent(`Join THE GRID — ${plan.toUpperCase()} plan`);
-        const body = encodeURIComponent('Hi, I’d like to join this plan. Please send me the checkout link.');
-        window.location.href = `mailto:gridcoresystems@gmail.com?subject=${subject}&body=${body}`;
-        return;
-      }
+    gold: `GOLD
+• Monthly collab session
+• Admin toolkit & automations
+• 1:1 onboarding (45 min)
+• Priority hotfix`,
 
-      try{
-        // One-time redirect to Checkout (no backend yet). For subscriptions,
-        // you’ll typically create a Checkout Session server-side.
-        const { error } = await stripe.redirectToCheckout({
-          lineItems: [{ price: priceId, quantity: 1 }],
-          mode: 'subscription',
-          successUrl: window.location.origin + '/dev/#pricing?success=true',
-          cancelUrl: window.location.origin + '/dev/#pricing?canceled=true'
-        });
-        if (error) alert(error.message || 'Stripe error. Please try again.');
-      }catch(err){
-        alert('Checkout failed. Please try email instead.');
-      }
-    });
-  });
+    diamond: `DIAMOND
+• Custom pipelines (Notion/Airtable/Zapier)
+• Hands-on stack build
+• Priority roadmap & fast turnaround
+• Quarterly strategy review`
+  };
+
+  function open(plan) {
+    const url = PAYMENT_LINKS[plan];
+    if (!url || url.includes("REPLACE_")) {
+      alert("Stripe Checkout not wired yet.\n\nAdd your Stripe Payment Link URL in assets/js/commerce.js to enable one-click checkout.");
+      return;
+    }
+    window.location.href = url;
+  }
+
+  function describe(plan) {
+    return DETAILS[plan] || "Plan details not found.";
+  }
+
+  return { open, describe };
 })();
