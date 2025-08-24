@@ -2,36 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>THE GRID — Adaptive Experiences</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>THE GRID — Adaptive. Self-Improving. No Regression.</title>
+  <meta name="description" content="THE GRID: Adaptive system with ethical monetisation, self-improving design, and no regression." />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-  <!-- Connectivity banner -->
-  <div id="net-status"><strong>Offline</strong> — trying to reconnect…</div>
+  <!-- Overlay -->
+  <div id="ui-overlay" class="overlay hidden"></div>
 
-  <!-- Site Header -->
-  <header class="site-head">
-    <div class="wrap head-inner">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="wrap">
       <a class="brand" href="#">
-        <img class="brand-spin" src="assets/images/logo.png" alt="THE GRID logo" />
-        <div class="brand-text">
-          <strong>THE</strong><span>GRID</span>
-        </div>
+        <span class="brand-mark"></span>
+        <span class="brand-text">THE GRID</span>
       </a>
-
       <nav class="nav">
         <a href="#library">Library</a>
         <a href="#resources">Resources</a>
         <a href="#community">Community</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#plans">Plans</a>
         <a href="#contact">Contact</a>
       </nav>
-
-      <div class="head-cta">
-        <a class="btn ghost strong" data-action="customize" href="#customize">Customize</a>
-        <a class="btn strong" data-action="join" href="#join">Join Now</a>
+      <div class="header-cta">
+        <a href="#" class="btn ghost" data-action="customize">Customize</a>
+        <a href="#" class="btn solid" data-action="join">Join Now</a>
       </div>
     </div>
   </header>
@@ -39,38 +35,24 @@
   <!-- Hero -->
   <section class="hero">
     <div class="wrap">
-      <h1>Launch experiences that learn — and never regress.</h1>
-      <p class="lede">
-        Self-improving, ethical, quantifiable. Paste a Save → the system adapts.
-      </p>
+      <h1>Launch experiences that never regress.</h1>
+      <p class="lede">Adaptive, ethical, quantifiable. One save → instant learning.</p>
       <div class="cta-row">
-        <a class="btn strong" href="#library">Open Library</a>
-        <a class="btn ghost strong" href="#pricing">See Pricing</a>
+        <a href="#library" class="btn solid">Open Library</a>
+        <a href="#plans" class="btn ghost">See Pricing</a>
       </div>
-
-      <div class="hero-media">
-        <!-- Placeholder thumbnail; swap to your reel (mp4/webm) -->
-        <button class="play" aria-label="Play hero video">▶</button>
+      <div class="hero-media card">
+        <div class="hero-placeholder">Hero Placeholder • Replace with your top niche video</div>
       </div>
     </div>
   </section>
 
   <!-- Library -->
-  <section id="library" class="section">
+  <section id="library" class="section" data-section="featured" data-kind="videos">
     <div class="wrap">
       <h2>Library</h2>
-      <p class="muted">
-        Tap a tile to set the Hero or add to showcases. Drop content into <code>assets/videos</code> and
-        <code>assets/images</code>. Optional manifests: <code>assets/images/manifest.json</code> &
-        <code>assets/videos/manifest.json</code>.
-      </p>
-
-      <div class="grid tiles">
-        <div class="tile" data-title="Hero Reel 1">Hero Reel 1</div>
-        <div class="tile" data-title="Interaction">Interaction</div>
-        <div class="tile" data-title="Pour">Pour</div>
-        <div class="tile" data-title="Spread">Spread</div>
-      </div>
+      <p class="subhead">Tap any tile to preview. Drop content into <code>assets/videos</code> and extend via <code>manifest.json</code>.</p>
+      <div class="grid tiles"></div>
     </div>
   </section>
 
@@ -78,13 +60,24 @@
   <section id="resources" class="section">
     <div class="wrap">
       <h2>Resources</h2>
-      <p class="muted">Choose a lane — the system adapts to each profession.</p>
-
-      <div class="grid tiles dark">
-        <div class="tile">Creators • reels, thumbnails, hooks</div>
-        <div class="tile">E-commerce • product visuals, PDP boosts</div>
-        <div class="tile">Local Business • service landing pack</div>
-        <div class="tile">Education • course promos, lesson visuals</div>
+      <p class="subhead">Curated per role — system adapts each lane.</p>
+      <div class="lane">
+        <h3>Creators</h3>
+        <section class="lane-section" data-section="resources/creators" data-kind="videos">
+          <div class="grid tiles"></div>
+        </section>
+      </div>
+      <div class="lane">
+        <h3>E-commerce</h3>
+        <section class="lane-section" data-section="resources/ecom" data-kind="videos">
+          <div class="grid tiles"></div>
+        </section>
+      </div>
+      <div class="lane">
+        <h3>Local Business</h3>
+        <section class="lane-section" data-section="resources/local" data-kind="videos">
+          <div class="grid tiles"></div>
+        </section>
       </div>
     </div>
   </section>
@@ -93,80 +86,74 @@
   <section id="community" class="section">
     <div class="wrap">
       <h2>Community Methods</h2>
-      <p class="muted">Preview how others build. Details unlock by plan.</p>
-
-      <div class="stack">
+      <p class="subhead">Preview how others build. Details unlock by plan.</p>
+      <div class="grid cards">
         <article class="card method">
-          <h3>Gold Pulse Logo</h3>
-          <p class="muted small">CapCut + grain + spectral pulse</p>
-          <div class="lockout">Locked • Request access</div>
+          <h4>Gold Pulse Logo</h4>
+          <p class="muted">CapCut + spectral pulse</p>
+          <div class="lock">Locked • Request access</div>
         </article>
-
         <article class="card method">
-          <h3>Liquid Pour Cinematic</h3>
-          <p class="muted small">Reference fusion + glide cut timing</p>
-          <div class="lockout">Locked • Request access</div>
+          <h4>Liquid Pour Cinematic</h4>
+          <p class="muted">Reference fusion + glide timing</p>
+          <div class="lock">Locked • Request access</div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Pricing -->
-  <section id="pricing" class="section">
+  <!-- Plans -->
+  <section id="plans" class="section">
     <div class="wrap">
       <h2>Plans</h2>
-      <p class="muted">Fair pricing. Clear value. 7-day refund.</p>
-
-      <div class="stack">
+      <p class="subhead">Fair pricing. Clear value. 7-day refund.</p>
+      <div class="grid cards plans">
         <article class="card plan" data-plan="BASIC">
           <h3>BASIC £9/mo</h3>
-          <ul>
-            <li>Starter hero & sections</li>
-            <li>Access Library</li>
+          <ul class="bullets">
+            <li>Starter templates</li>
+            <li>Library access</li>
             <li>Email support (48h)</li>
           </ul>
-          <div class="actions">
-            <a class="btn" data-choose="BASIC">Choose</a>
-            <a class="btn ghost" data-details='{"title":"BASIC","points":["Starter hero & sections","Access Library","Email support 48h","Cancel/upgrade anytime"]}'>Details</a>
+          <div class="row">
+            <a href="#" class="btn solid" data-choose="BASIC">Choose</a>
+            <a href="#" class="btn ghost" data-details='{"title":"BASIC","points":["Starter templates","Library access","Email 48h","Cancel anytime"]}'>Details</a>
           </div>
         </article>
-
         <article class="card plan" data-plan="SILVER">
           <h3>SILVER £29/mo</h3>
-          <ul>
+          <ul class="bullets">
             <li>Everything in Basic</li>
-            <li>Advanced effects & presets</li>
+            <li>Advanced effects</li>
             <li>Priority email (24h)</li>
           </ul>
-          <div class="actions">
-            <a class="btn" data-choose="SILVER">Choose</a>
-            <a class="btn ghost" data-details='{"title":"SILVER","points":["Everything in Basic","Advanced effects","Priority 24h","Quarterly tune-ups"]}'>Details</a>
+          <div class="row">
+            <a href="#" class="btn solid" data-choose="SILVER">Choose</a>
+            <a href="#" class="btn ghost" data-details='{"title":"SILVER","points":["Everything in Basic","Advanced effects","Priority email 24h"]}'>Details</a>
           </div>
         </article>
-
         <article class="card plan" data-plan="GOLD">
           <h3>GOLD £49/mo</h3>
-          <ul>
+          <ul class="bullets">
             <li>Full custom session</li>
-            <li>Admin toolkit & automations</li>
-            <li>1:1 onboarding (45 min)</li>
+            <li>Admin toolkit</li>
+            <li>1:1 onboarding</li>
           </ul>
-          <div class="actions">
-            <a class="btn" data-choose="GOLD">Choose</a>
-            <a class="btn ghost" data-details='{"title":"GOLD","points":["Monthly collab session","Admin toolkit","1:1 onboarding","Priority hotfix"]}'>Details</a>
+          <div class="row">
+            <a href="#" class="btn solid" data-choose="GOLD">Choose</a>
+            <a href="#" class="btn ghost" data-details='{"title":"GOLD","points":["Monthly collab","Admin toolkit","1:1 onboarding"]}'>Details</a>
           </div>
         </article>
-
         <article class="card plan" data-plan="DIAMOND">
           <h3>DIAMOND £99/mo</h3>
-          <ul>
-            <li>Custom pipelines & integrations</li>
+          <ul class="bullets">
+            <li>Custom pipelines</li>
             <li>Hands-on stack build</li>
             <li>Priority roadmap</li>
           </ul>
-          <div class="actions">
-            <a class="btn" data-choose="DIAMOND">Choose</a>
-            <a class="btn ghost" data-details='{"title":"DIAMOND","points":["Pipelines (Notion/Airtable/Zapier)","Hands-on stack","Priority roadmap","Quarterly strategy"]}'>Details</a>
+          <div class="row">
+            <a href="#" class="btn solid" data-choose="DIAMOND">Choose</a>
+            <a href="#" class="btn ghost" data-details='{"title":"DIAMOND","points":["Custom pipelines","Hands-on stack","Priority roadmap"]}'>Details</a>
           </div>
         </article>
       </div>
@@ -174,178 +161,74 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="section contact">
+  <section id="contact" class="section">
     <div class="wrap">
       <h2>Contact</h2>
-      <form class="card form" action="#" method="post" onsubmit="return false;">
-        <label>
-          <span>Your name</span>
-          <input type="text" placeholder="Jane Doe" required>
-        </label>
-        <label>
-          <span>Email</span>
-          <input type="email" placeholder="you@example.com" required>
-        </label>
-        <label class="span-2">
-          <span>Subject</span>
-          <input id="subject" type="text" placeholder="How can we help?">
-        </label>
-        <label class="span-2">
-          <span>Message</span>
-          <textarea rows="5" placeholder="Write your message..."></textarea>
-        </label>
-        <div class="actions span-2">
-          <button class="btn strong" type="submit">Send</button>
+      <form class="card form" onsubmit="event.preventDefault(); alert('Thanks — we’ll reply soon');">
+        <label>Name <input type="text" placeholder="Jane Doe"></label>
+        <label>Email <input type="email" placeholder="you@example.com"></label>
+        <label class="full">Message <textarea rows="4"></textarea></label>
+        <div class="row">
+          <button class="btn solid">Send</button>
         </div>
-        <p class="muted small span-2">
-          Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.
-        </p>
       </form>
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="site-foot">
     <div class="wrap">© 2025 THE GRID. All rights reserved.</div>
   </footer>
 
-  <!-- Overlay -->
-  <div id="ui-overlay" class="overlay hidden"></div>
-
-  <!-- Customize Sheet -->
-  <aside id="design-panel" class="sheet hidden" aria-label="Design Controls">
-    <div class="sheet-head">
+  <!-- Customize panel -->
+  <aside id="design-panel" class="sheet hidden" aria-hidden="true">
+    <header class="sheet-head">
       <h3>Design Controls</h3>
-      <button class="icon-close" data-close aria-label="Close">✕</button>
-    </div>
-
+      <button class="icon-close" data-close>×</button>
+    </header>
     <div class="sheet-body">
-      <!-- GROUP: Theme -->
-      <fieldset class="ctrl">
-        <legend>Theme preset</legend>
-        <div class="pills">
-          <button data-preset="gold">Gold</button>
-          <button data-preset="midnight">Midnight</button>
-          <button data-preset="emerald">Emerald</button>
-          <button data-preset="silver">Silver</button>
-        </div>
-      </fieldset>
-
-      <fieldset class="ctrl">
-        <label>Accent color
-          <input id="ctrl-accent" type="color" value="#f3c545">
-        </label>
-      </fieldset>
-
-      <!-- GROUP: Layout -->
-      <fieldset class="ctrl two">
-        <label>Font scale
-          <input id="ctrl-font" type="range" min="90" max="115" value="100">
-        </label>
-        <label>Container width (px)
-          <input id="ctrl-wrap" type="range" min="960" max="1240" value="1100">
-        </label>
-      </fieldset>
-
-      <fieldset class="ctrl two">
-        <label>Hero height (vh)
-          <input id="ctrl-hero" type="range" min="36" max="72" value="46">
-        </label>
-        <label>Header mode
-          <select id="ctrl-header">
-            <option value="glass">Glass</option>
-            <option value="solid">Solid</option>
-            <option value="floating">Floating</option>
-          </select>
-        </label>
-      </fieldset>
-
-      <!-- GROUP: Surfaces -->
-      <fieldset class="ctrl two">
-        <label>Card radius
-          <input id="ctrl-radius" type="range" min="8" max="28" value="18">
-        </label>
-        <label>Glow intensity
-          <input id="ctrl-glow" type="range" min="0" max="1" step="0.01" value=".35">
-        </label>
-      </fieldset>
-
-      <fieldset class="ctrl two">
-        <label>Border weight
-          <input id="ctrl-border" type="range" min="0" max="2" step=".25" value="1">
-        </label>
-        <label>Shadow depth
-          <input id="ctrl-shadow" type="range" min="0" max="60" step="2" value="40">
-        </label>
-      </fieldset>
-
-      <!-- GROUP: Background -->
-      <fieldset class="ctrl two">
-        <label>Background pattern
-          <input id="ctrl-bgpat" type="range" min="0" max="1" step=".05" value=".2">
-        </label>
-        <label>Grid gap
-          <input id="ctrl-gap" type="range" min="10" max="22" value="14">
-        </label>
-      </fieldset>
-
-      <!-- Save / Load -->
-      <fieldset class="ctrl">
-        <legend>Save & Restore</legend>
-        <div class="save-row">
-          <button id="save-json" type="button" class="btn ghost">Copy Save</button>
-          <button id="load-json" type="button" class="btn ghost">Paste & Apply</button>
-        </div>
-        <textarea id="save-area" rows="4" placeholder="Paste a Save blob here to apply…"></textarea>
-        <p class="muted small">Saves also persist locally. Pasting here applies instantly.</p>
-      </fieldset>
+      <label class="ctrl">Accent Color <input id="ctrl-accent" type="color" value="#f3c545"></label>
+      <label class="ctrl">Card Radius <input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
+      <label class="ctrl">Glow Intensity <input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
     </div>
-
-    <div class="sheet-foot">
-      <div class="foot-left">
-        <button id="panel-collapse" class="btn ghost">Collapse</button>
-        <button id="panel-reset" class="btn ghost">Reset</button>
-      </div>
-      <button data-close class="btn strong">Done</button>
-    </div>
+    <footer class="sheet-foot">
+      <button class="btn solid" data-close>Done</button>
+    </footer>
   </aside>
 
-  <!-- Generic Modal -->
-  <section id="details-modal" class="modal hidden" role="dialog" aria-modal="true">
+  <!-- Join modal -->
+  <div id="join-modal" class="modal hidden" aria-hidden="true">
     <div class="modal-card">
-      <div class="modal-head">
-        <h3 id="details-title">Membership & Billing</h3>
-        <button class="icon-close" data-close aria-label="Close">✕</button>
+      <header class="modal-head">
+        <h3>Membership</h3>
+        <button class="icon-close" data-close>×</button>
+      </header>
+      <div class="modal-body">
+        <p>Upgrade/downgrade anytime. Email support via <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>.</p>
       </div>
+      <footer class="modal-foot">
+        <a href="#plans" class="btn solid">See Plans</a>
+        <button class="btn ghost" data-close>Close</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Details modal -->
+  <div id="details-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
+      <header class="modal-head">
+        <h3 id="details-title">Plan Details</h3>
+        <button class="icon-close" data-close>×</button>
+      </header>
       <div class="modal-body">
         <ul id="details-list" class="bullets"></ul>
       </div>
-      <div class="modal-foot">
+      <footer class="modal-foot">
         <button class="btn ghost" data-close>Close</button>
-        <button id="details-choose" class="btn">Choose</button>
-      </div>
+        <button id="details-choose" class="btn solid">Choose</button>
+      </footer>
     </div>
-  </section>
-
-  <!-- Join Modal -->
-  <section id="join-modal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h3>Membership & Billing</h3>
-        <button class="icon-close" data-close aria-label="Close">✕</button>
-      </div>
-      <div class="modal-body">
-        <ul class="bullets">
-          <li>7-day refund, no lock-in</li>
-          <li>Upgrade/downgrade anytime</li>
-          <li>Email support from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a></li>
-        </ul>
-      </div>
-      <div class="modal-foot">
-        <button class="btn ghost" data-close>Close</button>
-        <a class="btn" href="#pricing">See Plans</a>
-      </div>
-    </div>
-  </section>
+  </div>
 
   <script src="assets/js/main.js"></script>
 </body>
