@@ -3,6 +3,7 @@
 .github/ISSUE_TEMPLATE/multi-file-change.yml
 .github/ISSUE_TEMPLATE/update-file.yml
 .github/workflows/apply.yml
+.github/workflows/assets-manifest.yml
 .github/workflows/build-file-inventory.yml
 .github/workflows/deploy-on-patch.yml
 .github/workflows/deploy.yml

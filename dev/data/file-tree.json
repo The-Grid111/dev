@@ -1,14 +1,15 @@
 {
-  "generatedAt": "2025-08-25T09:26:02.179Z",
+  "generatedAt": "2025-08-25T09:26:31.074Z",
   "branch": "main",
-  "commit": "747d64a",
-  "count": 62,
+  "commit": "3215920",
+  "count": 63,
   "files": [
     ".github/ISSUE_TEMPLATE/add-file.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
     ".github/ISSUE_TEMPLATE/multi-file-change.yml",
     ".github/ISSUE_TEMPLATE/update-file.yml",
     ".github/workflows/apply.yml",
+    ".github/workflows/assets-manifest.yml",
     ".github/workflows/build-file-inventory.yml",
     ".github/workflows/deploy-on-patch.yml",
     ".github/workflows/deploy.yml",
