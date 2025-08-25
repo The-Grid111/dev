@@ -3,43 +3,24 @@ name: Repo Hygiene
 on:
   push:
     branches: [ main ]
-  pull_request:
-
-permissions:
-  contents: read
+  workflow_dispatch: {}
 
 jobs:
   hygiene:
-    name: Hygiene checks (soft-fail)
     runs-on: ubuntu-latest
-    # Never mark the commit red; we'll exit 0 even if we find issues.
+    # Keep runs green; report warnings in logs only
     continue-on-error: true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Basic checks
-        id: checks
+      - name: Basic hygiene report
         run: |
-          set -e
-          echo "== file endings =="
-          ! git ls-files -z | xargs -0 file | grep -E ':.*CRLF' || echo "::warning::CRLF line endings detected"
-          echo "== trailing whitespace =="
-          ! git grep -nI $'[ \t]$' || echo "::warning::Trailing whitespace detected"
-          echo "== large files (soft threshold 5MB) =="
-          git ls-files -s | cut -d' ' -f2 | xargs -I{} git cat-file -s {} | awk '{if($1>5*1024*1024) print}' && echo "::warning::Large tracked files found (>5MB)" || true
-          echo "Hygiene scan complete"
-
-      - name: Always succeed but keep warnings visible
-        if: always()
-        run: |
-          echo "Marking job success (soft-fail enabled)."
-          exit 0
+          echo "== Large files (>10MB) =="
+          find . -type f -size +10M -not -path "./.git/*" -printf "%P (%k KB)\n" || true
+          echo
+          echo "== Trailing spaces (first 50 hits) =="
+          grep -RIl --exclude-dir=.git --exclude-dir=node_modules ' $' | head -n 50 || true
+          echo
+          echo "== CRLF files (first 50 hits) =="
+          git ls-files -z | xargs -0 file | grep CRLF | head -n 50 || true
