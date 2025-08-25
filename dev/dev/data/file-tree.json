@@ -125,7 +125,7 @@
   },
   {
     "path": "assets/data/update.json",
-    "bytes": 541
+    "bytes": 7315
   },
   {
     "path": "assets/data/updates.json",
@@ -289,7 +289,7 @@
   },
   {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 6191
+    "bytes": 6264
   },
   {
     "path": "dev/dev/data/file-tree.txt",
