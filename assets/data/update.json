@@ -1,49 +1,11 @@
 {
-  "update": "full-redo",
-  "target": "repository",
-  "actions": [
+  "branch": "main",
+  "ops": [
+    { "op": "mkdir", "path": ".github/workflows" },
     {
-      "task": "stabilize-build-inventory",
-      "details": {
-        "ensureManifestSync": true,
-        "validateJsonConsistency": true,
-        "allowArchiveFallback": true,
-        "stripEmptyRefs": true
-      }
-    },
-    {
-      "task": "sync-snapshot-inventory",
-      "details": {
-        "verifyAgainstFileTree": true,
-        "regenerateOnMismatch": true,
-        "archiveAllNewSnapshots": true
-      }
-    },
-    {
-      "task": "cleanup-temp",
-      "details": {
-        "paths": [
-          "dev/dev/*",
-          "patch_path.txt"
-        ],
-        "preserve": [
-          "dev/data/*",
-          "dev/archive/*"
-        ]
-      }
-    },
-    {
-      "task": "harden-workflows",
-      "details": {
-        "retryOnFailure": 2,
-        "gracefulExit": true,
-        "consistentOrdering": true
-      }
+      "op": "write",
+      "path": ".github/workflows/build-file-inventory.yml",
+      "content": "name: Build File Inventory\n\non:\n  push:\n    branches: [ main ]\n    paths-ignore:\n      - 'archive/**'\n      - 'dev/**/archive/**'\n      - '.github/**'\n      - '**/*.md'\n      - 'sitemap.xml'\n      - 'robots.txt'\n      - 'lychee.toml'\n  workflow_dispatch:\n\npermissions:\n  contents: write\n\njobs:\n  inventory:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n\n      - name: Generate file inventory\n        env:\n          INVENTORY_OUT_JSON: dev/data/file-tree.json\n          INVENTORY_OUT_TXT: dev/data/file-tree.txt\n          INVENTORY_METRICS:  dev/data/repo-metrics.json\n          INVENTORY_IGNORE:   'archive/**,dev/**/archive/**,.git/**,node_modules/**,.github/**'\n        run: |\n          node scripts/gen-file-inventory.mjs\n\n      - name: Commit inventory (if changed)\n        uses: stefanzweifel/git-auto-commit-action@v5\n        with:\n          commit_message: \"Build File Inventory\"\n          file_pattern: |\n            dev/data/file-tree.json\n            dev/data/file-tree.txt\n            dev/data/repo-metrics.json\n          commit_user_name: github-actions[bot]\n          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com\n          push_options: '--no-verify'\n"
     }
-  ],
-  "meta": {
-    "version": "2025-08-25.1",
-    "author": "Grid-AI",
-    "note": "Full redo to stabilise Build File Inventory, auto-sync snapshots, clean dev/dev duplicates, and enforce consistent workflow order."
-  }
+  ]
 }
