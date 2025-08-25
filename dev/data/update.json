@@ -1,1 +1,11 @@
-
+{
+  "version": "1.0",
+  "branch": "main",
+  "ops": [
+    { "op": "mkdir",  "path": "archive" },
+    { "op": "mkdir",  "path": "archives" },
+    { "op": "write",  "path": "archive/ping_dev_fixed.txt",   "content": "ping dev fixed\n" },
+    { "op": "write",  "path": "archives/ping_dev_fixed.txt",  "content": "ping dev fixed (plural)\n" },
+    { "op": "append", "path": "README.md", "content": "\n\n✅ updater wrote from dev/update.json (fixed)" }
+  ]
+}
