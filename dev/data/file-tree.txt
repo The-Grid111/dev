@@ -59,6 +59,7 @@ privacy.html
 robots.txt
 scripts/check-json.mjs
 scripts/gen-file-inventory.mjs
+scripts/verify-inventory.mjs
 sitemap.xml
 terms.html
 thegrid_verify_signature.js
