@@ -1,37 +1,30 @@
 name: Build File Inventory
-
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out
+      - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-      - name: Setup Node
+      - name: Use Node 20
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Generate inventory (json/txt/csv)
-        run: |
-          node dev/scripts/gen-file-inventory.mjs
+      - name: Generate file inventory
+        run: node dev/scripts/gen-file-inventory.mjs
 
-      - name: Commit changes (if any)
+      - name: Commit file inventory
         run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add dev/data/file-tree.json dev/data/file-tree.txt dev/data/file-tree.csv
-            git commit -m "chore: update file inventory"
-            git push
-          else
-            echo "No inventory changes."
-          fi
+          git config user.name "grid-bot"
+          git config user.email "grid-bot@users.noreply.github.com"
+          git add dev/data/file-tree.*
+          git commit -m "chore: update file inventory" || echo "No changes"
+          git push
