@@ -3,30 +3,39 @@ name: Build File Inventory
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: {}
-
-permissions:
-  contents: write   # <-- allows committing the generated files
+    paths-ignore:
+      - 'dev/dev/archive/**'
+      - 'dev/dev/data/file-tree.json'
+      - 'dev/dev/data/file-tree.txt'
+      - 'dev/dev/data/repo-metrics.json'
+      - 'dev/dev/state_packs/**'
 
 jobs:
-  build:
+  inventory:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Check out
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Generate file inventory
-        run: node scripts/gen-file-inventory.mjs
+        run: |
+          mkdir -p dev/dev/data
+          # Only inventory "real" project files, exclude generated telemetry
+          git ls-files \
+            ':(exclude)dev/dev/archive/**' \
+            ':(exclude)dev/dev/data/file-tree.json' \
+            ':(exclude)dev/dev/data/file-tree.txt' \
+            ':(exclude)dev/dev/data/repo-metrics.json' \
+            ':(exclude)dev/dev/state_packs/**' \
+          > dev/dev/data/file-tree.txt
+
+          # Convert to JSON
+          jq -R -s -c 'split("\n")[:-1]' dev/dev/data/file-tree.txt > dev/dev/data/file-tree.json
 
       - name: Commit inventory
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update file inventory [skip ci]"
-          file_pattern: dev/data/file-tree.*
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add dev/dev/data/file-tree.*
+          git commit -m "Update file inventory [skip ci]" || echo "No changes"
+          git push
