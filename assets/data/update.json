@@ -3,7 +3,7 @@
   "branch": "main",
   "ops": [
     { "op": "mkdir",  "path": "archive" },
-    { "op": "write",  "path": "archive/ping_2046.txt", "content": "ping 2046\n" },
-    { "op": "append", "path": "README.md", "content": "\n\n✅ updater ping 2046" }
+    { "op": "write",  "path": "archive/ping_dev_2055.txt", "content": "ping dev\n" },
+    { "op": "append", "path": "README.md", "content": "\n\n✅ updater wrote from dev/update.json" }
   ]
 }
