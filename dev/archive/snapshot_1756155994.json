@@ -1,0 +1,899 @@
+{
+  "generated_at": "2025-08-25T21:06:34.624Z",
+  "records": [
+    {
+      "path": ".nojekyll",
+      "type": "file",
+      "size": 1,
+      "hash": "01ba4719c80b",
+      "ext": "",
+      "commit": "9e608e8",
+      "date": "2025-08-15",
+      "ts": 1755261173
+    },
+    {
+      "path": "404.html",
+      "type": "file",
+      "size": 869,
+      "hash": "dcf1c0b689a9",
+      "ext": ".html",
+      "commit": "1420abf",
+      "date": "2025-08-25",
+      "ts": 1756108060
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 141,
+      "hash": "1ae84b72ee78",
+      "ext": ".md",
+      "commit": "016883d",
+      "date": "2025-08-25",
+      "ts": 1756150062
+    },
+    {
+      "path": "archive/",
+      "type": "dir"
+    },
+    {
+      "path": "archive/hello_v0.2.html",
+      "type": "file",
+      "size": 79,
+      "hash": "65710a6cd100",
+      "ext": ".html",
+      "commit": "016883d",
+      "date": "2025-08-25",
+      "ts": 1756150062
+    },
+    {
+      "path": "assets/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/config/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/config/stripe.json",
+      "type": "file",
+      "size": 248,
+      "hash": "92ea51f67b14",
+      "ext": ".json",
+      "commit": "97b24bd",
+      "date": "2025-08-25",
+      "ts": 1756117131
+    },
+    {
+      "path": "assets/css/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/css/modal.css",
+      "type": "file",
+      "size": 1918,
+      "hash": "cfe7acf062ee",
+      "ext": ".css",
+      "commit": "e06a9ca",
+      "date": "2025-08-22",
+      "ts": 1755892552
+    },
+    {
+      "path": "assets/css/site.css",
+      "type": "file",
+      "size": 2836,
+      "hash": "dd6bbfeb5ca5",
+      "ext": ".css",
+      "commit": "4fee312",
+      "date": "2025-08-25",
+      "ts": 1756103035
+    },
+    {
+      "path": "assets/css/styles.css",
+      "type": "file",
+      "size": 9436,
+      "hash": "412be95af7a6",
+      "ext": ".css",
+      "commit": "48dc004",
+      "date": "2025-08-24",
+      "ts": 1756037779
+    },
+    {
+      "path": "assets/data/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/data/language.json",
+      "type": "file",
+      "size": 1355,
+      "hash": "663ccf4caef9",
+      "ext": ".json",
+      "commit": "3fd54b4",
+      "date": "2025-08-25",
+      "ts": 1756107022
+    },
+    {
+      "path": "assets/data/learn.js",
+      "type": "file",
+      "size": 3440,
+      "hash": "8220671b9ab7",
+      "ext": ".js",
+      "commit": "86465e2",
+      "date": "2025-08-25",
+      "ts": 1756107300
+    },
+    {
+      "path": "assets/data/owner_core_save_v1.2.json",
+      "type": "file",
+      "size": 403,
+      "hash": "51afac43f1c9",
+      "ext": ".json",
+      "commit": "f3acea3",
+      "date": "2025-08-24",
+      "ts": 1756016549
+    },
+    {
+      "path": "assets/data/plans.json",
+      "type": "file",
+      "size": 1895,
+      "hash": "671df2fc16a4",
+      "ext": ".json",
+      "commit": "8cac417",
+      "date": "2025-08-24",
+      "ts": 1756016491
+    },
+    {
+      "path": "assets/data/services.json",
+      "type": "file",
+      "size": 840,
+      "hash": "7c29559dfbc8",
+      "ext": ".json",
+      "commit": "958172f",
+      "date": "2025-08-24",
+      "ts": 1756016520
+    },
+    {
+      "path": "assets/data/taxonomy.json",
+      "type": "file",
+      "size": 409,
+      "hash": "56c1cf1acc0a",
+      "ext": ".json",
+      "commit": "e20be18",
+      "date": "2025-08-24",
+      "ts": 1756019978
+    },
+    {
+      "path": "assets/data/update.json",
+      "type": "file",
+      "size": 541,
+      "hash": "3784d3fce280",
+      "ext": ".json",
+      "commit": "7fb5b43",
+      "date": "2025-08-25",
+      "ts": 1756154778
+    },
+    {
+      "path": "assets/data/updates.json",
+      "type": "file",
+      "size": 472,
+      "hash": "fb0dfd45e71d",
+      "ext": ".json",
+      "commit": "0d2824c",
+      "date": "2025-08-25",
+      "ts": 1756107082
+    },
+    {
+      "path": "assets/gc_spin.mp4",
+      "type": "file",
+      "size": 2438352,
+      "hash": "ccb4fcb55ec4",
+      "ext": ".mp4",
+      "commit": "3d9db77",
+      "date": "2025-08-15",
+      "ts": 1755268134
+    },
+    {
+      "path": "assets/images/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/images/favicon.svg",
+      "type": "file",
+      "size": 1075,
+      "hash": "238d380899d9",
+      "ext": ".svg",
+      "commit": "002ef0f",
+      "date": "2025-08-25",
+      "ts": 1756108359
+    },
+    {
+      "path": "assets/images/logo-grid-mark.svg",
+      "type": "file",
+      "size": 1289,
+      "hash": "98cf6dc2cf50",
+      "ext": ".svg",
+      "commit": "9c230c5",
+      "date": "2025-08-25",
+      "ts": 1756101691
+    },
+    {
+      "path": "assets/images/logo-grid-word-only.svg",
+      "type": "file",
+      "size": 581,
+      "hash": "1386fec0ae86",
+      "ext": ".svg",
+      "commit": "9c230c5",
+      "date": "2025-08-25",
+      "ts": 1756101691
+    },
+    {
+      "path": "assets/images/logo-grid-wordmark.svg",
+      "type": "file",
+      "size": 1939,
+      "hash": "c253157365d3",
+      "ext": ".svg",
+      "commit": "9c230c5",
+      "date": "2025-08-25",
+      "ts": 1756101691
+    },
+    {
+      "path": "assets/images/manifest.json",
+      "type": "file",
+      "size": 327,
+      "hash": "ac38c68549f1",
+      "ext": ".json",
+      "commit": "511162a",
+      "date": "2025-08-24",
+      "ts": 1756019816
+    },
+    {
+      "path": "assets/js/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/js/app.js",
+      "type": "file",
+      "size": 5017,
+      "hash": "c9fb4064ab91",
+      "ext": ".js",
+      "commit": "11a42f4",
+      "date": "2025-08-25",
+      "ts": 1756100673
+    },
+    {
+      "path": "assets/js/commerce.js",
+      "type": "file",
+      "size": 4349,
+      "hash": "5b145b646d37",
+      "ext": ".js",
+      "commit": "6f7fc58",
+      "date": "2025-08-24",
+      "ts": 1756057813
+    },
+    {
+      "path": "assets/js/confetti.js",
+      "type": "file",
+      "size": 1116,
+      "hash": "e9d0d5ac9a03",
+      "ext": ".js",
+      "commit": "2d5574b",
+      "date": "2025-08-20",
+      "ts": 1755674998
+    },
+    {
+      "path": "assets/js/effects.js",
+      "type": "file",
+      "size": 806,
+      "hash": "3d8e3a8c48fc",
+      "ext": ".js",
+      "commit": "becb948",
+      "date": "2025-08-20",
+      "ts": 1755677672
+    },
+    {
+      "path": "assets/js/entitlements.js",
+      "type": "file",
+      "size": 397,
+      "hash": "64e4511390c6",
+      "ext": ".js",
+      "commit": "a369d15",
+      "date": "2025-08-25",
+      "ts": 1756100906
+    },
+    {
+      "path": "assets/js/hotfix.js",
+      "type": "file",
+      "size": 2974,
+      "hash": "88f30624fac9",
+      "ext": ".js",
+      "commit": "a1d750a",
+      "date": "2025-08-24",
+      "ts": 1756019564
+    },
+    {
+      "path": "assets/js/main.js",
+      "type": "file",
+      "size": 6534,
+      "hash": "585fc1d4599e",
+      "ext": ".js",
+      "commit": "54a3df4",
+      "date": "2025-08-24",
+      "ts": 1756037858
+    },
+    {
+      "path": "assets/js/metrics.js",
+      "type": "file",
+      "size": 2853,
+      "hash": "b2bcca9726f1",
+      "ext": ".js",
+      "commit": "66610d2",
+      "date": "2025-08-24",
+      "ts": 1756013768
+    },
+    {
+      "path": "assets/js/save-merge.js",
+      "type": "file",
+      "size": 6477,
+      "hash": "bf0a35240e04",
+      "ext": ".js",
+      "commit": "6eed004",
+      "date": "2025-08-24",
+      "ts": 1756013659
+    },
+    {
+      "path": "assets/js/save.js",
+      "type": "file",
+      "size": 6600,
+      "hash": "222eac41227a",
+      "ext": ".js",
+      "commit": "1852de0",
+      "date": "2025-08-25",
+      "ts": 1756107186
+    },
+    {
+      "path": "assets/js/storage.js",
+      "type": "file",
+      "size": 1899,
+      "hash": "a0bd10a42a42",
+      "ext": ".js",
+      "commit": "5098c60",
+      "date": "2025-08-25",
+      "ts": 1756100832
+    },
+    {
+      "path": "assets/js/stripe.js",
+      "type": "file",
+      "size": 1773,
+      "hash": "0b3c2ba5c2b5",
+      "ext": ".js",
+      "commit": "d4b26bf",
+      "date": "2025-08-25",
+      "ts": 1756102765
+    },
+    {
+      "path": "assets/js/supabase.js",
+      "type": "file",
+      "size": 760,
+      "hash": "10e91f1da87b",
+      "ext": ".js",
+      "commit": "27833b9",
+      "date": "2025-08-25",
+      "ts": 1756100963
+    },
+    {
+      "path": "assets/js/thegrid_verify_signature.js",
+      "type": "file",
+      "size": 1259,
+      "hash": "fcec9e1b9a0e",
+      "ext": ".js",
+      "commit": "aea8a9e",
+      "date": "2025-08-20",
+      "ts": 1755649947
+    },
+    {
+      "path": "assets/js/trial-banner.js",
+      "type": "file",
+      "size": 973,
+      "hash": "a7745896fc1e",
+      "ext": ".js",
+      "commit": "4967bae",
+      "date": "2025-08-25",
+      "ts": 1756117165
+    },
+    {
+      "path": "assets/js/ui.js",
+      "type": "file",
+      "size": 1704,
+      "hash": "bb928e751a5a",
+      "ext": ".js",
+      "commit": "74e2794",
+      "date": "2025-08-25",
+      "ts": 1756102852
+    },
+    {
+      "path": "assets/manifest.json",
+      "type": "file",
+      "size": 2286,
+      "hash": "7ba2bb48d558",
+      "ext": ".json",
+      "commit": "2d304a7",
+      "date": "2025-08-25",
+      "ts": 1756117176
+    },
+    {
+      "path": "assets/videos/",
+      "type": "dir"
+    },
+    {
+      "path": "assets/videos/manifest.json",
+      "type": "file",
+      "size": 317,
+      "hash": "e0fd8699ce7b",
+      "ext": ".json",
+      "commit": "3bae943",
+      "date": "2025-08-24",
+      "ts": 1756019892
+    },
+    {
+      "path": "dev/",
+      "type": "dir"
+    },
+    {
+      "path": "dev/archive/",
+      "type": "dir"
+    },
+    {
+      "path": "dev/archive/snapshot_1756155441.json",
+      "type": "file",
+      "size": 18965,
+      "hash": "c0084cc581f5",
+      "ext": ".json",
+      "commit": "b3bfcae",
+      "date": "2025-08-25",
+      "ts": 1756155441
+    },
+    {
+      "path": "dev/archive/snapshot_1756155958.json",
+      "type": "file",
+      "size": 19228,
+      "hash": "01037f8619c5",
+      "ext": ".json",
+      "commit": "0eca591",
+      "date": "2025-08-25",
+      "ts": 1756155958
+    },
+    {
+      "path": "dev/data/",
+      "type": "dir"
+    },
+    {
+      "path": "dev/data/file-tree.json",
+      "type": "file",
+      "size": 13326,
+      "hash": "34af32c1f22b",
+      "ext": ".json",
+      "commit": "0eca591",
+      "date": "2025-08-25",
+      "ts": 1756155958
+    },
+    {
+      "path": "dev/data/file-tree.txt",
+      "type": "file",
+      "size": 4362,
+      "hash": "09156dbd083b",
+      "ext": ".txt",
+      "commit": "0eca591",
+      "date": "2025-08-25",
+      "ts": 1756155958
+    },
+    {
+      "path": "dev/data/repo-metrics.json",
+      "type": "file",
+      "size": 4056,
+      "hash": "54f58d99e91b",
+      "ext": ".json",
+      "commit": "0eca591",
+      "date": "2025-08-25",
+      "ts": 1756155958
+    },
+    {
+      "path": "dev/data/state_packs/",
+      "type": "dir"
+    },
+    {
+      "path": "dev/data/state_packs/state_pack_20250825_1310.json",
+      "type": "file",
+      "size": 1,
+      "hash": "01ba4719c80b",
+      "ext": ".json",
+      "commit": "56f85e8",
+      "date": "2025-08-25",
+      "ts": 1756144275
+    },
+    {
+      "path": "dev/data/update.json",
+      "type": "file",
+      "size": 454,
+      "hash": "3ecd78451b40",
+      "ext": ".json",
+      "commit": "3020300",
+      "date": "2025-08-25",
+      "ts": 1756152546
+    },
+    {
+      "path": "favicon.svg",
+      "type": "file",
+      "size": 1273,
+      "hash": "38830de2bdd7",
+      "ext": ".svg",
+      "commit": "40b24c0",
+      "date": "2025-08-25",
+      "ts": 1756101713
+    },
+    {
+      "path": "index.html",
+      "type": "file",
+      "size": 9797,
+      "hash": "52c73e010ac3",
+      "ext": ".html",
+      "commit": "c2faa5b",
+      "date": "2025-08-25",
+      "ts": 1756121689
+    },
+    {
+      "path": "lychee.toml",
+      "type": "file",
+      "size": 346,
+      "hash": "778bc3c0f70c",
+      "ext": ".toml",
+      "commit": "5a8f0c1",
+      "date": "2025-08-25",
+      "ts": 1756115218
+    },
+    {
+      "path": "patch_path.txt",
+      "type": "file",
+      "size": 10,
+      "hash": "0eb547304658",
+      "ext": ".txt",
+      "commit": "eb86040",
+      "date": "2025-08-20",
+      "ts": 1755707133
+    },
+    {
+      "path": "privacy.html",
+      "type": "file",
+      "size": 838,
+      "hash": "73347a6af1d7",
+      "ext": ".html",
+      "commit": "0685900",
+      "date": "2025-08-20",
+      "ts": 1755719681
+    },
+    {
+      "path": "robots.txt",
+      "type": "file",
+      "size": 79,
+      "hash": "6a0d354935c8",
+      "ext": ".txt",
+      "commit": "cd0128b",
+      "date": "2025-08-25",
+      "ts": 1756107962
+    },
+    {
+      "path": "scripts/",
+      "type": "dir"
+    },
+    {
+      "path": "scripts/apply-update.mjs",
+      "type": "file",
+      "size": 5010,
+      "hash": "9ae765ffefa1",
+      "ext": ".mjs",
+      "commit": "0dd43d1",
+      "date": "2025-08-25",
+      "ts": 1756152969
+    },
+    {
+      "path": "scripts/bump-asset-manifest.mjs",
+      "type": "file",
+      "size": 1189,
+      "hash": "9e88b5ce24f4",
+      "ext": ".mjs",
+      "commit": "8429816",
+      "date": "2025-08-25",
+      "ts": 1756115376
+    },
+    {
+      "path": "scripts/check-json.mjs",
+      "type": "file",
+      "size": 522,
+      "hash": "56b1045bd861",
+      "ext": ".mjs",
+      "commit": "7e48f11",
+      "date": "2025-08-25",
+      "ts": 1756114025
+    },
+    {
+      "path": "scripts/gen-file-inventory.mjs",
+      "type": "file",
+      "size": 879,
+      "hash": "0c843442f2b3",
+      "ext": ".mjs",
+      "commit": "f581f66",
+      "date": "2025-08-25",
+      "ts": 1756112767
+    },
+    {
+      "path": "scripts/repo-snapshot.mjs",
+      "type": "file",
+      "size": 5378,
+      "hash": "e7ba765aa852",
+      "ext": ".mjs",
+      "commit": "9e17d9a",
+      "date": "2025-08-25",
+      "ts": 1756155947
+    },
+    {
+      "path": "scripts/svg-sanity.mjs",
+      "type": "file",
+      "size": 1324,
+      "hash": "a8e6055029e6",
+      "ext": ".mjs",
+      "commit": "c88ad83",
+      "date": "2025-08-25",
+      "ts": 1756115293
+    },
+    {
+      "path": "scripts/verify-inventory.mjs",
+      "type": "file",
+      "size": 1325,
+      "hash": "dc882e919cb8",
+      "ext": ".mjs",
+      "commit": "7c88aad",
+      "date": "2025-08-25",
+      "ts": 1756114052
+    },
+    {
+      "path": "sitemap.xml",
+      "type": "file",
+      "size": 507,
+      "hash": "e610f9c3ef45",
+      "ext": ".xml",
+      "commit": "82607eb",
+      "date": "2025-08-25",
+      "ts": 1756107993
+    },
+    {
+      "path": "terms.html",
+      "type": "file",
+      "size": 841,
+      "hash": "0be8097de2f3",
+      "ext": ".html",
+      "commit": "d155bc5",
+      "date": "2025-08-20",
+      "ts": 1755719753
+    },
+    {
+      "path": "thegrid_verify_signature.js",
+      "type": "file",
+      "size": 441,
+      "hash": "1f38cadee840",
+      "ext": ".js",
+      "commit": "846ccca",
+      "date": "2025-08-15",
+      "ts": 1755258788
+    }
+  ],
+  "metrics": {
+    "generated_at": "2025-08-25T21:06:34.623Z",
+    "totals": {
+      "files": 63,
+      "dirs": 13,
+      "bytes": 2606691
+    },
+    "by_extension": {
+      ".mp4": {
+        "count": 1,
+        "bytes": 2438352
+      },
+      ".json": {
+        "count": 17,
+        "bytes": 65123
+      },
+      ".js": {
+        "count": 18,
+        "bytes": 49372
+      },
+      ".mjs": {
+        "count": 7,
+        "bytes": 15627
+      },
+      ".css": {
+        "count": 3,
+        "bytes": 14190
+      },
+      ".html": {
+        "count": 5,
+        "bytes": 12424
+      },
+      ".svg": {
+        "count": 5,
+        "bytes": 6157
+      },
+      ".txt": {
+        "count": 3,
+        "bytes": 4451
+      },
+      ".xml": {
+        "count": 1,
+        "bytes": 507
+      },
+      ".toml": {
+        "count": 1,
+        "bytes": 346
+      },
+      ".md": {
+        "count": 1,
+        "bytes": 141
+      },
+      "": {
+        "count": 1,
+        "bytes": 1
+      }
+    },
+    "largest": [
+      {
+        "path": "assets/gc_spin.mp4",
+        "size": 2438352,
+        "hash": "ccb4fcb55ec4"
+      },
+      {
+        "path": "dev/archive/snapshot_1756155958.json",
+        "size": 19228,
+        "hash": "01037f8619c5"
+      },
+      {
+        "path": "dev/archive/snapshot_1756155441.json",
+        "size": 18965,
+        "hash": "c0084cc581f5"
+      },
+      {
+        "path": "dev/data/file-tree.json",
+        "size": 13326,
+        "hash": "34af32c1f22b"
+      },
+      {
+        "path": "index.html",
+        "size": 9797,
+        "hash": "52c73e010ac3"
+      },
+      {
+        "path": "assets/css/styles.css",
+        "size": 9436,
+        "hash": "412be95af7a6"
+      },
+      {
+        "path": "assets/js/save.js",
+        "size": 6600,
+        "hash": "222eac41227a"
+      },
+      {
+        "path": "assets/js/main.js",
+        "size": 6534,
+        "hash": "585fc1d4599e"
+      },
+      {
+        "path": "assets/js/save-merge.js",
+        "size": 6477,
+        "hash": "bf0a35240e04"
+      },
+      {
+        "path": "scripts/repo-snapshot.mjs",
+        "size": 5378,
+        "hash": "e7ba765aa852"
+      },
+      {
+        "path": "assets/js/app.js",
+        "size": 5017,
+        "hash": "c9fb4064ab91"
+      },
+      {
+        "path": "scripts/apply-update.mjs",
+        "size": 5010,
+        "hash": "9ae765ffefa1"
+      },
+      {
+        "path": "dev/data/file-tree.txt",
+        "size": 4362,
+        "hash": "09156dbd083b"
+      },
+      {
+        "path": "assets/js/commerce.js",
+        "size": 4349,
+        "hash": "5b145b646d37"
+      },
+      {
+        "path": "dev/data/repo-metrics.json",
+        "size": 4056,
+        "hash": "54f58d99e91b"
+      }
+    ],
+    "most_recent": [
+      {
+        "path": "dev/archive/snapshot_1756155958.json",
+        "commit": "0eca591",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "dev/data/file-tree.json",
+        "commit": "0eca591",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "dev/data/file-tree.txt",
+        "commit": "0eca591",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "dev/data/repo-metrics.json",
+        "commit": "0eca591",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "scripts/repo-snapshot.mjs",
+        "commit": "9e17d9a",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "dev/archive/snapshot_1756155441.json",
+        "commit": "b3bfcae",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "assets/data/update.json",
+        "commit": "7fb5b43",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "scripts/apply-update.mjs",
+        "commit": "0dd43d1",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "dev/data/update.json",
+        "commit": "3020300",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "README.md",
+        "commit": "016883d",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "archive/hello_v0.2.html",
+        "commit": "016883d",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "dev/data/state_packs/state_pack_20250825_1310.json",
+        "commit": "56f85e8",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "index.html",
+        "commit": "c2faa5b",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "assets/manifest.json",
+        "commit": "2d304a7",
+        "date": "2025-08-25"
+      },
+      {
+        "path": "assets/js/trial-banner.js",
+        "commit": "4967bae",
+        "date": "2025-08-25"
+      }
+    ]
+  }
+}

@@ -450,38 +450,48 @@
     "ts": 1756155441
   },
   {
+    "path": "dev/archive/snapshot_1756155958.json",
+    "type": "file",
+    "size": 19228,
+    "hash": "01037f8619c5",
+    "ext": ".json",
+    "commit": "0eca591",
+    "date": "2025-08-25",
+    "ts": 1756155958
+  },
+  {
     "path": "dev/data/",
     "type": "dir"
   },
   {
     "path": "dev/data/file-tree.json",
     "type": "file",
-    "size": 13106,
-    "hash": "5b01c3b967a5",
+    "size": 13326,
+    "hash": "34af32c1f22b",
     "ext": ".json",
-    "commit": "b3bfcae",
+    "commit": "0eca591",
     "date": "2025-08-25",
-    "ts": 1756155441
+    "ts": 1756155958
   },
   {
     "path": "dev/data/file-tree.txt",
     "type": "file",
-    "size": 4280,
-    "hash": "8e451c7942ed",
+    "size": 4362,
+    "hash": "09156dbd083b",
     "ext": ".txt",
-    "commit": "b3bfcae",
+    "commit": "0eca591",
     "date": "2025-08-25",
-    "ts": 1756155441
+    "ts": 1756155958
   },
   {
     "path": "dev/data/repo-metrics.json",
     "type": "file",
-    "size": 4033,
-    "hash": "8cfff02ea28d",
+    "size": 4056,
+    "hash": "54f58d99e91b",
     "ext": ".json",
-    "commit": "b3bfcae",
+    "commit": "0eca591",
     "date": "2025-08-25",
-    "ts": 1756155441
+    "ts": 1756155958
   },
   {
     "path": "dev/data/state_packs/",

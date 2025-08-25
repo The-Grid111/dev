@@ -1,22 +1,22 @@
 {
-  "generated_at": "2025-08-25T21:05:58.801Z",
+  "generated_at": "2025-08-25T21:06:34.623Z",
   "totals": {
-    "files": 62,
+    "files": 63,
     "dirs": 13,
-    "bytes": 2587138
+    "bytes": 2606691
   },
   "by_extension": {
     ".mp4": {
       "count": 1,
       "bytes": 2438352
     },
+    ".json": {
+      "count": 17,
+      "bytes": 65123
+    },
     ".js": {
       "count": 18,
       "bytes": 49372
-    },
-    ".json": {
-      "count": 16,
-      "bytes": 45652
     },
     ".mjs": {
       "count": 7,
@@ -36,7 +36,7 @@
     },
     ".txt": {
       "count": 3,
-      "bytes": 4369
+      "bytes": 4451
     },
     ".xml": {
       "count": 1,
@@ -62,14 +62,19 @@
       "hash": "ccb4fcb55ec4"
     },
     {
+      "path": "dev/archive/snapshot_1756155958.json",
+      "size": 19228,
+      "hash": "01037f8619c5"
+    },
+    {
       "path": "dev/archive/snapshot_1756155441.json",
       "size": 18965,
       "hash": "c0084cc581f5"
     },
     {
       "path": "dev/data/file-tree.json",
-      "size": 13106,
-      "hash": "5b01c3b967a5"
+      "size": 13326,
+      "hash": "34af32c1f22b"
     },
     {
       "path": "index.html",
@@ -112,27 +117,42 @@
       "hash": "9ae765ffefa1"
     },
     {
+      "path": "dev/data/file-tree.txt",
+      "size": 4362,
+      "hash": "09156dbd083b"
+    },
+    {
       "path": "assets/js/commerce.js",
       "size": 4349,
       "hash": "5b145b646d37"
     },
     {
-      "path": "dev/data/file-tree.txt",
-      "size": 4280,
-      "hash": "8e451c7942ed"
-    },
-    {
       "path": "dev/data/repo-metrics.json",
-      "size": 4033,
-      "hash": "8cfff02ea28d"
-    },
-    {
-      "path": "assets/data/learn.js",
-      "size": 3440,
-      "hash": "8220671b9ab7"
+      "size": 4056,
+      "hash": "54f58d99e91b"
     }
   ],
   "most_recent": [
+    {
+      "path": "dev/archive/snapshot_1756155958.json",
+      "commit": "0eca591",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/file-tree.json",
+      "commit": "0eca591",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/file-tree.txt",
+      "commit": "0eca591",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/repo-metrics.json",
+      "commit": "0eca591",
+      "date": "2025-08-25"
+    },
     {
       "path": "scripts/repo-snapshot.mjs",
       "commit": "9e17d9a",
@@ -140,21 +160,6 @@
     },
     {
       "path": "dev/archive/snapshot_1756155441.json",
-      "commit": "b3bfcae",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "dev/data/file-tree.json",
-      "commit": "b3bfcae",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "dev/data/file-tree.txt",
-      "commit": "b3bfcae",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "dev/data/repo-metrics.json",
       "commit": "b3bfcae",
       "date": "2025-08-25"
     },
@@ -201,11 +206,6 @@
     {
       "path": "assets/js/trial-banner.js",
       "commit": "4967bae",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "assets/config/stripe.json",
-      "commit": "97b24bd",
       "date": "2025-08-25"
     }
   ]
