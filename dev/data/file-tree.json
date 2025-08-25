@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2025-08-25T09:09:14.025Z",
+  "generatedAt": "2025-08-25T09:09:31.728Z",
   "branch": "main",
-  "commit": "ce4ce3c",
+  "commit": "fce9266",
   "count": 59,
   "files": [
     ".github/ISSUE_TEMPLATE/add-file.yml",
@@ -52,7 +52,7 @@
     "assets/js/ui.js",
     "assets/manifest.json",
     "assets/videos/manifest.json",
-    "data/file-tree.json",
+    "dev/data/file-tree.json",
     "dev/data/file-tree.txt",
     "favicon.svg",
     "index.html",
