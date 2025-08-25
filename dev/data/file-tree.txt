@@ -17,6 +17,7 @@
 .nojekyll
 404.html
 README.md
+archive/hello_v0.2.html
 assets/config/stripe.json
 assets/css/modal.css
 assets/css/site.css
