@@ -1,24 +1,15 @@
 {
   "branch": "main",
   "ops": [
-    { "op": "mkdir", "path": "dev/archive" },
     {
-      "op": "write",
-      "path": "dev/archive/snapshot_1756159001.json",
-      "content": "{\n  \"version\": 1,\n  \"note\": \"stabilize snapshot (primary)\",\n  \"source\": \"assets/data/update.json\",\n  \"created_at\": \"2025-08-25T22:56:00Z\"\n}\n"
+      "op": "run",
+      "path": "scripts/gen-file-inventory.mjs",
+      "args": []
     },
-
-    { "op": "mkdir", "path": "dev/dev/archive" },
-    {
-      "op": "write",
-      "path": "dev/dev/archive/snapshot_1756159002.json",
-      "content": "{\n  \"version\": 1,\n  \"note\": \"stabilize snapshot (mirror)\",\n  \"source\": \"assets/data/update.json\",\n  \"created_at\": \"2025-08-25T22:56:00Z\"\n}\n"
-    },
-
     {
       "op": "append",
       "path": "README.md",
-      "content": "\n\n✅ Snapshot refresh: wrote dev/archive/snapshot_1756159001.json and dev/dev/archive/snapshot_1756159002.json via updater.\n"
+      "content": "\n\n📦 Inventory sync complete at 2025-08-25T23:00Z."
     }
   ]
 }
