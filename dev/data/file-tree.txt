@@ -12,6 +12,7 @@
 .github/workflows/patch.yml
 .github/workflows/repo-hygiene.yml
 .github/workflows/svg-sanity.yml
+.github/workflows/verify-inventory.yml
 .nojekyll
 404.html
 README.md
