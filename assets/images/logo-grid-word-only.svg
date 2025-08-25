@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="120" viewBox="0 0 520 120" role="img" aria-label="THE GRID">
+  <defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#FFE08A"/>
+  <stop offset="50%" stop-color="#FFD24D"/>
+  <stop offset="100%" stop-color="#CBA135"/>
+</linearGradient></defs>
+  <g transform="translate(0, 81.60000000000001)">
+    <text font-family="Inter, ui-sans-serif, system-ui, -apple-system" font-weight="800" font-size="66" fill="#111">
+      THE <tspan fill="url(#gold)">GRID</tspan>
+    </text>
+  </g>
+</svg>

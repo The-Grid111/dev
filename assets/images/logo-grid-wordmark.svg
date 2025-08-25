@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="160" viewBox="0 0 640 160" role="img" aria-label="THE GRID wordmark">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#FFE08A"/>
+  <stop offset="50%" stop-color="#FFD24D"/>
+  <stop offset="100%" stop-color="#CBA135"/>
+</linearGradient>
+  </defs>
+  <g transform="translate(8, 16.0)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="The Grid logo mark">
+<defs>
+<linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#FFE08A"/>
+  <stop offset="50%" stop-color="#FFD24D"/>
+  <stop offset="100%" stop-color="#CBA135"/>
+</linearGradient>
+<filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+             <feGaussianBlur stdDeviation="2.5" result="blur"/>
+             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+           </filter>
+</defs>
+<circle cx="64.0" cy="64.0" r="63.0" fill="url(#gold)" stroke="#8a6b22" stroke-width="1"/>
+<rect x="24.0" y="8.0" width="1.5" height="112.0" fill="#1b1405" opacity="0.55"/>
+<rect x="8.0" y="24.0" width="112.0" height="1.5" fill="#1b1405" opacity="0.55"/>
+<rect x="40.0" y="8.0" width="1.5" height="112.0" fill="#1b1405" opacity="0.55"/>
+<rect x="8.0" y="40.0" width="112.0" height="1.5" fill="#1b1405" opacity="0.55"/>
+<rect x="56.0" y="8.0" width="1.5" height="112.0" fill="#1b1405" opacity="0.55"/>
+<rect x="8.0" y="56.0" width="112.0" height="1.5" fill="#1b1405" opacity="0.55"/>
+<path d="M0 12.8 L12.8 0 L128 115.2 L115.2 128 Z" fill="#ffffff" opacity="0.06" filter="url(#softGlow)"/>
+</svg>
+  </g>
+  <g transform="translate(152, 108.80000000000001)">
+    <text font-family="Inter, ui-sans-serif, system-ui, -apple-system" font-weight="800" font-size="60" fill="#111">
+      THE <tspan fill="url(#gold)">GRID</tspan>
+    </text>
+  </g>
+</svg>
