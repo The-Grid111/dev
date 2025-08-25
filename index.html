@@ -1,61 +1,255 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Grid</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Primary Favicon (SVG) -->
-  <link rel="icon" href="/dev/assets/images/favicon.svg" type="image/svg+xml">
+  <title>THE GRID — Launch experiences that never regress</title>
+  <meta name="description" content="Self-serve, adaptive, quantifiable creative system. Paste a Save → instant learning. Diamond unlocks watermark-free, commercial-safe exports." />
 
-  <!-- PNG Fallbacks -->
-  <link rel="icon" href="/dev/assets/images/favicon.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="/dev/assets/images/favicon-64.png" sizes="64x64" type="image/png">
+  <!-- Icons/Manifest -->
+  <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/assets/manifest.json" />
+  <meta name="theme-color" content="#0b0b0d" />
 
-  <!-- Apple Touch Icon (iOS/Android homescreen) -->
-  <link rel="apple-touch-icon" href="/dev/assets/images/icon-180.png" sizes="180x180">
+  <!-- Social -->
+  <meta property="og:title" content="THE GRID" />
+  <meta property="og:description" content="Launch experiences that never regress." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://the-grid111.github.io/" />
+  <meta property="og:image" content="https://the-grid111.github.io/assets/images/logo-grid-wordmark.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Launch experiences that never regress. Self-serve, adaptive, quantifiable." />
-
+  <!-- CSS -->
+  <link rel="preload" href="/assets/css/site.css" as="style" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/modal.css" />
+
+  <!-- Basic preloads -->
+  <link rel="preload" href="/assets/js/main.js" as="script" />
 </head>
-<body>
-  <header>
-    <nav>
-      <div class="logo">
-        <img src="/dev/assets/images/favicon.svg" alt="The Grid Logo" />
-        <span>THE GRID</span>
+
+<body class="theme-dark">
+  <!-- ===== Header / Nav ===== -->
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="/" aria-label="THE GRID home">
+        <img src="/assets/images/logo-grid-wordmark.svg" alt="THE GRID" height="28" />
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Toggle menu</span>
+      </button>
+
+      <div id="nav-menu" class="nav-menu">
+        <a href="#library">Library</a>
+        <a href="#stacks">Stacks</a>
+        <a href="#community">Community</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
       </div>
-      <ul>
-        <li><a href="#library">Library</a></li>
-        <li><a href="#stacks">Stacks</a></li>
-        <li><a href="#community">Community</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+
+      <div class="nav-ctas">
+        <a class="btn ghost" href="#customize">Customize</a>
+        <a class="btn" href="#pricing" id="join-now">Join Now</a>
+      </div>
     </nav>
+
+    <!-- Trial banner: auto-shown when Stripe URL is available -->
+    <section id="trial-banner" class="banner banner-trial container" hidden>
+      <div class="banner-text">
+        <strong>Launch Trial:</strong> One-time Diamond access to try watermark-free exports &amp; private drops.
+      </div>
+      <div class="banner-actions">
+        <button class="btn" data-action="start-trial">Start Trial</button>
+        <button class="btn ghost" data-dismiss="trial-banner">Dismiss</button>
+      </div>
+    </section>
   </header>
 
-  <main>
-    <section id="hero">
-      <h1>Launch experiences that never regress.</h1>
+  <main id="top">
+    <!-- ===== Hero ===== -->
+    <section class="hero container">
+      <div class="hero-copy">
+        <h1>Launch experiences that never regress.</h1>
+        <p>
+          Self-serve, adaptive, quantifiable. Paste a Save → instant learning. Plans unlock features; no 1:1 required.
+          <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
+        </p>
+        <div class="hero-ctas">
+          <a class="btn ghost" href="#library">Open Library</a>
+          <a class="btn" href="#pricing">See Pricing</a>
+          <button class="btn outline" data-action="start-trial">Start Trial</button>
+        </div>
+      </div>
+
+      <!-- Keep background plain; replace placeholder with your mp4 if desired -->
+      <figure class="hero-media plain">
+        <!-- Example placeholder card; replace with <video> if you like -->
+        <div class="hero-placeholder">Hero Placeholder • Replace with your top niche video</div>
+      </figure>
+    </section>
+
+    <!-- ===== Library ===== -->
+    <section id="library" class="section container">
+      <h2>Library</h2>
       <p>
-        Self-serve, adaptive, quantifiable. Paste a Save → instant learning.
-        Plans unlock features; no 1:1 required. <strong>Diamond</strong> unlocks
-        watermark-free, commercial-safe exports.
+        Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.
+        Lower tiers export with a subtle GRID watermark.
+        <strong>Diamond exports are watermark-free.</strong>
       </p>
-      <div class="buttons">
-        <a class="btn" href="#library">Open Library</a>
-        <a class="btn" href="#pricing">See Pricing</a>
+
+      <div class="cards cards-library">
+        <!-- These four cards mirror your tiers; populate from assets/videos/manifest.json if you later template it -->
+        <article class="card tier-basic"><h3>Samples &amp; getting started</h3><p class="badge">Basic</p></article>
+        <article class="card tier-silver"><h3>Guides &amp; improvements</h3><p class="badge">Silver</p></article>
+        <article class="card tier-gold"><h3>Full pro library</h3><p class="badge">Gold</p></article>
+        <article class="card tier-diamond"><h3>Private packs &amp; early drops</h3><p class="badge">Diamond</p></article>
       </div>
     </section>
 
-    <!-- Existing sections go here -->
+    <!-- ===== Stacks & Setups ===== -->
+    <section id="stacks" class="section container">
+      <h2>Stacks &amp; Setups</h2>
+      <p>Battle-tested combos. Start free, scale when ready.</p>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Creator Starter</h3>
+          <p>CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export watermarked unless Diamond.</p>
+        </article>
+        <article class="card">
+          <h3>Commerce Visuals</h3>
+          <p>Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p>
+        </article>
+        <article class="card">
+          <h3>Educator Essentials</h3>
+          <p>Canva slides + Descript edits + Loom screen. Clip library grows from your Saves.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Community ===== -->
+    <section id="community" class="section container">
+      <h2>Community</h2>
+      <p>High-signal showcases and reusable methods. Admin curated so it never gets noisy.</p>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Liquid Pour Cinematic</h3>
+          <p>Reference fusion + glide timing. Export watermark applies unless Diamond.</p>
+        </article>
+        <article class="card">
+          <h3>Gold Pulse Logo</h3>
+          <p>CapCut spectral pulse + metallic accent. Private pack on Diamond.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Why The Grid ===== -->
+    <section class="section container">
+      <h2>Why The Grid</h2>
+      <div class="cards">
+        <article class="card"><h3>Anti-Regression Core</h3><p>Changes are tracked &amp; scored. Wins are promoted; misses are rolled back. Saves persist.</p></article>
+        <article class="card"><h3>Quantifiable UX</h3><p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable modes.</p></article>
+        <article class="card"><h3>Self-Serve</h3><p>Clear plans, no calls required. Learn by doing with guides and templates. Upgrade when you need more.</p></article>
+      </div>
+    </section>
+
+    <!-- ===== Pricing ===== -->
+    <section id="pricing" class="section container">
+      <h2>Pricing</h2>
+      <p>Fair pricing. Clear value. 7-day refund. <em>No 1:1 calls included in any plan.</em></p>
+
+      <div class="pricing-grid">
+        <article class="plan">
+          <h3>BASIC £9/mo</h3>
+          <ul>
+            <li>Starter templates &amp; effects</li>
+            <li>Theme presets &amp; Save imports</li>
+            <li>Sample Library (watermarked)</li>
+            <li>Email support (48h)</li>
+          </ul>
+          <div class="plan-ctas">
+            <a class="btn" href="#" aria-disabled="true">Choose</a>
+            <button class="btn ghost" data-action="start-trial">Trial</button>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h3>SILVER £29/mo</h3>
+          <ul>
+            <li>Everything in Basic</li>
+            <li>Advanced effects &amp; metallic presets</li>
+            <li>Priority email (24h)</li>
+            <li>Quarterly tune-ups</li>
+          </ul>
+          <div class="plan-ctas">
+            <a class="btn" href="#" aria-disabled="true">Choose</a>
+            <button class="btn ghost" data-action="start-trial">Trial</button>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h3>GOLD £49/mo</h3>
+          <ul>
+            <li>Everything in Silver</li>
+            <li>Admin toolkit &amp; automations</li>
+            <li>Pro Library &amp; recipes</li>
+            <li>Priority hotfix</li>
+          </ul>
+          <div class="plan-ctas">
+            <a class="btn" href="#" aria-disabled="true">Choose</a>
+            <button class="btn ghost" data-action="start-trial">Trial</button>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h3>DIAMOND £99/mo</h3>
+          <ul>
+            <li>Private Library drops, custom pipelines</li>
+            <li>Roadmap priority, fast turnaround</li>
+            <li><strong>Watermark-free exports + commercial rights</strong></li>
+          </ul>
+          <div class="plan-ctas">
+            <a class="btn" href="#" aria-disabled="true">Choose</a>
+            <button class="btn ghost" data-action="start-trial">Trial</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section id="contact" class="section container">
+      <h2>Contact</h2>
+      <form class="contact-form" action="https://formspree.io/f/xyyydemo" method="POST">
+        <div class="row">
+          <input name="name" placeholder="Your name" required />
+          <input name="email" type="email" placeholder="Email" required />
+        </div>
+        <div class="row">
+          <input name="subject" placeholder="Subject" required />
+        </div>
+        <div class="row">
+          <textarea name="message" rows="5" placeholder="Message" required></textarea>
+        </div>
+        <button class="btn" type="submit">Send</button>
+      </form>
+      <p class="small">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
+    </section>
   </main>
 
-  <footer>
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer container">
     <p>© 2025 THE GRID. All rights reserved.</p>
   </footer>
+
+  <noscript><div class="container notice">This site works best with JavaScript enabled.</div></noscript>
+
+  <!-- JS (defer keeps render quick) -->
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/ui.js" defer></script>
+  <script src="/assets/js/trial-banner.js" defer></script>
 </body>
 </html>
