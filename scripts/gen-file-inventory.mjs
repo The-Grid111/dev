@@ -1,43 +1,24 @@
-import fs from "fs";
-import path from "path";
+// scripts/gen-file-inventory.mjs
+import { execSync } from "node:child_process";
+import { mkdirSync, writeFileSync } from "node:fs";
 
-const ROOT = process.cwd();
-const OUTDIR = path.join(ROOT, "dev", "data");
+mkdirSync("dev/data", { recursive: true });
 
-// folders to ignore in the listing (safe defaults)
-const IGNORE = new Set([".git", "node_modules", ".github", ".vscode", ".DS_Store"]);
+// List all tracked files (stable, ignores .git itself)
+const list = execSync("git ls-files", { encoding: "utf8" })
+  .split("\n")
+  .filter(Boolean);
 
-function walk(dir) {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  let files = [];
-  for (const e of entries) {
-    if (IGNORE.has(e.name)) continue;
-    const p = path.join(dir, e.name);
-    const rel = path.relative(ROOT, p).replace(/\\/g, "/");
-    if (e.isDirectory()) {
-      files = files.concat(walk(p));
-    } else {
-      const size = fs.statSync(p).size;
-      files.push({ path: rel, bytes: size });
-    }
-  }
-  return files.sort((a, b) => a.path.localeCompare(b.path));
-}
+// Save TXT (easy to paste to me)
+writeFileSync("dev/data/file-tree.txt", list.join("\n") + "\n");
 
-function asText(list) {
-  return list.map(f => `${f.path} (${f.bytes} B)`).join("\n") + "\n";
-}
-
-fs.mkdirSync(OUTDIR, { recursive: true });
-const files = walk(ROOT);
-
-fs.writeFileSync(
-  path.join(OUTDIR, "file-tree.json"),
-  JSON.stringify({ generatedAt: new Date().toISOString(), files }, null, 2)
-);
-fs.writeFileSync(
-  path.join(OUTDIR, "file-tree.txt"),
-  asText(files)
-);
-
-console.log(`✅ File inventory written: ${files.length} files → dev/data/file-tree.{json,txt}`);
+// Save JSON (machine-friendly)
+const payload = {
+  generatedAt: new Date().toISOString(),
+  branch: execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf8" }).trim(),
+  commit: execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim(),
+  count: list.length,
+  files: list,
+};
+writeFileSync("dev/data/file-tree.json", JSON.stringify(payload, null, 2));
+console.log(`Wrote dev/data/file-tree.{txt,json} with ${list.length} items`);
