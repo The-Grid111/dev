@@ -3,10 +3,18 @@ name: Repo Snapshot
 on:
   push:
     branches: [ "main" ]
+  schedule:
+    # Weekly snapshot every Sunday at 03:00 UTC
+    - cron: "0 3 * * 0"
   workflow_dispatch:
 
 permissions:
   contents: write
+
+# Avoid overlapping runs if a push lands during the scheduled job
+concurrency:
+  group: repo-snapshot
+  cancel-in-progress: true
 
 jobs:
   snapshot:
