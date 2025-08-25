@@ -1,137 +1,24 @@
 {
   "branch": "main",
   "ops": [
-    { "op": "mkdir", "path": "dev" },
-    { "op": "mkdir", "path": "dev/data" },
     { "op": "mkdir", "path": "dev/archive" },
-    { "op": "mkdir", "path": "dev/dev" },
-    { "op": "mkdir", "path": "dev/dev/data" },
+    {
+      "op": "write",
+      "path": "dev/archive/snapshot_1756159001.json",
+      "content": "{\n  \"version\": 1,\n  \"note\": \"stabilize snapshot (primary)\",\n  \"source\": \"assets/data/update.json\",\n  \"created_at\": \"2025-08-25T22:56:00Z\"\n}\n"
+    },
+
     { "op": "mkdir", "path": "dev/dev/archive" },
-
     {
       "op": "write",
-      "path": "dev/data/file-tree.txt",
-      "content": ".github/ISSUE_TEMPLATE/add-file.yml\n.github/ISSUE_TEMPLATE/config.yml\n.github/ISSUE_TEMPLATE/multi-file-change.yml\n.github/ISSUE_TEMPLATE/update-file.yml\n.github/workflows/apply-update.yml\n.github/workflows/apply.yml\n.github/workflows/assets-manifest.yml\n.github/workflows/build-file-inventory.yml\n.github/workflows/deploy-on-patch.yml\n.github/workflows/deploy.yml\n.github/workflows/issue-patches.yml\n.github/workflows/link-check.yml\n.github/workflows/patch.yml\n.github/workflows/repo-hygiene.yml\n.github/workflows/repo-snapshot.yml\n.github/workflows/svg-sanity.yml\n.github/workflows/verify-inventory.yml\n.nojekyll\n404.html\nREADME.md\narchive/hello_v0.2.html\nassets/config/stripe.json\nassets/css/modal.css\nassets/css/site.css\nassets/css/styles.css\nassets/data/language.json\nassets/data/learn.js\nassets/data/owner_core_save_v1.2.json\nassets/data/plans.json\nassets/data/services.json\nassets/data/taxonomy.json\nassets/data/update.json\nassets/data/updates.json\nassets/gc_spin.mp4\nassets/images/favicon.svg\nassets/images/logo-grid-mark.svg\nassets/images/logo-grid-word-only.svg\nassets/images/logo-grid-wordmark.svg\nassets/images/manifest.json\nassets/js/app.js\nassets/js/commerce.js\nassets/js/confetti.js\nassets/js/effects.js\nassets/js/entitlements.js\nassets/js/hotfix.js\nassets/js/main.js\nassets/js/metrics.js\nassets/js/save-merge.js\nassets/js/save.js\nassets/js/storage.js\nassets/js/stripe.js\nassets/js/supabase.js\nassets/js/thegrid_verify_signature.js\nassets/js/trial-banner.js\nassets/js/ui.js\nassets/manifest.json\nassets/videos/manifest.json\ndev/archive/snapshot_1756155441.json\ndev/archive/snapshot_1756155958.json\ndev/archive/snapshot_1756155994.json\ndev/archive/snapshot_1756156186.json\ndev/data/file-tree.json\ndev/data/file-tree.txt\ndev/data/repo-metrics.json\ndev/data/state_packs/state_pack_20250825_1310.json\ndev/data/update.json\ndev/dev/archive/snapshot_1756156501.json\ndev/dev/archive/snapshot_1756156683.json\ndev/dev/archive/snapshot_1756156927.json\ndev/dev/archive/snapshot_1756157741.json\ndev/dev/archive/snapshot_1756157951.json\ndev/dev/archive/snapshot_1756157985.json\ndev/dev/data/file-tree.json\ndev/dev/data/file-tree.txt\ndev/dev/data/repo-metrics.json\nfavicon.svg\nindex.html\nlychee.toml\npatch_path.txt\nprivacy.html\nrobots.txt\nscripts/apply-update.mjs\nscripts/bump-asset-manifest.mjs\nscripts/check-json.mjs\nscripts/gen-file-inventory.mjs\nscripts/repo-snapshot.mjs\nscripts/svg-sanity.mjs\nscripts/verify-inventory.mjs\nsitemap.xml\nterms.html\nthegrid_verify_signature.js\n"
+      "path": "dev/dev/archive/snapshot_1756159002.json",
+      "content": "{\n  \"version\": 1,\n  \"note\": \"stabilize snapshot (mirror)\",\n  \"source\": \"assets/data/update.json\",\n  \"created_at\": \"2025-08-25T22:56:00Z\"\n}\n"
     },
-
-    {
-      "op": "write",
-      "path": "dev/data/file-tree.json",
-      "content": [
-        ".github/ISSUE_TEMPLATE/add-file.yml",
-        ".github/ISSUE_TEMPLATE/config.yml",
-        ".github/ISSUE_TEMPLATE/multi-file-change.yml",
-        ".github/ISSUE_TEMPLATE/update-file.yml",
-        ".github/workflows/apply-update.yml",
-        ".github/workflows/apply.yml",
-        ".github/workflows/assets-manifest.yml",
-        ".github/workflows/build-file-inventory.yml",
-        ".github/workflows/deploy-on-patch.yml",
-        ".github/workflows/deploy.yml",
-        ".github/workflows/issue-patches.yml",
-        ".github/workflows/link-check.yml",
-        ".github/workflows/patch.yml",
-        ".github/workflows/repo-hygiene.yml",
-        ".github/workflows/repo-snapshot.yml",
-        ".github/workflows/svg-sanity.yml",
-        ".github/workflows/verify-inventory.yml",
-        ".nojekyll",
-        "404.html",
-        "README.md",
-        "archive/hello_v0.2.html",
-        "assets/config/stripe.json",
-        "assets/css/modal.css",
-        "assets/css/site.css",
-        "assets/css/styles.css",
-        "assets/data/language.json",
-        "assets/data/learn.js",
-        "assets/data/owner_core_save_v1.2.json",
-        "assets/data/plans.json",
-        "assets/data/services.json",
-        "assets/data/taxonomy.json",
-        "assets/data/update.json",
-        "assets/data/updates.json",
-        "assets/gc_spin.mp4",
-        "assets/images/favicon.svg",
-        "assets/images/logo-grid-mark.svg",
-        "assets/images/logo-grid-word-only.svg",
-        "assets/images/logo-grid-wordmark.svg",
-        "assets/images/manifest.json",
-        "assets/js/app.js",
-        "assets/js/commerce.js",
-        "assets/js/confetti.js",
-        "assets/js/effects.js",
-        "assets/js/entitlements.js",
-        "assets/js/hotfix.js",
-        "assets/js/main.js",
-        "assets/js/metrics.js",
-        "assets/js/save-merge.js",
-        "assets/js/save.js",
-        "assets/js/storage.js",
-        "assets/js/stripe.js",
-        "assets/js/supabase.js",
-        "assets/js/thegrid_verify_signature.js",
-        "assets/js/trial-banner.js",
-        "assets/js/ui.js",
-        "assets/manifest.json",
-        "assets/videos/manifest.json",
-        "dev/archive/snapshot_1756155441.json",
-        "dev/archive/snapshot_1756155958.json",
-        "dev/archive/snapshot_1756155994.json",
-        "dev/archive/snapshot_1756156186.json",
-        "dev/data/file-tree.json",
-        "dev/data/file-tree.txt",
-        "dev/data/repo-metrics.json",
-        "dev/data/state_packs/state_pack_20250825_1310.json",
-        "dev/data/update.json",
-        "dev/dev/archive/snapshot_1756156501.json",
-        "dev/dev/archive/snapshot_1756156683.json",
-        "dev/dev/archive/snapshot_1756156927.json",
-        "dev/dev/archive/snapshot_1756157741.json",
-        "dev/dev/archive/snapshot_1756157951.json",
-        "dev/dev/archive/snapshot_1756157985.json",
-        "dev/dev/data/file-tree.json",
-        "dev/dev/data/file-tree.txt",
-        "dev/dev/data/repo-metrics.json",
-        "favicon.svg",
-        "index.html",
-        "lychee.toml",
-        "patch_path.txt",
-        "privacy.html",
-        "robots.txt",
-        "scripts/apply-update.mjs",
-        "scripts/bump-asset-manifest.mjs",
-        "scripts/check-json.mjs",
-        "scripts/gen-file-inventory.mjs",
-        "scripts/repo-snapshot.mjs",
-        "scripts/svg-sanity.mjs",
-        "scripts/verify-inventory.mjs",
-        "sitemap.xml",
-        "terms.html",
-        "thegrid_verify_signature.js"
-      ]
-    },
-
-    {
-      "op": "write",
-      "path": "dev/data/repo-metrics.json",
-      "content": {
-        "generated_at": "<AUTO>",
-        "notes": "baseline metrics file so workflows have something to read",
-        "totals": {
-          "paths_listed": 96
-        }
-      }
-    },
-
-    { "op": "write", "path": "dev/dev/data/file-tree.txt", "content_from": "dev/data/file-tree.txt" },
-    { "op": "write", "path": "dev/dev/data/file-tree.json", "content_from": "dev/data/file-tree.json" },
-    { "op": "write", "path": "dev/dev/data/repo-metrics.json", "content_from": "dev/data/repo-metrics.json" },
 
     {
       "op": "append",
       "path": "README.md",
-      "content": "\n\n✅ Baseline repo tree and metrics refreshed via assets/data/update.json (auto).\n"
+      "content": "\n\n✅ Snapshot refresh: wrote dev/archive/snapshot_1756159001.json and dev/dev/archive/snapshot_1756159002.json via updater.\n"
     }
   ]
 }
