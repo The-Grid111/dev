@@ -3,6 +3,7 @@ name: Repo Snapshot
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -25,10 +26,14 @@ jobs:
         run: node scripts/repo-snapshot.mjs
 
       - name: Commit snapshot
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update repo snapshot"
-          branch: main
-          file_pattern: |
-            dev/data/file-tree.*
-            dev/data/repo-metrics.json
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add dev/data/file-tree.* dev/data/repo-metrics.json
+            git commit -m "chore: update repo snapshot [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
