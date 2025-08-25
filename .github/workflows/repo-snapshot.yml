@@ -28,10 +28,10 @@ jobs:
       - name: Commit snapshot
         shell: bash
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet; then
-            git add dev/data/file-tree.* dev/data/repo-metrics.json
+          git add dev/data/file-tree.* dev/data/repo-metrics.json dev/archive/snapshot_*.json
+          if ! git diff --cached --quiet; then
             git commit -m "chore: update repo snapshot [skip ci]"
             git push
           else
