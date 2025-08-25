@@ -3,13 +3,13 @@
   "ops": [
     {
       "op": "run",
-      "path": "scripts/gen-file-inventory.mjs",
-      "args": []
+      "path": "scripts/repo-snapshot.mjs",
+      "args": ["--force-clean"]
     },
     {
       "op": "append",
       "path": "README.md",
-      "content": "\n\n📦 Inventory sync complete at 2025-08-25T23:00Z."
+      "content": "\n\n🗂 Snapshot sync complete (force clean) — $(date -u +%Y-%m-%dT%H:%MZ)."
     }
   ]
 }
