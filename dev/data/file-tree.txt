@@ -57,6 +57,7 @@ index.html
 patch_path.txt
 privacy.html
 robots.txt
+scripts/check-json.mjs
 scripts/gen-file-inventory.mjs
 sitemap.xml
 terms.html
