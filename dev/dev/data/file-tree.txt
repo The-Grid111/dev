@@ -64,6 +64,14 @@ dev/data/file-tree.txt
 dev/data/repo-metrics.json
 dev/data/state_packs/state_pack_20250825_1310.json
 dev/data/update.json
+dev/dev/archive/snapshot_1756156501.json
+dev/dev/archive/snapshot_1756156683.json
+dev/dev/archive/snapshot_1756156927.json
+dev/dev/archive/snapshot_1756157741.json
+dev/dev/archive/snapshot_1756157951.json
+dev/dev/archive/snapshot_1756157985.json
+dev/dev/data/file-tree.json
+dev/dev/data/file-tree.txt
 favicon.svg
 index.html
 lychee.toml
