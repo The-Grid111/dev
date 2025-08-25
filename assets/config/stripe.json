@@ -1,8 +1,9 @@
 {
-  "mode": "links",
-  "trial": "https://buy.stripe.com/eVqcN64qVbq2fIhfsd3cc00",
-  "basic": "https://buy.stripe.com/fZu9AU8HbeCe53D0xj3cc01",
-  "silver": "https://buy.stripe.com/dRm28scXr65Icw593P3cc02",
-  "gold": "https://buy.stripe.com/8x26oI8HbeCe0Nn1Bn3cc03",
-  "diamond": "https://buy.stripe.com/9B6bJ2g9Ddya53Dcg13cc04"
+  "trialCheckoutUrl": "https://buy.stripe.com/eVqcN64qVbq2fIhfsd3cc00",
+  "plans": {
+    "basic":   { "price": "£9/mo"  },
+    "silver":  { "price": "£29/mo" },
+    "gold":    { "price": "£49/mo" },
+    "diamond": { "price": "£99/mo" }
+  }
 }
