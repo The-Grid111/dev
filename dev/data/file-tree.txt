@@ -8,6 +8,7 @@
 .github/workflows/deploy.yml
 .github/workflows/issue-patches.yml
 .github/workflows/patch.yml
+.github/workflows/repo-hygiene.yml
 .nojekyll
 404.html
 README.md
