@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2025-08-25T17:51:25.760Z",
+  "generatedAt": "2025-08-25T18:18:32.615Z",
   "branch": "main",
-  "commit": "56f85e8",
-  "count": 70,
+  "commit": "85bc714",
+  "count": 71,
   "files": [
     ".github/ISSUE_TEMPLATE/add-file.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
@@ -32,6 +32,7 @@
     "assets/data/plans.json",
     "assets/data/services.json",
     "assets/data/taxonomy.json",
+    "assets/data/update.json",
     "assets/data/updates.json",
     "assets/gc_spin.mp4",
     "assets/images/favicon.svg",
