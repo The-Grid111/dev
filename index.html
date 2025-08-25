@@ -3,220 +3,173 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>THE GRID</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>THE GRID — Anti-Regression Creative System</title>
+
   <link rel="stylesheet" href="/dev/assets/css/site.css">
+  <link rel="stylesheet" href="/dev/assets/css/bg.css">
+  <link rel="icon" href="/dev/assets/images/favicon.svg" type="image/svg+xml">
 </head>
-<body>
+<body class="site-root">
+  <!-- Live Background -->
+  <div class="bg-wrap"><canvas id="bg" class="bg-canvas" aria-hidden="true"></canvas></div>
+
   <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <div class="brand">THE&nbsp;GRID</div>
+      <div class="brand">
+        <img src="/dev/assets/images/logo.svg" alt="THE GRID" class="brand-logo">
+        <span>THE GRID</span>
+      </div>
       <nav class="nav-links">
         <a href="#library">Library</a>
         <a href="#stacks">Stacks</a>
         <a href="#community">Community</a>
+        <a href="#trial-log">Trials</a>
         <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-        <a class="btn" href="#customize">Customize</a>
-        <a class="btn gold" data-scroll="pricing" href="#pricing">Join&nbsp;Now</a>
+        <a class="btn" data-open="panel-design" href="#customize">Customize</a>
+        <a class="btn gold" data-scroll="pricing" href="#pricing">Join Now</a>
       </nav>
     </div>
   </header>
 
-  <!-- Sticky Trial Banner -->
+  <!-- Trial Banner -->
   <div class="container">
-    <div class="trial-banner card">
-      <div style="display:flex;gap:14px;align-items:center">
-        <strong>Launch Trial:</strong>
-        <span class="small">One-time Diamond access to try watermark-free exports & private drops.</span>
-        <div class="cta">
-          <a class="btn gold js-trial" href="#">Start&nbsp;Trial</a>
-          <button class="trial-dismiss" type="button">Dismiss</button>
+    <div id="trial-banner" class="trial-banner card">
+      <div class="banner-inner">
+        <div class="banner-copy">
+          <strong id="trial-headline">Launch Trial — One-time Diamond access</strong>
+          <span id="trial-copy" class="small muted">Try watermark-free exports & private drops. Limited time.</span>
+        </div>
+        <div class="banner-actions">
+          <button class="btn gold js-checkout" data-plan="trial">Start Trial</button>
+          <button class="trial-dismiss js-trial-dismiss" type="button">Dismiss</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Hero -->
-  <section class="container hero">
-    <h1>Launch experiences that never regress.</h1>
-    <p class="lead">
-      Self-serve, adaptive, quantifiable. Paste a Save → instant learning.
-      Plans unlock features; no 1:1 required. <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
-    </p>
+  <section class="container hero" id="hero" data-track="hero">
+    <h1>Launch visuals that never regress.</h1>
+    <p class="lead">Adaptive, quantifiable, self-learning. Paste a Save → instant improvements. No 1:1 calls required.</p>
     <div class="actions">
       <a class="btn gold" href="#library">Open Library</a>
-      <a class="btn" data-scroll="pricing" href="#pricing">See Pricing</a>
+      <a class="btn" href="#pricing" data-scroll="pricing">See Pricing</a>
     </div>
-    <div class="card" style="margin-top:18px">Hero Placeholder • Replace with your top niche video</div>
+    <div class="card hero-media"><div class="media-placeholder">Hero Placeholder • Drop your morphing logo video here</div></div>
   </section>
 
   <!-- Library -->
-  <section id="library" class="container section">
+  <section id="library" class="container section" data-track="library">
     <h2>Library</h2>
-    <p class="small">Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.
-      Lower tiers export with a subtle GRID watermark. <strong>Diamond exports are watermark-free.</strong></p>
+    <p class="small">Put assets in <code>assets/images/</code> & <code>assets/videos/</code>, describe in their <code>manifest.json</code>. Diamond = watermark-free exports.</p>
     <div class="grid grid-2" style="margin-top:14px">
-      <div class="card"><div style="height:180px;background:repeating-linear-gradient(45deg,#1e2429,#1e2429 10px,#222a30 10px,#222a30 20px);border-radius:12px;margin-bottom:10px"></div><div class="badge">Basic</div> Samples & getting started</div>
-      <div class="card"><div style="height:180px;background:repeating-linear-gradient(45deg,#1e2429,#1e2429 10px,#222a30 10px,#222a30 20px);border-radius:12px;margin-bottom:10px"></div><div class="badge">Silver</div> Guides & improvements</div>
-      <div class="card"><div style="height:180px;background:repeating-linear-gradient(45deg,#1e2429,#1e2429 10px,#222a30 10px,#222a30 20px);border-radius:12px;margin-bottom:10px"></div><div class="badge">Gold</div> Full pro library</div>
-      <div class="card"><div style="height:180px;background:repeating-linear-gradient(45deg,#1e2429,#1e2429 10px,#222a30 10px,#222a30 20px);border-radius:12px;margin-bottom:10px"></div><div class="badge">Diamond</div> Private packs & early drops</div>
+      <div class="card"><h3>Logos & Intros</h3><p>Brand marks, morph loops, hero intros.</p></div>
+      <div class="card"><h3>Reels & Shorts</h3><p>Niche packs, captions, CTA templates.</p></div>
+      <div class="card"><h3>Scenes</h3><p>Reference-driven scenes for Runway.</p></div>
+      <div class="card"><h3>Audio</h3><p>VO presets (ElevenLabs), SFX beds.</p></div>
     </div>
   </section>
 
-  <!-- Stacks & Community -->
-  <section id="stacks" class="container section">
+  <!-- Stacks -->
+  <section id="stacks" class="container section" data-track="stacks">
     <h2>Stacks & Setups</h2>
     <p class="small">Battle-tested combos. Start free, scale when ready.</p>
     <div class="grid grid-3" style="margin-top:14px">
-      <div class="card"><h3>Creator Starter</h3><p>CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export watermarked unless Diamond.</p></div>
-      <div class="card"><h3>Commerce Visuals</h3><p>Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p></div>
-      <div class="card"><h3>Educator Essentials</h3><p>Canva slides + Descript edits + Loom screen. Clip library grows from your Saves.</p></div>
+      <div class="card"><h3>Creator Starter</h3><p>CapCut + Runway + ElevenLabs. Hook → fills → captions.</p></div>
+      <div class="card"><h3>Commerce Visuals</h3><p>Runway swaps + PS polish + PDP A/B.</p></div>
+      <div class="card"><h3>Educator Essentials</h3><p>Canva slides + Descript + Loom.</p></div>
     </div>
   </section>
 
-  <section id="community" class="container section">
+  <!-- Community -->
+  <section id="community" class="container section" data-track="community">
     <h2>Community</h2>
-    <p class="small">High-signal showcases and reusable methods. Admin curated so it never gets noisy.</p>
+    <p class="small">High-signal showcases and reusable methods. Admin-curated.</p>
     <div class="grid grid-2" style="margin-top:14px">
-      <div class="card"><h3>Liquid Pour Cinematic</h3><p>Reference fusion + glide timing. Export watermark applies unless Diamond.</p></div>
-      <div class="card"><h3>Gold Pulse Logo</h3><p>CapCut spectral pulse + metallic accent. Private pack on Diamond.</p></div>
+      <div class="card"><h3>Liquid Pour Cinematic</h3><p>Reference fusion + glide timing.</p></div>
+      <div class="card"><h3>Gold Pulse Logo</h3><p>CapCut spectral pulse + metallic accent.</p></div>
     </div>
   </section>
 
-  <!-- Why -->
-  <section class="container section">
-    <h2>Why The Grid</h2>
-    <div class="grid grid-3" style="margin-top:14px">
-      <div class="card"><h3>Anti-Regression Core</h3><p>Changes are tracked & scored. Wins are promoted; misses are rolled back. Saves persist.</p></div>
-      <div class="card"><h3>Quantifiable UX</h3><p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable modes.</p></div>
-      <div class="card"><h3>Self-Serve</h3><p>Clear plans, no calls required. Learn by doing with guides and templates. Upgrade when you need more.</p></div>
-    </div>
+  <!-- Trial Log (learning from screenshots/settings) -->
+  <section id="trial-log" class="container section" data-track="trial-log">
+    <h2>Trial Log</h2>
+    <p class="small">Save screenshots/settings from trials to help the system learn continuously. Local-only by default. Export to back up or share with admin.</p>
+    <form id="trial-form" class="card" style="display:grid;gap:12px">
+      <div class="grid grid-3">
+        <label>App<input name="app" placeholder="Runway / CapCut / ElevenLabs"/></label>
+        <label>Model<input name="model" placeholder="Gen-4 / Gen-4 Turbo"/></label>
+        <label>Seed<input name="seed" type="number" placeholder="2025"/></label>
+      </div>
+      <div class="grid grid-3">
+        <label>Duration (s)<input name="duration" type="number" placeholder="5"/></label>
+        <label>Format Forcer<input name="format_forcer" placeholder="tiktok_9x16"/></label>
+        <label> </label>
+      </div>
+      <label>Prompt<textarea name="prompt" rows="3" placeholder="Paste the exact prompt you used…"></textarea></label>
+      <label>Notes<textarea name="notes" rows="2" placeholder="What worked / didn’t? Seeds to try next?"></textarea></label>
+      <div class="actions">
+        <button class="btn gold" type="submit">Save Trial</button>
+        <button id="save-export" class="btn" type="button">Export Save</button>
+        <button id="save-import" class="btn" type="button">Import Save</button>
+        <input id="save-import-file" type="file" accept="application/json" hidden>
+      </div>
+    </form>
+    <ul id="trial-list" class="card" style="margin-top:12px; list-style:none; padding:16px; display:grid; gap:10px"></ul>
   </section>
 
   <!-- Pricing -->
-  <section id="pricing" class="container section pricing">
+  <section id="pricing" class="container section" data-track="pricing">
     <h2>Pricing</h2>
     <p class="small">Fair pricing. Clear value. 7-day refund. <strong>No 1:1 calls included in any plan.</strong></p>
-
     <div class="grid grid-3" style="margin-top:14px">
       <div class="card plan">
         <h3>BASIC £9/mo</h3>
-        <ul>
-          <li>Starter templates & effects</li>
-          <li>Theme presets & Save imports</li>
-          <li>Sample Library (watermarked)</li>
-          <li>Email support (48h)</li>
-        </ul>
-        <div class="row">
-          <a class="btn gold js-choose" data-plan="basic" href="#">Choose</a>
-          <a class="btn js-details" data-plan="basic" href="#">Details</a>
-        </div>
+        <ul><li>Starter templates & effects</li><li>Theme presets & Save imports</li><li>Sample Library (watermarked)</li><li>Email support (48h)</li></ul>
+        <div class="row"><a class="btn gold js-checkout" data-plan="basic" href="#">Choose</a><a class="btn js-details" data-plan="basic" href="#">Details</a></div>
       </div>
-
       <div class="card plan">
         <h3>SILVER £29/mo</h3>
-        <ul>
-          <li>Everything in Basic</li>
-          <li>Advanced effects & metallic presets</li>
-          <li>Priority email (24h)</li>
-          <li>Quarterly tune-ups</li>
-        </ul>
-        <div class="row">
-          <a class="btn gold js-choose" data-plan="silver" href="#">Choose</a>
-          <a class="btn js-details" data-plan="silver" href="#">Details</a>
-        </div>
+        <ul><li>Everything in Basic</li><li>Advanced effects & metallic presets</li><li>Priority email (24h)</li><li>Quarterly tune-ups</li></ul>
+        <div class="row"><a class="btn gold js-checkout" data-plan="silver" href="#">Choose</a><a class="btn js-details" data-plan="silver" href="#">Details</a></div>
       </div>
-
       <div class="card plan">
         <h3>GOLD £49/mo</h3>
-        <ul>
-          <li>Everything in Silver</li>
-          <li>Admin toolkit & automations</li>
-          <li>Pro Library & recipes</li>
-          <li>Priority hotfix</li>
-        </ul>
-        <div class="row">
-          <a class="btn gold js-choose" data-plan="gold" href="#">Choose</a>
-          <a class="btn js-details" data-plan="gold" href="#">Details</a>
-        </div>
+        <ul><li>Everything in Silver</li><li>Admin toolkit & automations</li><li>Pro Library & recipes</li><li>Priority hotfix</li></ul>
+        <div class="row"><a class="btn gold js-checkout" data-plan="gold" href="#">Choose</a><a class="btn js-details" data-plan="gold" href="#">Details</a></div>
       </div>
     </div>
-
     <div class="card plan" style="margin-top:16px">
       <h3>DIAMOND £99/mo</h3>
-      <ul>
-        <li>Private Library drops, custom pipelines</li>
-        <li>Roadmap priority, fast turnaround</li>
-        <li><strong>Watermark-free exports + commercial rights</strong></li>
-      </ul>
-      <div class="row">
-        <a class="btn gold js-choose" data-plan="diamond" href="#">Choose</a>
-        <a class="btn js-details" data-plan="diamond" href="#">Details</a>
-      </div>
+      <ul><li>Private Library drops, custom pipelines</li><li>Roadmap priority, fast turnaround</li><li><strong>Watermark-free exports + commercial rights</strong></li></ul>
+      <div class="row"><a class="btn gold js-checkout" data-plan="diamond" href="#">Choose</a><a class="btn js-details" data-plan="diamond" href="#">Details</a></div>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact" class="container section">
-    <h2>Contact</h2>
-    <div class="card">
-      <form onsubmit="event.preventDefault(); alert('Thanks — we will reply from gridcoresystems@gmail.com');">
-        <div class="grid grid-2">
-          <input placeholder="Your name" style="padding:12px;border-radius:10px;border:1px solid var(--border);background:#0f1418;color:var(--text)"/>
-          <input placeholder="Email" style="padding:12px;border-radius:10px;border:1px solid var(--border);background:#0f1418;color:var(--text)"/>
-        </div>
-        <div class="grid grid-2" style="margin-top:10px">
-          <input placeholder="Subject" style="padding:12px;border-radius:10px;border:1px solid var(--border);background:#0f1418;color:var(--text)"/>
-          <input placeholder="Message" style="padding:12px;border-radius:10px;border:1px solid var(--border);background:#0f1418;color:var(--text)"/>
-        </div>
-        <div style="margin-top:12px"><button class="btn gold" type="submit">Send</button></div>
-        <p class="small" style="margin-top:8px">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
-      </form>
+  <!-- Customize Panel -->
+  <aside id="panel-design" class="sheet hidden" aria-hidden="true" role="dialog">
+    <header class="sheet-head"><h3>Design Controls</h3><button class="icon-close" data-close>×</button></header>
+    <div class="sheet-body">
+      <label class="ctrl"><span>Accent color</span><input id="ctrl-accent" type="color" value="#d8b15a"></label>
+      <label class="ctrl"><span>Card radius</span><input id="ctrl-radius" type="range" min="0" max="28" value="18"></label>
+      <label class="ctrl"><span>Glow</span><input id="ctrl-glow" type="range" min="0" max="1" step="0.05" value="0.35"></label>
+      <label class="ctrl"><span>Theme</span>
+        <select id="ctrl-theme"><option value="dark" selected>Dark</option><option value="light">Light</option></select>
+      </label>
+      <label class="ctrl"><span>Learning (on-device)</span><input id="ctrl-learn" type="checkbox" checked></label>
+      <label class="ctrl"><span>Auto-save</span><input id="ctrl-autosave" type="checkbox" checked></label>
     </div>
-  </section>
+    <footer class="sheet-foot"><button class="btn" data-close>Done</button></footer>
+  </aside>
 
-  <footer class="footer">
-    <div class="container small">© 2025 THE GRID. All rights reserved.</div>
-  </footer>
-
-  <!-- Plan Detail Modals -->
-  <dialog id="modal-basic" class="plan-modal">
-    <div class="head"><strong>BASIC</strong><a href="#" class="x">×</a></div>
-    <div class="inner">
-      Starter hero & sections. Theme presets & Save import. Samples in Library. Email support within 48h.
-      <div style="margin-top:14px"><a class="btn gold js-choose" data-plan="basic" href="#">Continue to Checkout</a>
-        <a class="btn close" href="#">Close</a></div>
-    </div>
-  </dialog>
-  <dialog id="modal-silver" class="plan-modal">
-    <div class="head"><strong>SILVER</strong><a href="#" class="x">×</a></div>
-    <div class="inner">
-      Everything in Basic + advanced effects & metallic presets. Pro ‘Stacks & Setups’ guides. Priority email (24h). Quarterly tune-ups.
-      <div style="margin-top:14px"><a class="btn gold js-choose" data-plan="silver" href="#">Continue to Checkout</a>
-        <a class="btn close" href="#">Close</a></div>
-    </div>
-  </dialog>
-  <dialog id="modal-gold" class="plan-modal">
-    <div class="head"><strong>GOLD</strong><a href="#" class="x">×</a></div>
-    <div class="inner">
-      Everything in Silver + Admin toolkit & automation recipes, Pro Library (full access), priority hotfix.
-      <div style="margin-top:14px"><a class="btn gold js-choose" data-plan="gold" href="#">Continue to Checkout</a>
-        <a class="btn close" href="#">Close</a></div>
-    </div>
-  </dialog>
-  <dialog id="modal-diamond" class="plan-modal">
-    <div class="head"><strong>DIAMOND</strong><a href="#" class="x">×</a></div>
-    <div class="inner">
-      Top-tier access. Private Library drops, custom pipelines (Notion/Airtable/Zapier), roadmap priority. Exports are watermark-free with full commercial rights.
-      <div style="margin-top:14px"><a class="btn gold js-choose" data-plan="diamond" href="#">Continue to Checkout</a>
-        <a class="btn close" href="#">Close</a></div>
-    </div>
-  </dialog>
+  <!-- Footer -->
+  <footer class="footer"><div class="container small">© 2025 THE GRID. All rights reserved.</div></footer>
 
   <!-- Scripts -->
-  <script src="/dev/assets/js/ui.js" defer></script>
-  <script src="/dev/assets/js/stripe.js" defer></script>
+  <script src="/dev/assets/js/bg.js"></script>
+  <script src="/dev/assets/js/checkout.js"></script>
+  <script src="/dev/assets/js/save.js"></script>
+  <script src="/dev/assets/js/learn.js"></script>
 </body>
 </html>
