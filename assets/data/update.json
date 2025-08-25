@@ -1,9 +1,0 @@
-{
-  "version": "1.0",
-  "branch": "main",
-  "ops": [
-    { "op": "mkdir",  "path": "archive" },
-    { "op": "write",  "path": "archive/ping_dev_2055.txt", "content": "ping dev\n" },
-    { "op": "append", "path": "README.md", "content": "\n\n✅ updater wrote from dev/update.json" }
-  ]
-}
