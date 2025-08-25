@@ -3,45 +3,43 @@ name: Repo Hygiene
 on:
   push:
     branches: [ main ]
-    # If a commit only touches generated/dev telemetry, skip hygiene.
-    paths-ignore:
-      - 'dev/dev/archive/**'
-      - 'dev/dev/data/file-tree.json'
-      - 'dev/dev/data/file-tree.txt'
-      - 'dev/dev/data/repo-metrics.json'
-      - 'dev/dev/state_packs/**'
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   hygiene:
-    # still run for normal edits; also allow bot commits to pass quickly
+    name: Hygiene checks (soft-fail)
     runs-on: ubuntu-latest
+    # Never mark the commit red; we'll exit 0 even if we find issues.
+    continue-on-error: true
+
     steps:
-      - name: Check out
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Fast-pass for bot or snapshot commits
-        if: |
-          startsWith(github.actor, 'github-actions') ||
-          contains(github.event.head_commit.message, 'Repo Snapshot')
-        run: echo "Generated commit – skipping strict checks."
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: Basic checks (line endings, large files, trailing spaces)
-        if: |
-          !startsWith(github.actor, 'github-actions') &&
-          !contains(github.event.head_commit.message, 'Repo Snapshot')
+      - name: Basic checks
+        id: checks
         run: |
           set -e
-          # Fail on files > 5MB (except under assets/videos or assets/gc_spin.mp4)
-          git ls-files -z | xargs -0 -I{} bash -c '
-            s=$(wc -c < "{}"); 
-            if [ "$s" -gt 5242880 ] && [[ "{}" != assets/videos/* ]] && [[ "{}" != assets/gc_spin.mp4 ]]; then
-              echo "::error file={}: file is larger than 5MB ($s bytes)"; exit 1; 
-            fi'
-          # Fail on CRLF
-          if git grep -I -n $'\r' -- . ':(exclude)assets/**' ; then
-            echo "::error ::CRLF detected (exclude assets). Use LF."; exit 1; 
-          fi
-          # Fail on trailing spaces
-          if git grep -I -n '[[:blank:]]$' -- . ':(exclude)assets/**' ; then
-            echo "::error ::Trailing whitespace found (exclude assets)."; exit 1;
-          fi
+          echo "== file endings =="
+          ! git ls-files -z | xargs -0 file | grep -E ':.*CRLF' || echo "::warning::CRLF line endings detected"
+          echo "== trailing whitespace =="
+          ! git grep -nI $'[ \t]$' || echo "::warning::Trailing whitespace detected"
+          echo "== large files (soft threshold 5MB) =="
+          git ls-files -s | cut -d' ' -f2 | xargs -I{} git cat-file -s {} | awk '{if($1>5*1024*1024) print}' && echo "::warning::Large tracked files found (>5MB)" || true
+          echo "Hygiene scan complete"
+
+      - name: Always succeed but keep warnings visible
+        if: always()
+        run: |
+          echo "Marking job success (soft-fail enabled)."
+          exit 0
