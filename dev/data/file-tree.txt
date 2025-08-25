@@ -54,6 +54,7 @@ dev/data/file-tree.json
 dev/data/file-tree.txt
 favicon.svg
 index.html
+lychee.toml
 patch_path.txt
 privacy.html
 robots.txt
