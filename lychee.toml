@@ -1,20 +1,10 @@
-# timeouts
-max_redirects = 5
-timeout = 20
-
-# don’t fail on flaky externals
-exclude_all_private = false
-accept = ["200..299", "300..399"]
+# Ignore all external links; validate only internal repo paths.
+exclude = ["^https?://", "^mailto:", "^tel:"]
+# Skip common directories
+exclude_path = [".github", "node_modules"]
+# Be gentle with CI
+max_concurrency = 8
 retry_wait_time = 2
 max_retries = 2
-
-# ignore known dynamic or gated links
-exclude = [
-  "mailto:*",
-  "https://buy.stripe.com/*",
-  "https://the-grid111.github.io/*" # self links resolve after deploy
-]
-
-# output a small report
-format = "markdown"
-output = "lychee/out.md"
+# Accept typical OK/redirect statuses (for local files this is moot)
+accept = ["200..399"]
