@@ -46,8 +46,8 @@ assets/js/trial-banner.js
 assets/js/ui.js
 assets/manifest.json
 assets/videos/manifest.json
-data/SECURITY_README.txt
-data/file-tree.json
+dev/data/file-tree.json
+dev/data/file-tree.txt
 favicon.svg
 index.html
 patch_path.txt

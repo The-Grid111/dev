@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2025-08-25T09:06:52.237Z",
+  "generatedAt": "2025-08-25T09:08:42.152Z",
   "branch": "main",
-  "commit": "a432a9d",
+  "commit": "2344851",
   "count": 59,
   "files": [
     ".github/ISSUE_TEMPLATE/add-file.yml",
@@ -52,8 +52,8 @@
     "assets/js/ui.js",
     "assets/manifest.json",
     "assets/videos/manifest.json",
-    "data/SECURITY_README.txt",
-    "data/file-tree.json",
+    "dev/data/file-tree.json",
+    "dev/data/file-tree.txt",
     "favicon.svg",
     "index.html",
     "patch_path.txt",
