@@ -1,21 +1,16 @@
 {
-  "imports": [
-    {
-      "save_version": "v1.9",
-      "owner": "Jake",
-      "ui_prefs": {
-        "accent_hex": "#f3c545",
-        "card_radius": 18,
-        "glow": 0.35,
-        "font_scale": 1.0,
-        "container_px": 1100,
-        "hero_height_vh": 42,
-        "border_px": 1,
-        "shadow_depth_px": 40,
-        "header_mode": "glass",
-        "pattern": 0
-      }
-    }
-  ],
-  "notes": "Unified plan names (CORE/PRO/STUDIO/ENTERPRISE). Static-safe commerce wiring."
+  "version": "2025.09.01",
+  "flags": {
+    "trial_banner_enabled": true,
+    "learning_enabled_default": true,
+    "autosave_enabled_default": true
+  },
+  "defaults": {
+    "ui": { "accent": "#d8b15a", "radius": 18, "glow": 0.35, "theme": "dark" },
+    "language_ref": "/dev/assets/data/language.json"
+  },
+  "copy": {
+    "trial_headline": "Launch Trial — One-time Diamond access",
+    "trial_copy": "Try watermark-free exports & private drops. Limited time."
+  }
 }
