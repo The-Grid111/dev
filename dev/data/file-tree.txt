@@ -48,10 +48,11 @@ assets/manifest.json  (2286B, 7ba2bb48d558, 2d304a7, 2025-08-25)
 assets/videos/manifest.json  (317B, e0fd8699ce7b, 3bae943, 2025-08-24)
 [DIR] dev/
 [DIR] dev/archive/
+dev/archive/snapshot_1756155441.json  (18965B, c0084cc581f5, b3bfcae, 2025-08-25)
 [DIR] dev/data/
-dev/data/file-tree.json  (12896B, e10d4a35911d, d52eed2, 2025-08-25)
-dev/data/file-tree.txt  (4208B, 2ea57662ce5d, d52eed2, 2025-08-25)
-dev/data/repo-metrics.json  (4019B, f1e57e52233b, d52eed2, 2025-08-25)
+dev/data/file-tree.json  (13106B, 5b01c3b967a5, b3bfcae, 2025-08-25)
+dev/data/file-tree.txt  (4280B, 8e451c7942ed, b3bfcae, 2025-08-25)
+dev/data/repo-metrics.json  (4033B, 8cfff02ea28d, b3bfcae, 2025-08-25)
 [DIR] dev/data/state_packs/
 dev/data/state_packs/state_pack_20250825_1310.json  (1B, 01ba4719c80b, 56f85e8, 2025-08-25)
 dev/data/update.json  (454B, 3ecd78451b40, 3020300, 2025-08-25)
@@ -66,7 +67,7 @@ scripts/apply-update.mjs  (5010B, 9ae765ffefa1, 0dd43d1, 2025-08-25)
 scripts/bump-asset-manifest.mjs  (1189B, 9e88b5ce24f4, 8429816, 2025-08-25)
 scripts/check-json.mjs  (522B, 56b1045bd861, 7e48f11, 2025-08-25)
 scripts/gen-file-inventory.mjs  (879B, 0c843442f2b3, f581f66, 2025-08-25)
-scripts/repo-snapshot.mjs  (3741B, a5a441e6d77e, 644eba3, 2025-08-25)
+scripts/repo-snapshot.mjs  (5378B, e7ba765aa852, 9e17d9a, 2025-08-25)
 scripts/svg-sanity.mjs  (1324B, a8e6055029e6, c88ad83, 2025-08-25)
 scripts/verify-inventory.mjs  (1325B, dc882e919cb8, 7c88aad, 2025-08-25)
 sitemap.xml  (507B, e610f9c3ef45, 82607eb, 2025-08-25)

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2025-08-25T20:57:21.268Z",
+  "generated_at": "2025-08-25T21:05:58.801Z",
   "totals": {
-    "files": 61,
+    "files": 62,
     "dirs": 13,
-    "bytes": 2566240
+    "bytes": 2587138
   },
   "by_extension": {
     ".mp4": {
@@ -15,16 +15,16 @@
       "bytes": 49372
     },
     ".json": {
-      "count": 15,
-      "bytes": 26463
+      "count": 16,
+      "bytes": 45652
+    },
+    ".mjs": {
+      "count": 7,
+      "bytes": 15627
     },
     ".css": {
       "count": 3,
       "bytes": 14190
-    },
-    ".mjs": {
-      "count": 7,
-      "bytes": 13990
     },
     ".html": {
       "count": 5,
@@ -36,7 +36,7 @@
     },
     ".txt": {
       "count": 3,
-      "bytes": 4297
+      "bytes": 4369
     },
     ".xml": {
       "count": 1,
@@ -62,9 +62,14 @@
       "hash": "ccb4fcb55ec4"
     },
     {
+      "path": "dev/archive/snapshot_1756155441.json",
+      "size": 18965,
+      "hash": "c0084cc581f5"
+    },
+    {
       "path": "dev/data/file-tree.json",
-      "size": 12896,
-      "hash": "e10d4a35911d"
+      "size": 13106,
+      "hash": "5b01c3b967a5"
     },
     {
       "path": "index.html",
@@ -92,6 +97,11 @@
       "hash": "bf0a35240e04"
     },
     {
+      "path": "scripts/repo-snapshot.mjs",
+      "size": 5378,
+      "hash": "e7ba765aa852"
+    },
+    {
       "path": "assets/js/app.js",
       "size": 5017,
       "hash": "c9fb4064ab91"
@@ -108,49 +118,44 @@
     },
     {
       "path": "dev/data/file-tree.txt",
-      "size": 4208,
-      "hash": "2ea57662ce5d"
+      "size": 4280,
+      "hash": "8e451c7942ed"
     },
     {
       "path": "dev/data/repo-metrics.json",
-      "size": 4019,
-      "hash": "f1e57e52233b"
-    },
-    {
-      "path": "scripts/repo-snapshot.mjs",
-      "size": 3741,
-      "hash": "a5a441e6d77e"
+      "size": 4033,
+      "hash": "8cfff02ea28d"
     },
     {
       "path": "assets/data/learn.js",
       "size": 3440,
       "hash": "8220671b9ab7"
-    },
-    {
-      "path": "assets/js/hotfix.js",
-      "size": 2974,
-      "hash": "88f30624fac9"
     }
   ],
   "most_recent": [
     {
+      "path": "scripts/repo-snapshot.mjs",
+      "commit": "9e17d9a",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/archive/snapshot_1756155441.json",
+      "commit": "b3bfcae",
+      "date": "2025-08-25"
+    },
+    {
       "path": "dev/data/file-tree.json",
-      "commit": "d52eed2",
+      "commit": "b3bfcae",
       "date": "2025-08-25"
     },
     {
       "path": "dev/data/file-tree.txt",
-      "commit": "d52eed2",
+      "commit": "b3bfcae",
       "date": "2025-08-25"
     },
     {
       "path": "dev/data/repo-metrics.json",
-      "commit": "d52eed2",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "scripts/repo-snapshot.mjs",
-      "commit": "644eba3",
+      "commit": "b3bfcae",
       "date": "2025-08-25"
     },
     {
@@ -201,11 +206,6 @@
     {
       "path": "assets/config/stripe.json",
       "commit": "97b24bd",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "scripts/bump-asset-manifest.mjs",
-      "commit": "8429816",
       "date": "2025-08-25"
     }
   ]
