@@ -3,17 +3,14 @@ name: Build File Inventory
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
-  contents: write
+  contents: write   # <-- allows committing the generated files
 
 jobs:
-  inventory:
+  build:
     runs-on: ubuntu-latest
-    # ← Do not block deploy even if this job errors
-    continue-on-error: true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,25 +20,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
       - name: Generate file inventory
-        run: node dev/scripts/gen-file-inventory.mjs
+        run: node scripts/gen-file-inventory.mjs
 
-      - name: Upload inventory artifact (always)
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Commit inventory
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: file-inventory
-          path: |
-            dev/data/file-tree.json
-            dev/data/file-tree.txt
-          if-no-files-found: warn
-
-      - name: Commit inventory back to repo (only on success)
-        if: success()
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dev/data/file-tree.*
-          git diff --cached --quiet || (git commit -m "chore: update file inventory [skip ci]" && git push)
+          commit_message: "chore: update file inventory [skip ci]"
+          file_pattern: dev/data/file-tree.*
