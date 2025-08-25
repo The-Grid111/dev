@@ -62,6 +62,7 @@ lychee.toml
 patch_path.txt
 privacy.html
 robots.txt
+scripts/apply-update.mjs
 scripts/bump-asset-manifest.mjs
 scripts/check-json.mjs
 scripts/gen-file-inventory.mjs

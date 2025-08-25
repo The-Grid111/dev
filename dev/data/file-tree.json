@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2025-08-25T18:24:17.639Z",
+  "generatedAt": "2025-08-25T18:25:05.673Z",
   "branch": "main",
-  "commit": "0bf10de",
-  "count": 72,
+  "commit": "4bc0847",
+  "count": 73,
   "files": [
     ".github/ISSUE_TEMPLATE/add-file.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
@@ -68,6 +68,7 @@
     "patch_path.txt",
     "privacy.html",
     "robots.txt",
+    "scripts/apply-update.mjs",
     "scripts/bump-asset-manifest.mjs",
     "scripts/check-json.mjs",
     "scripts/gen-file-inventory.mjs",
