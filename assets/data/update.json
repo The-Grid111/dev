@@ -1,20 +1,51 @@
-{
-  "version": "1.0",
-  "branch": "main",
-  "ops": [
-    {
-      "op": "mkdir",
-      "path": "archive"
-    },
-    {
-      "op": "write",
-      "path": "archive/ping.txt",
-      "content": "ping\n"
-    },
-    {
-      "op": "append",
-      "path": "README.md",
-      "content": "\n\n✅ updater ping"
-    }
-  ]
-}
+name: Apply update.json
+
+on:
+  push:
+    paths:
+      - "assets/data/update.json"
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Show repo snapshot (debug)
+        run: |
+          echo "PWD=$(pwd)"
+          ls -la
+          echo "------ scripts/ ------"
+          ls -la scripts || true
+          echo "------ assets/data/update.json ------"
+          test -f assets/data/update.json && cat assets/data/update.json || echo "update.json not found"
+
+      - name: Run updater (capture logs)
+        shell: bash
+        run: |
+          set -e
+          node scripts/apply-update.mjs 2>&1 | tee apply-update.log
+
+      - name: Commit & push changes (if any)
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "Apply update.json ops [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
