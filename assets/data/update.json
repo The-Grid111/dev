@@ -1,11 +1,49 @@
 {
-  "branch": "main",
-  "ops": [
-    { "op": "run", "path": "scripts/repo-snapshot.mjs" },
+  "update": "full-redo",
+  "target": "repository",
+  "actions": [
     {
-      "op": "append",
-      "path": "README.md",
-      "content": "\n\n🗂 Snapshot sync attempted — $(date -u +%Y-%m-%dT%H:%MZ)."
+      "task": "stabilize-build-inventory",
+      "details": {
+        "ensureManifestSync": true,
+        "validateJsonConsistency": true,
+        "allowArchiveFallback": true,
+        "stripEmptyRefs": true
+      }
+    },
+    {
+      "task": "sync-snapshot-inventory",
+      "details": {
+        "verifyAgainstFileTree": true,
+        "regenerateOnMismatch": true,
+        "archiveAllNewSnapshots": true
+      }
+    },
+    {
+      "task": "cleanup-temp",
+      "details": {
+        "paths": [
+          "dev/dev/*",
+          "patch_path.txt"
+        ],
+        "preserve": [
+          "dev/data/*",
+          "dev/archive/*"
+        ]
+      }
+    },
+    {
+      "task": "harden-workflows",
+      "details": {
+        "retryOnFailure": 2,
+        "gracefulExit": true,
+        "consistentOrdering": true
+      }
     }
-  ]
+  ],
+  "meta": {
+    "version": "2025-08-25.1",
+    "author": "Grid-AI",
+    "note": "Full redo to stabilise Build File Inventory, auto-sync snapshots, clean dev/dev duplicates, and enforce consistent workflow order."
+  }
 }
