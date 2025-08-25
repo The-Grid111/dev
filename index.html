@@ -3,439 +3,249 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE GRID — Launch experiences that never regress</title>
-
-  <!-- ✅ Correct stylesheets (your repo paths) -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="stylesheet" href="assets/css/effects.css" />
-
-  <link rel="icon" href="assets/images/icon.png" />
-  <meta name="theme-color" content="#0b0b0c" />
+  <title>THE GRID</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
-
-<body class="grid-bg">
-  <!-- Top Notice / Trial -->
-  <div id="trial-banner" class="notice-bar">
-    <div class="container row between center">
-      <span>
-        <strong>Launch special:</strong> One-time <em>Diamond Trial Pass</em> — full access, watermark-free exports, and commercial rights.
-        Limited use &amp; device-limited to prevent abuse.
-      </span>
-      <button id="trial-cta" class="btn btn-gold">Try Diamond</button>
+<body>
+  <header class="nav">
+    <div class="brand">
+      <span class="badge" aria-hidden="true">?</span>
+      <span>THE GRID</span>
     </div>
-  </div>
-
-  <!-- Header -->
-  <header class="container header row between center">
-    <div class="brand row center">
-      <img src="assets/images/gold_mark.png" alt="" class="brand-mark" />
-      <span class="brand-name">THE GRID</span>
-    </div>
-
-    <nav class="nav">
+    <nav class="links">
       <a href="#library">Library</a>
       <a href="#stacks">Stacks</a>
       <a href="#community">Community</a>
       <a href="#pricing">Pricing</a>
       <a href="#contact">Contact</a>
     </nav>
-
-    <div class="header-actions">
-      <a href="#customize" class="btn btn-ghost">Customize</a>
-      <a href="#pricing" class="btn btn-primary">Join Now</a>
+    <div class="actions">
+      <button id="btnCustomize" class="btn">Customize</button>
+      <button id="btnJoinNow" class="btn btn-primary">Join Now</button>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="container hero">
-    <h1>Launch experiences that never regress.</h1>
-    <p class="lead">
-      Self-serve, adaptive, quantifiable. Paste a Save → instant learning.
-      Plans unlock features; no 1:1 required. <strong>Diamond</strong> unlocks
-      watermark-free, commercial-safe exports.
-    </p>
-
-    <div class="cta-row">
-      <a href="#library" class="btn btn-gold">Open Library</a>
-      <a href="#pricing" class="btn btn-outline">See Pricing</a>
-    </div>
-
-    <div class="hero-media placeholder">
-      Hero Placeholder • Replace with your top niche video
+  <!-- TRIAL CTA (auto-hides if no link configured) -->
+  <section id="trialStrip" class="strip hidden">
+    <div class="strip-inner">
+      <div class="strip-copy">
+        <strong>Launch Trial:</strong> One-time Diamond access to try watermark-free exports & private drops.
+      </div>
+      <div class="strip-actions">
+        <a id="trialLink" class="btn btn-gold" target="_blank" rel="noopener">Start Trial</a>
+        <button id="dismissTrial" class="btn btn-ghost">Dismiss</button>
+      </div>
     </div>
   </section>
 
-  <!-- Library -->
-  <section id="library" class="container section">
-    <h2>Library</h2>
-    <p class="muted">
-      Drop videos in <code>assets/videos/</code> and list them in
-      <code>assets/videos/manifest.json</code>. Lower tiers export with a subtle GRID watermark.
-      <strong>Diamond exports are watermark-free.</strong>
-    </p>
+  <main class="wrap">
+    <section class="hero" id="top">
+      <h1>Launch experiences that never regress.</h1>
+      <p class="lede">
+        Self-serve, adaptive, quantifiable. Paste a Save → instant learning. Plans unlock features; no 1:1
+        required. <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
+      </p>
+      <div class="cta">
+        <a href="#library" class="btn btn-primary">Open Library</a>
+        <a href="#pricing" class="btn">See Pricing</a>
+      </div>
+      <div class="hero-placeholder">Hero Placeholder • Replace with your top niche video</div>
+    </section>
 
-    <div class="library-grid">
-      <div class="tile">
-        <div class="tile-body">No videos yet</div>
-        <div class="tile-footer">
-          <span class="pill">Basic</span>
-          <span>Samples &amp; getting started</span>
+    <section id="library" class="section">
+      <h2>Library</h2>
+      <p class="muted">
+        Drop videos in <code>assets/videos/</code> and list them in <code>assets/videos/manifest.json</code>.
+        Lower tiers export with a subtle GRID watermark. <strong>Diamond exports are watermark-free.</strong>
+      </p>
+      <div class="tiers">
+        <div class="tier">
+          <div class="tile">No videos yet</div>
+          <div class="tier-foot"><span class="pill">Basic</span> Samples &amp; getting started</div>
+        </div>
+        <div class="tier">
+          <div class="tile">No videos yet</div>
+          <div class="tier-foot"><span class="pill">Silver</span> Guides &amp; improvements</div>
+        </div>
+        <div class="tier">
+          <div class="tile">No videos yet</div>
+          <div class="tier-foot"><span class="pill">Gold</span> Full pro library</div>
+        </div>
+        <div class="tier">
+          <div class="tile">No videos yet</div>
+          <div class="tier-foot"><span class="pill">Diamond</span> Private packs &amp; early drops</div>
         </div>
       </div>
+    </section>
 
-      <div class="tile">
-        <div class="tile-body">No videos yet</div>
-        <div class="tile-footer">
-          <span class="pill">Silver</span>
-          <span>Guides &amp; improvements</span>
-        </div>
+    <section id="stacks" class="section">
+      <h2>Stacks &amp; Setups</h2>
+      <p class="muted">Battle-tested combos. Start free, scale when ready.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>Creator Starter</h3>
+          <p>CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export watermarked unless Diamond.</p>
+        </article>
+        <article class="card">
+          <h3>Commerce Visuals</h3>
+          <p>Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p>
+        </article>
+        <article class="card">
+          <h3>Educator Essentials</h3>
+          <p>Canva slides + Descript edits + Loom screen. Clip library grows from your Saves.</p>
+        </article>
       </div>
+    </section>
 
-      <div class="tile">
-        <div class="tile-body">No videos yet</div>
-        <div class="tile-footer">
-          <span class="pill">Gold</span>
-          <span>Full pro library</span>
-        </div>
+    <section id="community" class="section">
+      <h2>Community</h2>
+      <p class="muted">High-signal showcases and reusable methods. Admin curated so it never gets noisy.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>Liquid Pour Cinematic</h3>
+          <p>Reference fusion + glide timing. Export watermark applies unless Diamond.</p>
+        </article>
+        <article class="card">
+          <h3>Gold Pulse Logo</h3>
+          <p>CapCut spectral pulse + metallic accent. Private pack on Diamond.</p>
+        </article>
       </div>
+    </section>
 
-      <div class="tile">
-        <div class="tile-body">No videos yet</div>
-        <div class="tile-footer">
-          <span class="pill pill-diamond">Diamond</span>
-          <span>Private packs &amp; early drops</span>
-        </div>
+    <section id="why" class="section">
+      <h2>Why The Grid</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Anti-Regression Core</h3>
+          <p>Changes are tracked &amp; scored. Wins are promoted; misses are rolled back. Saves persist.</p>
+        </article>
+        <article class="card">
+          <h3>Quantifiable UX</h3>
+          <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable modes.</p>
+        </article>
+        <article class="card">
+          <h3>Self-Serve</h3>
+          <p>Clear plans, no calls required. Learn by doing with guides and templates. Upgrade when you need more.</p>
+        </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Stacks & Setups -->
-  <section id="stacks" class="container section">
-    <h2>Stacks &amp; Setups</h2>
-    <p class="muted">Battle-tested combos. Start free, scale when ready.</p>
+    <section id="how" class="section">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><strong>Save</strong> — export a tiny JSON with settings, notes, outcomes.</li>
+        <li><strong>Adapt</strong> — paste a Save → UI and copy update instantly. No rebuilds.</li>
+        <li><strong>Compound</strong> — wins are promoted to presets. Your system compounds over time.</li>
+      </ol>
+    </section>
 
-    <div class="card-grid">
-      <article class="card">
-        <h3>Creator Starter</h3>
-        <p>CapCut + Runway + ElevenLabs. Cut → motion fills → VO → captions. Export watermarked unless Diamond.</p>
-      </article>
-
-      <article class="card">
-        <h3>Commerce Visuals</h3>
-        <p>Runway swaps + Photoshop polish + PDP A/B in Shopify. Promote winners automatically.</p>
-      </article>
-
-      <article class="card">
-        <h3>Educator Essentials</h3>
-        <p>Canva slides + Descript edits + Loom screen. Clip library grows from your Saves.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- Community -->
-  <section id="community" class="container section">
-    <h2>Community</h2>
-    <p class="muted">High-signal showcases and reusable methods. Admin curated so it never gets noisy.</p>
-
-    <div class="card-grid">
-      <article class="card">
-        <h3>Liquid Pour Cinematic</h3>
-        <p>Reference fusion + glide timing. Export watermark applies unless Diamond.</p>
-      </article>
-      <article class="card">
-        <h3>Gold Pulse Logo</h3>
-        <p>CapCut spectral pulse + metallic accent. Private pack on Diamond.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- Why -->
-  <section class="container section">
-    <h2>Why The Grid</h2>
-
-    <div class="card-grid">
-      <article class="card">
-        <h3>Anti-Regression Core</h3>
-        <p>Changes are tracked &amp; scored. Wins are promoted; misses are rolled back. Saves persist.</p>
-      </article>
-      <article class="card">
-        <h3>Quantifiable UX</h3>
-        <p>Controls map to variables (<code>--accent</code>, <code>--radius</code>, etc.). Your presets become reusable “modes.”</p>
-      </article>
-      <article class="card">
-        <h3>Self-Serve</h3>
-        <p>Clear plans, no calls required. Learn by doing with guides and templates. Upgrade when you need more.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section class="container section">
-    <h2>How it works</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1 • Save</div>
-        <p>Export a tiny JSON with settings, notes, outcomes.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2 • Adapt</div>
-        <p>Paste a Save → UI, defaults, and copy update instantly. No rebuilds.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3 • Compound</div>
-        <p>Wins become presets. Your system compounds over time.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="container section">
-    <div class="row between center">
+    <section id="pricing" class="section">
       <h2>Pricing</h2>
-      <button class="btn btn-outline" id="compare-plans">Compare plans</button>
+      <p class="muted">Fair pricing. Clear value. 7-day refund. <strong>No 1:1 calls included in any plan.</strong></p>
+
+      <div class="plan-grid">
+        <!-- BASIC -->
+        <article class="plan" data-plan="basic">
+          <header>
+            <h3>BASIC £9/mo</h3>
+          </header>
+          <ul class="features">
+            <li>Starter templates & effects</li>
+            <li>Theme presets & Save imports</li>
+            <li>Sample Library (watermarked)</li>
+            <li>Email support (48h)</li>
+          </ul>
+          <footer>
+            <a class="btn btn-gold choose">Choose</a>
+            <button class="btn details">Details</button>
+          </footer>
+        </article>
+
+        <!-- SILVER -->
+        <article class="plan" data-plan="silver">
+          <header>
+            <h3>SILVER £29/mo</h3>
+          </header>
+          <ul class="features">
+            <li>Everything in Basic</li>
+            <li>Advanced effects & metallic presets</li>
+            <li>Priority email (24h)</li>
+            <li>Quarterly tune-ups</li>
+          </ul>
+          <footer>
+            <a class="btn btn-gold choose">Choose</a>
+            <button class="btn details">Details</button>
+          </footer>
+        </article>
+
+        <!-- GOLD -->
+        <article class="plan" data-plan="gold">
+          <header>
+            <h3>GOLD £49/mo</h3>
+          </header>
+          <ul class="features">
+            <li>Everything in Silver</li>
+            <li>Admin toolkit & automations</li>
+            <li>Pro Library & recipes</li>
+            <li>Priority hotfix</li>
+          </ul>
+          <footer>
+            <a class="btn btn-gold choose">Choose</a>
+            <button class="btn details">Details</button>
+          </footer>
+        </article>
+
+        <!-- DIAMOND -->
+        <article class="plan" data-plan="diamond">
+          <header>
+            <h3>DIAMOND £99/mo</h3>
+          </header>
+          <ul class="features">
+            <li>Private Library drops, custom pipelines</li>
+            <li>Roadmap priority, fast turnaround</li>
+            <li><strong>Watermark-free exports + commercial rights</strong></li>
+          </ul>
+          <footer>
+            <a class="btn btn-gold choose">Choose</a>
+            <button class="btn details">Details</button>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contact</h2>
+      <form class="contact">
+        <label>Your name<input type="text" placeholder="Jane Doe" required></label>
+        <label>Email<input type="email" placeholder="you@example.com" required></label>
+        <label>Subject<input type="text" placeholder="How can we help?" required></label>
+        <label>Message<textarea placeholder="Write your message..." rows="5" required></textarea></label>
+        <button class="btn btn-gold" type="submit">Send</button>
+      </form>
+      <p class="muted small">Replies from <a href="mailto:gridcoresystems@gmail.com">gridcoresystems@gmail.com</a>. No spam, no sharing.</p>
+    </section>
+  </main>
+
+  <!-- DETAILS PANEL (opens for any plan; does NOT navigate to Stripe) -->
+  <dialog id="detailsDialog" class="dialog">
+    <div class="dialog-head">
+      <h3 id="detailsTitle">Plan Details</h3>
+      <button id="detailsClose" class="icon">✕</button>
     </div>
-    <p class="muted">Fair pricing. Clear value. 7-day refund. <strong>No 1:1 calls included in any plan.</strong></p>
-
-    <div class="pricing-grid">
-      <!-- BASIC -->
-      <article class="price-card">
-        <h3>BASIC £9/mo</h3>
-        <ul>
-          <li>Starter templates &amp; effects</li>
-          <li>Theme presets &amp; Save imports</li>
-          <li>Sample Library (watermarked)</li>
-          <li>Email support (48h)</li>
-        </ul>
-        <div class="price-actions">
-          <button class="btn btn-gold choose-plan" data-plan="basic">Choose</button>
-          <button class="btn btn-ghost details-btn" data-details="basic">Details</button>
-        </div>
-      </article>
-
-      <!-- SILVER -->
-      <article class="price-card">
-        <h3>SILVER £29/mo</h3>
-        <ul>
-          <li>Everything in Basic</li>
-          <li>Advanced effects &amp; metallic presets</li>
-          <li>Priority email (24h)</li>
-          <li>Quarterly tune-ups</li>
-        </ul>
-        <div class="price-actions">
-          <button class="btn btn-gold choose-plan" data-plan="silver">Choose</button>
-          <button class="btn btn-ghost details-btn" data-details="silver">Details</button>
-        </div>
-      </article>
-
-      <!-- GOLD -->
-      <article class="price-card">
-        <h3>GOLD £49/mo</h3>
-        <ul>
-          <li>Everything in Silver</li>
-          <li>Admin toolkit &amp; automations</li>
-          <li>Pro Library &amp; recipes</li>
-          <li>Priority hotfix</li>
-        </ul>
-        <div class="price-actions">
-          <button class="btn btn-gold choose-plan" data-plan="gold">Choose</button>
-          <button class="btn btn-ghost details-btn" data-details="gold">Details</button>
-        </div>
-      </article>
-
-      <!-- DIAMOND -->
-      <article class="price-card diamond">
-        <h3>DIAMOND £99/mo</h3>
-        <ul>
-          <li>Private Library drops, custom pipelines</li>
-          <li>Roadmap priority, fast turnaround</li>
-          <li><strong>Watermark-free exports + commercial rights</strong></li>
-        </ul>
-        <div class="price-actions">
-          <button class="btn btn-gold choose-plan" data-plan="diamond">Choose</button>
-          <button class="btn btn-ghost details-btn" data-details="diamond">Details</button>
-        </div>
-      </article>
+    <div id="detailsBody" class="dialog-body"></div>
+    <div class="dialog-foot">
+      <a id="detailsChoose" class="btn btn-gold" target="_blank" rel="noopener">Continue to Checkout</a>
+      <button id="detailsCancel" class="btn">Close</button>
     </div>
-  </section>
+  </dialog>
 
-  <!-- Contact -->
-  <section id="contact" class="container section">
-    <h2>Contact</h2>
-    <form class="contact-form">
-      <label>Your name<input type="text" placeholder="Jane Doe" /></label>
-      <label>Email<input type="email" placeholder="you@example.com" /></label>
-      <label>Subject<input type="text" placeholder="How can we help?" /></label>
-      <label>Message<textarea placeholder="Write your message..."></textarea></label>
-      <button type="submit" class="btn btn-primary">Send</button>
-      <p class="muted small">Replies from <strong>gridcoresystems@gmail.com</strong>. No spam, no sharing.</p>
-    </form>
-  </section>
-
-  <footer class="container footer">
+  <footer class="footer">
     © <span id="year"></span> THE GRID. All rights reserved.
   </footer>
 
-  <!-- Plan Details Panel -->
-  <dialog id="plan-dialog" class="sheet">
-    <div class="sheet-head row between center">
-      <h3 id="plan-title">PLAN</h3>
-      <button class="icon-btn" id="plan-close" aria-label="Close">✕</button>
-    </div>
-    <div id="plan-body" class="sheet-body"></div>
-    <div class="sheet-foot row right">
-      <button class="btn btn-gold" id="plan-choose">Continue to Checkout</button>
-      <button class="btn btn-ghost" id="plan-dismiss">Close</button>
-    </div>
-  </dialog>
-
-  <!-- Compare Plans Panel -->
-  <dialog id="compare-dialog" class="sheet wide">
-    <div class="sheet-head row between center">
-      <h3>Compare Plans</h3>
-      <button class="icon-btn" id="compare-close" aria-label="Close">✕</button>
-    </div>
-    <div class="sheet-body">
-      <div class="table-scroll">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>What's included</th>
-              <th>Basic</th>
-              <th>Silver</th>
-              <th>Gold</th>
-              <th>Diamond</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Site + Customize</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
-            <tr><td>Effects &amp; metallic presets</td><td>Starter</td><td><strong>Advanced</strong></td><td><strong>All</strong></td><td><strong>All</strong></td></tr>
-            <tr><td>Stacks &amp; Setups</td><td>Starter</td><td>Pro</td><td>Pro+</td><td>All</td></tr>
-            <tr><td>Library access</td><td>Samples</td><td>Guides</td><td>Full (Pro)</td><td>All + Private</td></tr>
-            <tr><td>Automation recipes</td><td>—</td><td>—</td><td><strong>Included</strong></td><td><strong>Included</strong></td></tr>
-            <tr><td>Support speed</td><td>48h</td><td>24h</td><td>Hotfix</td><td>Roadmap</td></tr>
-            <tr><td>Watermark-free + commercial rights</td><td>—</td><td>—</td><td>—</td><td><strong>Included</strong></td></tr>
-            <tr><td>1:1 sessions</td><td colspan="4"><strong>Not included in any plan</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="sheet-foot row right">
-      <button class="btn btn-ghost" id="compare-dismiss">Close</button>
-    </div>
-  </dialog>
-
-  <!-- Minimal inline JS to wire buttons to Stripe links via assets/config/stripe.json -->
-  <script>
-    const $ = (sel, root=document) => root.querySelector(sel);
-    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-
-    const state = { links: {}, trial: "" };
-
-    // Load Stripe links config
-    fetch("assets/config/stripe.json", { cache: "no-store" })
-      .then(r => r.json())
-      .then(cfg => {
-        state.links = cfg || {};
-        if (!state.links.mode) state.links.mode = "links";
-
-        // Trial button visibility
-        if (cfg.trial && cfg.trial.trim()) {
-          state.trial = cfg.trial.trim();
-          $("#trial-cta").onclick = () => window.location.href = state.trial;
-        } else {
-          // hide banner if no trial configured
-          $("#trial-banner").style.display = "none";
-        }
-      })
-      .catch(() => {
-        // If config fails, hide trial and leave Choose buttons inert
-        $("#trial-banner") && ($("#trial-banner").style.display = "none");
-      });
-
-    // Choose buttons -> Stripe
-    $$(".choose-plan").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const plan = btn.dataset.plan;
-        const url = (state.links && state.links[plan]) ? state.links[plan] : null;
-        if (url) window.location.href = url;
-        else alert("Payment link for " + plan.toUpperCase() + " isn’t configured yet.");
-      });
-    });
-
-    // Compare plans dialog
-    const compareDlg = $("#compare-dialog");
-    $("#compare-plans").onclick = () => compareDlg.showModal();
-    $("#compare-close").onclick = $("#compare-dismiss").onclick = () => compareDlg.close();
-
-    // Plan details dialog content
-    const planCopy = {
-      basic: {
-        title: "BASIC",
-        bullets: [
-          "Starter templates & effects",
-          "Theme presets + Save import",
-          "Samples in Library (watermarked)",
-          "Email support within 48h",
-          "Cancel/upgrade anytime"
-        ]
-      },
-      silver: {
-        title: "SILVER",
-        bullets: [
-          "Everything in Basic",
-          "Advanced effects & metallic styles",
-          "Pro 'Stacks & Setups' guides",
-          "Priority email (24h) and quarterly tune-ups",
-          "Cancel/upgrade anytime"
-        ]
-      },
-      gold: {
-        title: "GOLD",
-        bullets: [
-          "All Silver features",
-          "Admin toolkit + automation recipes",
-          "Pro Library (full access)",
-          "Priority hotfix support"
-        ]
-      },
-      diamond: {
-        title: "DIAMOND",
-        bullets: [
-          "All Gold features",
-          "Private Library drops & custom pipelines",
-          "Roadmap priority & fast turnaround",
-          "Watermark-free exports with full commercial rights"
-        ]
-      }
-    };
-
-    const planDlg = $("#plan-dialog");
-    const planTitle = $("#plan-title");
-    const planBody  = $("#plan-body");
-    const planChoose= $("#plan-choose");
-    let activePlan = null;
-
-    $$(".details-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const key = btn.dataset.details;
-        const d = planCopy[key];
-        activePlan = key;
-        planTitle.textContent = d.title;
-        planBody.innerHTML = "<ul>" + d.bullets.map(b => `<li>${b}</li>`).join("") + "</ul>";
-        planDlg.showModal();
-      });
-    });
-
-    $("#plan-close").onclick = $("#plan-dismiss").onclick = () => planDlg.close();
-    $("#plan-choose").onclick = () => {
-      if (!activePlan) return;
-      const url = (state.links && state.links[activePlan]) ? state.links[activePlan] : null;
-      if (url) window.location.href = url;
-      else alert("Payment link for " + activePlan.toUpperCase() + " isn’t configured yet.");
-    };
-
-    // Footer year
-    $("#year").textContent = new Date().getFullYear();
-  </script>
+  <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>
