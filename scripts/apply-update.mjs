@@ -1,31 +1,16 @@
-// scripts/apply-update.mjs — autodetect root or /dev update.json, write with correct base
+// scripts/apply-update.mjs — reads dev/assets/data/update.json and writes into /dev tree
 import fs from "node:fs";
 import path from "node:path";
 
 const repoRoot = process.cwd();
-
-// Prefer dev/assets/data/update.json if present, else assets/data/update.json
-const devUpdate = path.join(repoRoot, "dev", "assets", "data", "update.json");
-const rootUpdate = path.join(repoRoot, "assets", "data", "update.json");
-
-let updatePath = null;
-let basePrefix = ""; // prefix for write targets when update.json lives under /dev
-if (fs.existsSync(devUpdate)) {
-  updatePath = devUpdate;
-  basePrefix = "dev/";
-} else if (fs.existsSync(rootUpdate)) {
-  updatePath = rootUpdate;
-  basePrefix = ""; // root
-} else {
-  console.error("[apply-update] ERROR: update.json not found in assets/data/ or dev/assets/data/");
-  process.exit(1);
-}
+const updatePath = path.join(repoRoot, "dev", "assets", "data", "update.json");
+const basePrefix = "dev/"; // all write targets are under dev/
 
 function note(...a){ console.log("[apply-update]", ...a); }
 function err(...a){ console.error("[apply-update][error]", ...a); }
 
 function safePath(p) {
-  const relTarget = path.join(basePrefix, String(p || "").replace(/^\/+/, "")); // prefix dev/ if needed
+  const relTarget = path.join(basePrefix, String(p || "").replace(/^\/+/, ""));
   const full = path.join(repoRoot, relTarget);
   const rel = path.relative(repoRoot, full);
   if (!p || rel.startsWith("..")) throw new Error(`Refusing path outside repo or empty path: "${p}"`);
@@ -36,11 +21,12 @@ let hadError = false;
 const results = [];
 
 try {
+  if (!fs.existsSync(updatePath)) throw new Error("dev/assets/data/update.json not found");
   const spec = JSON.parse(fs.readFileSync(updatePath, "utf8"));
   if (!spec || !Array.isArray(spec.ops)) throw new Error("update.json must have array 'ops'");
 
   note(`using update file: ${path.relative(repoRoot, updatePath)}`);
-  note(`base write prefix: ${basePrefix || "(repo root)"}`);
+  note(`base write prefix: ${basePrefix}`);
 
   for (let i = 0; i < spec.ops.length; i++) {
     const op = spec.ops[i] || {};
@@ -86,7 +72,7 @@ try {
         results.push({ i, kind, path: op.path, status: "appended", bytes: content.length });
       }
     } catch (e) {
-      hadError = true; // record but keep going so we get a full summary
+      hadError = true;
       results.push({ i, error: String(e.message || e) });
       err(where, "-", e.message || e);
     }
@@ -97,8 +83,5 @@ try {
   err("fatal", "-", e.message || e);
 }
 
-// Always print a summary
 note("summary:\n" + JSON.stringify(results, null, 2));
-
-// Nonzero if any op failed (keeps CI honest), but we still processed as many as possible
 process.exit(hadError ? 1 : 0);
