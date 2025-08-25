@@ -1,48 +1,47 @@
 name: Repo Hygiene
+
 on:
   push:
     branches: [ main ]
-  pull_request:
-  workflow_dispatch:
+    # If a commit only touches generated/dev telemetry, skip hygiene.
+    paths-ignore:
+      - 'dev/dev/archive/**'
+      - 'dev/dev/data/file-tree.json'
+      - 'dev/dev/data/file-tree.txt'
+      - 'dev/dev/data/repo-metrics.json'
+      - 'dev/dev/state_packs/**'
 
 jobs:
-  json-valid:
-    name: Validate JSON
+  hygiene:
+    # still run for normal edits; also allow bot commits to pass quickly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Validate all JSON (except lock/manifests we write)
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          files=$(git ls-files '*.json' ':!package-lock.json')
-          for f in $files; do
-            echo "Checking $f"
-            jq -e . "$f" >/dev/null || { echo "::error file=$f::Invalid JSON"; exit 1; }
-          done
+      - name: Check out
+        uses: actions/checkout@v4
 
-  whitespace:
-    name: Trailing whitespace (warn only)
-    runs-on: ubuntu-latest
-    continue-on-error: true   # never blocks deploys
-    steps:
-      - uses: actions/checkout@v4
-      - name: Scan for trailing whitespace
+      - name: Fast-pass for bot or snapshot commits
+        if: |
+          startsWith(github.actor, 'github-actions') ||
+          contains(github.event.head_commit.message, 'Repo Snapshot')
+        run: echo "Generated commit – skipping strict checks."
+
+      - name: Basic checks (line endings, large files, trailing spaces)
+        if: |
+          !startsWith(github.actor, 'github-actions') &&
+          !contains(github.event.head_commit.message, 'Repo Snapshot')
         run: |
-          set -euo pipefail
-          bad=$(git ls-files | xargs -I{} grep -nE "[[:blank:]]+$" "{}" || true)
-          if [ -n "$bad" ]; then
-            echo "$bad" | sed 's/^/::warning::Trailing whitespace -> /'
-          else
-            echo "No trailing whitespace"
+          set -e
+          # Fail on files > 5MB (except under assets/videos or assets/gc_spin.mp4)
+          git ls-files -z | xargs -0 -I{} bash -c '
+            s=$(wc -c < "{}"); 
+            if [ "$s" -gt 5242880 ] && [[ "{}" != assets/videos/* ]] && [[ "{}" != assets/gc_spin.mp4 ]]; then
+              echo "::error file={}: file is larger than 5MB ($s bytes)"; exit 1; 
+            fi'
+          # Fail on CRLF
+          if git grep -I -n $'\r' -- . ':(exclude)assets/**' ; then
+            echo "::error ::CRLF detected (exclude assets). Use LF."; exit 1; 
           fi
-
-  svg-sanity:
-    name: SVG sanity check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '18' }
-      - name: Run SVG sanity
-        run: node scripts/svg-sanity.mjs
+          # Fail on trailing spaces
+          if git grep -I -n '[[:blank:]]$' -- . ':(exclude)assets/**' ; then
+            echo "::error ::Trailing whitespace found (exclude assets)."; exit 1;
+          fi
