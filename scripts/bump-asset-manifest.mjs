@@ -1,40 +1,36 @@
-// scripts/bump-asset-manifest.mjs
-import fs from "node:fs";
-import path from "node:path";
-import crypto from "node:crypto";
+import { createHash } from 'crypto';
+import { readdirSync, readFileSync, writeFileSync, statSync } from 'fs';
+import { join, extname, relative } from 'path';
 
-const ROOT = "assets";
-const MANIFEST = path.join(ROOT, "manifest.json");
+const roots = ['assets/images', 'assets/css', 'assets/js', 'assets/videos'];
+const outFile = 'assets/manifest.json';
+const manifest = {};
 
-const walk = (dir) =>
-  fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-    const p = path.join(dir, e.name);
-    return e.isDirectory() ? walk(p) : p;
-  });
-
-if (!fs.existsSync(ROOT)) {
-  console.log("No assets/ folder; nothing to do.");
-  process.exit(0);
+function* walk(dir) {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) yield* walk(p);
+    else yield p;
+  }
 }
 
-const files = walk(ROOT).filter((p) => p !== MANIFEST);
-const entries = files.map((p) => {
-  const buf = fs.readFileSync(p);
-  const hash = crypto.createHash("sha256").update(buf).digest("hex");
-  return { path: p.replace(/\\/g, "/"), sha256: hash };
-});
-
-const versionSeed = entries.map((e) => e.sha256).join("");
-const version = "assets-" + crypto.createHash("sha1").update(versionSeed).digest("hex").slice(0, 12);
-
-const manifest = { version, generatedAt: new Date().toISOString(), files: entries };
-
-const prev = fs.existsSync(MANIFEST) ? fs.readFileSync(MANIFEST, "utf8") : "";
-const next = JSON.stringify(manifest, null, 2);
-
-if (prev.trim() === next.trim()) {
-  console.log("No asset changes. Manifest unchanged.");
-} else {
-  fs.writeFileSync(MANIFEST, next + "\n");
-  console.log(`Wrote ${MANIFEST} with version ${version}`);
+function hashContents(path) {
+  const h = createHash('sha1');
+  h.update(readFileSync(path));
+  return h.digest('hex').slice(0, 10);
 }
+
+for (const root of roots) {
+  try {
+    for (const file of walk(root)) {
+      if (statSync(file).size === 0) continue;
+      const ext = extname(file).toLowerCase();
+      const key = relative('assets', file).replace(/\\/g, '/'); // e.g. images/foo.svg
+      const fingerprint = hashContents(file);
+      manifest[key] = { hash: fingerprint, bytes: statSync(file).size, ext };
+    }
+  } catch (_) { /* root may not exist yet */ }
+}
+
+writeFileSync(outFile, JSON.stringify(manifest, null, 2));
+console.log(`Wrote ${outFile} with ${Object.keys(manifest).length} entries`);
