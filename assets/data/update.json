@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "branch": "main",
+  "ops": [
+    { "op": "mkdir",  "path": "archive",  "scope": "dev" },
+    { "op": "mkdir",  "path": "archives", "scope": "dev" },
+
+    { "op": "write",  "path": "archive/ping_dev_fixed.txt",  "content": "ping dev fixed\n",  "scope": "dev" },
+    { "op": "write",  "path": "archives/ping_dev_fixed.txt", "content": "ping dev + plural fixed\n", "scope": "dev" },
+
+    { "op": "append", "path": "README.md", "content": "\n\n✅ updater wrote from dev/update.json (scoped+move enabled)", "scope": "root" },
+
+    { "op": "mkdir",  "path": "dev/data", "scope": "root" },
+    { "op": "move",   "path": "dev/dev/data/file-tree.json", "dest": "dev/data/file-tree.json", "scope": "root" },
+    { "op": "move",   "path": "dev/dev/data/file-tree.txt",  "dest": "dev/data/file-tree.txt",  "scope": "root" },
+    { "op": "delete", "path": "dev/dev/data/update.json", "scope": "root" },
+    { "op": "delete", "path": "dev/dev", "scope": "root" }
+  ]
+}
