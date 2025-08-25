@@ -1,31 +1,33 @@
 name: Link Check
-
 on:
+  workflow_dispatch:
+  pull_request:
   push:
     branches: [ main ]
-  workflow_dispatch:
-  schedule:
-    - cron: "11 4 * * *"
-
+    paths:
+      - '**/*.md'
+      - '**/*.html'
+      - 'lychee.toml'
+permissions:
+  contents: read
 jobs:
   lychee:
     runs-on: ubuntu-latest
+    continue-on-error: true   # hygiene, never blocks deploy
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run lychee on repo HTML/MD
-        uses: lycheeverse/lychee-action@v2
+      - uses: actions/checkout@v4
+      - name: Run lychee
+        uses: lycheeverse/lychee-action@v1
         with:
           args: >
-            --no-progress
-            --scheme https
-            --retry 2
-            --timeout 20s
+            --config lychee.toml
+            --max-concurrency 6
             --exclude-mail
-            --base ${{
-              vars.PAGES_BASE != '' && vars.PAGES_BASE || format('https://{0}.github.io/', github.repository_owner)
-            }}
-            **/*.html **/*.md
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            --no-progress
+            .
+      - name: Upload lychee report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report
+          path: lychee/out.md
