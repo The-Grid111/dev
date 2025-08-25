@@ -1,19 +1,127 @@
 {
-  "Hero": [
-    "assets/videos/hero_1.mp4",
-    "assets/images/hero_1.jpg",
-    "assets/images/hero_2.jpg"
-  ],
-  "Reels 9:16": [],
-  "Reels 16:9": [],
-  "Backgrounds": [],
-  "Logos": [
-    "assets/videos/gc_spin.mp4",
-    "assets/images/gc_logo.png"
-  ],
-  "Images": [
-    "assets/images/hero_1.jpg",
-    "assets/images/hero_2.jpg",
-    "assets/images/hero_3.jpg"
-  ]
+  "images/favicon.svg": {
+    "hash": "6bf4ee2973",
+    "bytes": 1075,
+    "ext": ".svg"
+  },
+  "images/logo-grid-mark.svg": {
+    "hash": "5ec6989555",
+    "bytes": 1289,
+    "ext": ".svg"
+  },
+  "images/logo-grid-word-only.svg": {
+    "hash": "43d7d1dcf5",
+    "bytes": 581,
+    "ext": ".svg"
+  },
+  "images/logo-grid-wordmark.svg": {
+    "hash": "82af9c6373",
+    "bytes": 1939,
+    "ext": ".svg"
+  },
+  "images/manifest.json": {
+    "hash": "b526c73ed6",
+    "bytes": 327,
+    "ext": ".json"
+  },
+  "css/modal.css": {
+    "hash": "9491601a07",
+    "bytes": 1918,
+    "ext": ".css"
+  },
+  "css/site.css": {
+    "hash": "cf4d93b80b",
+    "bytes": 2836,
+    "ext": ".css"
+  },
+  "css/styles.css": {
+    "hash": "27ab0ef127",
+    "bytes": 9436,
+    "ext": ".css"
+  },
+  "js/app.js": {
+    "hash": "55747ed85f",
+    "bytes": 5017,
+    "ext": ".js"
+  },
+  "js/commerce.js": {
+    "hash": "27bacacc4e",
+    "bytes": 4349,
+    "ext": ".js"
+  },
+  "js/confetti.js": {
+    "hash": "850284b3b0",
+    "bytes": 1116,
+    "ext": ".js"
+  },
+  "js/effects.js": {
+    "hash": "f0b50cb73d",
+    "bytes": 806,
+    "ext": ".js"
+  },
+  "js/entitlements.js": {
+    "hash": "6abda3d82e",
+    "bytes": 397,
+    "ext": ".js"
+  },
+  "js/hotfix.js": {
+    "hash": "778524a0f0",
+    "bytes": 2974,
+    "ext": ".js"
+  },
+  "js/main.js": {
+    "hash": "85df17ce4f",
+    "bytes": 6534,
+    "ext": ".js"
+  },
+  "js/metrics.js": {
+    "hash": "4eb11ad945",
+    "bytes": 2853,
+    "ext": ".js"
+  },
+  "js/save-merge.js": {
+    "hash": "cd15bb3925",
+    "bytes": 6477,
+    "ext": ".js"
+  },
+  "js/save.js": {
+    "hash": "926dd0fd2c",
+    "bytes": 6600,
+    "ext": ".js"
+  },
+  "js/storage.js": {
+    "hash": "ee11b1abbf",
+    "bytes": 1899,
+    "ext": ".js"
+  },
+  "js/stripe.js": {
+    "hash": "0a079de309",
+    "bytes": 1773,
+    "ext": ".js"
+  },
+  "js/supabase.js": {
+    "hash": "9b440ad9a2",
+    "bytes": 760,
+    "ext": ".js"
+  },
+  "js/thegrid_verify_signature.js": {
+    "hash": "e3347b766f",
+    "bytes": 1259,
+    "ext": ".js"
+  },
+  "js/trial-banner.js": {
+    "hash": "c544e09c0a",
+    "bytes": 6375,
+    "ext": ".js"
+  },
+  "js/ui.js": {
+    "hash": "7caa27a9fd",
+    "bytes": 1704,
+    "ext": ".js"
+  },
+  "videos/manifest.json": {
+    "hash": "889aed4649",
+    "bytes": 317,
+    "ext": ".json"
+  }
 }
