@@ -1,0 +1,212 @@
+{
+  "generated_at": "2025-08-25T20:56:34.246Z",
+  "totals": {
+    "files": 60,
+    "dirs": 13,
+    "bytes": 2549720
+  },
+  "by_extension": {
+    ".mp4": {
+      "count": 1,
+      "bytes": 2438352
+    },
+    ".js": {
+      "count": 18,
+      "bytes": 49372
+    },
+    ".css": {
+      "count": 3,
+      "bytes": 14190
+    },
+    ".mjs": {
+      "count": 7,
+      "bytes": 13990
+    },
+    ".html": {
+      "count": 5,
+      "bytes": 12424
+    },
+    ".json": {
+      "count": 14,
+      "bytes": 12180
+    },
+    ".svg": {
+      "count": 5,
+      "bytes": 6157
+    },
+    ".txt": {
+      "count": 3,
+      "bytes": 2060
+    },
+    ".xml": {
+      "count": 1,
+      "bytes": 507
+    },
+    ".toml": {
+      "count": 1,
+      "bytes": 346
+    },
+    ".md": {
+      "count": 1,
+      "bytes": 141
+    },
+    "": {
+      "count": 1,
+      "bytes": 1
+    }
+  },
+  "largest": [
+    {
+      "path": "assets/gc_spin.mp4",
+      "size": 2438352,
+      "hash": "ccb4fcb55ec4"
+    },
+    {
+      "path": "index.html",
+      "size": 9797,
+      "hash": "52c73e010ac3"
+    },
+    {
+      "path": "assets/css/styles.css",
+      "size": 9436,
+      "hash": "412be95af7a6"
+    },
+    {
+      "path": "assets/js/save.js",
+      "size": 6600,
+      "hash": "222eac41227a"
+    },
+    {
+      "path": "assets/js/main.js",
+      "size": 6534,
+      "hash": "585fc1d4599e"
+    },
+    {
+      "path": "assets/js/save-merge.js",
+      "size": 6477,
+      "hash": "bf0a35240e04"
+    },
+    {
+      "path": "assets/js/app.js",
+      "size": 5017,
+      "hash": "c9fb4064ab91"
+    },
+    {
+      "path": "scripts/apply-update.mjs",
+      "size": 5010,
+      "hash": "9ae765ffefa1"
+    },
+    {
+      "path": "assets/js/commerce.js",
+      "size": 4349,
+      "hash": "5b145b646d37"
+    },
+    {
+      "path": "scripts/repo-snapshot.mjs",
+      "size": 3741,
+      "hash": "a5a441e6d77e"
+    },
+    {
+      "path": "assets/data/learn.js",
+      "size": 3440,
+      "hash": "8220671b9ab7"
+    },
+    {
+      "path": "assets/js/hotfix.js",
+      "size": 2974,
+      "hash": "88f30624fac9"
+    },
+    {
+      "path": "assets/js/metrics.js",
+      "size": 2853,
+      "hash": "b2bcca9726f1"
+    },
+    {
+      "path": "assets/css/site.css",
+      "size": 2836,
+      "hash": "dd6bbfeb5ca5"
+    },
+    {
+      "path": "dev/data/file-tree.json",
+      "size": 2632,
+      "hash": "5d1d8c969b94"
+    }
+  ],
+  "most_recent": [
+    {
+      "path": "scripts/repo-snapshot.mjs",
+      "commit": "644eba3",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/file-tree.json",
+      "commit": "45b1e5b",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "assets/data/update.json",
+      "commit": "7fb5b43",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/file-tree.txt",
+      "commit": "4ce4f05",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "scripts/apply-update.mjs",
+      "commit": "0dd43d1",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/update.json",
+      "commit": "3020300",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "README.md",
+      "commit": "016883d",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "archive/hello_v0.2.html",
+      "commit": "016883d",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/state_packs/state_pack_20250825_1310.json",
+      "commit": "56f85e8",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "index.html",
+      "commit": "c2faa5b",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "assets/manifest.json",
+      "commit": "2d304a7",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "assets/js/trial-banner.js",
+      "commit": "4967bae",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "assets/config/stripe.json",
+      "commit": "97b24bd",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "scripts/bump-asset-manifest.mjs",
+      "commit": "8429816",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "scripts/svg-sanity.mjs",
+      "commit": "c88ad83",
+      "date": "2025-08-25"
+    }
+  ]
+}
