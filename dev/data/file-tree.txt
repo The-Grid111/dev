@@ -1,76 +1,72 @@
-.github/ISSUE_TEMPLATE/add-file.yml
-.github/ISSUE_TEMPLATE/config.yml
-.github/ISSUE_TEMPLATE/multi-file-change.yml
-.github/ISSUE_TEMPLATE/update-file.yml
-.github/workflows/apply-update.yml
-.github/workflows/apply.yml
-.github/workflows/assets-manifest.yml
-.github/workflows/build-file-inventory.yml
-.github/workflows/deploy-on-patch.yml
-.github/workflows/deploy.yml
-.github/workflows/issue-patches.yml
-.github/workflows/link-check.yml
-.github/workflows/patch.yml
-.github/workflows/repo-hygiene.yml
-.github/workflows/repo-snapshot.yml
-.github/workflows/svg-sanity.yml
-.github/workflows/verify-inventory.yml
-.nojekyll
-404.html
-README.md
-archive/hello_v0.2.html
-assets/config/stripe.json
-assets/css/modal.css
-assets/css/site.css
-assets/css/styles.css
-assets/data/language.json
-assets/data/learn.js
-assets/data/owner_core_save_v1.2.json
-assets/data/plans.json
-assets/data/services.json
-assets/data/taxonomy.json
-assets/data/update.json
-assets/data/updates.json
-assets/gc_spin.mp4
-assets/images/favicon.svg
-assets/images/logo-grid-mark.svg
-assets/images/logo-grid-word-only.svg
-assets/images/logo-grid-wordmark.svg
-assets/images/manifest.json
-assets/js/app.js
-assets/js/commerce.js
-assets/js/confetti.js
-assets/js/effects.js
-assets/js/entitlements.js
-assets/js/hotfix.js
-assets/js/main.js
-assets/js/metrics.js
-assets/js/save-merge.js
-assets/js/save.js
-assets/js/storage.js
-assets/js/stripe.js
-assets/js/supabase.js
-assets/js/thegrid_verify_signature.js
-assets/js/trial-banner.js
-assets/js/ui.js
-assets/manifest.json
-assets/videos/manifest.json
-dev/data/file-tree.json
-dev/data/file-tree.txt
-dev/data/state_packs/state_pack_20250825_1310.json
-dev/data/update.json
-favicon.svg
-index.html
-lychee.toml
-patch_path.txt
-privacy.html
-robots.txt
-scripts/apply-update.mjs
-scripts/bump-asset-manifest.mjs
-scripts/check-json.mjs
-scripts/gen-file-inventory.mjs
-scripts/svg-sanity.mjs
-scripts/verify-inventory.mjs
-sitemap.xml
-terms.html
-thegrid_verify_signature.js
+.nojekyll  (1B, 01ba4719c80b, 9e608e8, 2025-08-15)
+404.html  (869B, dcf1c0b689a9, 1420abf, 2025-08-25)
+README.md  (141B, 1ae84b72ee78, 016883d, 2025-08-25)
+[DIR] archive/
+archive/hello_v0.2.html  (79B, 65710a6cd100, 016883d, 2025-08-25)
+[DIR] assets/
+[DIR] assets/config/
+assets/config/stripe.json  (248B, 92ea51f67b14, 97b24bd, 2025-08-25)
+[DIR] assets/css/
+assets/css/modal.css  (1918B, cfe7acf062ee, e06a9ca, 2025-08-22)
+assets/css/site.css  (2836B, dd6bbfeb5ca5, 4fee312, 2025-08-25)
+assets/css/styles.css  (9436B, 412be95af7a6, 48dc004, 2025-08-24)
+[DIR] assets/data/
+assets/data/language.json  (1355B, 663ccf4caef9, 3fd54b4, 2025-08-25)
+assets/data/learn.js  (3440B, 8220671b9ab7, 86465e2, 2025-08-25)
+assets/data/owner_core_save_v1.2.json  (403B, 51afac43f1c9, f3acea3, 2025-08-24)
+assets/data/plans.json  (1895B, 671df2fc16a4, 8cac417, 2025-08-24)
+assets/data/services.json  (840B, 7c29559dfbc8, 958172f, 2025-08-24)
+assets/data/taxonomy.json  (409B, 56c1cf1acc0a, e20be18, 2025-08-24)
+assets/data/update.json  (609B, cf9167925d12, 46d95da, 2025-08-25)
+assets/data/updates.json  (472B, fb0dfd45e71d, 0d2824c, 2025-08-25)
+assets/gc_spin.mp4  (2438352B, ccb4fcb55ec4, 3d9db77, 2025-08-15)
+[DIR] assets/images/
+assets/images/favicon.svg  (1075B, 238d380899d9, 002ef0f, 2025-08-25)
+assets/images/logo-grid-mark.svg  (1289B, 98cf6dc2cf50, 9c230c5, 2025-08-25)
+assets/images/logo-grid-word-only.svg  (581B, 1386fec0ae86, 9c230c5, 2025-08-25)
+assets/images/logo-grid-wordmark.svg  (1939B, c253157365d3, 9c230c5, 2025-08-25)
+assets/images/manifest.json  (327B, ac38c68549f1, 511162a, 2025-08-24)
+[DIR] assets/js/
+assets/js/app.js  (5017B, c9fb4064ab91, 11a42f4, 2025-08-25)
+assets/js/commerce.js  (4349B, 5b145b646d37, 6f7fc58, 2025-08-24)
+assets/js/confetti.js  (1116B, e9d0d5ac9a03, 2d5574b, 2025-08-20)
+assets/js/effects.js  (806B, 3d8e3a8c48fc, becb948, 2025-08-20)
+assets/js/entitlements.js  (397B, 64e4511390c6, a369d15, 2025-08-25)
+assets/js/hotfix.js  (2974B, 88f30624fac9, a1d750a, 2025-08-24)
+assets/js/main.js  (6534B, 585fc1d4599e, 54a3df4, 2025-08-24)
+assets/js/metrics.js  (2853B, b2bcca9726f1, 66610d2, 2025-08-24)
+assets/js/save-merge.js  (6477B, bf0a35240e04, 6eed004, 2025-08-24)
+assets/js/save.js  (6600B, 222eac41227a, 1852de0, 2025-08-25)
+assets/js/storage.js  (1899B, a0bd10a42a42, 5098c60, 2025-08-25)
+assets/js/stripe.js  (1773B, 0b3c2ba5c2b5, d4b26bf, 2025-08-25)
+assets/js/supabase.js  (760B, 10e91f1da87b, 27833b9, 2025-08-25)
+assets/js/thegrid_verify_signature.js  (1259B, fcec9e1b9a0e, aea8a9e, 2025-08-20)
+assets/js/trial-banner.js  (973B, a7745896fc1e, 4967bae, 2025-08-25)
+assets/js/ui.js  (1704B, bb928e751a5a, 74e2794, 2025-08-25)
+assets/manifest.json  (2286B, 7ba2bb48d558, 2d304a7, 2025-08-25)
+[DIR] assets/videos/
+assets/videos/manifest.json  (317B, e0fd8699ce7b, 3bae943, 2025-08-24)
+[DIR] dev/
+[DIR] dev/data/
+dev/data/file-tree.json  (2599B, 51605fc417bf, ff1aaaf, 2025-08-25)
+dev/data/file-tree.txt  (1945B, 146c7499a6ca, ff1aaaf, 2025-08-25)
+[DIR] dev/data/state_packs/
+dev/data/state_packs/state_pack_20250825_1310.json  (1B, 01ba4719c80b, 56f85e8, 2025-08-25)
+dev/data/update.json  (454B, 3ecd78451b40, 3020300, 2025-08-25)
+favicon.svg  (1273B, 38830de2bdd7, 40b24c0, 2025-08-25)
+index.html  (9797B, 52c73e010ac3, c2faa5b, 2025-08-25)
+lychee.toml  (346B, 778bc3c0f70c, 5a8f0c1, 2025-08-25)
+patch_path.txt  (10B, 0eb547304658, eb86040, 2025-08-20)
+privacy.html  (838B, 73347a6af1d7, 0685900, 2025-08-20)
+robots.txt  (79B, 6a0d354935c8, cd0128b, 2025-08-25)
+[DIR] scripts/
+scripts/apply-update.mjs  (5010B, 9ae765ffefa1, 0dd43d1, 2025-08-25)
+scripts/bump-asset-manifest.mjs  (1189B, 9e88b5ce24f4, 8429816, 2025-08-25)
+scripts/check-json.mjs  (522B, 56b1045bd861, 7e48f11, 2025-08-25)
+scripts/gen-file-inventory.mjs  (879B, 0c843442f2b3, f581f66, 2025-08-25)
+scripts/repo-snapshot.mjs  (3592B, 6b3d538debe3, 3756a7c, 2025-08-25)
+scripts/svg-sanity.mjs  (1324B, a8e6055029e6, c88ad83, 2025-08-25)
+scripts/verify-inventory.mjs  (1325B, dc882e919cb8, 7c88aad, 2025-08-25)
+sitemap.xml  (507B, e610f9c3ef45, 82607eb, 2025-08-25)
+terms.html  (841B, 0be8097de2f3, d155bc5, 2025-08-20)
+thegrid_verify_signature.js  (441B, 1f38cadee840, 846ccca, 2025-08-15)
