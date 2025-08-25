@@ -1,48 +1,48 @@
 name: Repo Hygiene
 on:
-  workflow_dispatch:
-  pull_request:
   push:
     branches: [ main ]
-    paths:
-      - "assets/**/*.json"
-      - "assets/**/*.svg"
-      - "assets/manifest.json"
-      - "assets/images/**"
-      - "scripts/*.mjs"
-permissions:
-  contents: read
+  pull_request:
+  workflow_dispatch:
+
 jobs:
-  json:
-    name: JSON sanity
+  json-valid:
+    name: Validate JSON
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - run: node scripts/check-json.mjs || echo "::warning ::JSON check reported issues"
-
-  svg:
-    name: SVG sanity
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - run: node scripts/svg-sanity.mjs || echo "::warning ::SVG check reported issues"
-
-  bump:
-    name: Asset manifest (noop-safe)
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - name: Run bump script if present
+      - name: Validate all JSON (except lock/manifests we write)
         run: |
-          if [ -f scripts/bump-asset-manifest.mjs ]; then
-            node scripts/bump-asset-manifest.mjs || echo "::warning ::bump script warnings"
+          set -euo pipefail
+          shopt -s nullglob
+          files=$(git ls-files '*.json' ':!package-lock.json')
+          for f in $files; do
+            echo "Checking $f"
+            jq -e . "$f" >/dev/null || { echo "::error file=$f::Invalid JSON"; exit 1; }
+          done
+
+  whitespace:
+    name: Trailing whitespace (warn only)
+    runs-on: ubuntu-latest
+    continue-on-error: true   # never blocks deploys
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for trailing whitespace
+        run: |
+          set -euo pipefail
+          bad=$(git ls-files | xargs -I{} grep -nE "[[:blank:]]+$" "{}" || true)
+          if [ -n "$bad" ]; then
+            echo "$bad" | sed 's/^/::warning::Trailing whitespace -> /'
           else
-            echo "no bump script; skipping"
+            echo "No trailing whitespace"
           fi
+
+  svg-sanity:
+    name: SVG sanity check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '18' }
+      - name: Run SVG sanity
+        run: node scripts/svg-sanity.mjs
