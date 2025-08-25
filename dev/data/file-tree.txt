@@ -50,10 +50,11 @@ assets/videos/manifest.json  (317B, e0fd8699ce7b, 3bae943, 2025-08-24)
 [DIR] dev/archive/
 dev/archive/snapshot_1756155441.json  (18965B, c0084cc581f5, b3bfcae, 2025-08-25)
 dev/archive/snapshot_1756155958.json  (19228B, 01037f8619c5, 0eca591, 2025-08-25)
+dev/archive/snapshot_1756155994.json  (19496B, cba0fc61f191, 0374f5a, 2025-08-25)
 [DIR] dev/data/
-dev/data/file-tree.json  (13326B, 34af32c1f22b, 0eca591, 2025-08-25)
-dev/data/file-tree.txt  (4362B, 09156dbd083b, 0eca591, 2025-08-25)
-dev/data/repo-metrics.json  (4056B, 54f58d99e91b, 0eca591, 2025-08-25)
+dev/data/file-tree.json  (13546B, 04c0a3979ecd, 0374f5a, 2025-08-25)
+dev/data/file-tree.txt  (4444B, 78b948793129, 0374f5a, 2025-08-25)
+dev/data/repo-metrics.json  (4084B, 22d02c924b70, 0374f5a, 2025-08-25)
 [DIR] dev/data/state_packs/
 dev/data/state_packs/state_pack_20250825_1310.json  (1B, 01ba4719c80b, 56f85e8, 2025-08-25)
 dev/data/update.json  (454B, 3ecd78451b40, 3020300, 2025-08-25)

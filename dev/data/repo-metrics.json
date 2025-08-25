@@ -1,9 +1,9 @@
 {
-  "generated_at": "2025-08-25T21:06:34.623Z",
+  "generated_at": "2025-08-25T21:09:46.600Z",
   "totals": {
-    "files": 63,
+    "files": 64,
     "dirs": 13,
-    "bytes": 2606691
+    "bytes": 2626517
   },
   "by_extension": {
     ".mp4": {
@@ -11,8 +11,8 @@
       "bytes": 2438352
     },
     ".json": {
-      "count": 17,
-      "bytes": 65123
+      "count": 18,
+      "bytes": 84867
     },
     ".js": {
       "count": 18,
@@ -36,7 +36,7 @@
     },
     ".txt": {
       "count": 3,
-      "bytes": 4451
+      "bytes": 4533
     },
     ".xml": {
       "count": 1,
@@ -62,6 +62,11 @@
       "hash": "ccb4fcb55ec4"
     },
     {
+      "path": "dev/archive/snapshot_1756155994.json",
+      "size": 19496,
+      "hash": "cba0fc61f191"
+    },
+    {
       "path": "dev/archive/snapshot_1756155958.json",
       "size": 19228,
       "hash": "01037f8619c5"
@@ -73,8 +78,8 @@
     },
     {
       "path": "dev/data/file-tree.json",
-      "size": 13326,
-      "hash": "34af32c1f22b"
+      "size": 13546,
+      "hash": "04c0a3979ecd"
     },
     {
       "path": "index.html",
@@ -118,38 +123,38 @@
     },
     {
       "path": "dev/data/file-tree.txt",
-      "size": 4362,
-      "hash": "09156dbd083b"
+      "size": 4444,
+      "hash": "78b948793129"
     },
     {
       "path": "assets/js/commerce.js",
       "size": 4349,
       "hash": "5b145b646d37"
-    },
-    {
-      "path": "dev/data/repo-metrics.json",
-      "size": 4056,
-      "hash": "54f58d99e91b"
     }
   ],
   "most_recent": [
     {
-      "path": "dev/archive/snapshot_1756155958.json",
-      "commit": "0eca591",
+      "path": "dev/archive/snapshot_1756155994.json",
+      "commit": "0374f5a",
       "date": "2025-08-25"
     },
     {
       "path": "dev/data/file-tree.json",
-      "commit": "0eca591",
+      "commit": "0374f5a",
       "date": "2025-08-25"
     },
     {
       "path": "dev/data/file-tree.txt",
-      "commit": "0eca591",
+      "commit": "0374f5a",
       "date": "2025-08-25"
     },
     {
       "path": "dev/data/repo-metrics.json",
+      "commit": "0374f5a",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/archive/snapshot_1756155958.json",
       "commit": "0eca591",
       "date": "2025-08-25"
     },
@@ -201,11 +206,6 @@
     {
       "path": "assets/manifest.json",
       "commit": "2d304a7",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "assets/js/trial-banner.js",
-      "commit": "4967bae",
       "date": "2025-08-25"
     }
   ]
