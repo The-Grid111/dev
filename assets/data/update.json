@@ -1,15 +1,11 @@
 {
   "branch": "main",
   "ops": [
-    {
-      "op": "run",
-      "path": "scripts/repo-snapshot.mjs",
-      "args": ["--force-clean"]
-    },
+    { "op": "run", "path": "scripts/repo-snapshot.mjs" },
     {
       "op": "append",
       "path": "README.md",
-      "content": "\n\n🗂 Snapshot sync complete (force clean) — $(date -u +%Y-%m-%dT%H:%MZ)."
+      "content": "\n\n🗂 Snapshot sync attempted — $(date -u +%Y-%m-%dT%H:%MZ)."
     }
   ]
 }
