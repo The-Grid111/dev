@@ -1,0 +1,31 @@
+name: Link Check
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: "11 4 * * *"
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run lychee on repo HTML/MD
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --no-progress
+            --scheme https
+            --retry 2
+            --timeout 20s
+            --exclude-mail
+            --base ${{
+              vars.PAGES_BASE != '' && vars.PAGES_BASE || format('https://{0}.github.io/', github.repository_owner)
+            }}
+            **/*.html **/*.md
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
