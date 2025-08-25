@@ -57,6 +57,7 @@ index.html
 patch_path.txt
 privacy.html
 robots.txt
+scripts/bump-asset-manifest.mjs
 scripts/check-json.mjs
 scripts/gen-file-inventory.mjs
 scripts/svg-sanity.mjs
