@@ -1,0 +1,72 @@
+name: Repo Hygiene
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: "27 3 * * *"  # nightly
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify inventory outputs exist
+        run: |
+          set -e
+          test -f data/file-tree.json || (echo "Missing data/file-tree.json" && exit 1)
+          test -f dev/data/file-tree.txt || (echo "Missing dev/data/file-tree.txt" && exit 1)
+          echo "✅ Inventory outputs exist."
+
+      - name: Validate JSON configs
+        run: node scripts/check-json.mjs
+        env:
+          FILES: >-
+            data/file-tree.json
+            assets/config/stripe.json
+            assets/images/manifest.json
+            assets/manifest.json
+            assets/videos/manifest.json
+            assets/data/language.json
+            assets/data/owner_core_save_v1.2.json
+            assets/data/plans.json
+            assets/data/services.json
+            assets/data/taxonomy.json
+            assets/data/updates.json
+
+      - name: Policy checks (links + trial banner)
+        run: node scripts/verify-inventory.mjs
+
+      - name: Post short inventory snapshot (best effort)
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'data/file-tree.json';
+            if (!fs.existsSync(path)) { return core.info('No inventory to snapshot.'); }
+            const inv = JSON.parse(fs.readFileSync(path,'utf8'));
+            const lines = inv.files?.slice(0,40).map(f=>`- ${f}`) ?? [];
+            const body = [
+              '### Inventory snapshot (first 40)',
+              '',
+              '```\n' + lines.join('\n') + '\n```',
+            ].join('\n');
+            const {context, github} = require('@actions/github');
+            await github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body
+            });
