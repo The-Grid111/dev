@@ -28,7 +28,6 @@ assets/data/owner_core_save_v1.2.json
 assets/data/plans.json
 assets/data/services.json
 assets/data/taxonomy.json
-assets/data/update.json
 assets/data/updates.json
 assets/gc_spin.mp4
 assets/images/favicon.svg
