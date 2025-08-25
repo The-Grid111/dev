@@ -1,9 +1,9 @@
 {
-  "generated_at": "2025-08-25T20:56:34.246Z",
+  "generated_at": "2025-08-25T20:57:21.268Z",
   "totals": {
-    "files": 60,
+    "files": 61,
     "dirs": 13,
-    "bytes": 2549720
+    "bytes": 2566240
   },
   "by_extension": {
     ".mp4": {
@@ -13,6 +13,10 @@
     ".js": {
       "count": 18,
       "bytes": 49372
+    },
+    ".json": {
+      "count": 15,
+      "bytes": 26463
     },
     ".css": {
       "count": 3,
@@ -26,17 +30,13 @@
       "count": 5,
       "bytes": 12424
     },
-    ".json": {
-      "count": 14,
-      "bytes": 12180
-    },
     ".svg": {
       "count": 5,
       "bytes": 6157
     },
     ".txt": {
       "count": 3,
-      "bytes": 2060
+      "bytes": 4297
     },
     ".xml": {
       "count": 1,
@@ -60,6 +60,11 @@
       "path": "assets/gc_spin.mp4",
       "size": 2438352,
       "hash": "ccb4fcb55ec4"
+    },
+    {
+      "path": "dev/data/file-tree.json",
+      "size": 12896,
+      "hash": "e10d4a35911d"
     },
     {
       "path": "index.html",
@@ -102,6 +107,16 @@
       "hash": "5b145b646d37"
     },
     {
+      "path": "dev/data/file-tree.txt",
+      "size": 4208,
+      "hash": "2ea57662ce5d"
+    },
+    {
+      "path": "dev/data/repo-metrics.json",
+      "size": 4019,
+      "hash": "f1e57e52233b"
+    },
+    {
       "path": "scripts/repo-snapshot.mjs",
       "size": 3741,
       "hash": "a5a441e6d77e"
@@ -115,42 +130,32 @@
       "path": "assets/js/hotfix.js",
       "size": 2974,
       "hash": "88f30624fac9"
-    },
-    {
-      "path": "assets/js/metrics.js",
-      "size": 2853,
-      "hash": "b2bcca9726f1"
-    },
-    {
-      "path": "assets/css/site.css",
-      "size": 2836,
-      "hash": "dd6bbfeb5ca5"
-    },
-    {
-      "path": "dev/data/file-tree.json",
-      "size": 2632,
-      "hash": "5d1d8c969b94"
     }
   ],
   "most_recent": [
+    {
+      "path": "dev/data/file-tree.json",
+      "commit": "d52eed2",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/file-tree.txt",
+      "commit": "d52eed2",
+      "date": "2025-08-25"
+    },
+    {
+      "path": "dev/data/repo-metrics.json",
+      "commit": "d52eed2",
+      "date": "2025-08-25"
+    },
     {
       "path": "scripts/repo-snapshot.mjs",
       "commit": "644eba3",
       "date": "2025-08-25"
     },
     {
-      "path": "dev/data/file-tree.json",
-      "commit": "45b1e5b",
-      "date": "2025-08-25"
-    },
-    {
       "path": "assets/data/update.json",
       "commit": "7fb5b43",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "dev/data/file-tree.txt",
-      "commit": "4ce4f05",
       "date": "2025-08-25"
     },
     {
@@ -201,11 +206,6 @@
     {
       "path": "scripts/bump-asset-manifest.mjs",
       "commit": "8429816",
-      "date": "2025-08-25"
-    },
-    {
-      "path": "scripts/svg-sanity.mjs",
-      "commit": "c88ad83",
       "date": "2025-08-25"
     }
   ]

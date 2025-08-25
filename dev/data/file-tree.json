@@ -446,22 +446,32 @@
   {
     "path": "dev/data/file-tree.json",
     "type": "file",
-    "size": 2632,
-    "hash": "5d1d8c969b94",
+    "size": 12896,
+    "hash": "e10d4a35911d",
     "ext": ".json",
-    "commit": "45b1e5b",
+    "commit": "d52eed2",
     "date": "2025-08-25",
-    "ts": 1756154787
+    "ts": 1756155394
   },
   {
     "path": "dev/data/file-tree.txt",
     "type": "file",
-    "size": 1971,
-    "hash": "7afcc304823e",
+    "size": 4208,
+    "hash": "2ea57662ce5d",
     "ext": ".txt",
-    "commit": "4ce4f05",
+    "commit": "d52eed2",
     "date": "2025-08-25",
-    "ts": 1756154689
+    "ts": 1756155394
+  },
+  {
+    "path": "dev/data/repo-metrics.json",
+    "type": "file",
+    "size": 4019,
+    "hash": "f1e57e52233b",
+    "ext": ".json",
+    "commit": "d52eed2",
+    "date": "2025-08-25",
+    "ts": 1756155394
   },
   {
     "path": "dev/data/state_packs/",
