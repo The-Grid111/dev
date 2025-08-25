@@ -1,30 +1,47 @@
 name: Build File Inventory
+
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  inventory:
     runs-on: ubuntu-latest
+    # ← Do not block deploy even if this job errors
+    continue-on-error: true
+
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: Use Node 20
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
       - name: Generate file inventory
         run: node dev/scripts/gen-file-inventory.mjs
 
-      - name: Commit file inventory
+      - name: Upload inventory artifact (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: file-inventory
+          path: |
+            dev/data/file-tree.json
+            dev/data/file-tree.txt
+          if-no-files-found: warn
+
+      - name: Commit inventory back to repo (only on success)
+        if: success()
         run: |
-          git config user.name "grid-bot"
-          git config user.email "grid-bot@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dev/data/file-tree.*
-          git commit -m "chore: update file inventory" || echo "No changes"
-          git push
+          git diff --cached --quiet || (git commit -m "chore: update file inventory [skip ci]" && git push)
