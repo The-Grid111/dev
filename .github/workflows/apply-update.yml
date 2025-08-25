@@ -22,11 +22,23 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run updater
+      - name: Show repo snapshot (debug)
         run: |
+          echo "PWD=$(pwd)"
+          ls -la
+          echo "------ scripts/ ------"
+          ls -la scripts || true
+          echo "------ assets/data/update.json ------"
+          test -f assets/data/update.json && cat assets/data/update.json || echo "update.json not found"
+
+      - name: Run updater
+        shell: bash
+        run: |
+          set -e
           node scripts/apply-update.mjs
 
       - name: Commit & push changes (if any)
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
