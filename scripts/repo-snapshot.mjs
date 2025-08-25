@@ -7,7 +7,7 @@ import crypto from "node:crypto";
 import { execSync } from "node:child_process";
 
 const repo = process.cwd();
-const outDir = path.join(repo, "dev/data");
+const outDir = path.join(repo, "dev", "data");
 fs.mkdirSync(outDir, { recursive: true });
 
 function list(dir) {
@@ -113,8 +113,7 @@ const metrics = {
     bytes: totalBytes
   },
   by_extension: Object.fromEntries(
-    Object.entries(byExt)
-      .sort((a,b)=>b[1].bytes - a[1].bytes) // heaviest first
+    Object.entries(byExt).sort((a,b)=>b[1].bytes - a[1].bytes) // heaviest first
   ),
   largest: largestN.map(({path:sizePath, size, hash})=>({path:sizePath, size, hash})),
   most_recent: recentN.map(({path:rp, commit, date})=>({path:rp, commit, date}))
