@@ -1,13 +1,13 @@
 {
-  "files": 90,
-  "bytes": 2694214,
+  "files": 91,
+  "bytes": 2699189,
   "dirs": 19,
   "byExt": {
     "yml": 17,
     "nojekyll": 1,
     "html": 5,
     "md": 1,
-    "json": 26,
+    "json": 27,
     "css": 3,
     "js": 18,
     "mp4": 1,
@@ -17,5 +17,5 @@
     "mjs": 7,
     "xml": 1
   },
-  "generatedAt": "2025-08-25T21:40:27.091Z"
+  "generatedAt": "2025-08-25T21:48:47.986Z"
 }

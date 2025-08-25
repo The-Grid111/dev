@@ -261,7 +261,7 @@
   },
   {
     "path": "dev/data/update.json",
-    "bytes": 454
+    "bytes": 1215
   },
   {
     "path": "dev/dev/archive/snapshot_1756156501.json",
@@ -289,11 +289,15 @@
   },
   {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 2312
+    "bytes": 6191
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 2447
+    "bytes": 2478
+  },
+  {
+    "path": "dev/dev/data/repo-metrics.json",
+    "bytes": 304
   },
   {
     "path": "favicon.svg",
