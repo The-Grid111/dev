@@ -1,29 +1,27 @@
-name: Asset Manifest Bump
-
+name: Assets Manifest
 on:
   push:
     branches: [ main ]
     paths:
-      - 'assets/**'
-      - '!assets/manifest.json'  # will be rewritten by this job
+      - "assets/**"
+      - "scripts/bump-asset-manifest.mjs"
   workflow_dispatch:
 
 jobs:
-  bump:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with: { node-version: '18' }
 
       - name: Generate manifest
         run: node scripts/bump-asset-manifest.mjs
 
-      - name: Commit manifest if changed
+      - name: Commit manifest (if changed)
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(assets): bump manifest (auto)"
-          file_pattern: assets/manifest.json
+          commit_message: "chore: update assets/manifest.json"
+          file_pattern: "assets/manifest.json"
