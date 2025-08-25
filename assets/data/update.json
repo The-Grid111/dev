@@ -1,5 +1,20 @@
 {
   "version": "1.0",
   "branch": "main",
-  "ops": []
+  "ops": [
+    {
+      "op": "append",
+      "path": "README.md",
+      "content": "\n\n✅ Test update.json worked at $(date +%Y-%m-%d)"
+    },
+    {
+      "op": "mkdir",
+      "path": "archive"
+    },
+    {
+      "op": "write",
+      "path": "archive/test_v0.1.html",
+      "content": "<!doctype html>\n<html><body><h1>Archive test file</h1></body></html>\n"
+    }
+  ]
 }
