@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "seeds": {
+    "stable": 2025,
+    "cinematic": 77,
+    "creative": 999
+  },
+  "format_forcers": {
+    "tiktok_9x16": "Render as vertical video (9:16 TikTok format). Portrait orientation, cinematic framing, subject centered. No black bars, no cropping, full-screen composition.",
+    "landscape_site": "Render in cinematic landscape, centered subject, plain background, premium lighting."
+  },
+  "workflows": {
+    "logo_landscape_site": [
+      "Generate 3 reference images (Gen-4): cube / sphere / glyph.",
+      "Merge into one final master image (plain background, seed stable).",
+      "Animate with Gen-4 Turbo: slow morph loop, camera locked, plain background."
+    ],
+    "tiktok_reference_method": [
+      "Generate 3 reference images (Gen-4, landscape).",
+      "Merge to one final image (anchor).",
+      "Gen-4 Turbo video with motion prompt + `format_forcers.tiktok_9x16`."
+    ]
+  },
+  "prompts": {
+    "logo_image": "A premium futuristic gold crystal-tech object with a glowing blue energy core. No text, plain gradient background, cinematic lighting, clean metallic reflections, ultra-detailed.",
+    "logo_morph_video": "Golden crystal-tech object with blue energy core morphing slowly and seamlessly between elegant geometric forms. No spin. Camera steady, plain dark gradient background, hypnotic loop."
+  }
+}
