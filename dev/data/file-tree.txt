@@ -56,6 +56,7 @@ assets/videos/manifest.json
 dev/data/file-tree.json
 dev/data/file-tree.txt
 dev/data/state_packs/state_pack_20250825_1310.json
+dev/data/update.json
 favicon.svg
 index.html
 lychee.toml
