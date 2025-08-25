@@ -3,70 +3,66 @@ name: Repo Snapshot
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - 'dev/dev/archive/**'
-      - 'dev/dev/data/file-tree.json'
-      - 'dev/dev/data/file-tree.txt'
-      - 'dev/dev/data/repo-metrics.json'
-      - 'dev/dev/state_packs/**'
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: write
-
-concurrency:
-  group: repo-snapshot-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   snapshot:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build snapshot
+      # Keep Node consistent & also re-run apply to guarantee snapshot sees latest edits
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Apply update.json ops (idempotent)
+        run: node scripts/apply-update.mjs
+
+      - name: Make archive dir
+        run: mkdir -p dev/dev/archive
+
+      - name: Write snapshot JSON
         run: |
-          set -euo pipefail
-          mkdir -p dev/dev/archive dev/dev/data
+          node - <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const outDir = 'dev/dev/archive';
+          const ts = Math.floor(Date.now()/1000);
+          const sha = process.env.GITHUB_SHA || '';
+          function walk(dir='.') {
+            let files = [];
+            for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+              const rel = path.posix.join(dir, e.name).replace(/^\.\//,'');
+              if (rel.startsWith('.git/') || rel.startsWith('node_modules/')) continue;
+              if (e.isDirectory()) files = files.concat(walk(rel));
+              else files.push(rel);
+            }
+            return files.sort();
+          }
+          const files = walk('.');
+          const items = files.map(p => ({ path: p, bytes: fs.statSync(p).size }));
+          const snapshot = {
+            type: "repo-snapshot",
+            createdAt: new Date().toISOString(),
+            ts, sha,
+            count: items.length,
+            items
+          };
+          const out = path.join(outDir, `snapshot_${ts}.json`);
+          fs.writeFileSync(out, JSON.stringify(snapshot, null, 2));
+          console.log("wrote", out, "items:", items.length);
+          NODE
 
-          # file tree (same exclusions as inventory)
-          git ls-files \
-            ':(exclude)dev/dev/archive/**' \
-            ':(exclude)dev/dev/data/file-tree.json' \
-            ':(exclude)dev/dev/data/file-tree.txt' \
-            ':(exclude)dev/dev/data/repo-metrics.json' \
-            ':(exclude)dev/dev/state_packs/**' \
-          | tee dev/dev/data/file-tree.txt
-
-          jq -R -s -c 'split("\n")[:-1]' dev/dev/data/file-tree.txt \
-            > dev/dev/data/file-tree.json
-
-          # basic repo metrics (counts/sizes)
-          TOTAL=$(wc -l < dev/dev/data/file-tree.txt)
-          CODE=$(grep -E '\.(js|mjs|ts|tsx|css|html|json|yml|yaml|md)$' dev/dev/data/file-tree.txt | wc -l || true)
-          ASSETS=$(grep -E '\.(png|jpg|jpeg|svg|gif|mp4|webm|ico)$' dev/dev/data/file-tree.txt | wc -l || true)
-          SIZE=$(git ls-files -z | xargs -0 du -cb | tail -1 | awk '{print $1}')
-
-          TS=$(date +%s)
-          SNAP="dev/dev/archive/snapshot_${TS}.json"
-
-          jq -n --argjson total "$TOTAL" \
-                --argjson code "$CODE" \
-                --argjson assets "$ASSETS" \
-                --arg size "$SIZE" \
-                --arg ts "$TS" \
-                --slurpfile files dev/dev/data/file-tree.json '
-            {
-              timestamp: ($ts|tonumber),
-              stats: { total_files: $total, code_files: $code, asset_files: $assets, repo_size_bytes: ($size|tonumber) },
-              files: $files[0]
-            }' > "$SNAP"
-
-      - name: Commit snapshot & data
-        run: |
-          git config --global user.name  "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add dev/dev/archive/snapshot_*.json dev/dev/data/file-tree.*
-          git commit -m "Repo snapshot + file tree [skip ci]" || echo "No changes"
-          git push
+      - name: Auto-commit snapshot
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Repo snapshot (auto)"
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          file_pattern: dev/dev/archive/snapshot_*.json
