@@ -1,33 +1,62 @@
-// Loads links config and exposes helpers.
-// Supports { mode:"links", trial:"", basic:"", silver:"", gold:"", diamond:"" }
+/* Wire plan buttons to Stripe links from config/stripe.json
+   - .js-choose[data-plan] goes to Stripe
+   - .js-trial goes to trial link
+   - .js-details[data-plan] opens plan modal (handled in ui.js)
+*/
+(function () {
+  const cfgUrl = "/dev/assets/config/stripe.json";
+  let CFG = null;
 
-export async function loadStripeConfig() {
-  try {
-    const res = await fetch('assets/config/stripe.json', {cache:'no-store'});
-    const json = await res.json();
-    // Stash globally so Details dialog can read URLs without reloading
-    window.__stripeLinks = (json.mode === 'links') ? {
-      trial: json.trial || '',
-      basic: json.basic || '',
-      silver: json.silver || '',
-      gold: json.gold || '',
-      diamond: json.diamond || ''
-    } : {};
-    return window.__stripeLinks;
-  } catch (e) {
-    console.warn('Stripe config not found or invalid', e);
-    window.__stripeLinks = {};
-    return {};
+  async function loadCfg() {
+    if (CFG) return CFG;
+    const r = await fetch(cfgUrl, { cache: "no-store" });
+    if (!r.ok) throw new Error("stripe.json load failed");
+    CFG = await r.json();
+    return CFG;
   }
-}
 
-export function openCheckoutFor(plan, cfg) {
-  const links = cfg || window.__stripeLinks || {};
-  const url = links[plan];
-  if (!url) {
-    alert('Checkout link not configured yet.');
-    return;
+  function hrefForPlan(plan) {
+    if (!CFG) return "#";
+    return (CFG[plan] && typeof CFG[plan] === "string") ? CFG[plan] : "#";
   }
-  // Open in a new tab so users can come back easily
-  window.open(url, '_blank', 'noopener');
-}
+
+  function wireChooseButtons() {
+    document.querySelectorAll(".js-choose[data-plan]").forEach(btn => {
+      const plan = btn.getAttribute("data-plan");
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const link = hrefForPlan(plan);
+        if (link && link !== "#") {
+          window.location.href = link;
+        } else {
+          alert("Checkout link not configured yet.");
+        }
+      });
+    });
+  }
+
+  function wireTrialButtons() {
+    const trialBtns = document.querySelectorAll(".js-trial");
+    trialBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await loadCfg();
+        const link = hrefForPlan("trial");
+        if (link && link !== "#") window.location.href = link;
+        else alert("Trial link not configured yet.");
+      });
+    });
+  }
+
+  // init
+  (async function init() {
+    try {
+      await loadCfg();
+    } catch (e) {
+      console.error(e);
+    }
+    wireChooseButtons();
+    wireTrialButtons();
+    document.dispatchEvent(new CustomEvent("stripe-config-ready", { detail: { CFG } }));
+  })();
+})();
