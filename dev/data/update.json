@@ -1,11 +1,24 @@
 {
-  "version": "1.0",
   "branch": "main",
   "ops": [
-    { "op": "mkdir",  "path": "archive" },
-    { "op": "mkdir",  "path": "archives" },
-    { "op": "write",  "path": "archive/ping_dev_fixed.txt",   "content": "ping dev fixed\n" },
-    { "op": "write",  "path": "archives/ping_dev_fixed.txt",  "content": "ping dev fixed (plural)\n" },
-    { "op": "append", "path": "README.md", "content": "\n\n✅ updater wrote from dev/update.json (fixed)" }
+    { "op": "mkdir", "path": "dev/dev/archive" },
+
+    {
+      "op": "write",
+      "path": "dev/dev/archive/hello_v0.3.html",
+      "content": "<!doctype html>\n<html lang=\"en\">\n<meta charset=\"utf-8\" />\n<title>The GRID – hello_v0.3</title>\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n<body style=\"font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding:2rem\">\n  <h1>✅ hello_v0.3</h1>\n  <p>This file was written automatically by <code>dev/dev/data/update.json</code>.</p>\n  <p>If you can read this in <code>dev/dev/archive/</code>, the apply-update job ran end-to-end.</p>\n</body>\n</html>\n"
+    },
+
+    {
+      "op": "write",
+      "path": "dev/dev/archive/checklist_v1.txt",
+      "content": "repo-snapshot ✔︎  | build-file-inventory ✔︎  | repo-hygiene ✔︎  | pages deploy ✔︎\n"
+    },
+
+    {
+      "op": "append",
+      "path": "README.md",
+      "content": "\n\n### ✅ Auto-update proof (from `dev/dev/data/update.json`)\n- Created `dev/dev/archive/hello_v0.3.html` and `dev/dev/archive/checklist_v1.txt`.\n- This line verifies the updater committed changes on branch `main`.\n"
+    }
   ]
 }
