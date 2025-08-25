@@ -3,98 +3,92 @@ name: Build File Inventory
 on:
   push:
     branches: [ main ]
-    # avoid infinite loops when the workflow commits refreshed inventories
-    paths-ignore:
-      - 'dev/dev/data/**'
-      - '.github/workflows/**'   # (optional) don't re-run only from workflow edits
-  workflow_dispatch:
-  schedule:
-    - cron: '17 2 * * *'  # daily refresh (UTC)
+  workflow_dispatch: {}
 
 permissions:
   contents: write
 
 jobs:
-  inventory:
-    name: File inventory
+  build-inventory:
     runs-on: ubuntu-latest
-    # never mark the whole commit red if this job hiccups
-    continue-on-error: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # ===== apply-update: runs FIRST so inventory/snapshot include your edits =====
+      - name: Setup Node (for apply script)
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
+          node-version: 20
 
-      - name: Generate inventory (tree, JSON, metrics)
-        shell: bash
+      - name: Apply update.json ops
+        run: node scripts/apply-update.mjs
+
+      # ===== inventory outputs go to dev/dev/data/ =====
+      - name: Ensure data dirs
         run: |
-          set -euo pipefail
           mkdir -p dev/dev/data
+          mkdir -p dev/dev/data/state_packs
 
+      - name: Build file-tree.txt
+        run: |
+          find . -type f \
+            -not -path "./.git/*" \
+            -not -path "./node_modules/*" \
+            -printf "%P\n" | sort > dev/dev/data/file-tree.txt
+
+      - name: Build file-tree.json + repo-metrics.json (Node)
+        run: |
           node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-
-          const ROOT = process.cwd();
-          const IGNORE = new Set([
-            '.git','node_modules','.cache','.next','.DS_Store',
-            '.venv','venv','.pytest_cache','dist','build'
-          ]);
-
-          function walk(dir) {
-            const out = [];
-            for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
-              if (IGNORE.has(ent.name)) continue;
-              const full = path.join(dir, ent.name);
-              const rel  = full.replace(ROOT + path.sep, '');
-              if (ent.isDirectory()) out.push(...walk(full));
-              else out.push(rel);
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const ignore = p => p.startsWith('.git/') || p.startsWith('node_modules/');
+          function walk(dir='.') {
+            let files = [];
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const rel = path.posix.join(dir, entry.name).replace(/^\.\//,'');
+              if (ignore(rel)) continue;
+              if (entry.isDirectory()) files = files.concat(walk(rel));
+              else files.push(rel);
             }
-            return out;
+            return files.sort();
           }
-
-          const files = walk(ROOT).sort();
-          // Save plain text list
-          fs.writeFileSync('dev/dev/data/file-tree.txt', files.join('\n'));
-
-          // Save JSON list
-          fs.writeFileSync('dev/dev/data/file-tree.json', JSON.stringify(files, null, 2));
-
-          // Simple repo metrics
-          const byExt = {};
-          for (const f of files) {
-            const ext = path.extname(f) || 'noext';
-            byExt[ext] = (byExt[ext] || 0) + 1;
-          }
+          const files = walk('.');
+          const tree = files.map(p => {
+            const st = fs.statSync(p);
+            return { path: p, bytes: st.size };
+          });
+          fs.writeFileSync('dev/dev/data/file-tree.json', JSON.stringify(tree, null, 2));
           const metrics = {
-            generated_at: new Date().toISOString(),
-            file_count: files.length,
-            by_extension: byExt
+            files: tree.length,
+            bytes: tree.reduce((a,b)=>a+b.bytes,0),
+            dirs: (()=>{
+              const s = new Set();
+              for (const f of files) {
+                const parts = f.split('/');
+                for (let i=0;i<parts.length-1;i++) s.add(parts.slice(0,i+1).join('/'));
+              }
+              return s.size;
+            })(),
+            byExt: (()=>{
+              const m = {};
+              for (const {path: p} of tree) {
+                const ext = (p.includes('.') ? p.split('.').pop() : '').toLowerCase();
+                m[ext] = (m[ext]||0)+1;
+              }
+              return m;
+            })(),
+            generatedAt: new Date().toISOString()
           };
           fs.writeFileSync('dev/dev/data/repo-metrics.json', JSON.stringify(metrics, null, 2));
+          console.log("metrics", metrics);
           NODE
 
-      - name: Upload inventory artifact
-        uses: actions/upload-artifact@v4
+      - name: Auto-commit inventory
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: repo-inventory
-          path: |
-            dev/dev/data/file-tree.txt
-            dev/dev/data/file-tree.json
-            dev/dev/data/repo-metrics.json
-
-      # Optional: commit the refreshed inventories back to the repo (safe, no loops)
-      - name: Commit inventory back to repo
-        if: ${{ github.ref == 'refs/heads/main' }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dev/dev/data/file-tree.txt dev/dev/data/file-tree.json dev/dev/data/repo-metrics.json || true
-          git diff --cached --quiet && echo "No inventory changes to commit." && exit 0
-          git commit -m "chore(inventory): refresh repo inventory [skip ci]"
-          git push || true
+          commit_message: "Update build-file-inventory (auto)"
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          file_pattern: dev/dev/data/file-tree.txt dev/dev/data/file-tree.json dev/dev/data/repo-metrics.json
