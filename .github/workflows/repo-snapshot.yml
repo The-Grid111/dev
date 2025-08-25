@@ -2,46 +2,71 @@ name: Repo Snapshot
 
 on:
   push:
-    branches: [ "main" ]
-  schedule:
-    # Weekly snapshot every Sunday at 03:00 UTC
-    - cron: "0 3 * * 0"
+    branches: [ main ]
+    paths-ignore:
+      - 'dev/dev/archive/**'
+      - 'dev/dev/data/file-tree.json'
+      - 'dev/dev/data/file-tree.txt'
+      - 'dev/dev/data/repo-metrics.json'
+      - 'dev/dev/state_packs/**'
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# Avoid overlapping runs if a push lands during the scheduled job
 concurrency:
-  group: repo-snapshot
+  group: repo-snapshot-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   snapshot:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Check out
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Generate repo snapshot
-        run: node scripts/repo-snapshot.mjs
-
-      - name: Commit snapshot
-        shell: bash
+      - name: Build snapshot
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dev/data/file-tree.* dev/data/repo-metrics.json dev/archive/snapshot_*.json
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: update repo snapshot [skip ci]"
-            git push
-          else
-            echo "No changes to commit."
-          fi
+          set -euo pipefail
+          mkdir -p dev/dev/archive dev/dev/data
+
+          # file tree (same exclusions as inventory)
+          git ls-files \
+            ':(exclude)dev/dev/archive/**' \
+            ':(exclude)dev/dev/data/file-tree.json' \
+            ':(exclude)dev/dev/data/file-tree.txt' \
+            ':(exclude)dev/dev/data/repo-metrics.json' \
+            ':(exclude)dev/dev/state_packs/**' \
+          | tee dev/dev/data/file-tree.txt
+
+          jq -R -s -c 'split("\n")[:-1]' dev/dev/data/file-tree.txt \
+            > dev/dev/data/file-tree.json
+
+          # basic repo metrics (counts/sizes)
+          TOTAL=$(wc -l < dev/dev/data/file-tree.txt)
+          CODE=$(grep -E '\.(js|mjs|ts|tsx|css|html|json|yml|yaml|md)$' dev/dev/data/file-tree.txt | wc -l || true)
+          ASSETS=$(grep -E '\.(png|jpg|jpeg|svg|gif|mp4|webm|ico)$' dev/dev/data/file-tree.txt | wc -l || true)
+          SIZE=$(git ls-files -z | xargs -0 du -cb | tail -1 | awk '{print $1}')
+
+          TS=$(date +%s)
+          SNAP="dev/dev/archive/snapshot_${TS}.json"
+
+          jq -n --argjson total "$TOTAL" \
+                --argjson code "$CODE" \
+                --argjson assets "$ASSETS" \
+                --arg size "$SIZE" \
+                --arg ts "$TS" \
+                --slurpfile files dev/dev/data/file-tree.json '
+            {
+              timestamp: ($ts|tonumber),
+              stats: { total_files: $total, code_files: $code, asset_files: $assets, repo_size_bytes: ($size|tonumber) },
+              files: $files[0]
+            }' > "$SNAP"
+
+      - name: Commit snapshot & data
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add dev/dev/archive/snapshot_*.json dev/dev/data/file-tree.*
+          git commit -m "Repo snapshot + file tree [skip ci]" || echo "No changes"
+          git push
