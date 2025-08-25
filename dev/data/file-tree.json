@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2025-08-25T09:24:46.128Z",
+  "generatedAt": "2025-08-25T09:25:22.117Z",
   "branch": "main",
-  "commit": "2d6468a",
-  "count": 60,
+  "commit": "d0edd0c",
+  "count": 61,
   "files": [
     ".github/ISSUE_TEMPLATE/add-file.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
@@ -13,6 +13,7 @@
     ".github/workflows/deploy-on-patch.yml",
     ".github/workflows/deploy.yml",
     ".github/workflows/issue-patches.yml",
+    ".github/workflows/link-check.yml",
     ".github/workflows/patch.yml",
     ".github/workflows/repo-hygiene.yml",
     ".nojekyll",

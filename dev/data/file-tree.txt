@@ -7,6 +7,7 @@
 .github/workflows/deploy-on-patch.yml
 .github/workflows/deploy.yml
 .github/workflows/issue-patches.yml
+.github/workflows/link-check.yml
 .github/workflows/patch.yml
 .github/workflows/repo-hygiene.yml
 .nojekyll
