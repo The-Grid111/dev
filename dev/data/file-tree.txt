@@ -46,7 +46,7 @@ assets/js/trial-banner.js
 assets/js/ui.js
 assets/manifest.json
 assets/videos/manifest.json
-dev/data/file-tree.json
+data/file-tree.json
 dev/data/file-tree.txt
 favicon.svg
 index.html
