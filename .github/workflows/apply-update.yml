@@ -1,9 +1,8 @@
-name: Apply update.json
+name: Apply update.json (dev only)
 
 on:
   push:
     paths:
-      - "assets/data/update.json"
       - "dev/assets/data/update.json"
 
 permissions:
@@ -29,8 +28,6 @@ jobs:
           ls -la
           echo "------ scripts/ ------"
           ls -la scripts || true
-          echo "------ assets/data/update.json ------"
-          test -f assets/data/update.json && cat assets/data/update.json || echo "root update.json not found"
           echo "------ dev/assets/data/update.json ------"
           test -f dev/assets/data/update.json && cat dev/assets/data/update.json || echo "dev update.json not found"
 
@@ -47,7 +44,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if ! git diff --quiet; then
             git add -A
-            git commit -m "Apply update.json ops [skip ci]"
+            git commit -m "Apply dev/assets/data/update.json ops [skip ci]"
             git push
           else
             echo "No changes to commit."
