@@ -1,14 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="THE GRID favicon">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0" stop-color="#F8E08A"/>
-      <stop offset="1" stop-color="#B88A2A"/>
+      <stop offset="0.5" stop-color="#D9A63A"/>
+      <stop offset="1" stop-color="#A57C12"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="1" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#FFE9A7"/>
+      <stop offset="1" stop-color="#BD8D28"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="12" fill="#0b0f14"/>
-  <g transform="translate(8 8)">
-    <rect x="0" y="0" width="48" height="48" rx="8" fill="none" stroke="url(#g)" stroke-width="2"/>
-    <path d="M0 16H48M0 32H48M16 0V48M32 0V48" stroke="url(#g)" stroke-width="2"/>
-    <circle cx="24" cy="24" r="5" fill="url(#g)"/>
-  </g>
+
+  <!-- outer diamond/cube frame -->
+  <path d="M32 4 58 20 58 44 32 60 6 44 6 20Z" fill="url(#g)" stroke="#2A2A2A" stroke-width="1.2"/>
+  <!-- inner cut -->
+  <path d="M32 12 50 23 50 41 32 52 14 41 14 23Z" fill="url(#g2)" stroke="#2A2A2A" stroke-width="1"/>
+  <!-- cross braces -->
+  <path d="M12 32h40M32 12v40" stroke="#2A2A2A" stroke-width="2" opacity=".6"/>
+  <!-- core orb -->
+  <circle cx="32" cy="32" r="9" fill="#14C6F3" opacity=".92"/>
+  <circle cx="32" cy="32" r="6" fill="#0FA2C9"/>
 </svg>
