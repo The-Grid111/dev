@@ -3,130 +3,162 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>THE GRID — Launch experiences that never regress</title>
-  <meta name="description" content="Paste a Save → instant learning. Plans unlock features; no 1:1 required. Diamond unlocks watermark-free, commercial-safe exports."/>
-  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml"/>
+  <title>THE GRID — adaptive, quantifiable</title>
+  <link rel="icon" href="assets/images/favicon.svg"/>
   <link rel="preload" href="assets/css/site.css" as="style"/>
   <link rel="stylesheet" href="assets/css/site.css"/>
-  <link rel="preload" href="assets/js/ui.js" as="script"/>
-  <link rel="preload" href="assets/js/main.js" as="script"/>
 </head>
 <body>
-  <!-- Sticky Header -->
-  <header class="nav">
-    <div class="nav__inner container">
-      <a class="brand" href="#top" aria-label="THE GRID home">
-        <img src="assets/images/logo-grid-mark.svg" alt="" class="brand__mark" width="28" height="28"/>
-        <span class="brand__name">THE GRID</span>
-      </a>
 
-      <!-- Primary Tabs -->
-      <nav class="tabs" aria-label="Primary">
-        <a class="tab" data-nav="library" href="#library">Open Library</a>
-        <a class="tab" data-nav="pricing" href="#pricing">See Pricing</a>
-        <a class="tab" data-nav="how" href="#how-it-works">How it works</a>
-      </nav>
-
-      <!-- Mobile menu button (JS toggles) -->
-      <button class="menu" id="menuToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="bar container">
+      <div class="brand">
+        <span class="dot"></span>
+        <span>THE GRID</span>
+      </div>
+      <div class="links">
+        <a href="#library" class="btn ghost small">Open Library</a>
+        <a href="#pricing" class="btn ghost small">See Pricing</a>
+        <button id="menuOpen" class="menu-btn" aria-label="Open menu">☰</button>
+      </div>
     </div>
 
-    <!-- Mobile Nav Drawer -->
-    <div class="mobile" id="mobileNav" hidden>
-      <a class="mobile__item" data-nav="library" href="#library">Open Library</a>
-      <a class="mobile__item" data-nav="pricing" href="#pricing">See Pricing</a>
-      <a class="mobile__item" data-nav="how" href="#how-it-works">How it works</a>
+    <!-- mobile sheet -->
+    <div id="menuSheet" class="hidden" style="background:rgba(11,12,15,.98); position:fixed; inset:0; z-index:25;">
+      <div class="container stack">
+        <div class="row" style="justify-content:space-between; align-items:center; padding:12px 0;">
+          <div class="brand"><span class="dot"></span><span>THE GRID</span></div>
+          <button id="menuClose" class="menu-btn" aria-label="Close menu">✕</button>
+        </div>
+        <a href="#library" class="btn block">Open Library</a>
+        <a href="#pricing" class="btn block">See Pricing</a>
+        <a href="#how" class="btn block">How it works</a>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <!-- Hero -->
-  <main id="top" class="main">
-    <section class="hero container" aria-labelledby="heroTitle">
-      <p class="eyebrow">LAUNCH EXPERIENCES THAT NEVER REGRESS</p>
-      <h1 id="heroTitle" class="hero__title">Self-serve, adaptive, quantifiable.</h1>
-      <p class="hero__lead">
-        Paste a Save → instant learning. Plans unlock features; no 1:1 required.
-        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
-      </p>
-      <div class="cta">
-        <a class="btn btn--primary" href="#library">Open Library</a>
-        <a class="btn" href="#pricing">See Pricing</a>
-        <a class="link" href="#how-it-works">Launch Trial — available</a>
+  <!-- ADMIN TOGGLE (shows only for admins) -->
+  <div id="adminToggle" class="container hidden" style="justify-content:flex-end">
+    <button class="btn small">Admin</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="sectionsHost" class="container stack">
+
+    <!-- HERO -->
+    <section class="hero" data-id="hero" id="home">
+      <span class="badge">LAUNCH EXPERIENCES THAT NEVER REGRESS</span>
+      <h1>Self-serve, adaptive, quantifiable.</h1>
+      <p class="lead">Paste a Save → instant learning. Plans unlock features; no 1:1 required.
+        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.</p>
+      <div class="row">
+        <button id="ctaLibrary" class="btn primary">Open Library</button>
+        <button id="ctaPricing" class="btn">See Pricing</button>
+        <button id="ctaTrial" class="btn ghost">Launch Trial — available</button>
       </div>
     </section>
 
-    <!-- Library -->
-    <section id="library" class="section container">
-      <h2 class="section__title">Library</h2>
-      <p class="section__lead">Ready-to-use starters and blueprints. Drop a Save to adapt.</p>
-
-      <div class="cards">
-        <article class="card">
-          <h3 class="card__title">Starter Blueprint</h3>
-          <p class="card__body">Paste a Save to adapt instantly.</p>
-          <button class="btn btn--ghost" data-action="preview" data-id="starter">Preview</button>
-        </article>
-
-        <article class="card">
-          <h3 class="card__title">Commerce Demo</h3>
-          <p class="card__body">Stripe-ready patterns.</p>
-          <button class="btn btn--ghost" data-action="preview" data-id="commerce">Preview</button>
-        </article>
-
-        <article class="card">
-          <h3 class="card__title">Creator Kit</h3>
-          <p class="card__body">Audience & content flows.</p>
-          <button class="btn btn--ghost" data-action="preview" data-id="creator">Preview</button>
-        </article>
+    <!-- FEATURE VIDEO -->
+    <section data-id="video" id="video">
+      <header><h2>Feature Video</h2></header>
+      <div class="video-wrap" id="videoSlot">
+        <div class="video-empty">Replace this with your top niche video (assets/videos/manifest.json)</div>
       </div>
     </section>
 
-    <!-- Pricing -->
-    <section id="pricing" class="section container">
-      <h2 class="section__title">Pricing</h2>
-
-      <div class="plans">
-        <article class="plan">
-          <h3 class="plan__name">Starter</h3>
-          <p class="plan__desc">For trying the system.</p>
-          <p class="plan__price">£0</p>
+    <!-- LIBRARY -->
+    <section data-id="library" id="library">
+      <header><h2>Library</h2><div class="muted">Ready-to-use starters and blueprints. Drop a Save to adapt.</div></header>
+      <div class="grid cards">
+        <article class="card">
+          <h3 class="title">Starter Blueprint</h3>
+          <div class="muted">Paste a Save to adapt instantly.</div>
+          <div class="mt-12"><button class="btn ghost" data-preview="starter">Preview</button></div>
         </article>
-
-        <article class="plan">
-          <h3 class="plan__name">Pro</h3>
-          <p class="plan__desc">For growing creators.</p>
-          <p class="plan__price">£9 <span class="u-mute">/ mo</span></p>
+        <article class="card">
+          <h3 class="title">Commerce Demo</h3>
+          <div class="muted">Stripe-ready patterns.</div>
+          <div class="mt-12"><button class="btn ghost" data-preview="commerce">Preview</button></div>
         </article>
-
-        <article class="plan plan--featured" aria-label="Diamond plan (featured)">
-          <h3 class="plan__name">Diamond</h3>
-          <p class="plan__desc">Commercial-safe, watermark-free exports.</p>
-          <p class="plan__price">£29 <span class="u-mute">/ mo</span></p>
+        <article class="card">
+          <h3 class="title">Creator Kit</h3>
+          <div class="muted">Audience & content flows.</div>
+          <div class="mt-12"><button class="btn ghost" data-preview="creator">Preview</button></div>
         </article>
       </div>
     </section>
 
-    <!-- How it works -->
-    <section id="how-it-works" class="section container">
-      <h2 class="section__title">How it works</h2>
-      <ol class="how">
+    <!-- PRICING -->
+    <section data-id="pricing" id="pricing">
+      <header><h2>Pricing</h2></header>
+      <div class="grid cards">
+        <div class="tier card">
+          <div class="title">Starter</div>
+          <div class="muted">For trying the system.</div>
+          <div class="mt-12"><strong>£0</strong></div>
+          <div class="mt-12"><button class="btn block">Get started</button></div>
+        </div>
+        <div class="tier card">
+          <div class="title">Pro</div>
+          <div class="muted">For growing creators.</div>
+          <div class="mt-12"><strong>£9 / mo</strong></div>
+          <div class="mt-12"><button class="btn block">Upgrade to Pro</button></div>
+        </div>
+        <div class="tier card highlight">
+          <div class="title">Diamond</div>
+          <div class="muted">Commercial-safe, watermark-free exports.</div>
+          <div class="mt-12"><strong>£29 / mo</strong></div>
+          <div class="mt-12"><button class="btn primary block">Choose Diamond</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section data-id="how" id="how">
+      <header><h2>How it works</h2></header>
+      <ol class="stack">
         <li>Paste a <em>Save</em> (from ChatGPT) into the site.</li>
         <li>Site adapts instantly (no rebuilds, no regressions).</li>
         <li>Export or publish with plan features.</li>
       </ol>
     </section>
+
   </main>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <p>© <span id="year"></span> THE GRID — All rights reserved.</p>
+    <div class="container">
+      © 2025 THE GRID — All rights reserved.
     </div>
   </footer>
 
+  <!-- ADMIN PANEL -->
+  <aside id="adminPanel" class="admin-panel">
+    <div class="panel-hd">
+      <strong>Customising Board</strong>
+      <div class="row">
+        <button id="adminClose" class="btn small">Close</button>
+        <button id="adminExit" class="btn ghost small">Exit admin</button>
+      </div>
+    </div>
+    <div class="panel-body stack">
+      <div class="admin-chip">Drag to reorder sections (live)</div>
+      <div id="adminSections" class="stack"></div>
+
+      <hr style="border:0; border-top:1px solid rgba(255,255,255,.08)">
+
+      <strong>Feature video</strong>
+      <div class="kv"><label>Source (mp4)</label><input id="vSrc" placeholder="assets/gc_spin.mp4"></div>
+      <div class="kv"><label>Poster</label><input id="vPoster" placeholder="assets/images/cover.jpg"></div>
+      <div class="kv"><label>Title</label><input id="vTitle" placeholder="Showcase title"></div>
+      <button id="vSave" class="btn">Save video</button>
+
+      <p class="muted mt-12">Tip: add <code>?admin=1</code> to the URL once to enable admin on this device. Admin is remembered locally (no one else sees it).</p>
+    </div>
+  </aside>
+
+  <script src="assets/js/effects.js" defer></script>
   <script src="assets/js/ui.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
