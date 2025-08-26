@@ -64,6 +64,10 @@
     "bytes": 381
   },
   {
+    "path": ".github/workflows/update-queue.yml",
+    "bytes": 1930
+  },
+  {
     "path": ".github/workflows/verify-inventory.yml",
     "bytes": 553
   },
@@ -349,7 +353,7 @@
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3052
+    "bytes": 3087
   },
   {
     "path": "dev/dev/data/repo-metrics.json",

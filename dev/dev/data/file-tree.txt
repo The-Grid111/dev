@@ -14,6 +14,7 @@
 .github/workflows/repo-hygiene.yml
 .github/workflows/repo-snapshot.yml
 .github/workflows/svg-sanity.yml
+.github/workflows/update-queue.yml
 .github/workflows/verify-inventory.yml
 .nojekyll
 404.html
