@@ -1,107 +1,192 @@
-/* --- Base readability & rhythm --- */
-:root{
-  --grid-font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-  --grid-text: #0b0f14;
-  --grid-muted: #5b6572;
-  --grid-bg: #ffffff;
-  --grid-ink: #0b0f14;
-  --grid-accent: #335dff;
-  --grid-accent-ink: #ffffff;
-  --grid-border: #e6e8ec;
-  --grid-radius: 14px;
-  --grid-gap: clamp(12px, 1.8vw, 20px);
-}
+{
+  "batch": "live-polish-a",
+  "ts": "2025-08-26T16:22:00Z",
+  "notes": [
+    "Safe content/config refresh only. No structural JS/CSS changes.",
+    "Improves microcopy, nav labels, plan blurbs, and adds a verified-save slot."
+  ],
 
-html{ scroll-behavior:smooth; }
-@media (prefers-reduced-motion: reduce){
-  html{ scroll-behavior:auto; }
-}
+  "write_files": [
+    {
+      "path": "assets/data/language.json",
+      "content": {
+        "site": {
+          "title": "The Grid",
+          "tagline": "Grow smarter, faster.",
+          "description": "A calm, personal AI layer that learns how you think, then helps you move faster without the overwhelm.",
+          "cta_primary": "Start now",
+          "cta_secondary": "How it works"
+        },
+        "nav": {
+          "home": "Home",
+          "learn": "Learn",
+          "plans": "Plans",
+          "privacy": "Privacy",
+          "terms": "Terms",
+          "save": "Save to The Grid"
+        },
+        "hero": {
+          "headline": "Personal AI that actually adapts to you.",
+          "subhead": "No noise. No hype. Just steady progress every day.",
+          "cta_primary": "Try a guided save",
+          "cta_secondary": "See what’s new"
+        },
+        "save": {
+          "title": "Contribute a Save",
+          "intro": "Drop a note, idea, or session summary. We de-identify, verify, and fold it back into your personal flow.",
+          "button": "Save now",
+          "success": "Saved. We’ll confirm and update your flow shortly."
+        },
+        "footer": {
+          "rights": "© The Grid — All rights reserved.",
+          "links": {
+            "privacy": "/privacy.html",
+            "terms": "/terms.html",
+            "sitemap": "/sitemap.xml"
+          }
+        },
+        "accessibility": {
+          "skip_to_content": "Skip to content",
+          "menu": "Menu",
+          "close": "Close"
+        }
+      }
+    },
 
-body{
-  font-family: var(--grid-font);
-  color: var(--grid-text);
-  background: var(--grid-bg);
-  line-height: 1.6;
-  letter-spacing: 0.2px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-}
+    {
+      "path": "assets/data/plans.json",
+      "content": {
+        "updated": "2025-08-26",
+        "plans": [
+          {
+            "id": "free",
+            "name": "Starter",
+            "price": "£0",
+            "period": "forever",
+            "bullets": [
+              "Personal Save pipeline",
+              "Calm onboarding prompts",
+              "De-identified learning",
+              "Weekly changelog summary"
+            ],
+            "cta": "Use for free"
+          },
+          {
+            "id": "plus",
+            "name": "Growth",
+            "price": "£9",
+            "period": "monthly",
+            "bullets": [
+              "Everything in Starter",
+              "Priority verification on Saves",
+              "Lightweight automations",
+              "Email export receipts"
+            ],
+            "cta": "Upgrade to Growth"
+          },
+          {
+            "id": "pro",
+            "name": "Creator",
+            "price": "£29",
+            "period": "monthly",
+            "bullets": [
+              "Everything in Growth",
+              "Multi-source ingest (text, links)",
+              "Versioned insight packs",
+              "Early features + direct support"
+            ],
+            "cta": "Go Creator"
+          }
+        ]
+      }
+    },
 
-main, section{ padding: clamp(18px, 3.5vw, 36px); }
+    {
+      "path": "assets/data/services.json",
+      "content": {
+        "updated": "2025-08-26",
+        "sections": [
+          {
+            "title": "Personal Onboarding",
+            "items": [
+              "Warm greeting + quick wins",
+              "Memory setup with privacy guardrails",
+              "Intrusive-thought friendly pacing"
+            ]
+          },
+          {
+            "title": "Save & Verify",
+            "items": [
+              "One-tap Save flow",
+              "De-identify before storage",
+              "Verification receipts"
+            ]
+          },
+          {
+            "title": "Growth Loops",
+            "items": [
+              "Weekly summaries",
+              "Gentle nudge prompts",
+              "Pattern highlights you can approve"
+            ]
+          }
+        ]
+      }
+    },
 
-/* --- Containers --- */
-.container{
-  max-width: 1160px;
-  margin-inline: auto;
-  padding-inline: clamp(12px, 2.5vw, 24px);
-}
+    {
+      "path": "assets/data/taxonomy.json",
+      "content": {
+        "categories": [
+          "Onboarding",
+          "Saves",
+          "Learning",
+          "Wellbeing",
+          "Plans",
+          "Privacy"
+        ],
+        "tags": [
+          "calm",
+          "clear",
+          "gentle",
+          "step-by-step",
+          "de-identified",
+          "verification"
+        ]
+      }
+    },
 
-/* --- Hero --- */
-.hero{
-  display:grid;
-  gap: var(--grid-gap);
-  align-items: center;
-  padding-block: clamp(32px, 7vw, 96px);
-  background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(51,93,255,.09), transparent 60%),
-    radial-gradient(900px 500px at -10% 20%, rgba(51,93,255,.06), transparent 60%);
-  border-bottom: 1px solid var(--grid-border);
-}
-.hero h1{
-  font-size: clamp(28px, 4.8vw, 56px);
-  line-height: 1.1;
-  margin: 0 0 10px 0;
-  letter-spacing: -0.02em;
-}
-.hero p{
-  color: var(--grid-muted);
-  font-size: clamp(16px, 2.2vw, 20px);
-  margin: 0 0 18px 0;
-}
+    {
+      "path": "assets/data/owner_core_save_v1.2.json",
+      "content": {
+        "schema": "1.2",
+        "memory_default": "on",
+        "verify_receipts": true,
+        "privacy": {
+          "deidentify": true,
+          "allow_generalization": true,
+          "store_personal_details": false
+        },
+        "contributor_slot": {
+          "status": "ready",
+          "owner": "Jake",
+          "nonce": "",
+          "instructions": "Paste verified JSON receipts here to attach to your history."
+        }
+      }
+    }
+  ],
 
-/* --- Buttons --- */
-.button{
-  appearance:none; border:0; cursor:pointer;
-  padding: 12px 18px;
-  border-radius: var(--grid-radius);
-  font-weight: 600;
-  box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 8px 20px rgba(51,93,255,.12);
-  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
-  display:inline-flex; gap:10px; align-items:center; text-decoration:none;
-}
-.button-primary{ background: var(--grid-accent); color: var(--grid-accent-ink); }
-.button-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(51,93,255,.18); }
-.button-secondary{
-  background: #f3f5ff; color: #274bd6;
-  box-shadow: inset 0 0 0 1px rgba(51,93,255,.25);
-}
-
-/* --- Cards / sections --- */
-.card{
-  background: #fff; border: 1px solid var(--grid-border);
-  border-radius: var(--grid-radius);
-  padding: clamp(16px, 2.5vw, 22px);
-  box-shadow: 0 1px 0 rgba(0,0,0,.02);
-}
-
-/* --- FAQ --- */
-.faq dt{ font-weight:700; margin-top: 16px; }
-.faq dd{ margin: 6px 0 14px 0; color: var(--grid-muted); }
-
-/* --- Footer --- */
-footer{
-  border-top: 1px solid var(--grid-border);
-  color: var(--grid-muted);
-  padding-block: 24px;
-}
-
-/* --- Small helpers --- */
-.hide-when-reduced-motion{
-  animation: float 6s ease-in-out infinite;
-}
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0px); }
+  "after": {
+    "run": [
+      "link_check",
+      "assets_manifest_bump",
+      "deploy"
+    ],
+    "expect": [
+      "Header/footer links resolve",
+      "Plans copy visible and buttons show",
+      "Save text reads calm, shows success message"
+    ]
+  }
 }
