@@ -1,9 +1,12 @@
-// UI gate switches for tiers (library lock/watermark notes, etc.)
-// Today this is static text; when Supabase is enabled we read entitlements
-// and toggle classes accordingly.
-
-export function applyEntitlements() {
-  // Example: add a CSS class if user is Diamond (future)
-  // document.body.classList.add('entitlement-diamond');
-  // For now we just ensure copy is present (already in HTML).
-}
+(() => {
+  const ENT = {
+    trial:  { watermark:true,  community:"read",  export:"basic" },
+    basic:  { watermark:true,  community:"write", export:"basic" },
+    silver: { watermark:false, community:"write", export:"images" },
+    gold:   { watermark:false, community:"write", export:"advanced" },
+    diamond:{ watermark:false, community:"write", export:"full", whitelist:true }
+  };
+  function planId(){ return Store.get('profile.plan','visitor'); }
+  function get(){ return ENT[planId()] || {}; }
+  window.Entitlements = { get, planId };
+})();
