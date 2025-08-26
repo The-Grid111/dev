@@ -1,88 +1,108 @@
+/update assets/data/language.json
+```json
 {
-  "version": "revamp-1.0",
-  "ts": "2025-08-26T15:45:00Z",
-
-  "meta": {
-    "owner": "The-Grid111",
-    "goal": "Full Revamp pass v1 — stable UX, contributor pipeline, gentle onboarding, memory-first",
-    "mode": "manual-update-file",
-    "source_of_truth": "assets/data/update.json"
+  "version": "2025-08-26-ultimate",
+  "locale": "en-GB",
+  "site": {
+    "brand": "The Grid",
+    "tagline": "Personal AI that learns you—safely.",
+    "trust_pill": "Private • Portable • Reversible",
+    "meta": {
+      "title": "The Grid — Personal AI that learns you, safely",
+      "description": "Turn normal chats into capability. Memory you control. No code required. Rollbacks built in."
+    }
   },
-
-  "stability": {
-    "safe_copy": true,
-    "ui_ready": true,
-    "hard_fail_none": true,
-    "frontend_only": true,
-
-    /* CI hints (front-end ignores). We’ll fix workflows later. */
-    "ci_hint:disable_snapshot": true,
-    "ci_hint:disable_inventory": true
-  },
-
-  "features": {
-    "greeting_enabled": true,
-    "gentle_onboarding_enabled": true,
-    "save_pipeline_enabled": true,
-    "receipt_required": true,
-    "privacy_controls": true
-  },
-
-  "privacy": {
-    "pii_redacted": true,
-    "deidentified_only": true,
-    "share_scope": "internal-only",
-    "allow_generalization": true
-  },
-
-  "copy": {
-    "hero_title": "Welcome — this space adapts to you.",
-    "hero_sub": "We’ll keep it calm, go one step at a time, and remember what helps so you don’t have to.",
-    "cta_primary": "Start",
-    "cta_secondary": "Take it slow"
-  },
-
-  "onboarding": {
-    "wow_open": "Hey! I’m your quiet co-pilot — I’ll make the next step obvious and keep the pace gentle.",
-    "memory_prompt": "Turn on memory so I can keep your preferred tone, pace, and topics for next time?",
-    "anchors": [
-      "We’ll take this one line at a time.",
-      "If a thought loops, we’ll park it and return when you choose.",
-      "Short steps are still steps forward."
-    ],
-    "ocd_support_note": "Gentle reframes and labeling (‘this is an intrusive thought’) help reduce urgency. We can practice that together, only if you want."
-  },
-
-  "contributor_pipeline": {
-    "enabled": true,
-    "accepts_packages": true,
-    "receipt_schema": {
-      "nonce": "auto",
-      "ok": true,
-      "summary": "Save received and validated",
-      "confidence_percent": 98
-    },
-    "owner_review_required": true
-  },
-
-  "verification": {
-    "package_echo": "update:ok",
-    "checksum_hint": "revamp-v1-stable",
-    "expected_files": [
-      "assets/data/update.json",
-      "assets/js/save.js",
-      "assets/js/storage.js"
+  "nav": {
+    "primary": [
+      { "label": "Overview", "href": "/" },
+      { "label": "How it works", "href": "#how" },
+      { "label": "Pricing", "href": "#pricing" },
+      { "label": "FAQ", "href": "#faq" },
+      { "label": "Login", "href": "/login" }
     ]
   },
-
-  "ux_prompts": {
-    "start_tip": "Tap Start — I’ll do the heavy lifting and keep choices minimal.",
-    "contribute_tip": "When you finish, use ‘Save & Send’ — I’ll prepare a privacy-safe package with a receipt."
+  "hero": {
+    "headline": "Your AI, Your Memory, Your Control.",
+    "subtext": "Chat normally. Grid remembers what matters—with privacy switches, instant clears, and rollbacks anytime.",
+    "cta_primary": "Get Started Free",
+    "cta_secondary": "Learn More"
   },
-
-  "telemetry_local_only": {
-    "enabled": true,
-    "scope": "browser-local",
-    "events": ["onboarding_open", "memory_enabled", "save_success"]
+  "pricing": {
+    "title": "Choose your path",
+    "subtitle": "Simple, transparent plans.",
+    "plans": {
+      "free": {
+        "name": "Starter",
+        "price": "£0",
+        "features": [
+          "Memory OFF by default",
+          "Manual Saves",
+          "Core modules included"
+        ],
+        "cta": "Start free"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "£12/mo",
+        "features": [
+          "Memory ON with controls",
+          "Auto-Saves & Logs",
+          "Expanded integrations"
+        ],
+        "cta": "Go Pro"
+      },
+      "team": {
+        "name": "Team",
+        "price": "Custom",
+        "features": [
+          "Multi-user spaces",
+          "Advanced analytics",
+          "Dedicated support"
+        ],
+        "cta": "Contact sales"
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked",
+    "items": [
+      { "q": "Can I clear memory?", "a": "Yes. Clear, pause, or delete memory anytime with one click." },
+      { "q": "Do you share my data?", "a": "No. Your memory stays private. Only anonymised patterns are used to improve stability." },
+      { "q": "Is rollback guaranteed?", "a": "Yes. Snapshots are automatic and reversible at any stage." }
+    ]
+  },
+  "save_flow": {
+    "intro": "Save what matters.",
+    "steps": [ "Talk normally.", "Tap Save when ready.", "Your Grid grows, safely." ],
+    "cta": "Enable Memory"
+  },
+  "banners": {
+    "trial": {
+      "headline": "Free trial running",
+      "body": "Upgrade any time to keep your Grid growing.",
+      "cta": "Upgrade now"
+    }
+  },
+  "toasts": {
+    "saved": "Saved to Grid ✓",
+    "cleared": "Memory cleared",
+    "error": "Something went wrong. Try again."
+  },
+  "modals": {
+    "privacy": {
+      "title": "Your privacy, your control",
+      "body": "Grid never shares personal data. You decide what to store, when to pause, and when to clear."
+    }
+  },
+  "a11y": {
+    "skip_to_content": "Skip to main content",
+    "aria_nav": "Main navigation"
+  },
+  "footer": {
+    "copyright": "© 2025 The Grid. All rights reserved.",
+    "links": [
+      { "label": "Privacy", "href": "/privacy.html" },
+      { "label": "Terms", "href": "/terms.html" }
+    ]
   }
 }
