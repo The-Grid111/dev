@@ -125,7 +125,7 @@
   },
   {
     "path": "assets/data/update.json",
-    "bytes": 3618
+    "bytes": 6834
   },
   {
     "path": "assets/data/updates.json",
@@ -345,7 +345,7 @@
   },
   {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 6929
+    "bytes": 7427
   },
   {
     "path": "dev/dev/data/file-tree.txt",
@@ -353,7 +353,7 @@
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
-    "bytes": 304
+    "bytes": 305
   },
   {
     "path": "favicon.svg",
