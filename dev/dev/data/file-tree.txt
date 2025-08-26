@@ -64,7 +64,6 @@ dev/data/file-tree.json
 dev/data/file-tree.txt
 dev/data/repo-metrics.json
 dev/data/state_packs/state_pack_20250825_1310.json
-dev/data/update.json
 dev/dev/archive/snapshot_1756156501.json
 dev/dev/archive/snapshot_1756156683.json
 dev/dev/archive/snapshot_1756156927.json
@@ -85,6 +84,10 @@ dev/dev/archive/snapshot_1756201435.json
 dev/dev/archive/snapshot_1756201843.json
 dev/dev/archive/snapshot_1756202271.json
 dev/dev/archive/snapshot_1756202575.json
+dev/dev/archive/snapshot_1756207741.json
+dev/dev/archive/snapshot_1756208119.json
+dev/dev/archive/snapshot_1756208156.json
+dev/dev/archive/snapshot_1756218747.json
 dev/dev/data/file-tree.json
 dev/dev/data/file-tree.txt
 dev/dev/data/repo-metrics.json
@@ -94,6 +97,7 @@ lychee.toml
 patch_path.txt
 privacy.html
 robots.txt
+scripts/apply-issue-queue.mjs
 scripts/apply-update.mjs
 scripts/bump-asset-manifest.mjs
 scripts/check-json.mjs

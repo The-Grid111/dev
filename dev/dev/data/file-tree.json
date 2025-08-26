@@ -65,7 +65,7 @@
   },
   {
     "path": ".github/workflows/update-queue.yml",
-    "bytes": 1930
+    "bytes": 747
   },
   {
     "path": ".github/workflows/verify-inventory.yml",
@@ -129,7 +129,7 @@
   },
   {
     "path": "assets/data/update.json",
-    "bytes": 6834
+    "bytes": 2002
   },
   {
     "path": "assets/data/updates.json",
@@ -264,10 +264,6 @@
     "bytes": 1
   },
   {
-    "path": "dev/data/update.json",
-    "bytes": 1215
-  },
-  {
     "path": "dev/dev/archive/snapshot_1756156501.json",
     "bytes": 2883
   },
@@ -348,12 +344,28 @@
     "bytes": 8351
   },
   {
+    "path": "dev/dev/archive/snapshot_1756207741.json",
+    "bytes": 8608
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756208119.json",
+    "bytes": 8698
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756208156.json",
+    "bytes": 8788
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756218747.json",
+    "bytes": 8808
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 7427
+    "bytes": 7504
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3087
+    "bytes": 3260
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
@@ -382,6 +394,10 @@
   {
     "path": "robots.txt",
     "bytes": 79
+  },
+  {
+    "path": "scripts/apply-issue-queue.mjs",
+    "bytes": 349
   },
   {
     "path": "scripts/apply-update.mjs",
