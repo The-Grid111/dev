@@ -1,115 +1,315 @@
-(() => {
-  const $ = (s, el=document) => el.querySelector(s);
-  const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+/* THE GRID — ui.js (Layer 1 Core UX)
+   Vanilla JS only; works on GitHub Pages. */
 
-  // --- One-tap admin unlock (per-device) -----------------------------
-  const ADMIN_TOKEN = 'unlock-483921'; // one-time link param ?admin=unlock-483921
-  const qp = new URL(location.href).searchParams;
-  if (qp.get('admin') === ADMIN_TOKEN) {
-    Store.set('admin.enabled', true);
-    history.replaceState({}, '', location.pathname);
-    alert('Admin unlocked on this device.');
+const qs  = (s, el=document)=>el.querySelector(s);
+const qsa = (s, el=document)=>[...el.querySelectorAll(s)];
+const store = {
+  get(k, d=null){ try { return JSON.parse(localStorage.getItem(k)) ?? d } catch { return d }},
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)) },
+  del(k){ localStorage.removeItem(k) }
+};
+
+const state = {
+  user: store.get('user', null),         // {name,email}
+  plan: store.get('plan', null),         // 'TRIAL' | 'BASIC' | ...
+  save: store.get('saveBlock', null),    // JSON object
+  isAdmin: store.get('isAdmin', false),
+  settings: store.get('settings', { accent:'#f5c84b', scale:1, density:'regular', liveBg:true, depth:true }),
+  slotOrder: store.get('slotOrder', [])  // array of ids in order
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  wireBasics();
+  applySettings();
+  greet();
+  renderProfile();
+  hydrateNews();
+  hydrateSlots();
+  wireAdmin();
+  year();
+});
+
+/* ---------- Topbar nav & basics ---------- */
+
+function wireBasics(){
+  // nav scroll
+  qsa('[data-nav]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const to = btn.getAttribute('data-nav');
+      const el = qs(to);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // menu button: scroll to hero (placeholder for real menu)
+  const menuBtn = qs('#menuBtn');
+  if(menuBtn) menuBtn.addEventListener('click', ()=>{
+    alert('Menu coming online with routing & account pages.');
+  });
+
+  // Paste Save
+  qs('#pasteSaveBtn').addEventListener('click', onPasteSave);
+
+  // Trial shortcut
+  const trialBtn = qs('#trialBtn');
+  if(trialBtn) trialBtn.addEventListener('click', ()=>choosePlan('TRIAL'));
+
+  // Pricing buttons
+  qsa('[data-plan]').forEach(b=>b.addEventListener('click', ()=>choosePlan(b.dataset.plan)));
+
+  // Profile toggle
+  qs('#profileBtn').addEventListener('click', ()=>{
+    const sec = qs('#profile');
+    sec.classList.toggle('hidden');
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  // Brand long-press → admin unlock
+  const brand = qs('#brand');
+  let holdTimer = null;
+  brand.addEventListener('touchstart', ()=>{ holdTimer = setTimeout(()=>unlockAdmin('hold'), 1200) });
+  brand.addEventListener('touchend', ()=>clearTimeout(holdTimer));
+  brand.addEventListener('mousedown', ()=>{ holdTimer = setTimeout(()=>unlockAdmin('hold'), 1200) });
+  brand.addEventListener('mouseup', ()=>clearTimeout(holdTimer));
+
+  // Hash unlock (#admin=on)
+  if(location.hash && location.hash.toLowerCase().includes('admin=on')){
+    unlockAdmin('hash');
   }
-  if (Store.get('admin.enabled')) document.body.classList.add('admin');
 
-  // --- Header & sheet ------------------------------------------------
-  const sheet = $('#sheet'), menuBtn = $('#menuBtn'), closeBtn = $('.sheet-close', sheet);
-  menuBtn?.addEventListener('click', () => sheet.classList.add('show'));
-  closeBtn?.addEventListener('click', () => sheet.classList.remove('show'));
-  $$('#sheet a[data-link]').forEach(a => a.addEventListener('click', () => sheet.classList.remove('show')));
+  // Simple previews
+  qsa('[data-action="preview"]').forEach(b=>{
+    b.addEventListener('click', () => {
+      alert(`This would open the ${b.dataset.id} preview.\n(Attach routing when ready).`);
+    });
+  });
 
-  // time-of-day greeting
+  // Community stub
+  qsa('[data-action="community"]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      alert('Community hub will connect to Supabase/Discord. (Stub)');
+    });
+  });
+}
+
+function year(){ const y = new Date().getFullYear(); qs('#year').textContent = y; }
+
+/* ---------- Greeting ---------- */
+function greet(){
+  const el = qs('#greeting');
   const h = new Date().getHours();
-  $('#todGreet').textContent = (h<12?'Good morning':h<18?'Good afternoon':'Good evening');
+  let msg = 'Welcome';
+  if(h < 6) msg = 'Good night';
+  else if(h < 12) msg = 'Good morning';
+  else if(h < 18) msg = 'Good afternoon';
+  else msg = 'Good evening';
+  if(state.user?.name) msg += `, ${state.user.name}`;
+  el.textContent = msg + '.';
+}
 
-  // paste save modal
-  const saveModal = $('#saveModal');
-  $('#pasteSaveBtn')?.addEventListener('click', () => saveModal.showModal());
-  $('#applySaveBtn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    try{
-      const json = JSON.parse($('#saveArea').value || '{}');
-      Store.set('save.last', json);
-      alert('Save accepted. (Hook: adaptors can read Store.get("save.last")).');
-    }catch(err){ alert('Invalid JSON'); }
+/* ---------- Pricing plan (local only) ---------- */
+function choosePlan(code){
+  state.plan = code;
+  store.set('plan', code);
+  alert(`Plan set locally to ${code}.\nAdd Stripe IDs for real checkout.`);
+  renderProfile();
+}
+
+/* ---------- Save input ---------- */
+async function onPasteSave(){
+  const raw = prompt('Paste your Save (JSON). Nothing is uploaded; it stays on this device.');
+  if(!raw) return;
+  try{
+    const obj = JSON.parse(raw);
+    state.save = obj;
+    store.set('saveBlock', obj);
+    renderSavePreview();
+    alert('Save stored locally.');
+  }catch(e){
+    alert('That wasn’t valid JSON. Try again.');
+  }
+}
+
+/* ---------- News feed ---------- */
+async function hydrateNews(){
+  const feed = qs('#newsFeed');
+  feed.innerHTML = `<li class="muted">Loading updates…</li>`;
+  try{
+    const res = await fetch('assets/data/updates.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('no file');
+    const items = await res.json();
+    renderNews(items);
+  }catch{
+    renderNews([
+      {date:'Today', title:'Welcome to the new GRID site', tag:'Release'},
+      {date:'Today', title:'Admin Board added: drag-drop slots, live background, brand hue', tag:'Feature'}
+    ]);
+  }
+}
+function renderNews(items){
+  const feed = qs('#newsFeed');
+  if(!items?.length){ feed.innerHTML = `<li class="muted">No updates yet.</li>`; return; }
+  feed.innerHTML = items.map(i=>(
+    `<li>
+      <span class="tag">${escapeHtml(i.tag||'Update')}</span>
+      <div><strong>${escapeHtml(i.title)}</strong><div class="muted small">${escapeHtml(i.date||'')}</div></div>
+    </li>`
+  )).join('');
+}
+
+/* ---------- Profile (stub auth) ---------- */
+function renderProfile(){
+  qs('#userPlan').textContent = state.plan ?? '—';
+  renderSavePreview();
+
+  const name = state.user?.name ?? 'Guest';
+  qs('#userName').textContent = name;
+
+  const inBtn = qs('#signInBtn');
+  const outBtn = qs('#signOutBtn');
+  inBtn.classList.toggle('hidden', !!state.user);
+  outBtn.classList.toggle('hidden', !state.user);
+
+  inBtn.onclick = async ()=>{
+    const email = prompt('Enter email for demo sign-in (local only):');
+    if(!email) return;
+    state.user = {name: email.split('@')[0], email};
+    store.set('user', state.user);
+    greet(); renderProfile();
+  };
+  outBtn.onclick = ()=>{
+    state.user = null; store.del('user'); greet(); renderProfile();
+  };
+}
+function renderSavePreview(){
+  const el = qs('#savePreview');
+  el.textContent = state.save ? JSON.stringify(state.save, null, 2) : 'None yet — paste one from the header.';
+}
+
+/* ---------- Admin board ---------- */
+function unlockAdmin(source=''){
+  if(state.isAdmin) return showAdmin();
+  state.isAdmin = true;
+  store.set('isAdmin', true);
+  alert('Admin unlocked locally on this device.');
+  showAdmin();
+}
+function showAdmin(){
+  qs('#adminBoard').classList.remove('hidden');
+  buildSlotList();
+}
+function wireAdmin(){
+  // open if already admin
+  if(state.isAdmin) showAdmin();
+
+  // close
+  qs('#closeAdmin').addEventListener('click', ()=>{
+    qs('#adminBoard').classList.add('hidden');
   });
-
-  // profile button (simple local view for now)
-  $('#profileBtn')?.addEventListener('click', () => {
-    const plan = Store.get('profile.plan','visitor');
-    alert(`Signed in locally.\nPlan: ${plan.toUpperCase()}\n(Admin panel is local-only)`);
-  });
-
-  // admin panel
-  const adminPanel = $('#adminPanel');
-  $('#adminToggle')?.addEventListener('click', (e)=>{ e.preventDefault(); adminPanel.classList.toggle('show'); });
-  $('#adminClose')?.addEventListener('click', ()=> adminPanel.classList.remove('show'));
 
   // controls
-  const ctlDepth = $('#ctlDepth'), ctlRadius = $('#ctlRadius'), ctlGlow = $('#ctlGlow');
-  // load persisted
-  document.documentElement.style.setProperty('--radius', (Store.get('ui.radius',16))+'px');
-  document.documentElement.style.setProperty('--glow', Store.get('ui.glow',0.12));
-  document.body.dataset.theme = Store.get('ui.theme','dark');
-  ctlDepth.value = Store.get('ui.depth',2);
-  ctlRadius.value = Store.get('ui.radius',16);
-  ctlGlow.value = Store.get('ui.glow',0.12);
+  qs('#accentInput').addEventListener('input', e=>{
+    state.settings.accent = e.target.value; saveSettings(); applySettings();
+  });
+  qs('#scaleInput').addEventListener('input', e=>{
+    state.settings.scale = Number(e.target.value); saveSettings(); applySettings();
+  });
+  qs('#densityInput').addEventListener('change', e=>{
+    state.settings.density = e.target.value; saveSettings(); applySettings();
+  });
+  qs('#bgToggle').addEventListener('change', e=>{
+    state.settings.liveBg = e.target.checked; saveSettings(); applySettings();
+  });
+  qs('#depthToggle').addEventListener('change', e=>{
+    state.settings.depth = e.target.checked; saveSettings(); applySettings();
+  });
 
-  const applyDepth = v => document.documentElement.style.setProperty('--depth', v);
-  const applyRadius = v => document.documentElement.style.setProperty('--radius', v+'px');
-  const applyGlow = v => document.documentElement.style.setProperty('--glow', v);
-  [ctlDepth, ctlRadius, ctlGlow].forEach(input => input?.addEventListener('input', () => {
-    if (input===ctlDepth){ Store.set('ui.depth', +input.value); applyDepth(+input.value); }
-    if (input===ctlRadius){ Store.set('ui.radius', +input.value); applyRadius(+input.value); }
-    if (input===ctlGlow){ Store.set('ui.glow', +input.value); applyGlow(+input.value); }
-  }));
-  $('#themeDark')?.addEventListener('click', ()=>{ document.body.dataset.theme='dark'; Store.set('ui.theme','dark'); });
-  $('#themeLight')?.addEventListener('click', ()=>{ document.body.dataset.theme='light'; Store.set('ui.theme','light'); });
+  qs('#resetOrder').addEventListener('click', ()=>{
+    state.slotOrder = []; store.del('slotOrder'); hydrateSlots(); buildSlotList();
+  });
 
-  // Section order manager
-  const sections = $$('[data-section]');
-  function renderOrder(){
-    const list = $('#orderList'); list.innerHTML='';
-    sections.forEach(s=>{
-      const id = s.getAttribute('data-section');
-      const row = document.createElement('div'); row.className='row center';
-      row.innerHTML = `<span>${id}</span>
-        <span class="spacer" style="flex:1"></span>
-        <button class="btn pill small ghost up">↑</button>
-        <button class="btn pill small ghost down">↓</button>`;
-      row.querySelector('.up').onclick = ()=> move(id, -1);
-      row.querySelector('.down').onclick = ()=> move(id, +1);
-      list.appendChild(row);
+  qs('#exportSave').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify(state.save ?? {}, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'save.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  qs('#toggleProfileSection').addEventListener('click', ()=>{
+    qs('#profile').classList.toggle('hidden');
+  });
+}
+
+function applySettings(){
+  document.documentElement.style.setProperty('--accent', state.settings.accent);
+  document.body.style.setProperty('--scale', state.settings.scale);
+  document.body.classList.toggle('density-compact', state.settings.density === 'compact');
+  qs('.live-bg').style.display = state.settings.liveBg ? 'block' : 'none';
+
+  // depth toggle: add/remove depth class on cards
+  qsa('.card').forEach(c => c.classList.toggle('depth', state.settings.depth));
+}
+
+function saveSettings(){ store.set('settings', state.settings); }
+
+/* ---------- Slots ordering ---------- */
+const slotIds = ['hero','feature','library','news','pricing','how','community','profile'];
+function hydrateSlots(){
+  const order = state.slotOrder?.length ? state.slotOrder : slotIds;
+  const container = qs('#page');
+  order.forEach(id=>{
+    const sec = qs(`#${id}`);
+    if(sec) container.appendChild(sec);
+  });
+}
+function buildSlotList(){
+  const list = qs('#slotList');
+  list.innerHTML = '';
+  slotIds.forEach(id=>{
+    const li = document.createElement('li');
+    li.draggable = true;
+    li.dataset.id = id;
+    li.textContent = id;
+    list.appendChild(li);
+  });
+  // drag events
+  qsa('#slotList li').forEach(li=>{
+    li.addEventListener('dragstart', ()=>li.classList.add('dragging'));
+    li.addEventListener('dragend', ()=>{
+      li.classList.remove('dragging');
+      applySlotOrderFromList();
     });
-  }
-  function move(id, dir){
-    const els = $$('[data-section]');
-    const arr = els.map(e=>e);
-    const i = arr.findIndex(e=>e.dataset.section===id);
-    const j = Math.min(arr.length-1, Math.max(0, i+dir));
-    if (i===j) return;
-    const parent = arr[i].parentElement;
-    parent.insertBefore(arr[i], dir>0 ? arr[j].nextSibling : arr[j]);
-    persistOrder();
-  }
-  function persistOrder(){
-    const order = $$('[data-section]').map(e=>e.dataset.section);
-    Store.set('ui.sectionOrder', order);
-  }
-  function applyPersistedOrder(){
-    const order = Store.get('ui.sectionOrder');
-    if (!order) return renderOrder();
-    const map = {}; $$('[data-section]').forEach(el => map[el.dataset.section]=el);
-    const parent = map[order[0]].parentElement;
-    order.forEach(id => map[id] && parent.appendChild(map[id]));
-    renderOrder();
-  }
-  applyPersistedOrder();
+  });
+  // container dragover to sort
+  list.addEventListener('dragover', e=>{
+    e.preventDefault();
+    const after = getDragAfterElement(list, e.clientY);
+    const dragging = qs('#slotList .dragging');
+    if(!dragging) return;
+    if(after == null) list.appendChild(dragging);
+    else list.insertBefore(dragging, after);
+  });
+}
+function getDragAfterElement(container, y){
+  const els = [...container.querySelectorAll('li:not(.dragging)')];
+  return els.reduce((closest, child)=>{
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height/2;
+    if(offset < 0 && offset > closest.offset){
+      return {offset, element:child};
+    } else {
+      return closest;
+    }
+  }, {offset: Number.NEGATIVE_INFINITY}).element;
+}
+function applySlotOrderFromList(){
+  const listIds = qsa('#slotList li').map(li=>li.dataset.id);
+  state.slotOrder = listIds;
+  store.set('slotOrder', listIds);
+  hydrateSlots();
+}
 
-  // year + footer plan
-  $('#year').textContent = new Date().getFullYear();
-  $('#footPlan').textContent = (Store.get('profile.plan','Visitor')||'Visitor');
-
-  // expose for other modules
-  window.UI = { renderOrder };
-})();
+/* ---------- Utilities ---------- */
+function escapeHtml(s=''){ return s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])) }
