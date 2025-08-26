@@ -189,7 +189,7 @@
   },
   {
     "path": "assets/js/main.js",
-    "bytes": 850
+    "bytes": 2675
   },
   {
     "path": "assets/js/metrics.js",
@@ -209,7 +209,7 @@
   },
   {
     "path": "assets/js/stripe.js",
-    "bytes": 1773
+    "bytes": 892
   },
   {
     "path": "assets/js/supabase.js",
@@ -225,7 +225,7 @@
   },
   {
     "path": "assets/js/ui.js",
-    "bytes": 6103
+    "bytes": 5284
   },
   {
     "path": "assets/manifest.json",
@@ -428,12 +428,20 @@
     "bytes": 10357
   },
   {
+    "path": "dev/dev/archive/snapshot_1756238754.json",
+    "bytes": 10448
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756238849.json",
+    "bytes": 10540
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 9090
+    "bytes": 9257
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3958
+    "bytes": 4040
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
