@@ -97,7 +97,7 @@
   },
   {
     "path": "assets/css/site.css",
-    "bytes": 3826
+    "bytes": 5813
   },
   {
     "path": "assets/css/styles.css",
@@ -185,7 +185,7 @@
   },
   {
     "path": "assets/js/main.js",
-    "bytes": 717
+    "bytes": 850
   },
   {
     "path": "assets/js/metrics.js",
@@ -221,7 +221,7 @@
   },
   {
     "path": "assets/js/ui.js",
-    "bytes": 1792
+    "bytes": 6103
   },
   {
     "path": "assets/manifest.json",
@@ -384,12 +384,24 @@
     "bytes": 9352
   },
   {
+    "path": "dev/dev/archive/snapshot_1756231395.json",
+    "bytes": 9443
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756231769.json",
+    "bytes": 9534
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756231912.json",
+    "bytes": 9625
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 8091
+    "bytes": 8339
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3506
+    "bytes": 3629
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
@@ -401,7 +413,7 @@
   },
   {
     "path": "index.html",
-    "bytes": 4049
+    "bytes": 5295
   },
   {
     "path": "lychee.toml",
