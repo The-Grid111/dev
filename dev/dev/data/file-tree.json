@@ -89,7 +89,7 @@
   },
   {
     "path": "assets/config/stripe.json",
-    "bytes": 248
+    "bytes": 151
   },
   {
     "path": "assets/css/modal.css",
@@ -416,12 +416,16 @@
     "bytes": 10082
   },
   {
+    "path": "dev/dev/archive/snapshot_1756238183.json",
+    "bytes": 10174
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 8588
+    "bytes": 9006
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3835
+    "bytes": 3876
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
@@ -433,7 +437,7 @@
   },
   {
     "path": "index.html",
-    "bytes": 6581
+    "bytes": 7260
   },
   {
     "path": "lychee.toml",
