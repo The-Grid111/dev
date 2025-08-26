@@ -1,0 +1,465 @@
+{
+  "type": "repo-snapshot",
+  "createdAt": "2025-08-26T16:14:25.366Z",
+  "ts": 1756224865,
+  "sha": "df850b6a4c4888108453be4c55302bb0609d43c3",
+  "count": 114,
+  "items": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/add-file.yml",
+      "bytes": 335
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "bytes": 28
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/multi-file-change.yml",
+      "bytes": 298
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/update-file.yml",
+      "bytes": 400
+    },
+    {
+      "path": ".github/workflows/apply-update.yml",
+      "bytes": 1344
+    },
+    {
+      "path": ".github/workflows/apply.yml",
+      "bytes": 2928
+    },
+    {
+      "path": ".github/workflows/assets-manifest.yml",
+      "bytes": 656
+    },
+    {
+      "path": ".github/workflows/build-file-inventory.yml",
+      "bytes": 3210
+    },
+    {
+      "path": ".github/workflows/deploy-on-patch.yml",
+      "bytes": 1074
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "bytes": 919
+    },
+    {
+      "path": ".github/workflows/issue-patches.yml",
+      "bytes": 3283
+    },
+    {
+      "path": ".github/workflows/link-check.yml",
+      "bytes": 469
+    },
+    {
+      "path": ".github/workflows/patch.yml",
+      "bytes": 1955
+    },
+    {
+      "path": ".github/workflows/repo-hygiene.yml",
+      "bytes": 757
+    },
+    {
+      "path": ".github/workflows/repo-snapshot.yml",
+      "bytes": 2209
+    },
+    {
+      "path": ".github/workflows/svg-sanity.yml",
+      "bytes": 381
+    },
+    {
+      "path": ".github/workflows/update-queue.yml",
+      "bytes": 747
+    },
+    {
+      "path": ".github/workflows/verify-inventory.yml",
+      "bytes": 553
+    },
+    {
+      "path": ".nojekyll",
+      "bytes": 1
+    },
+    {
+      "path": "404.html",
+      "bytes": 869
+    },
+    {
+      "path": "README.md",
+      "bytes": 141
+    },
+    {
+      "path": "archive/hello_v0.2.html",
+      "bytes": 79
+    },
+    {
+      "path": "assets/config/stripe.json",
+      "bytes": 248
+    },
+    {
+      "path": "assets/css/modal.css",
+      "bytes": 1918
+    },
+    {
+      "path": "assets/css/site.css",
+      "bytes": 3826
+    },
+    {
+      "path": "assets/css/styles.css",
+      "bytes": 9436
+    },
+    {
+      "path": "assets/data/language.json",
+      "bytes": 1355
+    },
+    {
+      "path": "assets/data/learn.js",
+      "bytes": 3440
+    },
+    {
+      "path": "assets/data/owner_core_save_v1.2.json",
+      "bytes": 403
+    },
+    {
+      "path": "assets/data/plans.json",
+      "bytes": 1895
+    },
+    {
+      "path": "assets/data/services.json",
+      "bytes": 840
+    },
+    {
+      "path": "assets/data/taxonomy.json",
+      "bytes": 409
+    },
+    {
+      "path": "assets/data/update.json",
+      "bytes": 153
+    },
+    {
+      "path": "assets/data/updates.json",
+      "bytes": 472
+    },
+    {
+      "path": "assets/gc_spin.mp4",
+      "bytes": 2438352
+    },
+    {
+      "path": "assets/images/favicon.svg",
+      "bytes": 1075
+    },
+    {
+      "path": "assets/images/logo-grid-mark.svg",
+      "bytes": 1289
+    },
+    {
+      "path": "assets/images/logo-grid-word-only.svg",
+      "bytes": 581
+    },
+    {
+      "path": "assets/images/logo-grid-wordmark.svg",
+      "bytes": 1939
+    },
+    {
+      "path": "assets/images/manifest.json",
+      "bytes": 327
+    },
+    {
+      "path": "assets/js/app.js",
+      "bytes": 5017
+    },
+    {
+      "path": "assets/js/commerce.js",
+      "bytes": 4349
+    },
+    {
+      "path": "assets/js/confetti.js",
+      "bytes": 1116
+    },
+    {
+      "path": "assets/js/effects.js",
+      "bytes": 806
+    },
+    {
+      "path": "assets/js/entitlements.js",
+      "bytes": 397
+    },
+    {
+      "path": "assets/js/hotfix.js",
+      "bytes": 2974
+    },
+    {
+      "path": "assets/js/main.js",
+      "bytes": 717
+    },
+    {
+      "path": "assets/js/metrics.js",
+      "bytes": 2853
+    },
+    {
+      "path": "assets/js/save-merge.js",
+      "bytes": 6477
+    },
+    {
+      "path": "assets/js/save.js",
+      "bytes": 6600
+    },
+    {
+      "path": "assets/js/storage.js",
+      "bytes": 1899
+    },
+    {
+      "path": "assets/js/stripe.js",
+      "bytes": 1773
+    },
+    {
+      "path": "assets/js/supabase.js",
+      "bytes": 760
+    },
+    {
+      "path": "assets/js/thegrid_verify_signature.js",
+      "bytes": 1259
+    },
+    {
+      "path": "assets/js/trial-banner.js",
+      "bytes": 973
+    },
+    {
+      "path": "assets/js/ui.js",
+      "bytes": 1792
+    },
+    {
+      "path": "assets/manifest.json",
+      "bytes": 2285
+    },
+    {
+      "path": "assets/videos/manifest.json",
+      "bytes": 317
+    },
+    {
+      "path": "dev/archive/snapshot_1756155441.json",
+      "bytes": 18965
+    },
+    {
+      "path": "dev/archive/snapshot_1756155958.json",
+      "bytes": 19228
+    },
+    {
+      "path": "dev/archive/snapshot_1756155994.json",
+      "bytes": 19496
+    },
+    {
+      "path": "dev/archive/snapshot_1756156186.json",
+      "bytes": 19758
+    },
+    {
+      "path": "dev/data/file-tree.json",
+      "bytes": 13766
+    },
+    {
+      "path": "dev/data/file-tree.txt",
+      "bytes": 4526
+    },
+    {
+      "path": "dev/data/repo-metrics.json",
+      "bytes": 4106
+    },
+    {
+      "path": "dev/data/state_packs/state_pack_20250825_1310.json",
+      "bytes": 1
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756156501.json",
+      "bytes": 2883
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756156683.json",
+      "bytes": 2883
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756156927.json",
+      "bytes": 2883
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756157741.json",
+      "bytes": 2883
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756157951.json",
+      "bytes": 2883
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756157985.json",
+      "bytes": 6996
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756159194.json",
+      "bytes": 7167
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756159639.json",
+      "bytes": 7258
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756159836.json",
+      "bytes": 7350
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756160358.json",
+      "bytes": 7441
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756160505.json",
+      "bytes": 7532
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756160853.json",
+      "bytes": 7623
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756161120.json",
+      "bytes": 7714
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756184383.json",
+      "bytes": 7805
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756185633.json",
+      "bytes": 7896
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756186116.json",
+      "bytes": 7988
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756201435.json",
+      "bytes": 8079
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756201843.json",
+      "bytes": 8170
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756202271.json",
+      "bytes": 8261
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756202575.json",
+      "bytes": 8351
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756207741.json",
+      "bytes": 8608
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756208119.json",
+      "bytes": 8698
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756208156.json",
+      "bytes": 8788
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756218747.json",
+      "bytes": 8808
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756219690.json",
+      "bytes": 8899
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756221633.json",
+      "bytes": 8990
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756223081.json",
+      "bytes": 9081
+    },
+    {
+      "path": "dev/dev/archive/snapshot_1756224737.json",
+      "bytes": 9171
+    },
+    {
+      "path": "dev/dev/data/file-tree.json",
+      "bytes": 8091
+    },
+    {
+      "path": "dev/dev/data/file-tree.txt",
+      "bytes": 3383
+    },
+    {
+      "path": "dev/dev/data/repo-metrics.json",
+      "bytes": 305
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 1273
+    },
+    {
+      "path": "index.html",
+      "bytes": 4049
+    },
+    {
+      "path": "lychee.toml",
+      "bytes": 346
+    },
+    {
+      "path": "patch_path.txt",
+      "bytes": 10
+    },
+    {
+      "path": "privacy.html",
+      "bytes": 838
+    },
+    {
+      "path": "robots.txt",
+      "bytes": 79
+    },
+    {
+      "path": "scripts/apply-issue-queue.mjs",
+      "bytes": 349
+    },
+    {
+      "path": "scripts/apply-update.mjs",
+      "bytes": 5656
+    },
+    {
+      "path": "scripts/bump-asset-manifest.mjs",
+      "bytes": 1189
+    },
+    {
+      "path": "scripts/check-json.mjs",
+      "bytes": 522
+    },
+    {
+      "path": "scripts/gen-file-inventory.mjs",
+      "bytes": 879
+    },
+    {
+      "path": "scripts/repo-snapshot.mjs",
+      "bytes": 5378
+    },
+    {
+      "path": "scripts/svg-sanity.mjs",
+      "bytes": 1324
+    },
+    {
+      "path": "scripts/verify-inventory.mjs",
+      "bytes": 1325
+    },
+    {
+      "path": "sitemap.xml",
+      "bytes": 507
+    },
+    {
+      "path": "terms.html",
+      "bytes": 841
+    },
+    {
+      "path": "thegrid_verify_signature.js",
+      "bytes": 441
+    }
+  ]
+}
