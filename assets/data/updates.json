@@ -1,16 +1,5 @@
-{
-  "version": "2025.09.01",
-  "flags": {
-    "trial_banner_enabled": true,
-    "learning_enabled_default": true,
-    "autosave_enabled_default": true
-  },
-  "defaults": {
-    "ui": { "accent": "#d8b15a", "radius": 18, "glow": 0.35, "theme": "dark" },
-    "language_ref": "/dev/assets/data/language.json"
-  },
-  "copy": {
-    "trial_headline": "Launch Trial — One-time Diamond access",
-    "trial_copy": "Try watermark-free exports & private drops. Limited time."
-  }
-}
+[
+  { "date": "2025-08-26", "title": "Layer 1 shipped: core UX, admin board, news feed", "tag": "Release" },
+  { "date": "2025-08-26", "title": "Pricing & local plan state (Stripe hook next pass)", "tag": "Commerce" },
+  { "date": "2025-08-26", "title": "Greeting + profile stub + Save storage (local)", "tag": "Profile" }
+]
