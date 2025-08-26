@@ -1,0 +1,59 @@
+/update assets/data/saves/rhianna_2025-08-26.json
+```json
+{
+  "meta": {
+    "contributor": "<YourName>",
+    "date": "2025-08-26",
+    "session": "initial",
+    "memory_status": "on",
+    "model": "GPT-5",
+    "privacy": {
+      "consent": true,
+      "allow_generalization": true,
+      "share_scope": "internal-only",
+      "pii_redacted": true
+    },
+    "receipt": {
+      "nonce": "672394",
+      "summary": "User explored OCD experiences in depth, mapped cycles, and added grounding anchors."
+    }
+  },
+  "insights": [
+    "Mapping the OCD cycle made patterns feel clearer and less overwhelming.",
+    "Creating personal anchors like 'Leaf Drift' and 'Pause Ritual' gave new ways to handle intrusive thoughts.",
+    "The calm, non-judgmental tone made sharing even distressing thoughts feel safe."
+  ],
+  "notes": "I shared details about my intrusive thoughts, rituals, and how OCD has affected me from childhood through to now. We built a full map of my cycle, added themes like harm thoughts and solo intimacy disruptions, and created grounding tools like Leaf Drift, Pause Ritual, and a personal script. I felt understood, supported, and safe throughout.",
+  "analysis": {
+    "improvement_scores_0to5": {
+      "clarity": 5,
+      "empathy_safety": 5,
+      "personalization": 5,
+      "usefulness_today": 5,
+      "memory_use": 5
+    },
+    "evidence_examples": [
+      "Clarity: Intrusive thought patterns were broken down into a simple cycle map.",
+      "Personalization: Anchors and scripts were tailored directly to the user’s experiences (e.g., solo intimacy)."
+    ],
+    "before_after_knowledge": {
+      "before": ["Only knew that intrusive thoughts were distressing in general."],
+      "after": ["Learned specific patterns, rituals, and themes (checking, confession, harm, intimacy) and developed tailored grounding strategies."]
+    },
+    "integration_ready": {
+      "ready": "yes",
+      "why": "Session produced structured insights, safe patterns, and practical tools."
+    },
+    "confidence_percent": 97,
+    "verification": "ok"
+  },
+  "system_learning": {
+    "abstract_patterns": [
+      "Mapping intrusive-thought cycles helps reduce fear and increase clarity.",
+      "Personalized grounding anchors (like leaf imagery) increase trust and usefulness.",
+      "Calm, therapeutic pacing makes it easier to share sensitive intrusive thoughts safely."
+    ],
+    "applicability_notes": "These patterns can improve future onboarding and OCD-support modules without personal identifiers.",
+    "personal_details_shared": "no"
+  }
+}
