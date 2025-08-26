@@ -97,7 +97,7 @@
   },
   {
     "path": "assets/css/site.css",
-    "bytes": 5813
+    "bytes": 4743
   },
   {
     "path": "assets/css/styles.css",
@@ -181,7 +181,7 @@
   },
   {
     "path": "assets/js/entitlements.js",
-    "bytes": 397
+    "bytes": 550
   },
   {
     "path": "assets/js/hotfix.js",
@@ -205,7 +205,7 @@
   },
   {
     "path": "assets/js/storage.js",
-    "bytes": 1899
+    "bytes": 769
   },
   {
     "path": "assets/js/stripe.js",
@@ -420,12 +420,20 @@
     "bytes": 10174
   },
   {
+    "path": "dev/dev/archive/snapshot_1756238364.json",
+    "bytes": 10266
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756238454.json",
+    "bytes": 10357
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 9006
+    "bytes": 9090
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3876
+    "bytes": 3958
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
