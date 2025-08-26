@@ -10,28 +10,26 @@ permissions:
   pages: write
   id-token: write
 
-# Avoid stuck “Queued” runs by cancelling older ones
+# 👇 ensures only one deploy at a time; latest cancels older ones
 concurrency:
-  group: "pages-${{ github.ref }}"
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # If you don't have a build step, just copy everything into _site
-      - name: Prepare site files
-        run: |
-          rm -rf _site
-          mkdir _site
-          rsync -a --exclude "_site" ./ _site/
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
+      # Upload the static site (root of repo)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: .
 
   deploy:
     needs: build
@@ -40,5 +38,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
