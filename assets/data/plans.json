@@ -1,84 +1,80 @@
 {
   "currency": "GBP",
-  "plans": [
+  "tiers": [
     {
-      "code": "CORE",
-      "price_gbp": 9,
+      "id": "trial",
+      "name": "Trial",
+      "price": 5,
+      "interval": "one_time",
+      "badge": "Try it",
+      "cta": "Start Trial",
+      "features": [
+        "7 days full access to Starters",
+        "Basic exports with watermark",
+        "Community read-only"
+      ],
+      "stripe_price_id": "",
+      "active": true
+    },
+    {
+      "id": "basic",
+      "name": "Basic",
+      "price": 9,
       "interval": "mo",
+      "badge": "Popular",
+      "cta": "Get Basic",
       "features": [
-        "Starter hero & section blocks",
-        "Access to media Library",
-        "Email support in 48h",
-        "Cancel/upgrade anytime"
-      ]
+        "All Starters & Library",
+        "Watermarked exports",
+        "Community access"
+      ],
+      "stripe_price_id": "",
+      "active": true
     },
     {
-      "code": "PRO",
-      "price_gbp": 29,
+      "id": "silver",
+      "name": "Silver",
+      "price": 19,
       "interval": "mo",
+      "badge": "Creator",
+      "cta": "Choose Silver",
       "features": [
-        "Everything in Core",
-        "Advanced visuals & presets",
-        "Priority email in 24h",
-        "Quarterly tune-ups included"
-      ]
+        "No watermark on images",
+        "Priority updates",
+        "Basic commercial use"
+      ],
+      "stripe_price_id": "",
+      "active": true
     },
     {
-      "code": "STUDIO",
-      "price_gbp": 49,
+      "id": "gold",
+      "name": "Gold",
+      "price": 49,
       "interval": "mo",
+      "badge": "Pro",
+      "cta": "Choose Gold",
       "features": [
-        "Monthly collaborative session",
-        "Admin toolkit + automations",
-        "1:1 onboarding (45 min)",
-        "Priority hotfix channel"
-      ]
+        "No watermarks anywhere",
+        "Advanced modules + routing",
+        "Creator monetisation tools"
+      ],
+      "stripe_price_id": "",
+      "active": true
     },
     {
-      "code": "ENTERPRISE",
-      "price_gbp": 99,
+      "id": "diamond",
+      "name": "Diamond",
+      "price": 99,
       "interval": "mo",
+      "badge": "Studio",
+      "cta": "Choose Diamond",
       "features": [
-        "Custom pipelines & integrations",
-        "Hands-on stack support",
-        "Priority roadmap & turnaround",
-        "Quarterly strategy review"
-      ]
-    }
-  ],
-  "addons": [
-    {
-      "code": "SETUP",
-      "price_gbp": 39,
-      "interval": "one-time",
-      "features": [
-        "Deploy site to GitHub Pages",
-        "Connect domains & basic SEO",
-        "Add analytics (GA/PL)",
-        "Performance & a11y sweep"
-      ]
-    },
-    {
-      "code": "REELS",
-      "price_gbp": 59,
-      "interval": "one-time",
-      "features": [
-        "Three 9–15s reels tailored to your niche",
-        "Captions + jump cuts + CTA",
-        "IG/TikTok delivery formats",
-        "Two revision rounds"
-      ]
-    },
-    {
-      "code": "TEMPLATES",
-      "price_gbp": 29,
-      "interval": "one-time",
-      "features": [
-        "Five hand-crafted sections",
-        "Responsive & accessible",
-        "Plug-in text + assets",
-        "Lifetime updates to this pack"
-      ]
+        "Commercial-safe, watermark-free",
+        "Priority support / fast-lane",
+        "White-label + export rights"
+      ],
+      "stripe_price_id": "",
+      "active": true
     }
   ]
 }
