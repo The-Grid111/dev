@@ -1,21 +1,35 @@
-<script>
-// ===== LIGHT EFFECTS & MICRO-INTERACTIONS (safe, no hard deps) =====
-(() => {
-  document.addEventListener('DOMContentLoaded', () => {
-    // Soft hover lift on all .card-like sections
-    document.querySelectorAll('.card, .panel, .section-card').forEach(el => {
-      el.addEventListener('pointerenter', () => el.classList.add('lift'));
-      el.addEventListener('pointerleave', () => el.classList.remove('lift'));
-    });
+/* Lightweight “depth” effects */
 
-    // Hero subtle vignette glow if hero becomes ready
-    const hero = document.querySelector('[data-hero]');
-    if (hero) {
-      const obs = new MutationObserver(() => {
-        if (hero.classList.contains('hero-ready')) hero.classList.add('hero-glow');
-      });
-      obs.observe(hero, { attributes: true, attributeFilter: ['class'] });
-    }
+function elevateOnHover(){
+  document.addEventListener('pointerenter', e=>{
+    const card = e.target.closest('.card, .tier');
+    if(card){ card.style.transform='translateY(-1px)'; card.style.transition='transform .08s ease'; }
+  }, true);
+
+  document.addEventListener('pointerleave', e=>{
+    const card = e.target.closest('.card, .tier');
+    if(card){ card.style.transform='translateY(0)'; }
+  }, true);
+}
+
+function rippleButtons(){
+  document.addEventListener('click', e=>{
+    const btn = e.target.closest('.btn');
+    if(!btn) return;
+    const ripple = document.createElement('span');
+    ripple.style.position='absolute';
+    ripple.style.inset='0';
+    ripple.style.borderRadius='inherit';
+    ripple.style.pointerEvents='none';
+    ripple.style.background='radial-gradient(200px 200px at '+(e.offsetX||btn.clientWidth/2)+'px '+(e.offsetY||btn.clientHeight/2)+'px, rgba(255,255,255,.25), transparent 65%)';
+    ripple.style.opacity='0'; ripple.style.transition='opacity .4s ease';
+    btn.style.position='relative';
+    btn.appendChild(ripple);
+    requestAnimationFrame(()=>{ ripple.style.opacity='1'; setTimeout(()=>{ ripple.style.opacity='0'; setTimeout(()=>ripple.remove(), 350); }, 120);});
   });
-})();
-</script>
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  elevateOnHover();
+  rippleButtons();
+});
