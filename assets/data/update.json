@@ -1,192 +1,39 @@
-{
-  "batch": "live-polish-a",
-  "ts": "2025-08-26T16:22:00Z",
-  "notes": [
-    "Safe content/config refresh only. No structural JS/CSS changes.",
-    "Improves microcopy, nav labels, plan blurbs, and adds a verified-save slot."
-  ],
+/update index.html
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE-GRID111</title>
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/ui.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">
+      <img src="assets/images/logo-grid-wordmark.svg" alt="THE GRID Logo">
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="archive/hello_v0.2.html">Archive</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  "write_files": [
-    {
-      "path": "assets/data/language.json",
-      "content": {
-        "site": {
-          "title": "The Grid",
-          "tagline": "Grow smarter, faster.",
-          "description": "A calm, personal AI layer that learns how you think, then helps you move faster without the overwhelm.",
-          "cta_primary": "Start now",
-          "cta_secondary": "How it works"
-        },
-        "nav": {
-          "home": "Home",
-          "learn": "Learn",
-          "plans": "Plans",
-          "privacy": "Privacy",
-          "terms": "Terms",
-          "save": "Save to The Grid"
-        },
-        "hero": {
-          "headline": "Personal AI that actually adapts to you.",
-          "subhead": "No noise. No hype. Just steady progress every day.",
-          "cta_primary": "Try a guided save",
-          "cta_secondary": "See what’s new"
-        },
-        "save": {
-          "title": "Contribute a Save",
-          "intro": "Drop a note, idea, or session summary. We de-identify, verify, and fold it back into your personal flow.",
-          "button": "Save now",
-          "success": "Saved. We’ll confirm and update your flow shortly."
-        },
-        "footer": {
-          "rights": "© The Grid — All rights reserved.",
-          "links": {
-            "privacy": "/privacy.html",
-            "terms": "/terms.html",
-            "sitemap": "/sitemap.xml"
-          }
-        },
-        "accessibility": {
-          "skip_to_content": "Skip to content",
-          "menu": "Menu",
-          "close": "Close"
-        }
-      }
-    },
+  <main>
+    <section class="hero">
+      <h1>Welcome to THE-GRID111</h1>
+      <p>Live system integration with stability and growth.</p>
+      <button id="cta-btn">Get Started</button>
+    </section>
+  </main>
 
-    {
-      "path": "assets/data/plans.json",
-      "content": {
-        "updated": "2025-08-26",
-        "plans": [
-          {
-            "id": "free",
-            "name": "Starter",
-            "price": "£0",
-            "period": "forever",
-            "bullets": [
-              "Personal Save pipeline",
-              "Calm onboarding prompts",
-              "De-identified learning",
-              "Weekly changelog summary"
-            ],
-            "cta": "Use for free"
-          },
-          {
-            "id": "plus",
-            "name": "Growth",
-            "price": "£9",
-            "period": "monthly",
-            "bullets": [
-              "Everything in Starter",
-              "Priority verification on Saves",
-              "Lightweight automations",
-              "Email export receipts"
-            ],
-            "cta": "Upgrade to Growth"
-          },
-          {
-            "id": "pro",
-            "name": "Creator",
-            "price": "£29",
-            "period": "monthly",
-            "bullets": [
-              "Everything in Growth",
-              "Multi-source ingest (text, links)",
-              "Versioned insight packs",
-              "Early features + direct support"
-            ],
-            "cta": "Go Creator"
-          }
-        ]
-      }
-    },
-
-    {
-      "path": "assets/data/services.json",
-      "content": {
-        "updated": "2025-08-26",
-        "sections": [
-          {
-            "title": "Personal Onboarding",
-            "items": [
-              "Warm greeting + quick wins",
-              "Memory setup with privacy guardrails",
-              "Intrusive-thought friendly pacing"
-            ]
-          },
-          {
-            "title": "Save & Verify",
-            "items": [
-              "One-tap Save flow",
-              "De-identify before storage",
-              "Verification receipts"
-            ]
-          },
-          {
-            "title": "Growth Loops",
-            "items": [
-              "Weekly summaries",
-              "Gentle nudge prompts",
-              "Pattern highlights you can approve"
-            ]
-          }
-        ]
-      }
-    },
-
-    {
-      "path": "assets/data/taxonomy.json",
-      "content": {
-        "categories": [
-          "Onboarding",
-          "Saves",
-          "Learning",
-          "Wellbeing",
-          "Plans",
-          "Privacy"
-        ],
-        "tags": [
-          "calm",
-          "clear",
-          "gentle",
-          "step-by-step",
-          "de-identified",
-          "verification"
-        ]
-      }
-    },
-
-    {
-      "path": "assets/data/owner_core_save_v1.2.json",
-      "content": {
-        "schema": "1.2",
-        "memory_default": "on",
-        "verify_receipts": true,
-        "privacy": {
-          "deidentify": true,
-          "allow_generalization": true,
-          "store_personal_details": false
-        },
-        "contributor_slot": {
-          "status": "ready",
-          "owner": "Jake",
-          "nonce": "",
-          "instructions": "Paste verified JSON receipts here to attach to your history."
-        }
-      }
-    }
-  ],
-
-  "after": {
-    "run": [
-      "link_check",
-      "assets_manifest_bump",
-      "deploy"
-    ],
-    "expect": [
-      "Header/footer links resolve",
-      "Plans copy visible and buttons show",
-      "Save text reads calm, shows success message"
-    ]
-  }
-}
+  <footer>
+    <p>&copy; 2025 THE-GRID111. All rights reserved.</p>
+  </footer>
+</body>
+</html>
