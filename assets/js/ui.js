@@ -1,52 +1,45 @@
-/* UI helpers: sticky trial banner, Details modals, “Join Now” / “See Pricing” scroll, and localStorage dismiss */
+/* ui.js — header/nav behavior, smooth anchors, mobile menu */
+
 (function () {
-  // Smooth scroll helpers
-  function scrollToId(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  const header = document.getElementById('site-header');
+  const nav = document.getElementById('nav');
+  const toggle = document.getElementById('nav-toggle');
 
-  // Join Now & See Pricing
-  document.querySelectorAll("[data-scroll='pricing']").forEach(el => {
-    el.addEventListener("click", (e) => {
+  // Sticky shadow
+  const onScroll = () => {
+    if (window.scrollY > 8) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // Mobile menu toggle
+  const closeNav = () => { nav.classList.remove('open'); toggle?.setAttribute('aria-expanded', 'false'); };
+  const openNav  = () => { nav.classList.add('open');    toggle?.setAttribute('aria-expanded', 'true');  };
+  toggle?.addEventListener('click', () => (nav.classList.contains('open') ? closeNav() : openNav()));
+  window.addEventListener('resize', () => { if (window.innerWidth >= 900) closeNav(); });
+
+  // Smooth anchor scrolling, adjust for header height
+  const smoothTo = (hash) => {
+    const el = document.querySelector(hash);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - header.offsetHeight - 8;
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
+
+  // Intercept any in-page anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const { hash } = a;
+      if (!hash) return;
       e.preventDefault();
-      scrollToId("pricing");
+      smoothTo(hash);
+      closeNav();
+      history.pushState(null, '', hash);
     });
   });
 
-  // Trial banner show/hide (persist)
-  const BANNER_KEY = "gc_trial_banner_dismissed_v1";
-  const banner = document.querySelector(".trial-banner");
-  if (banner) {
-    const dismissed = localStorage.getItem(BANNER_KEY) === "1";
-    if (dismissed) banner.remove();
-    const dismissBtn = banner.querySelector(".trial-dismiss");
-    if (dismissBtn) {
-      dismissBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        localStorage.setItem(BANNER_KEY, "1");
-        banner.remove();
-      });
-    }
-  }
-
-  // Plan modals (Details)
-  document.querySelectorAll(".js-details[data-plan]").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const plan = btn.getAttribute("data-plan");
-      const modal = document.getElementById(`modal-${plan}`);
-      if (modal) {
-        modal.showModal?.() || modal.classList.add("open");
-      }
-    });
-  });
-  document.querySelectorAll(".plan-modal .close, .plan-modal .x").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const dlg = btn.closest(".plan-modal");
-      dlg?.close?.();
-      dlg?.classList.remove("open");
-    });
-  });
+  // Explicit header buttons
+  document.getElementById('btn-open-library')?.addEventListener('click', (e) => { e.preventDefault(); smoothTo('#library'); });
+  document.getElementById('btn-see-pricing')?.addEventListener('click', (e) => { e.preventDefault(); smoothTo('#pricing'); });
 })();
