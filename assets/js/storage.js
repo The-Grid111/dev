@@ -1,60 +1,16 @@
-// Local-first autosave + revision slots (no backend required)
-
-const DB = 'grid_local_v1';
-const STORE = 'revisions';
-let db;
-
-export function initLocalState() {
-  // Tiny UX flags in localStorage
-  if (!localStorage.getItem('first_seen_at')) {
-    localStorage.setItem('first_seen_at', Date.now().toString());
-  }
-
-  // IndexedDB for big stuff
-  const req = indexedDB.open(DB, 1);
-  req.onupgradeneeded = () => {
-    const d = req.result;
-    if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, {keyPath:'id', autoIncrement:true});
+(() => {
+  const KEY = 'grid.v1';
+  const S = {
+    read() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } },
+    write(data) { localStorage.setItem(KEY, JSON.stringify(data)); },
+    get(path, dflt=null) {
+      const obj = S.read(); return path.split('.').reduce((a,k)=> (a && a[k]!==undefined)?a[k]:dflt, obj);
+    },
+    set(path, value) {
+      const obj = S.read(); const keys = path.split('.');
+      keys.slice(0,-1).reduce((a,k)=> (a[k] ??= {}), obj)[keys.at(-1)] = value; S.write(obj);
+    },
+    remove(path){ const obj = S.read(); const ks=path.split('.'); const last=ks.pop(); const parent=ks.reduce((a,k)=> a?.[k], obj); if(parent && last in parent){ delete parent[last]; S.write(obj);} }
   };
-  req.onsuccess = () => { db = req.result; };
-  req.onerror = () => console.warn('IndexedDB error', req.error);
-
-  // Example autosave every 10s (replace with your real Save object)
-  setInterval(() => {
-    const fakeSave = {
-      at: Date.now(),
-      theme: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
-      note: 'autosave heartbeat'
-    };
-    addRevision(fakeSave).then(trimRevisions);
-  }, 10000);
-}
-
-function addRevision(payload){
-  return new Promise((resolve,reject)=>{
-    if (!db) return resolve();
-    const tx = db.transaction(STORE,'readwrite');
-    tx.objectStore(STORE).add({payload, ts:Date.now()});
-    tx.oncomplete=()=>resolve();
-    tx.onerror=()=>reject(tx.error);
-  });
-}
-
-function trimRevisions(limit=10){
-  return new Promise((resolve,reject)=>{
-    if (!db) return resolve();
-    const tx = db.transaction(STORE,'readwrite');
-    const store = tx.objectStore(STORE);
-    const items = [];
-    store.openCursor().onsuccess = (e)=>{
-      const cur = e.target.result;
-      if (cur){ items.push({key:cur.key, val:cur.value}); cur.continue(); }
-      else {
-        const toDelete = items.slice(0, Math.max(0, items.length - limit));
-        toDelete.forEach(row => store.delete(row.key));
-      }
-    };
-    tx.oncomplete=()=>resolve();
-    tx.onerror=()=>reject(tx.error);
-  });
-}
+  window.Store = S;
+})();
