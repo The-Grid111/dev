@@ -1,108 +1,107 @@
-/update assets/data/language.json
-```json
-{
-  "version": "2025-08-26-ultimate",
-  "locale": "en-GB",
-  "site": {
-    "brand": "The Grid",
-    "tagline": "Personal AI that learns you—safely.",
-    "trust_pill": "Private • Portable • Reversible",
-    "meta": {
-      "title": "The Grid — Personal AI that learns you, safely",
-      "description": "Turn normal chats into capability. Memory you control. No code required. Rollbacks built in."
-    }
-  },
-  "nav": {
-    "primary": [
-      { "label": "Overview", "href": "/" },
-      { "label": "How it works", "href": "#how" },
-      { "label": "Pricing", "href": "#pricing" },
-      { "label": "FAQ", "href": "#faq" },
-      { "label": "Login", "href": "/login" }
-    ]
-  },
-  "hero": {
-    "headline": "Your AI, Your Memory, Your Control.",
-    "subtext": "Chat normally. Grid remembers what matters—with privacy switches, instant clears, and rollbacks anytime.",
-    "cta_primary": "Get Started Free",
-    "cta_secondary": "Learn More"
-  },
-  "pricing": {
-    "title": "Choose your path",
-    "subtitle": "Simple, transparent plans.",
-    "plans": {
-      "free": {
-        "name": "Starter",
-        "price": "£0",
-        "features": [
-          "Memory OFF by default",
-          "Manual Saves",
-          "Core modules included"
-        ],
-        "cta": "Start free"
-      },
-      "pro": {
-        "name": "Pro",
-        "price": "£12/mo",
-        "features": [
-          "Memory ON with controls",
-          "Auto-Saves & Logs",
-          "Expanded integrations"
-        ],
-        "cta": "Go Pro"
-      },
-      "team": {
-        "name": "Team",
-        "price": "Custom",
-        "features": [
-          "Multi-user spaces",
-          "Advanced analytics",
-          "Dedicated support"
-        ],
-        "cta": "Contact sales"
-      }
-    }
-  },
-  "faq": {
-    "title": "Frequently Asked",
-    "items": [
-      { "q": "Can I clear memory?", "a": "Yes. Clear, pause, or delete memory anytime with one click." },
-      { "q": "Do you share my data?", "a": "No. Your memory stays private. Only anonymised patterns are used to improve stability." },
-      { "q": "Is rollback guaranteed?", "a": "Yes. Snapshots are automatic and reversible at any stage." }
-    ]
-  },
-  "save_flow": {
-    "intro": "Save what matters.",
-    "steps": [ "Talk normally.", "Tap Save when ready.", "Your Grid grows, safely." ],
-    "cta": "Enable Memory"
-  },
-  "banners": {
-    "trial": {
-      "headline": "Free trial running",
-      "body": "Upgrade any time to keep your Grid growing.",
-      "cta": "Upgrade now"
-    }
-  },
-  "toasts": {
-    "saved": "Saved to Grid ✓",
-    "cleared": "Memory cleared",
-    "error": "Something went wrong. Try again."
-  },
-  "modals": {
-    "privacy": {
-      "title": "Your privacy, your control",
-      "body": "Grid never shares personal data. You decide what to store, when to pause, and when to clear."
-    }
-  },
-  "a11y": {
-    "skip_to_content": "Skip to main content",
-    "aria_nav": "Main navigation"
-  },
-  "footer": {
-    "copyright": "© 2025 The Grid. All rights reserved.",
-    "links": [
-      { "label": "Privacy", "href": "/privacy.html" },
-      { "label": "Terms", "href": "/terms.html" }
-    ]
-  }
+/* --- Base readability & rhythm --- */
+:root{
+  --grid-font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+  --grid-text: #0b0f14;
+  --grid-muted: #5b6572;
+  --grid-bg: #ffffff;
+  --grid-ink: #0b0f14;
+  --grid-accent: #335dff;
+  --grid-accent-ink: #ffffff;
+  --grid-border: #e6e8ec;
+  --grid-radius: 14px;
+  --grid-gap: clamp(12px, 1.8vw, 20px);
+}
+
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+}
+
+body{
+  font-family: var(--grid-font);
+  color: var(--grid-text);
+  background: var(--grid-bg);
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+main, section{ padding: clamp(18px, 3.5vw, 36px); }
+
+/* --- Containers --- */
+.container{
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: clamp(12px, 2.5vw, 24px);
+}
+
+/* --- Hero --- */
+.hero{
+  display:grid;
+  gap: var(--grid-gap);
+  align-items: center;
+  padding-block: clamp(32px, 7vw, 96px);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(51,93,255,.09), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(51,93,255,.06), transparent 60%);
+  border-bottom: 1px solid var(--grid-border);
+}
+.hero h1{
+  font-size: clamp(28px, 4.8vw, 56px);
+  line-height: 1.1;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.02em;
+}
+.hero p{
+  color: var(--grid-muted);
+  font-size: clamp(16px, 2.2vw, 20px);
+  margin: 0 0 18px 0;
+}
+
+/* --- Buttons --- */
+.button{
+  appearance:none; border:0; cursor:pointer;
+  padding: 12px 18px;
+  border-radius: var(--grid-radius);
+  font-weight: 600;
+  box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 8px 20px rgba(51,93,255,.12);
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+  display:inline-flex; gap:10px; align-items:center; text-decoration:none;
+}
+.button-primary{ background: var(--grid-accent); color: var(--grid-accent-ink); }
+.button-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(51,93,255,.18); }
+.button-secondary{
+  background: #f3f5ff; color: #274bd6;
+  box-shadow: inset 0 0 0 1px rgba(51,93,255,.25);
+}
+
+/* --- Cards / sections --- */
+.card{
+  background: #fff; border: 1px solid var(--grid-border);
+  border-radius: var(--grid-radius);
+  padding: clamp(16px, 2.5vw, 22px);
+  box-shadow: 0 1px 0 rgba(0,0,0,.02);
+}
+
+/* --- FAQ --- */
+.faq dt{ font-weight:700; margin-top: 16px; }
+.faq dd{ margin: 6px 0 14px 0; color: var(--grid-muted); }
+
+/* --- Footer --- */
+footer{
+  border-top: 1px solid var(--grid-border);
+  color: var(--grid-muted);
+  padding-block: 24px;
+}
+
+/* --- Small helpers --- */
+.hide-when-reduced-motion{
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
 }
