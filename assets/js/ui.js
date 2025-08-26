@@ -1,45 +1,80 @@
-/* ui.js — header/nav behavior, smooth anchors, mobile menu */
+/* ui.js — header/nav interactions & helpers */
 
 (function () {
-  const header = document.getElementById('site-header');
-  const nav = document.getElementById('nav');
-  const toggle = document.getElementById('nav-toggle');
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  // Sticky shadow
-  const onScroll = () => {
-    if (window.scrollY > 8) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
-  };
-  window.addEventListener('scroll', onScroll);
-  onScroll();
+  // Year in footer
+  const yearEl = $('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Mobile menu toggle
-  const closeNav = () => { nav.classList.remove('open'); toggle?.setAttribute('aria-expanded', 'false'); };
-  const openNav  = () => { nav.classList.add('open');    toggle?.setAttribute('aria-expanded', 'true');  };
-  toggle?.addEventListener('click', () => (nav.classList.contains('open') ? closeNav() : openNav()));
-  window.addEventListener('resize', () => { if (window.innerWidth >= 900) closeNav(); });
+  // Mobile drawer
+  const menuBtn = $('#menuToggle');
+  const mobile = $('#mobileNav');
+  if (menuBtn && mobile) {
+    menuBtn.addEventListener('click', () => {
+      const open = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!open));
+      mobile.hidden = open;
+    });
+    // Close on link click
+    $$('.mobile__item', mobile).forEach(a =>
+      a.addEventListener('click', () => {
+        menuBtn.setAttribute('aria-expanded', 'false');
+        mobile.hidden = true;
+      })
+    );
+  }
 
-  // Smooth anchor scrolling, adjust for header height
-  const smoothTo = (hash) => {
-    const el = document.querySelector(hash);
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - header.offsetHeight - 8;
-    window.scrollTo({ top, behavior: 'smooth' });
-  };
+  // Smooth scroll & active tab highlight
+  const sections = [
+    { id: 'library', key: 'library' },
+    { id: 'pricing', key: 'pricing' },
+    { id: 'how-it-works', key: 'how' }
+  ];
+  const anchors = [
+    ...$$('.tab[data-nav]'),
+    ...$$('.mobile__item[data-nav]')
+  ];
 
-  // Intercept any in-page anchors
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
+  // click → smooth scroll
+  anchors.forEach(a => {
     a.addEventListener('click', (e) => {
-      const { hash } = a;
-      if (!hash) return;
-      e.preventDefault();
-      smoothTo(hash);
-      closeNav();
-      history.pushState(null, '', hash);
+      const key = a.getAttribute('data-nav');
+      const s = document.getElementById(
+        key === 'how' ? 'how-it-works' : key
+      );
+      if (s) {
+        e.preventDefault();
+        s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState({}, '', `#${s.id}`);
+      }
     });
   });
 
-  // Explicit header buttons
-  document.getElementById('btn-open-library')?.addEventListener('click', (e) => { e.preventDefault(); smoothTo('#library'); });
-  document.getElementById('btn-see-pricing')?.addEventListener('click', (e) => { e.preventDefault(); smoothTo('#pricing'); });
+  // highlight while scrolling
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const sec = sections.find(s => s.id === entry.target.id);
+        if (!sec) return;
+        anchors.forEach(a => {
+          if (a.getAttribute('data-nav') === (sec.key)) {
+            if (entry.isIntersecting) {
+              a.classList.add('is-active');
+              a.setAttribute('aria-current', 'page');
+            } else {
+              a.classList.remove('is-active');
+              a.removeAttribute('aria-current');
+            }
+          }
+        });
+      });
+    },
+    { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 }
+  );
+  sections.forEach(s => {
+    const el = document.getElementById(s.id);
+    if (el) observer.observe(el);
+  });
 })();
