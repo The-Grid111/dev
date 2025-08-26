@@ -1,111 +1,132 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>THE GRID — Self-serve, adaptive, quantifiable.</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-
-  <link rel="icon" href="assets/images/favicon.svg?v=1702">
-  <link rel="preload" as="style" href="assets/css/site.css?v=1702">
-  <link rel="stylesheet" href="assets/css/site.css?v=1702">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>THE GRID — Launch experiences that never regress</title>
+  <meta name="description" content="Paste a Save → instant learning. Plans unlock features; no 1:1 required. Diamond unlocks watermark-free, commercial-safe exports."/>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml"/>
+  <link rel="preload" href="assets/css/site.css" as="style"/>
+  <link rel="stylesheet" href="assets/css/site.css"/>
+  <link rel="preload" href="assets/js/ui.js" as="script"/>
+  <link rel="preload" href="assets/js/main.js" as="script"/>
 </head>
-<body class="theme-dark">
-  <!-- ===== Header ===== -->
-  <header id="site-header" class="site-header sticky">
-    <div class="container row between center">
-      <a class="brand row center" href="/">
-        <img src="assets/images/logo-grid-mark.svg?v=1702" alt="GRID" width="32" height="32" />
-        <span class="brand-word">THE <strong>GRID</strong></span>
+<body>
+  <!-- Sticky Header -->
+  <header class="nav">
+    <div class="nav__inner container">
+      <a class="brand" href="#top" aria-label="THE GRID home">
+        <img src="assets/images/logo-grid-mark.svg" alt="" class="brand__mark" width="28" height="28"/>
+        <span class="brand__name">THE GRID</span>
       </a>
 
-      <nav id="nav" class="nav">
-        <a class="nav-link" href="#library">Library</a>
-        <a class="nav-link" href="#pricing">Pricing</a>
-        <a class="nav-link" href="#how-it-works">How it works</a>
+      <!-- Primary Tabs -->
+      <nav class="tabs" aria-label="Primary">
+        <a class="tab" data-nav="library" href="#library">Open Library</a>
+        <a class="tab" data-nav="pricing" href="#pricing">See Pricing</a>
+        <a class="tab" data-nav="how" href="#how-it-works">How it works</a>
       </nav>
 
-      <div class="cta row gap-8">
-        <a id="btn-open-library" class="btn btn-primary" href="#library">Open Library</a>
-        <a id="btn-see-pricing" class="btn btn-ghost" href="#pricing">See Pricing</a>
-        <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+      <!-- Mobile menu button (JS toggles) -->
+      <button class="menu" id="menuToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile" id="mobileNav" hidden>
+      <a class="mobile__item" data-nav="library" href="#library">Open Library</a>
+      <a class="mobile__item" data-nav="pricing" href="#pricing">See Pricing</a>
+      <a class="mobile__item" data-nav="how" href="#how-it-works">How it works</a>
     </div>
   </header>
 
-  <!-- ===== Main ===== -->
-  <main>
-    <!-- Hero -->
-    <section class="hero container" id="top">
+  <!-- Hero -->
+  <main id="top" class="main">
+    <section class="hero container" aria-labelledby="heroTitle">
       <p class="eyebrow">LAUNCH EXPERIENCES THAT NEVER REGRESS</p>
-      <h1>Self-serve, adaptive, quantifiable.</h1>
-      <p class="lede">
+      <h1 id="heroTitle" class="hero__title">Self-serve, adaptive, quantifiable.</h1>
+      <p class="hero__lead">
         Paste a Save → instant learning. Plans unlock features; no 1:1 required.
-        Diamond unlocks watermark-free, commercial-safe exports.
+        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
       </p>
-      <div class="row gap-12 wrap">
-        <a class="btn btn-primary" href="#library">Open Library</a>
-        <a class="btn btn-ghost" href="#pricing">See Pricing</a>
-        <span class="pill">Launch Trial — <strong>available</strong></span>
-      </div>
-
-      <div class="video-card">
-        <h2>GRID</h2>
-        <p>Replace this with your top niche video. (<code>assets/videos/manifest.json</code>)</p>
+      <div class="cta">
+        <a class="btn btn--primary" href="#library">Open Library</a>
+        <a class="btn" href="#pricing">See Pricing</a>
+        <a class="link" href="#how-it-works">Launch Trial — available</a>
       </div>
     </section>
 
     <!-- Library -->
-    <section id="library" class="container section">
-      <h2>Library</h2>
-      <p>Ready-to-use starters and blueprints. Drop a Save to adapt.</p>
-      <div id="library-list" class="grid"></div>
+    <section id="library" class="section container">
+      <h2 class="section__title">Library</h2>
+      <p class="section__lead">Ready-to-use starters and blueprints. Drop a Save to adapt.</p>
+
+      <div class="cards">
+        <article class="card">
+          <h3 class="card__title">Starter Blueprint</h3>
+          <p class="card__body">Paste a Save to adapt instantly.</p>
+          <button class="btn btn--ghost" data-action="preview" data-id="starter">Preview</button>
+        </article>
+
+        <article class="card">
+          <h3 class="card__title">Commerce Demo</h3>
+          <p class="card__body">Stripe-ready patterns.</p>
+          <button class="btn btn--ghost" data-action="preview" data-id="commerce">Preview</button>
+        </article>
+
+        <article class="card">
+          <h3 class="card__title">Creator Kit</h3>
+          <p class="card__body">Audience & content flows.</p>
+          <button class="btn btn--ghost" data-action="preview" data-id="creator">Preview</button>
+        </article>
+      </div>
     </section>
 
     <!-- Pricing -->
-    <section id="pricing" class="container section">
-      <h2>Pricing</h2>
-      <div class="pricing-grid">
-        <article class="card">
-          <h3>Starter</h3>
-          <p>For trying the system.</p>
-          <p class="price">£0</p>
+    <section id="pricing" class="section container">
+      <h2 class="section__title">Pricing</h2>
+
+      <div class="plans">
+        <article class="plan">
+          <h3 class="plan__name">Starter</h3>
+          <p class="plan__desc">For trying the system.</p>
+          <p class="plan__price">£0</p>
         </article>
-        <article class="card">
-          <h3>Pro</h3>
-          <p>For growing creators.</p>
-          <p class="price">£9 / mo</p>
+
+        <article class="plan">
+          <h3 class="plan__name">Pro</h3>
+          <p class="plan__desc">For growing creators.</p>
+          <p class="plan__price">£9 <span class="u-mute">/ mo</span></p>
         </article>
-        <article class="card highlight">
-          <h3>Diamond</h3>
-          <p>Commercial-safe, watermark-free exports.</p>
-          <p class="price">£29 / mo</p>
+
+        <article class="plan plan--featured" aria-label="Diamond plan (featured)">
+          <h3 class="plan__name">Diamond</h3>
+          <p class="plan__desc">Commercial-safe, watermark-free exports.</p>
+          <p class="plan__price">£29 <span class="u-mute">/ mo</span></p>
         </article>
       </div>
     </section>
 
     <!-- How it works -->
-    <section id="how-it-works" class="container section">
-      <h2>How it works</h2>
-      <ol class="steps">
-        <li>Paste a Save (from ChatGPT) into the site.</li>
+    <section id="how-it-works" class="section container">
+      <h2 class="section__title">How it works</h2>
+      <ol class="how">
+        <li>Paste a <em>Save</em> (from ChatGPT) into the site.</li>
         <li>Site adapts instantly (no rebuilds, no regressions).</li>
         <li>Export or publish with plan features.</li>
       </ol>
     </section>
   </main>
 
-  <footer class="site-footer container">
-    <p>© <span id="y"></span> THE GRID — All rights reserved.</p>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> THE GRID — All rights reserved.</p>
+    </div>
   </footer>
 
-  <!-- JS (cache-busted) -->
-  <script src="assets/js/ui.js?v=1702" defer></script>
-  <script src="assets/js/main.js?v=1702" defer></script>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
