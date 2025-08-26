@@ -177,7 +177,7 @@
   },
   {
     "path": "assets/js/effects.js",
-    "bytes": 1349
+    "bytes": 292
   },
   {
     "path": "assets/js/entitlements.js",
@@ -229,7 +229,7 @@
   },
   {
     "path": "assets/manifest.json",
-    "bytes": 2285
+    "bytes": 2284
   },
   {
     "path": "assets/videos/manifest.json",
@@ -437,7 +437,7 @@
   },
   {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 9257
+    "bytes": 9425
   },
   {
     "path": "dev/dev/data/file-tree.txt",
@@ -453,7 +453,7 @@
   },
   {
     "path": "index.html",
-    "bytes": 7260
+    "bytes": 10015
   },
   {
     "path": "lychee.toml",
