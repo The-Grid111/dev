@@ -1,44 +1,69 @@
 {
-  "ops": [
-    {
-      "op": "write",
-      "path": ".github/workflows/_writer.yml",
-      "content": "name: Writer\n\non:\n  workflow_call:\n    inputs:\n      commit_message: { required: true, type: string }\n      file_glob:       { required: true, type: string }\n      run_script:      { required: true, type: string }\n\npermissions:\n  contents: write\n\n# Single lock for anything that writes to main\nconcurrency:\n  group: writes-to-main\n  cancel-in-progress: false\n\njobs:\n  write:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n          ref: main\n\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 20\n\n      - name: Generate files\n        shell: bash\n        run: ${{ inputs.run_script }}\n\n      - name: Commit & push with rebase + lease (retry)\n        shell: bash\n        run: |\n          set -euo pipefail\n          git config user.name  'github-actions[bot]'\n          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'\n\n          git add ${{ inputs.file_glob }} || true\n          if git diff --cached --quiet; then\n            echo 'No changes to commit.'\n            exit 0\n          fi\n\n          git commit -m '${{ inputs.commit_message }}'\n\n          for i in 1 2 3 4 5; do\n            git fetch --prune origin main\n            if ! git rebase origin/main; then\n              git rebase --abort || true\n            fi\n            if git push --force-with-lease origin HEAD:main; then\n              echo 'Pushed successfully.'\n              exit 0\n            fi\n            echo \"Push rejected, retry $i ...\"\n            sleep $((i*i))\n          done\n          echo 'Push failed after retries.'\n          exit 1\n"
-    },
+  "version": "1.4",
+  "ts": "2025-08-26T15:40:00Z",
 
-    // ---------- SNAPSHOT ----------
-    {
-      "op": "write",
-      "path": ".github/workflows/repo-snapshot.yml",
-      "content": "name: Repo Snapshot\non:\n  push:\n    branches: [ main ]\npermissions:\n  contents: write\nconcurrency:\n  group: writes-to-main\n  cancel-in-progress: false\njobs:\n  snapshot:\n    if: github.actor != 'github-actions[bot]'\n    uses: ./.github/workflows/_writer.yml\n    secrets: inherit\n    with:\n      commit_message: Repo snapshot (auto)\n      file_glob: dev/dev/archive/snapshot_*.json\n      run_script: |\n        set -euo pipefail\n        mkdir -p dev/dev/archive\n        node <<'JS'\n        const fs = require('fs');\n        const p = `dev/dev/archive/snapshot_${Date.now()}.json`;\n        fs.writeFileSync(p, JSON.stringify({ ts: new Date().toISOString() }, null, 2) + '\\n');\n        console.log('wrote', p);\n        JS\n"
-    },
+  "meta": {
+    "source_of_truth": "assets/data/update.json",
+    "owner": "The-Grid111",
+    "mode": "manual-update-file",
+    "purpose": "stabilize + prep girlfriend onboarding"
+  },
 
-    // ---------- BUILD FILE INVENTORY ----------
-    {
-      "op": "write",
-      "path": ".github/workflows/build-file-inventory.yml",
-      "content": "name: Build File Inventory\non:\n  push:\n    branches: [ main ]\npermissions:\n  contents: write\nconcurrency:\n  group: writes-to-main\n  cancel-in-progress: false\njobs:\n  inventory:\n    if: github.actor != 'github-actions[bot]'\n    uses: ./.github/workflows/_writer.yml\n    secrets: inherit\n    with:\n      commit_message: Update build-file-inventory (auto)\n      file_glob: dev/dev/data/file-tree.txt dev/dev/data/repo-metrics.json\n      run_script: |\n        set -euo pipefail\n        mkdir -p dev/dev/data\n        node <<'JS'\n        const { execSync } = require('node:child_process');\n        const fs = require('fs');\n        const files = execSync(`git ls-files -z -- ':!archive/**' ':!.github/**' ':!node_modules/**'`).toString().split('\\0').filter(Boolean).sort();\n        fs.writeFileSync('dev/dev/data/file-tree.txt', files.join('\\n') + '\\n');\n        const metrics = { generated_at: new Date().toISOString(), files_tracked: files.length };\n        fs.writeFileSync('dev/dev/data/repo-metrics.json', JSON.stringify(metrics, null, 2) + '\\n');\n        JS\n"
-    },
+  "flags": {
+    "ui_ready": true,
+    "safe_copy": true,
+    "feature:greeting_enabled": true,
+    "feature:gentle_onboarding_enabled": true,
+    "feature:save_pipeline_enabled": true,
 
-    // ---------- ASSETS MANIFEST ----------
-    {
-      "op": "write",
-      "path": ".github/workflows/assets-manifest.yml",
-      "content": "name: Assets Manifest\non:\n  push:\n    branches: [ main ]\npermissions:\n  contents: write\nconcurrency:\n  group: writes-to-main\n  cancel-in-progress: false\njobs:\n  assets:\n    if: github.actor != 'github-actions[bot]'\n    uses: ./.github/workflows/_writer.yml\n    secrets: inherit\n    with:\n      commit_message: Update assets manifest (auto)\n      file_glob: dev/assets/manifest.json\n      run_script: |\n        set -euo pipefail\n        mkdir -p dev/assets\n        node <<'JS'\n        const { execSync } = require('node:child_process');\n        const fs = require('fs');\n        const list = execSync(`git ls-files -z -- 'assets/**'`).toString().split('\\0').filter(Boolean).sort();\n        const out = { generated_at: new Date().toISOString(), count: list.length, files: list };\n        fs.writeFileSync('dev/assets/manifest.json', JSON.stringify(out, null, 2) + '\\n');\n        JS\n"
-    },
+    /* These two are hints for future CI work; safe for frontend to ignore. */
+    "ci_hint:disable_snapshot": true,
+    "ci_hint:disable_inventory": true
+  },
 
-    // ---------- REPO HYGIENE ----------
-    {
-      "op": "write",
-      "path": ".github/workflows/repo-hygiene.yml",
-      "content": "name: Repo Hygiene\non:\n  push:\n    branches: [ main ]\npermissions:\n  contents: write\nconcurrency:\n  group: writes-to-main\n  cancel-in-progress: false\njobs:\n  hygiene:\n    if: github.actor != 'github-actions[bot]'\n    uses: ./.github/workflows/_writer.yml\n    secrets: inherit\n    with:\n      commit_message: Repo hygiene (auto)\n      file_glob: dev/dev/data/hygiene.log\n      run_script: |\n        set -euo pipefail\n        mkdir -p dev/dev/data\n        node <<'JS'\n        const fs = require('fs');\n        const log = [`hygiene @ ${new Date().toISOString()}`];\n        fs.writeFileSync('dev/dev/data/hygiene.log', log.join('\\n') + '\\n');\n        JS\n"
-    },
+  "copy": {
+    "hero_greeting": "Welcome — you’re in. This space adapts to you, not the other way around.",
+    "hero_sub": "We’ll go slowly, keep things calm, and save what helps so you don’t have to remember it all.",
+    "cta_primary": "Start",
+    "cta_secondary": "Not sure? Tap me"
+  },
 
-    // ---------- LINK CHECK (writes report only if needed) ----------
-    {
-      "op": "write",
-      "path": ".github/workflows/link-check.yml",
-      "content": "name: Link Check\non:\n  push:\n    branches: [ main ]\npermissions:\n  contents: write\nconcurrency:\n  group: writes-to-main\n  cancel-in-progress: false\njobs:\n  linkcheck:\n    if: github.actor != 'github-actions[bot]'\n    uses: ./.github/workflows/_writer.yml\n    secrets: inherit\n    with:\n      commit_message: Link check report (auto)\n      file_glob: dev/dev/data/link-report.json\n      run_script: |\n        set -euo pipefail\n        mkdir -p dev/dev/data\n        node <<'JS'\n        const fs = require('fs');\n        // Placeholder: generate a minimal report (extend later with real checker)\n        const report = { generated_at: new Date().toISOString(), ok: true };\n        fs.writeFileSync('dev/dev/data/link-report.json', JSON.stringify(report, null, 2) + '\\n');\n        JS\n"
+  "onboarding": {
+    "wow_open": "Hey! I’m your quiet co-pilot — I’ll keep things simple and make the next step obvious.",
+    "memory_prompt": "Would you like me to remember helpful preferences (tone, pace, topics) so I can save you time next time?",
+    "grounding_anchors": [
+      "Let’s slow the pace — one line at a time.",
+      "If a thought loops, we’ll park it safely and come back when you want.",
+      "Short steps are still steps forward."
+    ]
+  },
+
+  "privacy": {
+    "pii_redacted": true,
+    "deidentified_only": true,
+    "share_scope": "internal-only",
+    "allow_generalization": true
+  },
+
+  "contributor_pipeline": {
+    "enabled": true,
+    "accepts_packages": true,
+    "receipt_required": true,
+    "receipt_schema": {
+      "nonce": "auto",
+      "ok": true,
+      "summary": "Save received and validated",
+      "confidence_percent": 98
     }
-  ]
+  },
+
+  "verification": {
+    "package_echo": "update:ok",
+    "checksum_hint": "v1-manual-stable",
+    "expected_files": [
+      "assets/data/update.json",
+      "assets/js/save.js",
+      "assets/js/storage.js"
+    ]
+  }
 }
