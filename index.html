@@ -1,164 +1,192 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="fx-live">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>THE GRID — adaptive, quantifiable</title>
-  <link rel="icon" href="assets/images/favicon.svg"/>
-  <link rel="preload" href="assets/css/site.css" as="style"/>
-  <link rel="stylesheet" href="assets/css/site.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>THE GRID — Adaptive, Quantifiable</title>
+  <meta name="description" content="Self-serve experiences that learn from Saves. No rebuilds. No regressions." />
+  <link rel="icon" href="assets/images/favicon.svg">
+  <link rel="preconnect" href="https://js.stripe.com">
+  <link rel="preload" href="assets/gc_spin.mp4" as="video" type="video/mp4">
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body>
+<body data-theme="dark">
+  <div id="bg-noise"></div>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="bar container">
-      <div class="brand">
-        <span class="dot"></span>
-        <span>THE GRID</span>
-      </div>
-      <div class="links">
-        <a href="#library" class="btn ghost small">Open Library</a>
-        <a href="#pricing" class="btn ghost small">See Pricing</a>
-        <button id="menuOpen" class="menu-btn" aria-label="Open menu">☰</button>
-      </div>
-    </div>
+  <!-- Header -->
+  <header class="site-header depth-2">
+    <div class="wrap row between center">
+      <a class="brand row center gap-8" href="/">
+        <img src="assets/images/logo-grid-mark.svg" alt="THE GRID" class="logo" />
+        <span class="word">THE GRID</span>
+      </a>
 
-    <!-- mobile sheet -->
-    <div id="menuSheet" class="hidden" style="background:rgba(11,12,15,.98); position:fixed; inset:0; z-index:25;">
-      <div class="container stack">
-        <div class="row" style="justify-content:space-between; align-items:center; padding:12px 0;">
-          <div class="brand"><span class="dot"></span><span>THE GRID</span></div>
-          <button id="menuClose" class="menu-btn" aria-label="Close menu">✕</button>
-        </div>
-        <a href="#library" class="btn block">Open Library</a>
-        <a href="#pricing" class="btn block">See Pricing</a>
-        <a href="#how" class="btn block">How it works</a>
+      <nav class="top-nav hide-sm" aria-label="Primary">
+        <a href="#library" class="btn pill ghost" data-link="library">Open Library</a>
+        <a href="#pricing" class="btn pill ghost" data-link="pricing">See Pricing</a>
+        <a href="#how" class="btn pill ghost">How it works</a>
+      </nav>
+
+      <div class="row center gap-8">
+        <button id="pasteSaveBtn" class="btn pill small">Paste Save</button>
+        <button id="profileBtn" class="btn pill ghost small" aria-haspopup="menu">Profile</button>
+        <button id="menuBtn" class="icon-btn only-sm" aria-label="Menu">≡</button>
       </div>
     </div>
-  </nav>
 
-  <!-- ADMIN TOGGLE (shows only for admins) -->
-  <div id="adminToggle" class="container hidden" style="justify-content:flex-end">
-    <button class="btn small">Admin</button>
-  </div>
+    <!-- Mobile sheet -->
+    <div id="sheet" class="sheet">
+      <button class="sheet-close" aria-label="Close">✕</button>
+      <a href="#library" data-link="library">Open Library</a>
+      <a href="#pricing" data-link="pricing">See Pricing</a>
+      <a href="#how">How it works</a>
+      <hr>
+      <a href="#" id="adminToggle" class="admin-only">Customizer</a>
+      <a href="#" id="logoutLink" class="admin-only">Logout</a>
+    </div>
+  </header>
 
-  <!-- MAIN CONTENT -->
-  <main id="sectionsHost" class="container stack">
-
-    <!-- HERO -->
-    <section class="hero" data-id="hero" id="home">
-      <span class="badge">LAUNCH EXPERIENCES THAT NEVER REGRESS</span>
-      <h1>Self-serve, adaptive, quantifiable.</h1>
-      <p class="lead">Paste a Save → instant learning. Plans unlock features; no 1:1 required.
-        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.</p>
-      <div class="row">
-        <button id="ctaLibrary" class="btn primary">Open Library</button>
-        <button id="ctaPricing" class="btn">See Pricing</button>
-        <button id="ctaTrial" class="btn ghost">Launch Trial — available</button>
+  <!-- Hero -->
+  <section class="hero pad-hero" data-section="hero">
+    <div class="wrap">
+      <div class="eyebrow">LAUNCH EXPERIENCES THAT NEVER REGRESS</div>
+      <h1 id="heroTitle">Self-serve, adaptive,<br>quantifiable.</h1>
+      <p class="lead">
+        <span id="todGreet">Good evening</span>. Paste a <em>Save</em> → instant learning.
+        Plans unlock features; no 1:1 required.
+        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
+      </p>
+      <div class="row gap-12 wrap">
+        <a class="btn pill solid" href="#library" data-link="library">Open Library</a>
+        <a class="btn pill ghost" href="#pricing" data-link="pricing">See Pricing</a>
+        <button id="trialBtn" class="btn pill subtle">Launch Trial — <span class="muted">available</span></button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FEATURE VIDEO -->
-    <section data-id="video" id="video">
-      <header><h2>Feature Video</h2></header>
-      <div class="video-wrap" id="videoSlot">
-        <div class="video-empty">Replace this with your top niche video (assets/videos/manifest.json)</div>
+  <!-- Feature video -->
+  <section class="feature pad" data-section="feature">
+    <div class="wrap">
+      <h2>Feature Video</h2>
+      <div class="card depth-2 radius-xl">
+        <video controls preload="metadata" playsinline class="hero-video">
+          <source src="assets/gc_spin.mp4" type="video/mp4"/>
+        </video>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- LIBRARY -->
-    <section data-id="library" id="library">
-      <header><h2>Library</h2><div class="muted">Ready-to-use starters and blueprints. Drop a Save to adapt.</div></header>
-      <div class="grid cards">
-        <article class="card">
-          <h3 class="title">Starter Blueprint</h3>
-          <div class="muted">Paste a Save to adapt instantly.</div>
-          <div class="mt-12"><button class="btn ghost" data-preview="starter">Preview</button></div>
+  <!-- Library -->
+  <section id="library" class="pad" data-section="library">
+    <div class="wrap">
+      <h2>Library</h2>
+      <p class="muted">Ready-to-use starters and blueprints. Drop a Save to adapt.</p>
+
+      <div class="grid cards" id="libraryGrid">
+        <!-- Cards are static for now; routing hooks added -->
+        <article class="card depth-1 radius-xl">
+          <h3>Starter Blueprint</h3>
+          <p>Paste a Save to adapt instantly.</p>
+          <button class="btn pill ghost preview" data-preview="starter">Preview</button>
         </article>
-        <article class="card">
-          <h3 class="title">Commerce Demo</h3>
-          <div class="muted">Stripe-ready patterns.</div>
-          <div class="mt-12"><button class="btn ghost" data-preview="commerce">Preview</button></div>
+
+        <article class="card depth-1 radius-xl">
+          <h3>Commerce Demo</h3>
+          <p>Stripe-ready patterns.</p>
+          <button class="btn pill ghost preview" data-preview="commerce">Preview</button>
         </article>
-        <article class="card">
-          <h3 class="title">Creator Kit</h3>
-          <div class="muted">Audience & content flows.</div>
-          <div class="mt-12"><button class="btn ghost" data-preview="creator">Preview</button></div>
+
+        <article class="card depth-1 radius-xl">
+          <h3>Creator Kit</h3>
+          <p>Audience & content flows.</p>
+          <button class="btn pill ghost preview" data-preview="creator">Preview</button>
         </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- PRICING -->
-    <section data-id="pricing" id="pricing">
-      <header><h2>Pricing</h2></header>
-      <div class="grid cards">
-        <div class="tier card">
-          <div class="title">Starter</div>
-          <div class="muted">For trying the system.</div>
-          <div class="mt-12"><strong>£0</strong></div>
-          <div class="mt-12"><button class="btn block">Get started</button></div>
-        </div>
-        <div class="tier card">
-          <div class="title">Pro</div>
-          <div class="muted">For growing creators.</div>
-          <div class="mt-12"><strong>£9 / mo</strong></div>
-          <div class="mt-12"><button class="btn block">Upgrade to Pro</button></div>
-        </div>
-        <div class="tier card highlight">
-          <div class="title">Diamond</div>
-          <div class="muted">Commercial-safe, watermark-free exports.</div>
-          <div class="mt-12"><strong>£29 / mo</strong></div>
-          <div class="mt-12"><button class="btn primary block">Choose Diamond</button></div>
-        </div>
-      </div>
-    </section>
+  <!-- Pricing (built from plans.json by main.js) -->
+  <section id="pricing" class="pad" data-section="pricing">
+    <div class="wrap">
+      <h2>Pricing</h2>
+      <div id="pricingGrid" class="grid cards"></div>
+    </div>
+  </section>
 
-    <!-- HOW IT WORKS -->
-    <section data-id="how" id="how">
-      <header><h2>How it works</h2></header>
-      <ol class="stack">
-        <li>Paste a <em>Save</em> (from ChatGPT) into the site.</li>
-        <li>Site adapts instantly (no rebuilds, no regressions).</li>
-        <li>Export or publish with plan features.</li>
+  <!-- How it works -->
+  <section id="how" class="pad" data-section="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <ol class="how">
+        <li><strong>Paste a Save</strong> (from ChatGPT) into the site.</li>
+        <li><strong>Adapts instantly</strong> (no rebuilds, no regressions).</li>
+        <li><strong>Export or publish</strong> using your plan features.</li>
       </ol>
-    </section>
+    </div>
+  </section>
 
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      © 2025 THE GRID — All rights reserved.
+  <!-- Footer -->
+  <footer class="pad">
+    <div class="wrap row between">
+      <small>© <span id="year"></span> THE GRID — All rights reserved.</small>
+      <small id="footPlan" class="muted">Visitor</small>
     </div>
   </footer>
 
-  <!-- ADMIN PANEL -->
-  <aside id="adminPanel" class="admin-panel">
-    <div class="panel-hd">
-      <strong>Customising Board</strong>
-      <div class="row">
-        <button id="adminClose" class="btn small">Close</button>
-        <button id="adminExit" class="btn ghost small">Exit admin</button>
+  <!-- Paste Save Modal -->
+  <dialog id="saveModal" class="modal">
+    <form method="dialog" class="card depth-3 radius-xl modal-card">
+      <header class="row between center">
+        <h3>Paste a Save</h3>
+        <button value="cancel" class="icon-btn">✕</button>
+      </header>
+      <textarea id="saveArea" placeholder="Paste your Save JSON here…" rows="8"></textarea>
+      <div class="row gap-8 end">
+        <button value="cancel" class="btn pill ghost">Cancel</button>
+        <button id="applySaveBtn" class="btn pill solid" value="ok">Apply</button>
       </div>
-    </div>
-    <div class="panel-body stack">
-      <div class="admin-chip">Drag to reorder sections (live)</div>
-      <div id="adminSections" class="stack"></div>
+    </form>
+  </dialog>
 
-      <hr style="border:0; border-top:1px solid rgba(255,255,255,.08)">
-
-      <strong>Feature video</strong>
-      <div class="kv"><label>Source (mp4)</label><input id="vSrc" placeholder="assets/gc_spin.mp4"></div>
-      <div class="kv"><label>Poster</label><input id="vPoster" placeholder="assets/images/cover.jpg"></div>
-      <div class="kv"><label>Title</label><input id="vTitle" placeholder="Showcase title"></div>
-      <button id="vSave" class="btn">Save video</button>
-
-      <p class="muted mt-12">Tip: add <code>?admin=1</code> to the URL once to enable admin on this device. Admin is remembered locally (no one else sees it).</p>
-    </div>
+  <!-- Admin Customizer (local-only) -->
+  <aside id="adminPanel" class="admin-panel">
+    <header class="row between center">
+      <h3>Customizer</h3>
+      <button class="icon-btn" id="adminClose">✕</button>
+    </header>
+    <section>
+      <label class="row between center">
+        <span>Border depth</span>
+        <input id="ctlDepth" type="range" min="0" max="4" step="1"/>
+      </label>
+      <label class="row between center">
+        <span>Radius</span>
+        <input id="ctlRadius" type="range" min="4" max="24" step="2"/>
+      </label>
+      <label class="row between center">
+        <span>Glow</span>
+        <input id="ctlGlow" type="range" min="0" max="1" step="0.05"/>
+      </label>
+    </section>
+    <section>
+      <h4>Section order</h4>
+      <div id="orderList" class="order-list"></div>
+    </section>
+    <section>
+      <h4>Theme</h4>
+      <button id="themeDark" class="btn pill small">Dark</button>
+      <button id="themeLight" class="btn pill ghost small">Light</button>
+    </section>
   </aside>
 
-  <script src="assets/js/effects.js" defer></script>
-  <script src="assets/js/ui.js" defer></script>
+  <!-- Scripts -->
+  <script src="https://js.stripe.com/v3"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/entitlements.js"></script>
+  <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/stripe.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/effects.js"></script>
 </body>
 </html>
