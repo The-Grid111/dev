@@ -1,41 +1,31 @@
 {
-  "version": "1.4",
-  "ts": "2025-08-26T15:40:00Z",
+  "version": "revamp-1.0",
+  "ts": "2025-08-26T15:45:00Z",
 
   "meta": {
-    "source_of_truth": "assets/data/update.json",
     "owner": "The-Grid111",
+    "goal": "Full Revamp pass v1 — stable UX, contributor pipeline, gentle onboarding, memory-first",
     "mode": "manual-update-file",
-    "purpose": "stabilize + prep girlfriend onboarding"
+    "source_of_truth": "assets/data/update.json"
   },
 
-  "flags": {
-    "ui_ready": true,
+  "stability": {
     "safe_copy": true,
-    "feature:greeting_enabled": true,
-    "feature:gentle_onboarding_enabled": true,
-    "feature:save_pipeline_enabled": true,
+    "ui_ready": true,
+    "hard_fail_none": true,
+    "frontend_only": true,
 
-    /* These two are hints for future CI work; safe for frontend to ignore. */
+    /* CI hints (front-end ignores). We’ll fix workflows later. */
     "ci_hint:disable_snapshot": true,
     "ci_hint:disable_inventory": true
   },
 
-  "copy": {
-    "hero_greeting": "Welcome — you’re in. This space adapts to you, not the other way around.",
-    "hero_sub": "We’ll go slowly, keep things calm, and save what helps so you don’t have to remember it all.",
-    "cta_primary": "Start",
-    "cta_secondary": "Not sure? Tap me"
-  },
-
-  "onboarding": {
-    "wow_open": "Hey! I’m your quiet co-pilot — I’ll keep things simple and make the next step obvious.",
-    "memory_prompt": "Would you like me to remember helpful preferences (tone, pace, topics) so I can save you time next time?",
-    "grounding_anchors": [
-      "Let’s slow the pace — one line at a time.",
-      "If a thought loops, we’ll park it safely and come back when you want.",
-      "Short steps are still steps forward."
-    ]
+  "features": {
+    "greeting_enabled": true,
+    "gentle_onboarding_enabled": true,
+    "save_pipeline_enabled": true,
+    "receipt_required": true,
+    "privacy_controls": true
   },
 
   "privacy": {
@@ -45,25 +35,54 @@
     "allow_generalization": true
   },
 
+  "copy": {
+    "hero_title": "Welcome — this space adapts to you.",
+    "hero_sub": "We’ll keep it calm, go one step at a time, and remember what helps so you don’t have to.",
+    "cta_primary": "Start",
+    "cta_secondary": "Take it slow"
+  },
+
+  "onboarding": {
+    "wow_open": "Hey! I’m your quiet co-pilot — I’ll make the next step obvious and keep the pace gentle.",
+    "memory_prompt": "Turn on memory so I can keep your preferred tone, pace, and topics for next time?",
+    "anchors": [
+      "We’ll take this one line at a time.",
+      "If a thought loops, we’ll park it and return when you choose.",
+      "Short steps are still steps forward."
+    ],
+    "ocd_support_note": "Gentle reframes and labeling (‘this is an intrusive thought’) help reduce urgency. We can practice that together, only if you want."
+  },
+
   "contributor_pipeline": {
     "enabled": true,
     "accepts_packages": true,
-    "receipt_required": true,
     "receipt_schema": {
       "nonce": "auto",
       "ok": true,
       "summary": "Save received and validated",
       "confidence_percent": 98
-    }
+    },
+    "owner_review_required": true
   },
 
   "verification": {
     "package_echo": "update:ok",
-    "checksum_hint": "v1-manual-stable",
+    "checksum_hint": "revamp-v1-stable",
     "expected_files": [
       "assets/data/update.json",
       "assets/js/save.js",
       "assets/js/storage.js"
     ]
+  },
+
+  "ux_prompts": {
+    "start_tip": "Tap Start — I’ll do the heavy lifting and keep choices minimal.",
+    "contribute_tip": "When you finish, use ‘Save & Send’ — I’ll prepare a privacy-safe package with a receipt."
+  },
+
+  "telemetry_local_only": {
+    "enabled": true,
+    "scope": "browser-local",
+    "events": ["onboarding_open", "memory_enabled", "save_success"]
   }
 }
