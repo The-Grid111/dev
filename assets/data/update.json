@@ -1,8 +1,14 @@
 {
-  "files": {
-    "dev/dev/data/file-tree.json": "{\n  \"files\": []\n}\n",
-    "dev/dev/data/file-tree.txt": "# File Tree\n\n(empty)\n",
-    "dev/dev/data/repo-metrics.json": "{\n  \"metrics\": {}\n}\n"
-  },
-  "message": "Manual reset of build-inventory files"
+  "ops": [
+    {
+      "op": "write",
+      "path": ".github/workflows/build-file-inventory.yml",
+      "content": "name: Build File Inventory\n\non:\n  push:\n    branches: [ main ]\n  workflow_dispatch:\n\npermissions:\n  contents: write\n  pull-requests: write\n\nconcurrency:\n  group: build-inventory-main\n  cancel-in-progress: true\n\njobs:\n  inventory:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n\n      - name: Generate inventory files\n        run: |\n          node scripts/gen-file-inventory.mjs\n\n      - name: Auto-commit inventory\n        id: auto_commit\n        uses: stefanzweifel/git-auto-commit-action@v5\n        with:\n          commit_message: \"Update build-file-inventory (auto)\"\n          file_pattern: |\n            dev/dev/data/file-tree.txt\n            dev/dev/data/file-tree.json\n            dev/dev/data/repo-metrics.json\n          branch: automation/build-inventory\n          create_branch: true\n          push_options: \"--force-with-lease --set-upstream\"\n\n      - name: Open/Update PR to main\n        if: steps.auto_commit.outputs.changes_detected == 'true'\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          # Create (or reuse) a PR from automation/build-inventory -> main\n          gh pr create \\\n            --title \"chore(inventory): automated update $(date -u +'%Y-%m-%dT%H:%M:%SZ')\" \\\n            --body  \"Automated inventory update from GitHub Actions.\" \\\n            --base main --head automation/build-inventory \\\n            || gh pr edit --add-label \"automation\" --title \"chore(inventory): automated update\" --body \"Automated inventory update\" --pr $(gh pr list --head automation/build-inventory --state open --json number --jq '.[0].number' || echo \"\")\n"
+    },
+    {
+      "op": "write",
+      "path": ".github/workflows/repo-snapshot.yml",
+      "content": "name: Repo Snapshot\n\non:\n  push:\n    branches: [ main ]\n  workflow_dispatch:\n\npermissions:\n  contents: write\n  pull-requests: write\n\nconcurrency:\n  group: repo-snapshot-main\n  cancel-in-progress: true\n\njobs:\n  snapshot:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n\n      - name: Create snapshot file\n        run: |\n          node scripts/repo-snapshot.mjs\n\n      - name: Auto-commit snapshot\n        id: auto_commit\n        uses: stefanzweifel/git-auto-commit-action@v5\n        with:\n          commit_message: \"Repo snapshot (auto)\"\n          file_pattern: dev/dev/archive/snapshot_*.json\n          branch: automation/repo-snapshot\n          create_branch: true\n          push_options: \"--force-with-lease --set-upstream\"\n\n      - name: Open/Update PR to main\n        if: steps.auto_commit.outputs.changes_detected == 'true'\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          # Create (or reuse) a PR from automation/repo-snapshot -> main\n          gh pr create \\\n            --title \"chore(snapshot): automated update $(date -u +'%Y-%m-%dT%H:%M:%SZ')\" \\\n            --body  \"Automated repo snapshot from GitHub Actions.\" \\\n            --base main --head automation/repo-snapshot \\\n            || gh pr edit --add-label \"automation\" --title \"chore(snapshot): automated update\" --body \"Automated snapshot update\" --pr $(gh pr list --head automation/repo-snapshot --state open --json number --jq '.[0].number' || echo \"\")\n"
+    }
+  ]
 }
