@@ -30,8 +30,8 @@
     "ext": ".css"
   },
   "css/site.css": {
-    "hash": "43c095605d",
-    "bytes": 4532,
+    "hash": "61f10dd809",
+    "bytes": 5813,
     "ext": ".css"
   },
   "css/styles.css": {
@@ -70,8 +70,8 @@
     "ext": ".js"
   },
   "js/main.js": {
-    "hash": "f95637ab33",
-    "bytes": 717,
+    "hash": "278cd199b0",
+    "bytes": 850,
     "ext": ".js"
   },
   "js/metrics.js": {
@@ -115,8 +115,8 @@
     "ext": ".js"
   },
   "js/ui.js": {
-    "hash": "2339d12c1a",
-    "bytes": 1792,
+    "hash": "85f3834748",
+    "bytes": 2364,
     "ext": ".js"
   },
   "videos/manifest.json": {
