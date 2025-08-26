@@ -30,8 +30,8 @@
     "ext": ".css"
   },
   "css/site.css": {
-    "hash": "61f10dd809",
-    "bytes": 5813,
+    "hash": "bebaa29f8c",
+    "bytes": 4743,
     "ext": ".css"
   },
   "css/styles.css": {
@@ -55,13 +55,13 @@
     "ext": ".js"
   },
   "js/effects.js": {
-    "hash": "f0b50cb73d",
-    "bytes": 806,
+    "hash": "1095a17b34",
+    "bytes": 292,
     "ext": ".js"
   },
   "js/entitlements.js": {
-    "hash": "6abda3d82e",
-    "bytes": 397,
+    "hash": "0b6919ad3f",
+    "bytes": 550,
     "ext": ".js"
   },
   "js/hotfix.js": {
@@ -70,8 +70,8 @@
     "ext": ".js"
   },
   "js/main.js": {
-    "hash": "278cd199b0",
-    "bytes": 850,
+    "hash": "64c8f3d02a",
+    "bytes": 2675,
     "ext": ".js"
   },
   "js/metrics.js": {
@@ -90,13 +90,13 @@
     "ext": ".js"
   },
   "js/storage.js": {
-    "hash": "ee11b1abbf",
-    "bytes": 1899,
+    "hash": "b95439ea7b",
+    "bytes": 769,
     "ext": ".js"
   },
   "js/stripe.js": {
-    "hash": "0a079de309",
-    "bytes": 1773,
+    "hash": "750fa0df79",
+    "bytes": 892,
     "ext": ".js"
   },
   "js/supabase.js": {
@@ -115,13 +115,13 @@
     "ext": ".js"
   },
   "js/ui.js": {
-    "hash": "85f3834748",
-    "bytes": 2364,
+    "hash": "76771e6447",
+    "bytes": 5284,
     "ext": ".js"
   },
   "videos/manifest.json": {
-    "hash": "889aed4649",
-    "bytes": 317,
+    "hash": "11e69d2ba2",
+    "bytes": 129,
     "ext": ".json"
   }
 }
