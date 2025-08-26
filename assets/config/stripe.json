@@ -1,9 +1,7 @@
 {
-  "trialCheckoutUrl": "https://buy.stripe.com/eVqcN64qVbq2fIhfsd3cc00",
-  "plans": {
-    "basic":   { "price": "£9/mo"  },
-    "silver":  { "price": "£29/mo" },
-    "gold":    { "price": "£49/mo" },
-    "diamond": { "price": "£99/mo" }
-  }
+  "publishableKey": "",
+  "successPath": "/?checkout=success",
+  "cancelPath": "/?checkout=cancel",
+  "billingPortal": "",
+  "allowTestMode": true
 }
