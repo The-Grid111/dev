@@ -1,0 +1,65 @@
+name: Update Queue (issue → commit)
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  apply:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.state == 'open' &&
+        contains(github.event.issue.title, 'Update Queue') &&
+        (
+          contains(github.event.comment.body, '/update ') ||
+          contains(github.event.comment.body, '/update\n') ||
+          contains(github.event.comment.body, '/update\r\n')
+        )
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Apply issue patch
+        id: apply
+        run: |
+          node .github/scripts/apply-issue-queue.mjs
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          DEFAULT_BRANCH: main
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Pull latest (avoid non-fast-forward)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "${DEFAULT_BRANCH}"
+          git pull --rebase origin "${DEFAULT_BRANCH}"
+
+      - name: Commit & push change
+        if: steps.apply.outputs.changed == 'true'
+        run: |
+          git add -A
+          git commit -m "${{ steps.apply.outputs.commit_message }}" || echo "Nothing to commit"
+          git push --force-with-lease origin HEAD:${DEFAULT_BRANCH}
+
+      - name: Summary
+        run: |
+          echo "Changed: ${{ steps.apply.outputs.changed }}"
+          echo "Target:  ${{ steps.apply.outputs.target_path }}"
