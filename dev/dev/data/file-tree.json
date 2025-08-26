@@ -37,7 +37,7 @@
   },
   {
     "path": ".github/workflows/deploy.yml",
-    "bytes": 919
+    "bytes": 878
   },
   {
     "path": ".github/workflows/issue-patches.yml",
@@ -97,7 +97,7 @@
   },
   {
     "path": "assets/css/site.css",
-    "bytes": 2836
+    "bytes": 3826
   },
   {
     "path": "assets/css/styles.css",
@@ -185,7 +185,7 @@
   },
   {
     "path": "assets/js/main.js",
-    "bytes": 6534
+    "bytes": 717
   },
   {
     "path": "assets/js/metrics.js",
@@ -221,11 +221,11 @@
   },
   {
     "path": "assets/js/ui.js",
-    "bytes": 1704
+    "bytes": 1792
   },
   {
     "path": "assets/manifest.json",
-    "bytes": 2286
+    "bytes": 2285
   },
   {
     "path": "assets/videos/manifest.json",
@@ -372,12 +372,24 @@
     "bytes": 9081
   },
   {
+    "path": "dev/dev/archive/snapshot_1756224737.json",
+    "bytes": 9171
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756224865.json",
+    "bytes": 9261
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756226877.json",
+    "bytes": 9352
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 7926
+    "bytes": 8091
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 3383
+    "bytes": 3506
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
@@ -389,7 +401,7 @@
   },
   {
     "path": "index.html",
-    "bytes": 9797
+    "bytes": 4049
   },
   {
     "path": "lychee.toml",
