@@ -1,352 +1,175 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>THE GRID — Adaptive Launch</title>
-<meta name="color-scheme" content="dark light" />
-<meta name="description" content="Launch experiences that never regress. Paste a Save → instant learning." />
-
-<!-- Fallback: we keep a link to site.css, but inline all critical styles below.
-     If site.css fails to load, the inline styles still render everything. -->
-<link rel="stylesheet" href="./site.css?v=hotfix" />
-
-<style>
-/* ==== CRITICAL STYLES (hotfix) ========================================= */
-:root{
-  --bg-0:#0b0b0e; --bg-1:#101014; --bg-2:#15161b;
-  --text:#e9ecf1; --muted:#b6bcc7; --brand:#ffd34d; --brand-ink:#1b1607;
-  --chip:rgba(255,255,255,.06); --chip-b:rgba(255,255,255,.14);
-  --panel:rgba(255,255,255,.06); --panel-2:rgba(255,255,255,.08);
-  --radius-xl:26px; --radius-lg:18px; --radius:14px; --radius-sm:10px;
-  --shadow-1:0 1px 2px rgba(0,0,0,.25), 0 6px 18px rgba(0,0,0,.35);
-  --shadow-2:0 6px 16px rgba(0,0,0,.35), 0 18px 36px rgba(0,0,0,.45);
-  --container:clamp(320px, 92vw, 1080px);
-  --font-sys: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  --step-0:clamp(.96rem,.9rem + .3vw,1.05rem);
-  --step-1:clamp(1.15rem,1rem + .6vw,1.35rem);
-  --step-2:clamp(1.44rem,1.2rem + 1vw,1.75rem);
-  --step-3:clamp(1.85rem,1.6rem + 1.2vw,2.25rem);
-  --step-5:clamp(3.2rem,2.6rem + 2.6vw,4.2rem);
-}
-*{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:#0b0b0e;color:var(--text);font:400 var(--step-0)/1.6 var(--font-sys);}
-a{color:inherit;text-decoration:none}
-.container{width:var(--container);margin-inline:auto;padding-inline:20px}
-.section{padding:48px 0}
-
-.bg-gradient{position:fixed;inset:0;z-index:-2;background:
-  radial-gradient(1200px 800px at 10% -10%, rgba(255,211,77,.12), transparent 60%),
-  radial-gradient(1000px 700px at 110% 10%, rgba(122,167,255,.12), transparent 55%),
-  radial-gradient(1200px 900px at 50% 120%, rgba(255,255,255,.08), transparent 55%),
-  linear-gradient(180deg, #101014, #0b0b0e);
-  animation:bg-pan 24s linear infinite}
-@keyframes bg-pan{0%{filter:hue-rotate(0)}50%{filter:hue-rotate(6deg)}100%{filter:hue-rotate(0)}}
-
-/* header */
-.site-header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:12px}
-.brand{display:inline-flex;align-items:center;gap:10px;font-weight:800}
-.brand-mark{width:34px;height:34px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#ffe27a, var(--brand) 60%, #caa200);
-  box-shadow:inset 0 6px 18px rgba(0,0,0,.35)}
-.brand-word{letter-spacing:.02em}
-.primary-nav{display:flex;align-items:center;gap:10px}
-.chip{display:inline-flex;align-items:center;padding:10px 16px;border-radius:999px;background:var(--chip);border:1px solid var(--chip-b);box-shadow:var(--shadow-1)}
-.chip:active{transform:translateY(1px)}
-.icon-btn{border:0;background:var(--chip);border:1px solid var(--chip-b);padding:10px;border-radius:999px}
-
-/* hero */
-.kicker{text-transform:uppercase;letter-spacing:.14em;color:var(--brand);font-weight:800}
-.display{font-size:var(--step-5);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin:10px 0}
-.lead{color:var(--muted);max-width:62ch}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-
-/* cards/buttons */
-.card{border-radius:var(--radius-lg);background:var(--panel);border:1px solid var(--panel-2);box-shadow:var(--shadow-1);padding:18px}
-.card--elevated{box-shadow:var(--shadow-2)}
-.card--glass{backdrop-filter:blur(8px);background:rgba(255,255,255,.05)}
-.lift{transition:transform .2s ease, box-shadow .2s ease}
-.lift:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
-.btn{border:0;border-radius:999px;padding:12px 18px;box-shadow:var(--shadow-1);background:var(--chip);border:1px solid var(--chip-b)}
-.btn:active{transform:translateY(1px)}
-.btn-primary{background:var(--brand);color:var(--brand-ink);border-color:#d8b63d}
-.btn-muted{background:#1b1c22;border-color:#272833}
-.btn-ghost{background:transparent;border-color:var(--chip-b)}
-.btn-soft{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
-.btn-sm{padding:8px 12px}
-
-/* grids */
-.grid{display:grid;gap:16px;margin-top:12px}
-@media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}}
-.pricing-grid{display:grid;gap:16px}
-@media(min-width:960px){.pricing-grid{grid-template-columns:repeat(5,1fr)}}
-.price{font-size:var(--step-2);font-weight:900}
-.per{font-weight:600;color:var(--muted)}
-.bullets{margin:8px 0 12px 18px;color:var(--muted)}
-.h2{font-size:var(--step-3);margin:0 0 10px}
-.h3{font-size:var(--step-1);margin:0 0 6px}
-.muted{color:var(--muted)}
-
-/* media */
-.media{overflow:hidden}
-.media-el{width:100%;display:block;border-radius:var(--radius-lg);background:#000}
-
-/* trial ribbon */
-.trial-ribbon{display:flex;gap:10px;align-items:center;justify-content:center;padding:8px 10px;margin:6px auto;border-radius:999px;background:rgba(255,211,77,.08);border:1px solid rgba(255,211,77,.3);width:var(--container)}
-.badge{background:var(--brand);color:var(--brand-ink);font-weight:800;padding:6px 10px;border-radius:999px}
-
-/* drawer + modals */
-.drawer{position:fixed;inset:0;z-index:40;display:none;background:rgba(0,0,0,.35);backdrop-filter:blur(2px)}
-.drawer.show{display:block}
-.drawer-card{position:absolute;top:0;right:0;width:min(92vw,360px);height:100%;padding:16px;overflow:auto}
-.drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.drawer-link{display:block;padding:14px 10px;border-radius:12px;background:var(--chip);border:1px solid var(--chip-b);margin:6px 0}
-
-.modal::backdrop{background:rgba(0,0,0,.55)}
-.modal{border:0;padding:0;background:transparent}
-.modal-card{width:min(92vw,760px)}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.input.area{width:100%;padding:12px;border-radius:12px;border:1px solid var(--chip-b);background:#0f1014;color:var(--text)}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-.stack>div{margin:6px 0}
-
-/* footer */
-.site-footer{padding:30px 0 60px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-
-/* toasts */
-.toasts{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:60}
-.toast{background:#11131a;border:1px solid #2a2d38;color:var(--text);padding:10px 14px;border-radius:12px;box-shadow:var(--shadow-2)}
-/* ====================================================================== */
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THE-GRID — Creators’ Launchpad</title>
+  <meta name="description" content="Black & gold, cinematic creator system. Live trial banner, working nav, profiles, saves, admin customize board, and plan selection." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap"></noscript>
+  <link rel="icon" href="/assets/images/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/site.css">
 </head>
-<body>
-  <div class="bg-gradient" aria-hidden="true"></div>
-
-  <div class="trial-ribbon">
-    <span class="badge">£5 Trial</span>
-    7 days, full access to Starters.
-    <button class="btn btn-ghost btn-sm" data-action="start-trial">Start Trial</button>
+<body class="grid-body">
+  <!-- Global trial banner -->
+  <div id="trialBanner" class="trial-banner" role="region" aria-label="Trial">
+    <div class="trial-inner">
+      <span class="badge">£5 Trial</span>
+      <span class="trial-text">Start now — full access for 7 days. Cancel anytime.</span>
+      <button id="trialStartBtn" class="btn btn-primary small">Start Trial</button>
+    </div>
   </div>
 
-  <header class="site-header container">
-    <a class="brand" href="#top"><span class="brand-mark"></span><span class="brand-word">THE GRID</span></a>
-    <nav class="primary-nav">
-      <a href="#library" class="chip">Open Library</a>
-      <a href="#pricing" class="chip">See Pricing</a>
-      <a href="#how" class="chip">How it works</a>
-      <button class="chip" data-open="profile">Profile</button>
-      <button class="chip" data-open="paste">Paste Save</button>
-      <button class="icon-btn" data-nav-toggle aria-label="Open menu"><span class="icon-lines"></span></button>
-    </nav>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <a class="brand-mark" href="/">
+          <img src="/assets/images/logo-grid-mark.svg" alt="THE-GRID" width="36" height="36">
+        </a>
+        <div class="brand-text">
+          <div class="brand-title">THE-GRID</div>
+          <div class="brand-badge" id="greeting" aria-live="polite">Loading…</div>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Primary">
+        <button class="nav-link" data-nav="home">Home</button>
+        <div class="nav-drop">
+          <button class="nav-link has-caret" data-nav="community">Community</button>
+          <div class="drop" role="menu">
+            <a role="menuitem" href="#" data-route="news">News</a>
+            <a role="menuitem" href="#" data-route="updates">Updates</a>
+            <a role="menuitem" href="#" data-route="forum">Forum</a>
+          </div>
+        </div>
+        <div class="nav-drop">
+          <button class="nav-link has-caret" data-nav="plans">Plans</button>
+          <div class="drop" role="menu">
+            <a role="menuitem" href="#" data-plan="trial">£5 Trial</a>
+            <a role="menuitem" href="#" data-plan="silver">Silver £9</a>
+            <a role="menuitem" href="#" data-plan="gold">Gold</a>
+            <a role="menuitem" href="#" data-plan="diamond">Diamond</a>
+          </div>
+        </div>
+        <button class="nav-link" data-nav="profile">Profile</button>
+        <button class="nav-link" data-nav="admin">Admin</button>
+      </nav>
+    </div>
   </header>
 
-  <aside class="drawer" data-drawer>
-    <div class="drawer-card card card--glass">
-      <div class="drawer-head">
-        <div class="brand"><span class="brand-mark"></span><span class="brand-word">THE GRID</span></div>
-        <button class="icon-btn" data-nav-toggle>✕</button>
+  <!-- Hero -->
+  <section class="hero wrap">
+    <div class="hero-copy panel card">
+      <h1>Cinematic, black-&-gold creator system.</h1>
+      <p class="lead">Single-file workflow. Full-file redos. Checkpoints that behave like saves. Built for TikTok creators and growth.</p>
+      <div class="cta">
+        <button class="btn btn-primary" id="btnCelebrate" aria-label="Trigger celebration">Celebrate</button>
+        <button class="btn btn-ghost" id="btnHow">How it works</button>
       </div>
-      <a href="#library" class="drawer-link">Open Library</a>
-      <a href="#pricing" class="drawer-link">See Pricing</a>
-      <a href="#how" class="drawer-link">How it works</a>
-      <button class="drawer-link" data-open="profile">Profile</button>
-      <button class="drawer-link" data-open="paste">Paste Save</button>
+      <div class="kpis" role="list" aria-label="Key points">
+        <div class="kpi" role="listitem"><strong>1-file</strong><div>index.html</div></div>
+        <div class="kpi" role="listitem"><strong>Full-redo</strong><div>No partial patches</div></div>
+        <div class="kpi" role="listitem"><strong>Checkpoint</strong><div>Paste-to-resume</div></div>
+      </div>
+    </div>
+    <div class="hero-video panel" aria-label="GC intro">
+      <video id="gcSpin" playsinline muted loop autoplay preload="metadata" width="100%" poster="/assets/images/manifest.json">
+        <source src="/assets/gc_spin.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <!-- Dynamic slots (move via Admin Board) -->
+  <section class="wrap">
+    <div id="slotGrid" class="slot-grid">
+      <article class="slot panel card" data-slot="weird-bed">
+        <h3>Weird-bed-material</h3>
+        <p class="muted">Ultra-realistic physics, soothing cinematic shots. Hooks ready for confetti on key actions.</p>
+      </article>
+      <article class="slot panel card" data-slot="minibeast">
+        <h3>Minibeast Brawls</h3>
+        <p class="muted">Cute micro-battles with believable shadows, reflections, and motion.</p>
+      </article>
+      <article class="slot panel card" data-slot="spreads">
+        <h3>Satisfying Spreads</h3>
+        <p class="muted">Knife-and-spread realism with human-like rhythm and residue effects.</p>
+      </article>
+    </div>
+    <p class="foot">Tip: Add assets to <code>/assets/images</code> & <code>/assets/videos</code>. Then place into any slot via Admin.</p>
+  </section>
+
+  <!-- Profile Modal -->
+  <dialog id="profileDialog" class="modal">
+    <form method="dialog" class="modal-card panel card">
+      <header class="modal-head">
+        <h3>Your Profile</h3>
+        <button value="close" class="btn btn-ghost small">Close</button>
+      </header>
+      <div class="modal-body">
+        <div class="profile-row">
+          <label>Display name</label>
+          <input id="profName" type="text" placeholder="Your name">
+        </div>
+        <div class="profile-row">
+          <label>Membership</label>
+          <div id="profPlan" class="chip">None</div>
+        </div>
+        <div class="profile-row">
+          <label>Paste Save Block</label>
+          <textarea id="saveBlock" rows="7" placeholder='Paste your JSON save here'></textarea>
+          <button id="saveBlockBtn" type="button" class="btn btn-primary small">Save to profile</button>
+        </div>
+        <div class="profile-row">
+          <label>Status</label>
+          <div id="profileStatus" class="muted">Ready.</div>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Admin Drawer -->
+  <aside id="adminDrawer" class="admin-drawer panel">
+    <div class="admin-head">
+      <strong>Customize Board</strong>
+      <button id="adminClose" class="btn btn-ghost small">Close</button>
+    </div>
+    <div class="admin-body">
+      <div class="admin-field">
+        <label>Depth</label>
+        <input id="depthRange" type="range" min="0" max="24" value="12">
+      </div>
+      <div class="admin-field">
+        <label>Font Weight</label>
+        <input id="fontRange" type="range" min="300" max="800" step="100" value="600">
+      </div>
+      <div class="admin-field">
+        <label>Background</label>
+        <select id="bgSelect">
+          <option value="grid">Cinematic Grid</option>
+          <option value="nebula">Nebula</option>
+          <option value="dark">Deep Dark</option>
+        </select>
+      </div>
+      <div class="admin-actions">
+        <button id="swapSlots" class="btn small">Swap Slots</button>
+        <button id="saveLayout" class="btn btn-primary small">Save Layout</button>
+      </div>
+      <div class="muted tiny">Admin mode is locally gated. Add <code>?admin=1</code> to the URL or toggle in profile (owner only).</div>
     </div>
   </aside>
 
-  <main id="top">
-    <section class="hero container section">
-      <p class="kicker">LAUNCH EXPERIENCES THAT NEVER REGRESS</p>
-      <h1 class="display">Self-serve,<br/>adaptive,<br/>quantifiable.</h1>
-      <p class="lead">Paste a Save → instant learning. Plans unlock features; no 1:1 required. <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.</p>
-      <div class="hero-actions">
-        <a href="#library" class="btn btn-primary">Open Library</a>
-        <a href="#pricing" class="btn btn-muted">See Pricing</a>
-        <button class="btn btn-ghost" data-action="start-trial">Launch Trial — available</button>
-      </div>
-    </section>
-
-    <section class="container section">
-      <h2 class="h2">Feature Video</h2>
-      <div class="media card card--elevated">
-        <video class="media-el" controls preload="metadata">
-          <source src="assets/feature.mp4" type="video/mp4">
-        </video>
-      </div>
-    </section>
-
-    <section id="library" class="container section">
-      <h2 class="h2">Library</h2>
-      <p class="muted">Ready-to-use starters and blueprints. Drop a Save to adapt.</p>
-      <div class="grid">
-        <article class="card card--glass lift">
-          <h3 class="h3">Starter Blueprint</h3>
-          <p>Paste a Save to adapt instantly.</p>
-          <div><button class="btn btn-soft" data-preview="starter">Preview</button></div>
-        </article>
-        <article class="card card--glass lift">
-          <h3 class="h3">Commerce Demo</h3>
-          <p>Stripe-ready patterns.</p>
-          <div><button class="btn btn-soft" data-preview="commerce">Preview</button></div>
-        </article>
-        <article class="card card--glass lift">
-          <h3 class="h3">Creator Kit</h3>
-          <p>Audience & content flows.</p>
-          <div><button class="btn btn-soft" data-preview="creator">Preview</button></div>
-        </article>
-      </div>
-    </section>
-
-    <section id="pricing" class="container section">
-      <h2 class="h2">Pricing</h2>
-      <div class="pricing-grid">
-        <article class="card lift">
-          <h3 class="h3">Trial</h3><p class="muted">7 days full access to Starters</p>
-          <div class="price">£5</div>
-          <ul class="bullets"><li>Basic exports with watermark</li><li>Community access</li></ul>
-          <button class="btn btn-primary" data-plan-select="TRIAL">Start Trial</button>
-        </article>
-        <article class="card lift">
-          <h3 class="h3">Basic</h3><p class="muted">All Starter features</p>
-          <div class="price">£9 <span class="per">/ mo</span></div>
-          <ul class="bullets"><li>Watermarked exports</li><li>Community access</li></ul>
-          <button class="btn btn-muted" data-plan-select="BASIC">Get Basic</button>
-        </article>
-        <article class="card lift">
-          <h3 class="h3">Silver</h3><p class="muted">No watermark on images</p>
-          <div class="price">£19 <span class="per">/ mo</span></div>
-          <ul class="bullets"><li>HD image exports</li><li>Priority help</li></ul>
-          <button class="btn btn-muted" data-plan-select="SILVER">Choose Silver</button>
-        </article>
-        <article class="card lift">
-          <h3 class="h3">Gold</h3><p class="muted">Advanced modules + routing</p>
-          <div class="price">£49 <span class="per">/ mo</span></div>
-          <ul class="bullets"><li>Creator monetisation tools</li><li>Priority support</li></ul>
-          <button class="btn btn-primary" data-plan-select="GOLD">Choose Gold</button>
-        </article>
-        <article class="card lift">
-          <h3 class="h3">Diamond</h3><p class="muted">Commercial-safe, watermark-free</p>
-          <div class="price">£99 <span class="per">/ mo</span></div>
-          <ul class="bullets"><li>White-label exports</li><li>Enterprise features</li></ul>
-          <button class="btn btn-primary" data-plan-select="DIAMOND">Choose Diamond</button>
-        </article>
-      </div>
-    </section>
-
-    <section id="how" class="container section">
-      <h2 class="h2">How it works</h2>
-      <ol class="bullets" style="list-style:decimal">
-        <li><strong>Paste a Save</strong> (from ChatGPT) into the site.</li>
-        <li><strong>Adapts instantly</strong> (no rebuilds, no regressions).</li>
-        <li><strong>Export or publish</strong> using your plan features.</li>
-      </ol>
-    </section>
-  </main>
-
-  <footer class="site-footer container">
-    <div class="greeting" data-greeting></div>
-    <div class="copy">© 2025 THE GRID — All rights reserved.</div>
+  <footer class="wrap foot">
+    © THE-GRID. <a class="inline" href="/privacy.html">Privacy</a> · <a class="inline" href="/terms.html">Terms</a>
   </footer>
 
-  <!-- Paste Save modal -->
-  <dialog data-modal="paste" class="modal">
-    <form method="dialog" class="card card--glass modal-card">
-      <header class="modal-head">
-        <h3 class="h3">Paste Save</h3>
-        <button class="icon-btn" value="cancel" aria-label="Close">✕</button>
-      </header>
-      <textarea class="input area" rows="10" placeholder="Paste your Save JSON here…" data-save-input></textarea>
-      <div class="modal-actions">
-        <button class="btn btn-muted" value="cancel">Cancel</button>
-        <button class="btn btn-primary" value="default" data-ingest-save>Ingest Save</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- Profile modal -->
-  <dialog data-modal="profile" class="modal">
-    <form method="dialog" class="card card--glass modal-card">
-      <header class="modal-head">
-        <h3 class="h3">Your Profile</h3>
-        <button class="icon-btn" value="cancel" aria-label="Close">✕</button>
-      </header>
-      <div class="stack">
-        <div><strong>Plan:</strong> <span data-current-plan>—</span></div>
-        <div><strong>Status:</strong> <span data-status>Guest</span></div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-soft" value="default" data-action="sign-in">Sign in</button>
-        <button class="btn btn-muted" value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- Toasts -->
-  <div class="toasts" aria-live="polite" aria-atomic="true"></div>
-
-<script>
-/* ==== UI HOTFIX JS (no external deps) ================================== */
-const $ = (sel, ctx=document) => ctx.querySelector(sel);
-const $$ = (sel, ctx=document) => [...ctx.querySelectorAll(sel)];
-
-const drawer = $('[data-drawer]');
-$$('[data-nav-toggle]').forEach(b=>b.addEventListener('click',()=>{
-  drawer.classList.toggle('show');
-}));
-
-// Greeting
-(function(){
-  const el = $('[data-greeting]');
-  if(!el) return;
-  const h = new Date().getHours();
-  const part = h<5?'Night': h<12?'Morning' : h<18?'Afternoon':'Evening';
-  el.textContent = `Good ${part} — ready to launch.`;
-})();
-
-// Modals
-function openModal(name){ const d=$(\`[data-modal="\${name}"]\`); if(d && !d.open) d.showModal(); }
-function closeModal(name){ const d=$(\`[data-modal="\${name}"]\`); if(d && d.open) d.close(); }
-$$('[data-open]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.open)));
-
-// Plan selection (local demo)
-const toasts = $('.toasts');
-function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; toasts.appendChild(t); setTimeout(()=>{t.style.opacity='0'; setTimeout(()=>t.remove(),300)},2400); }
-
-$$('[data-plan-select]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const plan = btn.dataset.planSelect;
-    localStorage.setItem('grid.plan', plan);
-    $('[data-current-plan]').textContent = plan;
-    $('[data-status]').textContent = 'Local demo';
-    toast(\`Plan set locally to \${plan}. Add Stripe IDs to go live.\`);
-  });
-});
-
-$$('[data-action="start-trial"]').forEach(b=>{
-  b.addEventListener('click',()=>{
-    localStorage.setItem('grid.plan','TRIAL');
-    $('[data-current-plan]').textContent = 'TRIAL';
-    $('[data-status]').textContent = 'Local trial';
-    toast('Trial started locally. (Wire to Stripe/Supabase to go live.)');
-  });
-});
-
-// Paste Save ingest (stores to localStorage for now)
-$('[data-ingest-save]').addEventListener('click', (e)=>{
-  e.preventDefault();
-  const raw = $('[data-save-input]').value.trim();
-  try{
-    if(!raw) throw new Error('Empty');
-    const json = JSON.parse(raw);
-    localStorage.setItem('grid.save', JSON.stringify(json));
-    toast('Save ingested locally.');
-    closeModal('paste');
-  }catch{
-    toast('Invalid JSON. Please check and try again.');
-  }
-});
-
-/* ======================================================================= */
-</script>
+  <!-- Scripts -->
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/ui.js"></script>
+  <script defer src="/assets/js/commerce.js"></script>
+  <script defer src="/assets/js/stripe.js"></script>
+  <script defer src="/assets/js/confetti.js"></script>
 </body>
 </html>
