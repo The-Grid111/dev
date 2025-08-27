@@ -97,7 +97,7 @@
   },
   {
     "path": "assets/css/site.css",
-    "bytes": 5488
+    "bytes": 6212
   },
   {
     "path": "assets/css/styles.css",
@@ -169,7 +169,7 @@
   },
   {
     "path": "assets/js/commerce.js",
-    "bytes": 4349
+    "bytes": 1047
   },
   {
     "path": "assets/js/confetti.js",
@@ -209,7 +209,7 @@
   },
   {
     "path": "assets/js/stripe.js",
-    "bytes": 892
+    "bytes": 1210
   },
   {
     "path": "assets/js/supabase.js",
@@ -452,12 +452,16 @@
     "bytes": 10909
   },
   {
+    "path": "dev/dev/archive/snapshot_1756289560.json",
+    "bytes": 11001
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
-    "bytes": 9425
+    "bytes": 9760
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 4204
+    "bytes": 4245
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
@@ -469,7 +473,7 @@
   },
   {
     "path": "index.html",
-    "bytes": 7872
+    "bytes": 7172
   },
   {
     "path": "lychee.toml",
