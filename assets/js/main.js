@@ -1,68 +1,74 @@
-(() => {
-  // Build Pricing from plans.json and wire up Stripe buttons
-  async function buildPricing(){
-    const res = await fetch('assets/data/plans.json', {cache:'no-store'});
-    const data = await res.json();
-    const grid = document.getElementById('pricingGrid'); grid.innerHTML = '';
-    const cur = data.currency || 'GBP';
+/* THE-GRID main: greeting, nav routes, banner, confetti fallback, basics */
+(function(){
+  const $ = (q,ctx=document)=>ctx.querySelector(q);
+  const $$ = (q,ctx=document)=>Array.from(ctx.querySelectorAll(q));
 
-    data.tiers.filter(t=>t.active).forEach(t=>{
-      const card = document.createElement('article');
-      card.className = 'card depth-1 radius-xl';
-      const price = `${cur === 'GBP' ? '£' : '$'}${t.price}${t.interval==='mo'?' / mo':''}`;
-      card.innerHTML = `
-        <h3>${t.name}</h3>
-        <p class="muted">${t.features[0] || ''}</p>
-        <div class="price"><strong>${price}</strong></div>
-        <div class="row gap-8">
-          <button class="btn pill ${t.id==='diamond'?'solid':'ghost'} buy" data-price="${t.stripe_price_id}" data-plan="${t.id}">
-            ${t.cta}
-          </button>
-        </div>
-        <ul class="muted" style="margin:.8em 0 0;padding-left:1.1em;list-style:disc;">
-          ${t.features.slice(1).map(f=>`<li>${f}</li>`).join('')}
-        </ul>
-      `;
-      grid.appendChild(card);
-    });
+  // Time greeting
+  try{
+    const el = $('#greeting');
+    const now = new Date(); const h = now.getHours();
+    const msg = h<12? 'Good morning' : h<18? 'Good afternoon' : 'Good evening';
+    if(el) el.textContent = msg + ' — welcome back';
+  }catch(e){}
 
-    grid.querySelectorAll('.buy').forEach(btn=>{
-      btn.addEventListener('click', () => {
-        const plan = btn.dataset.plan;
-        const priceId = btn.dataset.price || '';
-        if (!priceId){
-          // no Stripe yet → simulate upgrade locally
-          Store.set('profile.plan', plan);
-          alert(`Plan set locally to ${plan.toUpperCase()}.\nAdd Stripe IDs for real checkout.`);
-          document.getElementById('footPlan').textContent = plan.toUpperCase();
-          return;
-        }
-        StripeCtl.checkout(priceId);
-      });
+  // Trial banner
+  const trialBtn = $('#trialStartBtn');
+  if(trialBtn){
+    trialBtn.addEventListener('click', ()=>{
+      window.gridCommerce?.startTrial?.();
     });
   }
 
-  // Trial button → trial tier or message
-  document.getElementById('trialBtn')?.addEventListener('click', async ()=>{
-    const plans = await (await fetch('assets/data/plans.json', {cache:'no-store'})).json();
-    const trial = plans.tiers.find(p=>p.id==='trial' && p.active);
-    if (!trial){ alert('Trial not configured yet.'); return; }
-    if (!trial.stripe_price_id){
-      Store.set('profile.plan','trial');
-      alert('Trial set locally for 7 days.\n(Connect Stripe for real billing.)');
-      document.getElementById('footPlan').textContent = 'TRIAL';
-      return;
+  // Nav routing
+  function routeTo(key){
+    switch(key){
+      case 'home': window.scrollTo({top:0,behavior:'smooth'}); break;
+      case 'community': alert('Community coming online.'); break;
+      case 'profile': window.gridUI?.openProfile?.(); break;
+      case 'admin': window.gridUI?.openAdmin?.(); break;
+      default: /* plans etc handled elsewhere */ break;
     }
-    StripeCtl.checkout(trial.stripe_price_id);
-  });
-
-  // Library previews (placeholder)
-  document.querySelectorAll('.preview').forEach(btn=>{
-    btn.addEventListener('click', ()=> {
-      const kind = btn.dataset.preview;
-      alert(`This would open the ${kind} preview.\n(Attach routing when ready).`);
+  }
+  $$('.nav-link').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const key = e.currentTarget.getAttribute('data-nav');
+      if(key) routeTo(key);
     });
   });
 
-  buildPricing();
+  // Plans in dropdown
+  $$('.drop [data-plan]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const plan = e.currentTarget.getAttribute('data-plan');
+      window.gridCommerce?.selectPlan?.(plan);
+    });
+  });
+
+  // Confetti fallback if external not present
+  function fallbackConfetti(){
+    const btn = $('#btnCelebrate');
+    btn?.addEventListener('click', ()=>{
+      const n = 80; const frag = document.createDocumentFragment();
+      for(let i=0;i<n;i++){
+        const s = document.createElement('span');
+        const size = Math.random()*6+3;
+        const x = (Math.random()*100)|0; const dur = (Math.random()*700+600)|0;
+        s.style.cssText = `position:fixed;left:${x}vw;top:-10px;width:${size}px;height:${size}px;background:linear-gradient(135deg,#d1a954,#f0c366);border-radius:2px;opacity:.9;pointer-events:none;transform:translateY(0);transition:transform ${dur}ms ease, opacity ${dur}ms ease;`;
+        setTimeout(()=>{s.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*360}deg)`; s.style.opacity='0';}, 16);
+        setTimeout(()=>{s.remove();}, dur+400);
+        frag.appendChild(s);
+      }
+      document.body.appendChild(frag);
+    });
+  }
+  // Prefer external confetti if available
+  if(typeof window.__gridConfetti === 'object'){
+    $('#btnCelebrate')?.addEventListener('click', ()=> window.__gridConfetti.gold());
+  } else {
+    fallbackConfetti();
+  }
+
+  // Keyboard access hint
+  document.body.addEventListener('keydown', (e)=>{ if(e.key==='Tab'){ document.body.classList.add('show-focus'); } });
 })();
