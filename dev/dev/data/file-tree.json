@@ -97,7 +97,7 @@
   },
   {
     "path": "assets/css/site.css",
-    "bytes": 7295
+    "bytes": 5488
   },
   {
     "path": "assets/css/styles.css",
@@ -137,7 +137,7 @@
   },
   {
     "path": "assets/data/updates.json",
-    "bytes": 472
+    "bytes": 325
   },
   {
     "path": "assets/gc_spin.mp4",
@@ -189,7 +189,7 @@
   },
   {
     "path": "assets/js/main.js",
-    "bytes": 2675
+    "bytes": 2802
   },
   {
     "path": "assets/js/metrics.js",
@@ -225,11 +225,11 @@
   },
   {
     "path": "assets/js/ui.js",
-    "bytes": 5284
+    "bytes": 4575
   },
   {
     "path": "assets/manifest.json",
-    "bytes": 2284
+    "bytes": 2285
   },
   {
     "path": "assets/videos/manifest.json",
@@ -436,12 +436,28 @@
     "bytes": 10540
   },
   {
+    "path": "dev/dev/archive/snapshot_1756241318.json",
+    "bytes": 10634
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756244212.json",
+    "bytes": 10726
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756287793.json",
+    "bytes": 10817
+  },
+  {
+    "path": "dev/dev/archive/snapshot_1756288285.json",
+    "bytes": 10909
+  },
+  {
     "path": "dev/dev/data/file-tree.json",
     "bytes": 9425
   },
   {
     "path": "dev/dev/data/file-tree.txt",
-    "bytes": 4040
+    "bytes": 4204
   },
   {
     "path": "dev/dev/data/repo-metrics.json",
@@ -453,7 +469,7 @@
   },
   {
     "path": "index.html",
-    "bytes": 10015
+    "bytes": 7872
   },
   {
     "path": "lychee.toml",
