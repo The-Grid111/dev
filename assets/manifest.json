@@ -45,8 +45,8 @@
     "ext": ".js"
   },
   "js/commerce.js": {
-    "hash": "27bacacc4e",
-    "bytes": 4349,
+    "hash": "4aa4e83089",
+    "bytes": 1047,
     "ext": ".js"
   },
   "js/confetti.js": {
@@ -70,8 +70,8 @@
     "ext": ".js"
   },
   "js/main.js": {
-    "hash": "64c8f3d02a",
-    "bytes": 2675,
+    "hash": "2681299f39",
+    "bytes": 2802,
     "ext": ".js"
   },
   "js/metrics.js": {
@@ -115,8 +115,8 @@
     "ext": ".js"
   },
   "js/ui.js": {
-    "hash": "e69d1d678a",
-    "bytes": 10374,
+    "hash": "80d30b76a9",
+    "bytes": 4575,
     "ext": ".js"
   },
   "videos/manifest.json": {
