@@ -3,173 +3,192 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE-GRID — Creators’ Launchpad</title>
-  <meta name="description" content="Black & gold, cinematic creator system. Live trial banner, working nav, profiles, saves, admin customize board, and plan selection." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <title>THE GRID</title>
+  <meta name="theme-color" content="#0b0c10" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap"></noscript>
-  <link rel="icon" href="/assets/images/favicon.svg">
-  <link rel="stylesheet" href="/assets/css/site.css">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css" />
 </head>
-<body class="grid-body">
-  <!-- Global trial banner -->
-  <div id="trialBanner" class="trial-banner" role="region" aria-label="Trial">
-    <div class="trial-inner">
-      <span class="badge">£5 Trial</span>
-      <span class="trial-text">Start now — full access for 7 days. Cancel anytime.</span>
-      <button id="trialStartBtn" class="btn btn-primary small">Start Trial</button>
+<body>
+  <!-- Global trial ribbon -->
+  <div class="ribbon" id="trialRibbon">
+    <div class="ribbon-left">
+      <span class="pill pill-yellow">£5</span>
+      <div class="ribbon-copy">
+        <strong>Trial</strong><br />
+        <small>7 days, full access to Starters.</small>
+      </div>
     </div>
+    <button id="btnStartTrialRibbon" class="btn btn-ghost">Start Trial</button>
   </div>
 
-  <header class="site-header">
-    <div class="wrap header-inner">
-      <div class="brand">
-        <a class="brand-mark" href="/">
-          <img src="/assets/images/logo-grid-mark.svg" alt="THE-GRID" width="36" height="36">
-        </a>
-        <div class="brand-text">
-          <div class="brand-title">THE-GRID</div>
-          <div class="brand-badge" id="greeting" aria-live="polite">Loading…</div>
-        </div>
-      </div>
-
-      <nav class="main-nav" aria-label="Primary">
-        <button class="nav-link" data-nav="home">Home</button>
-        <div class="nav-drop">
-          <button class="nav-link has-caret" data-nav="community">Community</button>
-          <div class="drop" role="menu">
-            <a role="menuitem" href="#" data-route="news">News</a>
-            <a role="menuitem" href="#" data-route="updates">Updates</a>
-            <a role="menuitem" href="#" data-route="forum">Forum</a>
-          </div>
-        </div>
-        <div class="nav-drop">
-          <button class="nav-link has-caret" data-nav="plans">Plans</button>
-          <div class="drop" role="menu">
-            <a role="menuitem" href="#" data-plan="trial">£5 Trial</a>
-            <a role="menuitem" href="#" data-plan="silver">Silver £9</a>
-            <a role="menuitem" href="#" data-plan="gold">Gold</a>
-            <a role="menuitem" href="#" data-plan="diamond">Diamond</a>
-          </div>
-        </div>
-        <button class="nav-link" data-nav="profile">Profile</button>
-        <button class="nav-link" data-nav="admin">Admin</button>
-      </nav>
+  <!-- Header / Top nav -->
+  <header class="nav">
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <a href="#home" class="brand-name">THE<br/>GRID</a>
     </div>
+    <nav class="nav-actions">
+      <button class="chip" data-route="#library">Open<br/>Library</button>
+      <button class="chip" data-route="#pricing">See<br/>Pricing</button>
+      <button class="chip" data-route="#how-it-works">How<br/>it works</button>
+      <button class="chip chip-small" id="btnProfile">Profile</button>
+      <button class="chip chip-small" id="btnPasteSave">Paste Save</button>
+      <button class="chip chip-small" id="btnAdmin" title="Admin Menu">≡</button>
+    </nav>
   </header>
 
-  <!-- Hero -->
-  <section class="hero wrap">
-    <div class="hero-copy panel card">
-      <h1>Cinematic, black-&-gold creator system.</h1>
-      <p class="lead">Single-file workflow. Full-file redos. Checkpoints that behave like saves. Built for TikTok creators and growth.</p>
-      <div class="cta">
-        <button class="btn btn-primary" id="btnCelebrate" aria-label="Trigger celebration">Celebrate</button>
-        <button class="btn btn-ghost" id="btnHow">How it works</button>
+  <main id="app">
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <p class="eyebrow">LAUNCH EXPERIENCES THAT NEVER REGRESS</p>
+      <h1><span>Self-serve,</span><br/><span>adaptive,</span><br/><span>quantifiable.</span></h1>
+      <p class="lead">
+        Paste a Save → instant learning. Plans unlock features; no 1:1 required.
+        <strong>Diamond</strong> unlocks watermark-free, commercial-safe exports.
+      </p>
+      <div class="actions">
+        <button class="btn btn-primary" data-route="#library">Open Library</button>
+        <button class="btn btn-ghost" data-route="#pricing">See Pricing</button>
+        <button class="btn btn-outline" id="btnLaunchTrial">Launch Trial — available</button>
       </div>
-      <div class="kpis" role="list" aria-label="Key points">
-        <div class="kpi" role="listitem"><strong>1-file</strong><div>index.html</div></div>
-        <div class="kpi" role="listitem"><strong>Full-redo</strong><div>No partial patches</div></div>
-        <div class="kpi" role="listitem"><strong>Checkpoint</strong><div>Paste-to-resume</div></div>
-      </div>
-    </div>
-    <div class="hero-video panel" aria-label="GC intro">
-      <video id="gcSpin" playsinline muted loop autoplay preload="metadata" width="100%" poster="/assets/images/manifest.json">
-        <source src="/assets/gc_spin.mp4" type="video/mp4">
-      </video>
-    </div>
-  </section>
+    </section>
 
-  <!-- Dynamic slots (move via Admin Board) -->
-  <section class="wrap">
-    <div id="slotGrid" class="slot-grid">
-      <article class="slot panel card" data-slot="weird-bed">
-        <h3>Weird-bed-material</h3>
-        <p class="muted">Ultra-realistic physics, soothing cinematic shots. Hooks ready for confetti on key actions.</p>
-      </article>
-      <article class="slot panel card" data-slot="minibeast">
-        <h3>Minibeast Brawls</h3>
-        <p class="muted">Cute micro-battles with believable shadows, reflections, and motion.</p>
-      </article>
-      <article class="slot panel card" data-slot="spreads">
-        <h3>Satisfying Spreads</h3>
-        <p class="muted">Knife-and-spread realism with human-like rhythm and residue effects.</p>
-      </article>
-    </div>
-    <p class="foot">Tip: Add assets to <code>/assets/images</code> & <code>/assets/videos</code>. Then place into any slot via Admin.</p>
-  </section>
-
-  <!-- Profile Modal -->
-  <dialog id="profileDialog" class="modal">
-    <form method="dialog" class="modal-card panel card">
-      <header class="modal-head">
-        <h3>Your Profile</h3>
-        <button value="close" class="btn btn-ghost small">Close</button>
-      </header>
-      <div class="modal-body">
-        <div class="profile-row">
-          <label>Display name</label>
-          <input id="profName" type="text" placeholder="Your name">
-        </div>
-        <div class="profile-row">
-          <label>Membership</label>
-          <div id="profPlan" class="chip">None</div>
-        </div>
-        <div class="profile-row">
-          <label>Paste Save Block</label>
-          <textarea id="saveBlock" rows="7" placeholder='Paste your JSON save here'></textarea>
-          <button id="saveBlockBtn" type="button" class="btn btn-primary small">Save to profile</button>
-        </div>
-        <div class="profile-row">
-          <label>Status</label>
-          <div id="profileStatus" class="muted">Ready.</div>
+    <!-- Feature video -->
+    <section class="section" id="featureVideo">
+      <h2>Feature Video</h2>
+      <div class="media-card">
+        <!-- You can swap the src later; player UI works now -->
+        <video id="heroVideo" controls playsinline preload="metadata" class="media">
+          <source src="" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="media-empty" id="videoEmpty">
+          <div>
+            <div class="play-icon">▶</div>
+            <p>Add your hero.mp4 in the repo or paste a link via the Admin menu → “Feature video URL”.</p>
+          </div>
         </div>
       </div>
-    </form>
-  </dialog>
+    </section>
 
-  <!-- Admin Drawer -->
-  <aside id="adminDrawer" class="admin-drawer panel">
-    <div class="admin-head">
-      <strong>Customize Board</strong>
-      <button id="adminClose" class="btn btn-ghost small">Close</button>
-    </div>
-    <div class="admin-body">
-      <div class="admin-field">
-        <label>Depth</label>
-        <input id="depthRange" type="range" min="0" max="24" value="12">
-      </div>
-      <div class="admin-field">
-        <label>Font Weight</label>
-        <input id="fontRange" type="range" min="300" max="800" step="100" value="600">
-      </div>
-      <div class="admin-field">
-        <label>Background</label>
-        <select id="bgSelect">
-          <option value="grid">Cinematic Grid</option>
-          <option value="nebula">Nebula</option>
-          <option value="dark">Deep Dark</option>
-        </select>
-      </div>
-      <div class="admin-actions">
-        <button id="swapSlots" class="btn small">Swap Slots</button>
-        <button id="saveLayout" class="btn btn-primary small">Save Layout</button>
-      </div>
-      <div class="muted tiny">Admin mode is locally gated. Add <code>?admin=1</code> to the URL or toggle in profile (owner only).</div>
-    </div>
-  </aside>
+    <!-- Library -->
+    <section class="section" id="library">
+      <h2>Library</h2>
+      <p class="muted">Ready-to-use starters and blueprints. Drop a Save to adapt.</p>
 
-  <footer class="wrap foot">
-    © THE-GRID. <a class="inline" href="/privacy.html">Privacy</a> · <a class="inline" href="/terms.html">Terms</a>
-  </footer>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Starter Blueprint</h3>
+          <p>Paste a Save to adapt instantly.</p>
+          <button class="btn btn-chip" data-blueprint="starter">Preview</button>
+        </article>
+
+        <article class="card">
+          <h3>Commerce Demo</h3>
+          <p>Stripe-ready patterns.</p>
+          <button class="btn btn-chip" data-blueprint="commerce">Preview</button>
+        </article>
+
+        <article class="card">
+          <h3>Creator Kit</h3>
+          <p>Audience & content flows.</p>
+          <button class="btn btn-chip" data-blueprint="creator">Preview</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" id="pricing">
+      <h2>Pricing</h2>
+
+      <div class="pricing-grid">
+        <div class="price-card" data-plan="TRIAL">
+          <h3>Trial</h3>
+          <p class="small">7 days full access to Starters</p>
+          <div class="price">£5 <span class="per">/ once</span></div>
+          <ul>
+            <li>Basic exports with watermark</li>
+            <li>Community access</li>
+          </ul>
+          <button class="btn btn-primary plan" data-plan="TRIAL">Start Trial</button>
+        </div>
+
+        <div class="price-card" data-plan="BASIC">
+          <h3>Basic</h3>
+          <p class="small">All Starter features</p>
+          <div class="price">£9 <span class="per">/ mo</span></div>
+          <ul>
+            <li>Watermarked exports</li>
+            <li>Community access</li>
+          </ul>
+          <button class="btn btn-ghost plan" data-plan="BASIC">Get Basic</button>
+        </div>
+
+        <div class="price-card" data-plan="SILVER">
+          <h3>Silver</h3>
+          <p class="small">No watermark on images</p>
+          <div class="price">£19 <span class="per">/ mo</span></div>
+          <ul>
+            <li>HD image exports</li>
+            <li>Priority help</li>
+          </ul>
+          <button class="btn btn-ghost plan" data-plan="SILVER">Choose Silver</button>
+        </div>
+
+        <div class="price-card" data-plan="GOLD">
+          <h3>Gold</h3>
+          <p class="small">Advanced modules + routing</p>
+          <div class="price">£49 <span class="per">/ mo</span></div>
+          <ul>
+            <li>Creator monetisation tools</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn btn-ghost plan" data-plan="GOLD">Choose Gold</button>
+        </div>
+
+        <div class="price-card" data-plan="DIAMOND">
+          <h3>Diamond</h3>
+          <p class="small">Commercial-safe, watermark-free</p>
+          <div class="price">£99 <span class="per">/ mo</span></div>
+          <ul>
+            <li>White-label exports</li>
+            <li>Enterprise features</li>
+          </ul>
+          <button class="btn btn-primary plan" data-plan="DIAMOND">Choose Diamond</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how-it-works">
+      <h2>How it works</h2>
+      <ol class="howto">
+        <li><strong>Paste a Save</strong> (from ChatGPT) into the site.</li>
+        <li><strong>Adapts instantly</strong> (no rebuilds, no regressions).</li>
+        <li><strong>Export or publish</strong> using your plan features.</li>
+      </ol>
+    </section>
+
+    <footer class="footer">© 2025 THE GRID — All rights reserved.</footer>
+  </main>
+
+  <!-- Modals / overlays -->
+  <div id="overlay" class="overlay hidden"></div>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header">
+      <h3 id="modalTitle">Modal</h3>
+      <button id="modalClose" class="icon-btn" aria-label="Close">✕</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toasts" class="toasts"></div>
 
   <!-- Scripts -->
-  <script defer src="/assets/js/main.js"></script>
-  <script defer src="/assets/js/ui.js"></script>
-  <script defer src="/assets/js/commerce.js"></script>
-  <script defer src="/assets/js/stripe.js"></script>
-  <script defer src="/assets/js/confetti.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
